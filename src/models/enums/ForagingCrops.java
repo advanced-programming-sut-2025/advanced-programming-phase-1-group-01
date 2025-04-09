@@ -1,5 +1,7 @@
 package models.enums;
 
+import models.dateTime.Season;
+
 public enum ForagingCrops {
     COMMON_MUSHROOM(Season.SPECIAL, 40, 38),
     DAFFODIL(Season.SPRING, 30, 0),

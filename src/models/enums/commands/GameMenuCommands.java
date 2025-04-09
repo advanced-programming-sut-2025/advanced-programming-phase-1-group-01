@@ -1,4 +1,4 @@
-package models.enums.menu;
+package models.enums.commands;
 
 public enum GameMenuCommands {
 }

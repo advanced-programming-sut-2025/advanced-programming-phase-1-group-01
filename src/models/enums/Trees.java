@@ -1,5 +1,7 @@
 package models.enums;
 
+import models.dateTime.Season;
+
 public enum Trees {
     APRICOT_TREE("Apricot Tree", "Apricot Sapling", "7-7-7-7", 28, "Apricot", 1, 59, true, 38, Season.SPRING),
     CHERRY_TREE("Cherry Tree", "Cherry Sapling", "7-7-7-7", 28, "Cherry", 1, 80, true, 38, Season.SPRING),

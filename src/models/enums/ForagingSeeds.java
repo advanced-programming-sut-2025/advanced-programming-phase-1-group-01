@@ -1,5 +1,7 @@
 package models.enums;
 
+import models.dateTime.Season;
+
 public enum ForagingSeeds {
     JAZZ_SEEDS(Season.SPRING),
     CARROT_SEEDS(Season.SPRING),

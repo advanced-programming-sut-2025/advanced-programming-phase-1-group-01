@@ -1,8 +1,10 @@
 package models.data;
 
+import models.Game;
+import models.dateTime.DateTime;
 import models.User;
 import models.character.Player;
-import models.enums.menu.Menu;
+import models.enums.commands.Menu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +13,14 @@ public class Repository {
     private User currentUser;
     private Player currentPlayer;
     private Menu currentMenu;
+    private Game currentGame;
     private static Map<String, User> users;
     private FileManager fileManager;
 
     public Repository() {
         users = new HashMap<>();
         currentMenu = Menu.LOGIN;
+        fileManager = new FileManager();
     }
 
     public User getCurrentUser() {
@@ -53,5 +57,13 @@ public class Repository {
 
     public void setCurrentMenu(Menu currentMenu) {
         this.currentMenu = currentMenu;
+    }
+
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
     }
 }
