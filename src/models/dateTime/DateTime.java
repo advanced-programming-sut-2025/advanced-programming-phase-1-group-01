@@ -11,12 +11,12 @@ public class DateTime {
     private static final int MAX_DAY_OF_SEASON = 28;
     private static final int MAX_HOUR_OF_DAY = 23;
 
-    public DateTime() {
-        this.year = 2025;
-        this.season = Season.SPRING;
-        this.weekDay = WeekDay.MONDAY;
-        this.day = 1;
-        this.hour = 9;
+    public DateTime(int year, Season season, WeekDay weekDay, int day, int hour) {
+        this.year = year;
+        this.season = season;
+        this.weekDay = weekDay;
+        this.day = day;
+        this.hour = hour;
     }
 
     public void advanceHour() {
