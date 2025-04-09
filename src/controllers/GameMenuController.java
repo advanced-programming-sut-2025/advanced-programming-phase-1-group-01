@@ -1,9 +1,15 @@
+// Created by: Amirhossein Shafiee
 package controllers;
 
 import models.Result;
 import models.data.Repository;
 
+<<<<<<<HEAD
+
+public class GameMenuController extends MenuController {
+    =======
 public class GameMenuController extends Controller {
+>>>>>>> 33882845e996bb5883ea1f22468cc5bc8a6c9dbc
     public GameMenuController(Repository repo) {
         super(repo);
     }
