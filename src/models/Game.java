@@ -1,10 +1,13 @@
 package models;
 
+import models.dateTime.DateTime;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Game {
     private Map<String, User> users;
+    private DateTime currentDateTime;
 
     public Game() {
         users = new HashMap<>();

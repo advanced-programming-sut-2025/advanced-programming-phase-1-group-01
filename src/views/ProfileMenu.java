@@ -1,11 +1,11 @@
 package views;
 
-import controllers.ProfileMenuController;
+import controllers.ProfileController;
 
 public class ProfileMenu extends AppMenu {
-    private final ProfileMenuController controller;
+    private final ProfileController controller;
 
-    public ProfileMenu(ProfileMenuController controller, AppView appView) {
+    public ProfileMenu(ProfileController controller, AppView appView) {
         this.controller = controller;
         this.appView = appView;
     }

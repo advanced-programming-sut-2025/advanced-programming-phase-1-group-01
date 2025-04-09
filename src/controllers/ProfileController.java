@@ -3,8 +3,8 @@ package controllers;
 import models.Result;
 import models.data.Repository;
 
-public class ProfileMenuController extends MenuController {
-    public ProfileMenuController(Repository repo) {
+public class ProfileController extends Controller {
+    public ProfileController(Repository repo) {
         super(repo);
     }
 

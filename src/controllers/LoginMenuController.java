@@ -4,7 +4,7 @@ import models.data.Repository;
 import models.Result;
 import models.enums.Gender;
 
-public class LoginMenuController extends MenuController {
+public class LoginMenuController extends Controller {
     LoginMenuController(Repository repo) {
         super(repo);
     }

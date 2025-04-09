@@ -1,6 +1,6 @@
 package models.fish;
 
-import models.enums.Season;
+import models.dateTime.Season;
 
 public enum FishType {
     SALMON("Salmon", 75, Season.FALL),

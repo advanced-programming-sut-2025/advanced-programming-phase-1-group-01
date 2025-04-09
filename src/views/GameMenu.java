@@ -1,7 +1,6 @@
 package views;
 
 import controllers.GameMenuController;
-import controllers.MenuController;
 
 public class GameMenu extends AppMenu {
     private final GameMenuController controller;

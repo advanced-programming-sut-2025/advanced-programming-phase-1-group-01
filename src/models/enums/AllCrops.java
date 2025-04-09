@@ -1,5 +1,7 @@
 package models.enums;
 
+import models.dateTime.Season;
+
 import java.util.List;
 
 public enum AllCrops {
