@@ -4,7 +4,7 @@ import models.Game;
 import models.dateTime.DateTime;
 import models.User;
 import models.character.Player;
-import models.enums.command.Menu;
+import models.enums.commands.Menu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,13 +16,11 @@ public class Repository {
     private Game currentGame;
     private static Map<String, User> users;
     private FileManager fileManager;
-    private DateTime dateTime;
 
     public Repository() {
         users = new HashMap<>();
         currentMenu = Menu.LOGIN;
         fileManager = new FileManager();
-        dateTime = new DateTime();
     }
 
     public User getCurrentUser() {

@@ -1,4 +1,4 @@
-package models.enums.command;
+package models.enums.commands;
 
 public enum Menu {
     LOGIN, GAME, PROFILE, MAIN;
