@@ -3,7 +3,7 @@ package controllers;
 import models.data.Repository;
 import models.Result;
 
-public class MainMenuController extends MenuController {
+public class MainMenuController extends Controller {
     MainMenuController(Repository repo) {
         super(repo);
     }

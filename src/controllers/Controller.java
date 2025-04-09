@@ -3,10 +3,10 @@ package controllers;
 import models.data.Repository;
 import models.Result;
 
-public abstract class MenuController {
+public abstract class Controller {
     private final Repository repo;
 
-    MenuController(Repository repo) {
+    Controller(Repository repo) {
         this.repo = repo;
     }
 

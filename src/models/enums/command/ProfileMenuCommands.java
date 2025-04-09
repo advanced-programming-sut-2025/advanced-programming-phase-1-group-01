@@ -1,4 +1,4 @@
-package models.enums.menu;
+package models.enums.command;
 
 public enum ProfileMenuCommands {
 }

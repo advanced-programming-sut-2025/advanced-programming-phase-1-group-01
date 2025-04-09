@@ -1,0 +1,5 @@
+package models.dateTime;
+
+public enum WeekDay {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
+}
