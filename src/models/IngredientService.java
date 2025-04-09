@@ -1,5 +1,3 @@
-//yo nigga
-
 package models;
 
 import java.util.*;
