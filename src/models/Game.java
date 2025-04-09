@@ -1,11 +1,10 @@
 package models;
 
+import java.util.HashMap;
+import java.util.Map;
 import models.dateTime.DateTime;
 import models.dateTime.Season;
 import models.dateTime.WeekDay;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Game {
     private Map<String, User> users;
