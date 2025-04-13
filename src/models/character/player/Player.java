@@ -1,7 +1,5 @@
 package models.character.player;
 
-import models.Ability;
-import models.Inventory;
 import models.Position;
 import models.character.Character;
 import models.relations.RelationService;
@@ -16,7 +14,7 @@ public class Player extends Character {
     private int highestEarnedBalance;
     private Inventory inventory;
     private Energy energy;
-    private Ability ability;
+    private AbilityService abilityService;
     private List<Tool> tools;
     private RelationService relationService;
 }
