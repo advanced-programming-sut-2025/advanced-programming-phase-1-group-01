@@ -1,6 +1,6 @@
 package models;
 
-import models.character.Player;
+import models.character.player.Player;
 import models.enums.Gender;
 
 import java.util.List;

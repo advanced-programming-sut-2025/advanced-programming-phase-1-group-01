@@ -1,9 +1,8 @@
 package models.data;
 
 import models.Game;
-import models.dateTime.DateTime;
 import models.User;
-import models.character.Player;
+import models.character.player.Player;
 import models.enums.commands.Menu;
 
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package models.relations;
 
-import models.character.Player;
+import models.character.player.Player;
 
 public class Friendship {
     Player friend;

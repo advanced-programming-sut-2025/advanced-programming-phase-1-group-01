@@ -11,14 +11,14 @@ import models.Size;
 // giant products can't grow
 
 public class Greenhouse extends Building {
-    private Position tlc;
-    private Size size;
+    private static final int GREENHOUSE_WIDTH = 8;
+    private static final int GREENHOUSE_HEIGHT = 7;
 
-    private final int GREENHOUSE_WIDTH = 8;
-    private final int GREENHOUSE_HEIGHT = 7;
+    public Greenhouse() {
+        super();
+    }
 
-    public Greenhouse(Position tlc) {
-        this.tlc = tlc;
-        this.size = new Size(GREENHOUSE_WIDTH, GREENHOUSE_HEIGHT);
+    public Greenhouse(Position topLeftCorner) {
+        super(topLeftCorner, new Size(GREENHOUSE_WIDTH, GREENHOUSE_HEIGHT));
     }
 }

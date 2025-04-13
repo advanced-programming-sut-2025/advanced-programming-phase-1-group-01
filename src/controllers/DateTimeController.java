@@ -4,7 +4,6 @@ import models.Result;
 import models.data.Repository;
 
 public class DateTimeController extends Controller {
-
     public DateTimeController(Repository repo) {
         super(repo);
     }

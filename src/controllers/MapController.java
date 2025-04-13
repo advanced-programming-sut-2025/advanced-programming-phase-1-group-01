@@ -3,8 +3,8 @@ package controllers;
 import models.Result;
 import models.data.Repository;
 
-public class GreenhouseController extends Controller {
-    public GreenhouseController(Repository repo) {
+public class MapController extends Controller {
+    MapController(Repository repo) {
         super(repo);
     }
 
@@ -13,7 +13,11 @@ public class GreenhouseController extends Controller {
         return null;
     }
 
-    private Result greenhouseBuild() {
+    private Result printMap() {
+        return null;
+    }
+
+    private Result helpReadingMap() {
         return null;
     }
 }

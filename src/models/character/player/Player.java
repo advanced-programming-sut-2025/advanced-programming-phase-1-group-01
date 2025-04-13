@@ -1,8 +1,9 @@
-package models.character;
+package models.character.player;
 
 import models.Ability;
 import models.Inventory;
 import models.Position;
+import models.character.Character;
 import models.relations.RelationService;
 import models.tool.Tool;
 
@@ -14,7 +15,7 @@ public class Player extends Character {
     private int numOfPlayedGames;
     private int highestEarnedBalance;
     private Inventory inventory;
-    private double energy;
+    private Energy energy;
     private Ability ability;
     private List<Tool> tools;
     private RelationService relationService;
