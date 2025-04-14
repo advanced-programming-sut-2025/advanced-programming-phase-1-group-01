@@ -21,4 +21,6 @@ public class Greenhouse extends Building {
     public Greenhouse(Position topLeftCorner) {
         super(topLeftCorner, new Size(GREENHOUSE_WIDTH, GREENHOUSE_HEIGHT));
     }
+
+
 }

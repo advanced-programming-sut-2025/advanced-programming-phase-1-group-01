@@ -1,8 +1,8 @@
-package models.enums;
+package models.farming;
 
 import models.dateTime.Season;
 
-public enum ForagingSeeds {
+public enum SeedType {
     JAZZ_SEEDS(Season.SPRING),
     CARROT_SEEDS(Season.SPRING),
     CAULIFLOWER_SEEDS(Season.SPRING),
@@ -48,7 +48,7 @@ public enum ForagingSeeds {
 
     private Season season;
 
-    ForagingSeeds(Season season) {
+    SeedType(Season season) {
         this.season = season;
     }
 }

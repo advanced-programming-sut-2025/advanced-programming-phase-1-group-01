@@ -16,5 +16,6 @@ public class Player extends Character {
     private Energy energy;
     private AbilityService abilityService;
     private List<Tool> tools;
+    private Tool equipped;
     private RelationService relationService;
 }

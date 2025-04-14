@@ -10,6 +10,7 @@ public class AbilityService {
     private final Ability mining;
     private final Ability hiking;
     private final Ability fishing;
+    private final Ability foraging;
 
     private final int LEVEL_0_XP_NEEDED = 50;
     private final int LEVEL_1_XP_NEEDED = 150;
@@ -25,5 +26,26 @@ public class AbilityService {
         this.mining = new Ability(AbilityType.MINING, 0, 0);
         this.hiking = new Ability(AbilityType.HIKING, 0, 0);
         this.fishing = new Ability(AbilityType.FISHING, 0, 0);
+        this.foraging = new Ability(AbilityType.FORAGING, 0, 0);
+    }
+
+    public Ability getFarming() {
+        return farming;
+    }
+
+    public Ability getMining() {
+        return mining;
+    }
+
+    public Ability getHiking() {
+        return hiking;
+    }
+
+    public Ability getFishing() {
+        return fishing;
+    }
+
+    public Ability getForaging() {
+        return foraging;
     }
 }
