@@ -1,10 +1,11 @@
-package models.enums;
+package models.farming;
 
 import models.dateTime.Season;
 
 import java.util.List;
 
-public enum AllCrops {
+// this enum contains all kinds of crops
+public enum CropType {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", "1-2-2-2", 7, true, -1, 50, true, 45, List.of(Season.SPRING), false),
     CARROT("Carrot", "Carrot Seeds", "1-1-1", 3, true, -1, 35, true, 75, List.of(Season.SPRING), false),
     CAULIFLOWER("Cauliflower", "Cauliflower Seeds", "1-2-4-4-1", 12, true, -1, 175, true, 75, List.of(Season.SPRING), true),
@@ -59,7 +60,7 @@ public enum AllCrops {
     private final List<Season> season;
     private final boolean canBecomeGiant;
 
-    AllCrops(String name, String source, String stages, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, int energy, List<Season> season, boolean canBecomeGiant) {
+    CropType(String name, String source, String stages, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, int energy, List<Season> season, boolean canBecomeGiant) {
         this.name = name;
         this.source = source;
         this.stages = stages;
@@ -71,5 +72,49 @@ public enum AllCrops {
         this.energy = energy;
         this.season = season;
         this.canBecomeGiant = canBecomeGiant;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getStages() {
+        return stages;
+    }
+
+    public int getTotalHarvestTime() {
+        return totalHarvestTime;
+    }
+
+    public boolean isOneTime() {
+        return oneTime;
+    }
+
+    public int getRegrowthTime() {
+        return regrowthTime;
+    }
+
+    public int getBaseSellPrice() {
+        return baseSellPrice;
+    }
+
+    public boolean isEdible() {
+        return isEdible;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public List<Season> getSeason() {
+        return season;
+    }
+
+    public boolean canBecomeGiant() {
+        return canBecomeGiant;
     }
 }

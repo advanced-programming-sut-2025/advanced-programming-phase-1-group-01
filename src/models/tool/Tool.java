@@ -1,4 +1,6 @@
 package models.tool;
 
-public abstract class Tool {
+import models.Equipment;
+
+public abstract class Tool extends Equipment {
 }

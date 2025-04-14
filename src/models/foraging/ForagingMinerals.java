@@ -1,4 +1,4 @@
-package models.enums;
+package models.foraging;
 
 public enum ForagingMinerals {
     QUARTZ("A clear crystal commonly found in caves and mines.", 25),

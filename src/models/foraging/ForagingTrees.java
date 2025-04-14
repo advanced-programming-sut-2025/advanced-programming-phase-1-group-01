@@ -1,4 +1,4 @@
-package models.enums;
+package models.foraging;
 
 import models.dateTime.Season;
 
