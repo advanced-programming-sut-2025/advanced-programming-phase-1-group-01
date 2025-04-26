@@ -33,10 +33,10 @@ public class DateTime {
 
     public void advanceSeason() {
         switch (season) {
-            case Season.SPRING -> season = Season.SUMMER;
-            case Season.SUMMER -> season = Season.FALL;
-            case Season.FALL -> season = Season.WINTER;
-            case Season.WINTER -> season = Season.SPRING;
+            case SPRING -> season = Season.SUMMER;
+            case SUMMER -> season = Season.FALL;
+            case FALL -> season = Season.WINTER;
+            case WINTER -> season = Season.SPRING;
         }
     }
 
