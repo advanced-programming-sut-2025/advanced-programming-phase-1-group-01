@@ -12,6 +12,13 @@ public class TimeManager {
     private final int START_HOUR_OF_DAY = 9;
     private final int END_HOUR_OF_DAY = 22;
 
+    private final int DAY_START_HOUR = 9;
+    private final int DAY_END_HOUR = 22;
+    private final Season START_SEASON = Season.SPRING;
+    private final int START_DAY = 1;
+    private final WeekDay START_WEEKDAY = WeekDay.MONDAY;
+    private final int START_YEAR = 2025;
+
     public TimeManager(Game game) {
         this.eventTimes = new ArrayList<>();
         this.game = game;
