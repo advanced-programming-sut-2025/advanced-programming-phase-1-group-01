@@ -16,4 +16,10 @@ public class AppView {
     public Scanner getScanner() {
         return scanner;
     }
+    
+    public void run() {
+        while (true) {
+
+        }
+    }
 }

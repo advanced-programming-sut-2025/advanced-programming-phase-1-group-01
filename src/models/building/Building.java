@@ -2,7 +2,6 @@ package models.building;
 
 import models.Position;
 import models.Size;
-import models.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +17,5 @@ public abstract class Building {
         this.topLeftCorner = topLeftCorner;
         this.size = size;
         this.tiles = new ArrayList<>();
-        for (List<Tile> row : this.tiles) {
-            row = new ArrayList<>();
-        }
     }
 }

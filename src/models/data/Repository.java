@@ -1,7 +1,6 @@
 package models.data;
 
 import models.Game;
-import models.User;
 import models.enums.commands.Menu;
 
 import java.util.HashMap;
