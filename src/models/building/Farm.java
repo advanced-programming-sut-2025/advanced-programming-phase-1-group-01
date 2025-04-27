@@ -1,10 +1,8 @@
 package models.building;
 
-import models.Tile;
-
 import java.util.List;
 
-public class Farm {
+public class Farm extends Map {
     private Lake lake;
     private Greenhouse greenhouse;
     private Cottage cottage;

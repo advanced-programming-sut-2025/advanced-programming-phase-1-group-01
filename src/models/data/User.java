@@ -1,5 +1,6 @@
-package models;
+package models.data;
 
+import models.Game;
 import models.character.player.Player;
 import models.enums.Gender;
 
@@ -14,6 +15,8 @@ public class User {
     private String email;
     private Gender gender;
     private List<String> securityAnswers;
+    private int numOfPlayedGames;
+    private int highestEarnedBalance;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;

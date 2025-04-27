@@ -2,11 +2,15 @@ package models;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import models.character.player.Player;
+import models.data.User;
 import models.dateTime.DateTime;
 import models.dateTime.Season;
 import models.dateTime.WeekDay;
 
 public class Game {
+    private Player currentPlayer;
     private Map<String, User> users;
     private DateTime currentDateTime;
 

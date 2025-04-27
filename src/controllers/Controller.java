@@ -4,7 +4,7 @@ import models.data.Repository;
 import models.Result;
 
 public abstract class Controller {
-    private final Repository repo;
+    protected final Repository repo;
 
     Controller(Repository repo) {
         this.repo = repo;

@@ -1,11 +1,15 @@
 package models.dateTime;
 
+import java.util.List;
+
 public class DateTime {
     private int year;
     private Season season;
     private WeekDay weekDay;
     private int day;
     private int hour;
+
+    private List<Event> events;
 
     private static final int MAX_SEASON_OF_YEAR = 4;
     private static final int MAX_DAY_OF_SEASON = 28;
@@ -22,21 +26,31 @@ public class DateTime {
     public void advanceHour() {
         hour++;
 
-        if (hour >= 24) {
+        if (hour > MAX_HOUR_OF_DAY) {
             hour = 0;
             advanceDay();
         }
     }
 
     public void advanceDay() {
+        day++;
+
+        if (day >= MAX_DAY_OF_SEASON) {
+            day = 0;
+            advanceSeason();
+        }
     }
 
     public void advanceSeason() {
         switch (season) {
-            case Season.SPRING -> season = Season.SUMMER;
-            case Season.SUMMER -> season = Season.FALL;
-            case Season.FALL -> season = Season.WINTER;
-            case Season.WINTER -> season = Season.SPRING;
+            case SPRING -> season = Season.SUMMER;
+            case SUMMER -> season = Season.FALL;
+            case FALL -> season = Season.WINTER;
+            case WINTER -> season = Season.SPRING;
+        }
+
+        if (season == Season.WINTER) {
+            advanceYear();
         }
     }
 
@@ -54,5 +68,25 @@ public class DateTime {
 
     public void advanceYear() {
         year++;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateTime dateTime = (DateTime) o;
+        return this.year == dateTime.year &&
+                this.season == dateTime.season &&
+                this.weekDay == dateTime.weekDay &&
+                this.day == dateTime.day &&
+                this.hour == dateTime.hour;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void addEvent(Event event) {
+        events.add(event);
     }
 }

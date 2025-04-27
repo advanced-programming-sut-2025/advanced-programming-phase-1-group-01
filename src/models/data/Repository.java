@@ -1,8 +1,6 @@
 package models.data;
 
 import models.Game;
-import models.User;
-import models.character.player.Player;
 import models.enums.commands.Menu;
 
 import java.util.HashMap;
@@ -10,7 +8,6 @@ import java.util.Map;
 
 public class Repository {
     private User currentUser;
-    private Player currentPlayer;
     private Menu currentMenu;
     private Game currentGame;
     private static Map<String, User> users;
@@ -28,14 +25,6 @@ public class Repository {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
     }
 
     public Map<String, User> getUsers() {
