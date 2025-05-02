@@ -1,11 +1,9 @@
 package controllers;
 
-import models.Game;
 import models.Result;
 import models.data.Repository;
 import models.data.User;
 import models.enums.commands.GameMenuCommands;
-import models.enums.commands.ProfileMenuCommands;
 
 import java.util.HashSet;
 import java.util.Set;

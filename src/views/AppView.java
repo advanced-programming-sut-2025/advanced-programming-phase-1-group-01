@@ -1,6 +1,9 @@
 package views;
 
+import controllers.GameMenuController;
 import controllers.LoginMenuController;
+import controllers.MainMenuController;
+import controllers.ProfileController;
 import models.data.Repository;
 import models.enums.commands.Menu;
 
@@ -46,9 +49,9 @@ public class AppView {
 
     private void initMenus() {
         menus.put(Menu.LOGIN, new LoginMenu(new LoginMenuController(repo), this));
-        menus.put(Menu.MAIN, new MainMenu(new LoginMenuController(repo), this));
-        menus.put(Menu.LOGIN, new LoginMenu(new LoginMenuController(repo), this));
-        menus.put(Menu.LOGIN, new LoginMenu(new LoginMenuController(repo), this));
+        menus.put(Menu.MAIN, new MainMenu(new MainMenuController(repo), this));
+        menus.put(Menu.PROFILE, new ProfileMenu(new ProfileController(repo), this));
+        menus.put(Menu.GAME, new GameMenu(new GameMenuController(repo), this));
 
     }
 }
