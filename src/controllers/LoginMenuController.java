@@ -33,33 +33,16 @@ public class LoginMenuController extends Controller {
             return new Result(false, "invalid command!");
         }
 
-        switch (matchedCommand) {
-
-            case MENU_ENTER:
-                return new Result(false, "You cannot navigate to other menus from here");
-
-            case MENU_EXIT:
-                return menuExit();
-
-            case SHOW_CURRENT_MENU:
-                return new Result(true, "now you are in login menu");
-
-            case REGISTER:
-                return register(command);
-
-            case PICK_QUESTION:
-                return pickQuestion(command);
-
-            case LOGIN:
-                return login(command);
-
-            case FORGET_PASSWORD:
-                return forgetPassword(command);
-
-            case ANSWER:
-                return answer(command);
-        }
-        return null;
+        return switch (matchedCommand) {
+            case MENU_ENTER -> new Result(false, "You cannot navigate to other menus from here");
+            case MENU_EXIT -> menuExit();
+            case SHOW_CURRENT_MENU -> new Result(true, "now you are in login menu");
+            case REGISTER -> register(command);
+            case PICK_QUESTION -> pickQuestion(command);
+            case LOGIN -> login(command);
+            case FORGET_PASSWORD -> forgetPassword(command);
+            case ANSWER -> answer(command);
+        };
     }
 
     @Override

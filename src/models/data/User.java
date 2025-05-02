@@ -5,8 +5,6 @@ import models.character.player.Player;
 import models.enums.Gender;
 import models.enums.SecurityQuestion;
 
-import java.util.List;
-
 public class User {
     private Game game;
     private Player player;

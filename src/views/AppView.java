@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class AppView {
 
     private final Map<Menu,AppMenu> menus;
-    private Repository repo;
+    private final Repository repo;
 
     public AppView() {
         this.menus = new HashMap<>();

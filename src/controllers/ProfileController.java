@@ -3,7 +3,6 @@ package controllers;
 import models.Result;
 import models.data.Repository;
 import models.data.User;
-import models.enums.commands.LoginMenuCommands;
 import models.enums.commands.ProfileMenuCommands;
 
 import java.util.regex.Matcher;
@@ -29,32 +28,16 @@ public class ProfileController extends Controller {
             return new Result(false, "invalid command!");
         }
 
-        switch (matchedCommand) {
-            case MENU_ENTER:
-                return new Result(false, "You cannot navigate to other menus from here");
-
-            case MENU_EXIT:
-                return new Result(true,"now you are in main menu");
-
-            case SHOW_CURRENT_MENU:
-                return new Result(true, "now you are in profile menu");
-
-            case CHANGE_USERNAME:
-                return changeUsername(command);
-
-            case CHANGE_NICKNAME:
-                return changeNickname(command);
-
-            case CHANGE_EMAIL:
-                return changeEmail(command);
-
-            case CHANGE_PASSWORD:
-                return changePassword(command);
-
-            case USER_INFO:
-                return showUserInfo();
-        }
-        return null;
+        return switch (matchedCommand) {
+            case MENU_ENTER -> new Result(false, "You cannot navigate to other menus from here");
+            case MENU_EXIT -> new Result(true, "now you are in main menu");
+            case SHOW_CURRENT_MENU -> new Result(true, "now you are in profile menu");
+            case CHANGE_USERNAME -> changeUsername(command);
+            case CHANGE_NICKNAME -> changeNickname(command);
+            case CHANGE_EMAIL -> changeEmail(command);
+            case CHANGE_PASSWORD -> changePassword(command);
+            case USER_INFO -> showUserInfo();
+        };
     }
 
     private Result changeUsername(String command) {
@@ -149,7 +132,7 @@ public class ProfileController extends Controller {
         if (!password.matches(".*\\d.*")) {
             return "Password must contain at least one digit.";
         }
-        if (!password.matches("[?><,\"';:\\\\/|\\\\\\[\\]{}+=)(*&^%$#!-]")) {
+        if (!password.matches("[?><,\"';:\\\\/|\\[\\]{}+=)(*&^%$#!-]")) {
             return "Password must contain at least one special character.";
         }
         return null;
