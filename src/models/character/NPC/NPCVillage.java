@@ -1,4 +1,6 @@
 package models.character.NPC;
 
-public class NPCVillage {
+import models.building.Map;
+
+public class NPCVillage extends Map {
 }

@@ -18,7 +18,7 @@ public enum LoginMenuCommands {
         this.regex = regex;
     }
 
-    public String getRegex() {
+    public String regex() {
         return regex;
     }
 }
