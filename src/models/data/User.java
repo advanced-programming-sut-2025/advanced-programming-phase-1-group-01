@@ -3,6 +3,7 @@ package models.data;
 import models.Game;
 import models.character.player.Player;
 import models.enums.Gender;
+import models.enums.SecurityQuestion;
 
 import java.util.List;
 
@@ -14,7 +15,8 @@ public class User {
     private String nickname;
     private String email;
     private Gender gender;
-    private List<String> securityAnswers;
+    private SecurityQuestion securityQuestion;
+    private String securityAnswer;
     private int numOfPlayedGames;
     private int highestEarnedBalance;
 
@@ -70,13 +72,22 @@ public class User {
         this.gender = gender;
     }
 
-    public List<String> getSecurityAnswer() {
-        return securityAnswers;
+    public SecurityQuestion getSecurityQuestion() {
+        return securityQuestion;
     }
 
-    public void addSecurityAnswer(String securityAnswer) {
-        securityAnswers.add(securityAnswer);
+    public void setSecurityQuestion(SecurityQuestion securityQuestion) {
+        this.securityQuestion = securityQuestion;
     }
+
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
+    }
+
 
     public Game getGame() {
         return game;
@@ -84,5 +95,21 @@ public class User {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public int getNumOfPlayedGames() {
+        return numOfPlayedGames;
+    }
+
+    public void setNumOfPlayedGames(int numOfPlayedGames) {
+        this.numOfPlayedGames = numOfPlayedGames;
+    }
+
+    public int getHighestEarnedBalance() {
+        return highestEarnedBalance;
+    }
+
+    public void setHighestEarnedBalance(int highestEarnedBalance) {
+        this.highestEarnedBalance = highestEarnedBalance;
     }
 }
