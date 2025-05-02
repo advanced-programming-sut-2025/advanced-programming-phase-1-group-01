@@ -1,6 +1,7 @@
 package models.character.player;
 
 import models.Position;
+import models.building.Farm;
 import models.character.Character;
 import models.enums.Direction;
 import models.relations.RelationService;
@@ -12,6 +13,7 @@ import java.util.List;
 public class Player extends Character {
     private Position position;
     private Direction direction;
+    private Farm farm;
     private int numOfCoins;
     private Inventory inventory;
     private Energy energy;
@@ -104,5 +106,13 @@ public class Player extends Character {
 
     public void setRelationService(RelationService relationService) {
         this.relationService = relationService;
+    }
+
+    public Farm getFarm() {
+        return farm;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
     }
 }

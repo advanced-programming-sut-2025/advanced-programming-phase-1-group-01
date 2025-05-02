@@ -5,25 +5,22 @@ import java.util.Map;
 
 import models.character.player.Player;
 import models.data.User;
-import models.dateTime.DateTime;
-import models.dateTime.Season;
-import models.dateTime.WeekDay;
+import models.dateTime.TimeManager;
+import models.farming.FarmingManager;
+import models.weather.WeatherManager;
 
 public class Game {
     private Player currentPlayer;
-    private Map<String, User> users;
-    private DateTime currentDateTime;
-
-    private final int DAY_START_HOUR = 9;
-    private final int DAY_END_HOUR = 22;
-    private final Season START_SEASON = Season.SPRING;
-    private final int START_DAY = 1;
-    private final WeekDay START_WEEKDAY = WeekDay.MONDAY;
-    private final int START_YEAR = 2025;
+    private final Map<String, User> users;
+    private final TimeManager timeManager;
+    private final WeatherManager weatherManager;
+    private final FarmingManager farmingManager;
 
     public Game() {
         users = new HashMap<>();
-        currentDateTime = new DateTime(START_YEAR, START_SEASON, START_WEEKDAY, START_DAY, DAY_START_HOUR);
+        timeManager = new TimeManager(this);
+        weatherManager = new WeatherManager(this);
+        farmingManager = new FarmingManager(this);
     }
 
     public void addUser(User user) {
@@ -34,11 +31,27 @@ public class Game {
         users.remove(username);
     }
 
-    public Map<String, User> getUsers() {
+    public Map<String, User> users() {
         return users;
     }
 
-    public DateTime getCurrentDateTime() {
-        return currentDateTime;
+    public WeatherManager getWeatherManager() {
+        return weatherManager;
+    }
+
+    public TimeManager getTimeManager() {
+        return timeManager;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public FarmingManager getFarmingManager() {
+        return farmingManager;
     }
 }

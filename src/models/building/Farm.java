@@ -1,13 +1,14 @@
 package models.building;
 
-import java.util.List;
+import models.farming.Plant;
+
+import java.util.ArrayList;
 
 public class Farm extends Map {
     private Lake lake;
     private Greenhouse greenhouse;
     private Cottage cottage;
     private Quarry quarry;
-    private List<List<Tile>> tiles;
 
     public Farm() {
         lake = new Lake();
@@ -18,4 +19,36 @@ public class Farm extends Map {
     }
 
     private void initBuildings() {}
+
+    public Lake getLake() {
+        return lake;
+    }
+
+    public void setLake(Lake lake) {
+        this.lake = lake;
+    }
+
+    public Greenhouse getGreenhouse() {
+        return greenhouse;
+    }
+
+    public void setGreenhouse(Greenhouse greenhouse) {
+        this.greenhouse = greenhouse;
+    }
+
+    public Cottage getCottage() {
+        return cottage;
+    }
+
+    public void setCottage(Cottage cottage) {
+        this.cottage = cottage;
+    }
+
+    public Quarry getQuarry() {
+        return quarry;
+    }
+
+    public void setQuarry(Quarry quarry) {
+        this.quarry = quarry;
+    }
 }

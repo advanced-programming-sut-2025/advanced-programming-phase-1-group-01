@@ -2,7 +2,7 @@ package models.enums;
 
 import models.dateTime.Season;
 
-public enum Trees {
+public enum TreeType {
     APRICOT_TREE("Apricot Tree", "Apricot Sapling", "7-7-7-7", 28, "Apricot", 1, 59, true, 38, Season.SPRING),
     CHERRY_TREE("Cherry Tree", "Cherry Sapling", "7-7-7-7", 28, "Cherry", 1, 80, true, 38, Season.SPRING),
     BANANA_TREE("Banana Tree", "Banana Sapling", "7-7-7-7", 28, "Banana", 1, 150, true, 75, Season.SUMMER),
@@ -29,7 +29,7 @@ public enum Trees {
     private final int fruitEnergy;
     private final Season season;
 
-    Trees(String name, String source, String stages, int totalHarvestTime, String fruit, int fruitHarvestCycle,
+    TreeType(String name, String source, String stages, int totalHarvestTime, String fruit, int fruitHarvestCycle,
              int fruitBaseSellPrice, boolean isFruitEdible, int fruitEnergy, Season season) {
         this.name = name;
         this.source = source;
