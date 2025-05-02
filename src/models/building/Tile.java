@@ -8,6 +8,16 @@ public class Tile {
     private boolean isMovable;
     private Building building;
 
+    public Object getContent() {
+        return content;
+    }
+
+    public void setContent(Object content) {
+        this.content = content;
+    }
+
+    private Object content;
+
     public Tile(TileType type, Position position, boolean isMovable) {
         this.position = position;
         this.type = type;
