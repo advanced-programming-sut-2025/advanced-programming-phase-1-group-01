@@ -80,7 +80,6 @@ public class GameMenuController extends Controller {
                     return new Result(false,"User already in another game: " + username);
                 }
             }
-            new Game(usernameSet,);
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }
 

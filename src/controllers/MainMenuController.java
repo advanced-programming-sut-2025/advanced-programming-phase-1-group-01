@@ -6,7 +6,7 @@ import models.enums.commands.GameMenuCommands;
 import models.enums.commands.MainMenuCommands;
 
 public class MainMenuController extends Controller {
-    MainMenuController(Repository repo) {
+    public MainMenuController(Repository repo) {
         super(repo);
     }
 

@@ -12,7 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenuController extends Controller {
-    LoginMenuController(Repository repo) {
+
+    public LoginMenuController(Repository repo) {
+
         super(repo);
     }
 
