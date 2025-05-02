@@ -18,7 +18,15 @@ public class Energy {
         this.amount = amount;
     }
 
-    public void initEnergy() {
+    public void decrease(double amount) {
+       if (amount > 0) this.amount -= amount;
+    }
+
+    public void increase(double amount) {
+        if (amount > 0) this.amount += amount;
+    }
+
+    public void fillEnergy() {
         this.amount = MAX_ENERGY;
     }
 

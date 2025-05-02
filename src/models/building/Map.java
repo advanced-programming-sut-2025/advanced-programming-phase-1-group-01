@@ -50,4 +50,8 @@ public abstract class Map {
     public Tile getTileByPosition(Position position) {
         return tiles.get(position.getY()).get(position.getX());
     }
+
+    public List<List<Tile>> getTiles() {
+        return tiles;
+    }
 }

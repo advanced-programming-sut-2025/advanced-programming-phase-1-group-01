@@ -1,6 +1,8 @@
 package models.building;
 
-import java.util.List;
+import models.farming.Plant;
+
+import java.util.ArrayList;
 
 public class Farm extends Map {
     private Lake lake;
