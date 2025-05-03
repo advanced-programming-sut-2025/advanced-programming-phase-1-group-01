@@ -1,8 +1,8 @@
 package models.enums;
 
-import models.Ingredient;
-import models.IngredientService;
+import models.ingredients.Ingredient;
 
 public enum OtherIngredients implements Ingredient {
+    IRON,
 
 }

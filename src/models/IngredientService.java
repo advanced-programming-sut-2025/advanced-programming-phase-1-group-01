@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Map;
 import models.animal.AnimalProduct;
 import models.enums.OtherIngredients;
+import models.ingredients.Ingredient;
 
 public class IngredientService {
     private static Map<String, Ingredient> ingredients = new HashMap<>();
