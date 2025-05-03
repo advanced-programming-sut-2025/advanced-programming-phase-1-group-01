@@ -5,7 +5,7 @@ import models.IngredientService;
 
 import java.util.Map;
 
-public enum CheesePressProducts implements Ingredient {
+public enum CheesePressProducts { // implements Ingredient
     CHEESE(
             "Cheese",
             "It's your basic cheese.",

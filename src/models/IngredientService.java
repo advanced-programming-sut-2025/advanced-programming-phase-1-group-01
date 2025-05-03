@@ -11,11 +11,11 @@ public class IngredientService {
 
     public IngredientService() {
         for (AnimalProduct a : AnimalProduct.values()) {
-            ingredients.put(a.name(), a);
+//            ingredients.put(a.name(), a);
         }
 
         for (OtherIngredients a : OtherIngredients.values()) {
-            ingredients.put(a.name(), a);
+//            ingredients.put(a.name(), a);
         }
     }
 

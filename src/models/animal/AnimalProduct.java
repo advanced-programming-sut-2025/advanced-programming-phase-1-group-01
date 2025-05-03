@@ -2,7 +2,7 @@ package models.animal;
 
 import models.ingredients.Ingredient;
 
-public enum AnimalProduct implements Ingredient {
+public enum AnimalProduct { // implements Ingredient
     EGG(50),
     BIG_EGG(95),
     DUCK_EGG(95),
