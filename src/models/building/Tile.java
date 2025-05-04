@@ -52,6 +52,10 @@ public class Tile {
         this.object = object;
     }
 
+    public void removeObject() {
+        this.object = null;
+    }
+
     public boolean isEmpty() {
         return position == null || object == null;
     }

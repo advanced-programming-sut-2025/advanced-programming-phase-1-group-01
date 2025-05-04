@@ -1,6 +1,7 @@
 package models.farming;
 
 import models.Game;
+import models.building.Greenhouse;
 import models.building.Tile;
 import models.building.TileObject;
 
@@ -29,7 +30,7 @@ public class FarmingManager {
         for (List<Tile> row : game.getCurrentPlayer().getFarm().getTiles()) {
             for (Tile tile : row) {
                 TileObject tileObject = tile.getObject();
-                if (tileObject instanceof Plant plant) {
+                if (tileObject instanceof Plant plant && !(tile.getBuilding() instanceof Greenhouse)) {
                     plant.water();
                 }
             }

@@ -1,5 +1,6 @@
 package models.character.player;
 
+import models.Game;
 import models.Position;
 import models.building.Farm;
 import models.character.Character;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Character {
+    private final Game game;
     private Position position;
     private Direction direction;
     private Farm farm;
@@ -24,11 +26,12 @@ public class Player extends Character {
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
 
-    public Player() {
+    public Player(Game game) {
+        this.game = game;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
         numOfCoins = 0;
-        inventory = new Inventory();
+        inventory = new Inventory(this);
         energy = new Energy();
         abilityService = new AbilityService();
         tools = new ArrayList<>();
@@ -114,5 +117,9 @@ public class Player extends Character {
 
     public void setFarm(Farm farm) {
         this.farm = farm;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
