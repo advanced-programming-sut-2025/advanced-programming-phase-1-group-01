@@ -8,4 +8,9 @@ public class Scythe extends Tool {
     public Scythe() {
         useEnergy = INITIAL_SCYTHE_USE_ENERGY;
     }
+
+    @Override
+    public void use() {
+
+    }
 }

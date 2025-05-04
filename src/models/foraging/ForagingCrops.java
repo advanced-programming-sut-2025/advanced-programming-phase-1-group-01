@@ -1,12 +1,11 @@
 package models.foraging;
 
-import models.TileContent;
+import models.building.TileObject;
 import models.dateTime.Season;
-import models.enums.Trees;
 
 import java.util.Random;
 
-public enum ForagingCrops implements TileContent {
+public enum ForagingCrops implements TileObject {
     COMMON_MUSHROOM(Season.SPECIAL, 40, 38, "🍄"),
     DAFFODIL(Season.SPRING, 30, 0, "🌼"),
     DANDELION(Season.SPRING, 40, 25, "🌼"),

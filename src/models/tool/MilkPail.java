@@ -8,4 +8,9 @@ public class MilkPail extends Tool {
     public MilkPail() {
         useEnergy = INITIAL_MILK_PAIL_USE_ENERGY;
     }
+
+    @Override
+    public void use() {
+
+    }
 }

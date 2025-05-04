@@ -1,10 +1,10 @@
 package models.enums;
 
-import models.TileContent;
+import models.building.TileObject;
 import models.dateTime.Season;
 import java.util.Random;
 
-public enum Trees implements TileContent {
+public enum TreeType implements TileObject {
     APRICOT_TREE("Apricot Tree", "Apricot Sapling", "7-7-7-7", 28, "Apricot", 1, 59, true, 38, Season.SPRING, "🟡"),
     CHERRY_TREE("Cherry Tree", "Cherry Sapling", "7-7-7-7", 28, "Cherry", 1, 80, true, 38, Season.SPRING, "🍒"),
     BANANA_TREE("Banana Tree", "Banana Sapling", "7-7-7-7", 28, "Banana", 1, 150, true, 75, Season.SUMMER, "🍌"),
@@ -32,7 +32,7 @@ public enum Trees implements TileContent {
     private final Season season;
     private final String symbol;
 
-    Trees(String name, String source, String stages, int totalHarvestTime, String fruit, int fruitHarvestCycle,
+    TreeType(String name, String source, String stages, int totalHarvestTime, String fruit, int fruitHarvestCycle,
              int fruitBaseSellPrice, boolean isFruitEdible, int fruitEnergy, Season season, String symbol) {
         this.name = name;
         this.source = source;
@@ -49,8 +49,8 @@ public enum Trees implements TileContent {
 
     private static final Random RANDOM = new Random();
 
-    public static Trees randomTree() {
-        Trees[] values = Trees.values();
+    public static TreeType randomTree() {
+        TreeType[] values = TreeType.values();
         return values[RANDOM.nextInt(values.length)];
     }
 

@@ -1,10 +1,10 @@
 package models.foraging;
 
-import models.TileContent;
+import models.building.TileObject;
 
 import java.util.Random;
 
-public enum ForagingMinerals implements TileContent {
+public enum ForagingMinerals implements TileObject {
     QUARTZ("A clear crystal commonly found in caves and mines.", 25, "💎"),
     EARTH_CRISTAL("A resinous substance found near the surface.", 50, "🪨"),
     FROZEN_TEAR("A crystal fabled to be the frozen tears of a yeti.", 75, "🗿"),

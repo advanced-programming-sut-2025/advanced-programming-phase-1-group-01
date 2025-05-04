@@ -1,12 +1,11 @@
 package models.foraging;
 
-import com.sun.source.tree.Tree;
-import models.TileContent;
+import models.building.TileObject;
 import models.dateTime.Season;
 
 import java.util.Random;
 
-public enum ForagingTrees implements TileContent {
+public enum ForagingTrees implements TileObject {
     ACORNS(Season.SPECIAL, "🌳"),
     MAPLE_SEEDS(Season.SPECIAL, "🍁"),
     PINE_CONS(Season.SPECIAL, "🌲"),

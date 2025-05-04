@@ -8,4 +8,9 @@ public class Shear extends Tool {
     public Shear() {
         useEnergy = INITIAL_SHEAR_USE_ENERGY;
     }
+
+    @Override
+    public void use() {
+
+    }
 }
