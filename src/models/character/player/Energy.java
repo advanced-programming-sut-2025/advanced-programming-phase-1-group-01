@@ -18,7 +18,7 @@ public class Energy {
         this.amount = amount;
     }
 
-    public void decrease(double amount) {
+    public void consume(double amount) {
        if (amount > 0) this.amount -= amount;
     }
 

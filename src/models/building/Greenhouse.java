@@ -14,6 +14,9 @@ public class Greenhouse extends Building {
     private static final int GREENHOUSE_WIDTH = 8;
     private static final int GREENHOUSE_HEIGHT = 7;
 
+    private static final int GREENHOUSE_BUILD_WOOD_NEEDED = 500;
+    private static final int GREENHOUSE_BUILD_COIN_NEEDED = 1000;
+
     public Greenhouse() {
         super();
     }
@@ -21,6 +24,4 @@ public class Greenhouse extends Building {
     public Greenhouse(Position topLeftCorner) {
         super(topLeftCorner, new Size(GREENHOUSE_WIDTH, GREENHOUSE_HEIGHT));
     }
-
-
 }

@@ -4,7 +4,8 @@ public enum WeatherCommands {
     CHEAT_THOR("cheat Thor -l (.+?)"),
     WEATHER("weather"),
     WEATHER_FORECAST("weather forecast"),
-    CHEAT_WEATHER_SET("cheat weather set (.+?)");
+    CHEAT_WEATHER_SET("cheat weather set (.+?)"),
+    GREENHOUSE_BUILD("greenhouse build"),;
 
     private final String regex;
 

@@ -20,7 +20,8 @@ public enum Weather {
     STORMY {
         @Override
         public void applyEffect(Game game) {
-
+            game.getWeatherManager().handleDailyThor();
+            game.getFarmingManager().autoWaterAllPlants();
         }
     }, SNOWY {
         @Override

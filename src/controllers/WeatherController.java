@@ -51,6 +51,8 @@ public class WeatherController extends Controller {
                     return new Result(false, "invalid weather");
                 }
                 return cheatWeatherSet(weather);
+            case GREENHOUSE_BUILD:
+                return handleGreenhouseBuildCommand();
         }
 
         return new Result(false, "invalid command");
@@ -75,5 +77,10 @@ public class WeatherController extends Controller {
     private Result cheatWeatherSet(Weather weather) {
         repo.getCurrentGame().getWeatherManager().setTomorrowWeather(weather);
         return new Result(true, "tomorrow weather set to " + weather.name().toLowerCase() + ".");
+    }
+
+    private Result handleGreenhouseBuildCommand() {
+        
+        return null;
     }
 }
