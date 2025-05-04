@@ -14,7 +14,8 @@ public class Settlement extends Map {
     private List<Farm> farms;
     private NPCVillage npcVillage;
 
-    public Settlement(int numOfFarms) {
+    public Settlement(List<List<Tile>> tiles, int numOfFarms) {
+        super(tiles);
         this.numOfFarms = numOfFarms;
         this.size = new Size(MAP_WIDTH, MAP_HEIGHT);
     }

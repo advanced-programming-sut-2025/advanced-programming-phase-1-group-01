@@ -1,6 +1,6 @@
 package models.crafting.enums;
 
-import models.Ingredient;
+import models.ingredients.Ingredient;
 
 import java.util.Map;
 

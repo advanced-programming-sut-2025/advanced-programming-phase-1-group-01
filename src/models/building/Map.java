@@ -10,8 +10,8 @@ import java.util.Random;
 public abstract class Map {
     protected List<List<Tile>> tiles;
 
-    public Map() {
-        tiles = new ArrayList<>();
+    public Map(List<List<Tile>> tiles) {
+        this.tiles = tiles;
     }
 
     public void initTiles(int rows, int cols) {

@@ -3,22 +3,27 @@ package models.building;
 import models.farming.Plant;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Farm extends Map {
+    private static final int FARM_HEIGHT = 75;
+    private static final int FARM_WIDTH = 75;
     private Lake lake;
     private Greenhouse greenhouse;
     private Cottage cottage;
     private Quarry quarry;
 
-    public Farm() {
-        lake = new Lake();
-        greenhouse = new Greenhouse();
-        cottage = new Cottage();
-        quarry = new Quarry();
-        initBuildings();
+    public List<List<Tile>> getTiles() {
+        return tiles;
     }
 
-    private void initBuildings() {}
+    public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse) {
+        super(tiles);
+        this.lake = lake;
+        this.cottage = cottage;
+        this.quarry = quarry;
+        this.greenhouse = greenhouse;
+    }
 
     public Lake getLake() {
         return lake;

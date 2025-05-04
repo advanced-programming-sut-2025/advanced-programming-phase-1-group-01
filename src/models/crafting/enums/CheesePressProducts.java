@@ -1,11 +1,11 @@
 package models.crafting.enums;
 
-import models.Ingredient;
+import models.ingredients.Ingredient;
 import models.IngredientService;
 
 import java.util.Map;
 
-public enum CheesePressProducts implements Ingredient {
+public enum CheesePressProducts { // implements Ingredient
     CHEESE(
             "Cheese",
             "It's your basic cheese.",

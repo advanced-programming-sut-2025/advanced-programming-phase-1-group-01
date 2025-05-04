@@ -16,4 +16,9 @@ public class Plant implements TileObject {
     public void resetIsWatered() {
         isWatered = false;
     }
+
+    @Override
+    public String getSymbol() {
+        return "";
+    }
 }
