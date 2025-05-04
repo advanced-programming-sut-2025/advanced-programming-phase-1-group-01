@@ -1,8 +1,12 @@
 package models.weather;
 
 import models.Game;
+import models.building.Greenhouse;
 import models.building.Tile;
+import models.building.TileObject;
 import models.dateTime.DateTime;
+import models.farming.Crop;
+import models.farming.Tree;
 
 import java.util.List;
 import java.util.Random;
@@ -35,7 +39,17 @@ public class WeatherManager {
 
     // breaks trees and eliminates products
     public void invokeThor(Tile tile) {
+        TileObject object = tile.getObject();
 
+        if (tile.getBuilding() instanceof Greenhouse) {
+            return;
+        }
+
+        if (object instanceof Tree tree) {
+            tree.broke();
+        } else if (object instanceof Crop) {
+            tile.removeObject();
+        }
     }
 
     public void handleDailyThor() {
@@ -49,6 +63,7 @@ public class WeatherManager {
     }
 
     Random random = new Random();
+
     public Weather getRandomTomorrowWeather() {
         DateTime tomorrow = game.getTimeManager().getNow().clone().advanceDay();
         List<Weather> currSeasonWeathers = tomorrow.getSeason().getWeathers();
@@ -59,5 +74,19 @@ public class WeatherManager {
     public void prepareNewDayWeather() {
         todayWeather = tomorrowWeather;
         tomorrowWeather = getRandomTomorrowWeather();
+    }
+
+    public double getToolEnergyCostMultiplier() {
+        switch (todayWeather) {
+            case SUNNY, STORMY -> {
+                return 1.5;
+            }
+            case SNOWY -> {
+                return 2.0;
+            }
+            default -> {
+                return 1.0;
+            }
+        }
     }
 }

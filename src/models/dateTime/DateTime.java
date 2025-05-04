@@ -6,7 +6,7 @@ import models.building.Tile;
 import java.security.PublicKey;
 import java.util.List;
 
-public class DateTime implements Cloneable{
+public class DateTime implements Cloneable {
     private int year;
     private Season season;
     private WeekDay weekDay;
