@@ -1,4 +1,4 @@
-package initializer;
+package models.initializer;
 
 import models.Position;
 import models.building.*;
