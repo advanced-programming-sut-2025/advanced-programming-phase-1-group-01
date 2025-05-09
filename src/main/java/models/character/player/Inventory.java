@@ -1,7 +1,7 @@
 package models.character.player;
 
-import models.Equipment;
 import models.farming.Crop;
+import models.tool.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +9,13 @@ import java.util.Map;
 public class Inventory {
     private final Player player;
     private Map<String, Crop> crops;
-    private Map<String, Equipment> equipments;
+    private Map<String, Tool> tools;
+    private Tool equippedTool;
 
     public Inventory(Player player) {
         this.player = player;
         this.crops = new HashMap<>();
-        this.equipments = new HashMap<>();
+        this.tools = new HashMap<String, Tool>();
     }
 
     public Player getPlayer() {
@@ -25,7 +26,15 @@ public class Inventory {
         return crops;
     }
 
-    public Map<String, Equipment> getEquipments() {
-        return equipments;
+    public Map<String, Tool> getTools() {
+        return tools;
+    }
+
+    public Tool getEquippedTool() {
+        return equippedTool;
+    }
+
+    public void setEquippedTool(Tool equippedTool) {
+        this.equippedTool = equippedTool;
     }
 }
