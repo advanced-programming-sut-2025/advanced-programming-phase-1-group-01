@@ -3,16 +3,19 @@ package models.relations;
 import models.MessageEntry;
 import models.character.player.Player;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Friendship extends Relationship {
     private final Player firstFriend;
     private final Player secondFriend;
-
     private final Map<MessageEntry, Boolean> messages;
+
+    public static final int TALK_XP;
+    static {
+        TALK_XP = 20;
+
+    }
 
     public Friendship(Player p1, Player p2) {
         firstFriend = p1;

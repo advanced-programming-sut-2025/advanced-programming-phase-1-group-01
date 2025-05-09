@@ -15,8 +15,12 @@ public abstract class Relationship {
     }
 
     public void increaseXp(int amount) {
-        if (amount > 0) xp += amount;
-        if (xp >= MAX_XP) xp = MAX_XP;
+        for (int i = 0; i < amount; i++) {
+            xp++;
+            if (xp >= MAX_XP) {
+                incrementLevel();
+            }
+        }
     }
 
     public void incrementLevel() {

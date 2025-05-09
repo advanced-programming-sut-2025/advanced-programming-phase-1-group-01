@@ -10,6 +10,8 @@ import models.enums.commands.RelationshipCommands;
 import models.relations.Friendship;
 import models.relations.RelationshipService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class RelationshipController extends Controller {
@@ -66,17 +68,20 @@ public class RelationshipController extends Controller {
 
     private Result talk(String username, String message) {
         Player receiver = repo.getUserByUsername(username).getPlayer();
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         if (receiver == null) {
             return new Result(false, "player not found");
+        } else if (!currentPlayer.getPosition().isNearTo(receiver)) {
+            return new Result(false, "you should be near of %s".formatted(receiver));
         }
 
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Friendship friendship = currentPlayer.getRelationService().getFriendship(receiver);
 
         friendship.sendMessage(currentPlayer, message);
         receiver.addNotification(currentPlayer, "You have a new message from " + currentPlayer.getUser().getUsername());
 
-        return new Result(true, "your message sent");
+        friendship.increaseXp(Friendship.TALK_XP);
+        return new Result(true, "your message sent to " + receiver.getUser().getUsername());
     }
 
     private Result talkHistory(String username) {
@@ -85,6 +90,18 @@ public class RelationshipController extends Controller {
 
         Map<MessageEntry, Boolean> messages = currentPlayer.getRelationService().getFriendship(friend).getMessages();
 
+        StringBuilder resultMsg = new StringBuilder();
 
+        List<MessageEntry> keys = new ArrayList<>(messages.keySet());
+        for (MessageEntry messageEntry : messages.keySet()) {
+            resultMsg.append("%s : \"%s\"".formatted(messageEntry.sender(), messageEntry.message()));
+            if (messageEntry.sender() == friend) {
+                messages.put(messageEntry, true);
+            }
+            if (keys.indexOf(messageEntry) != keys.size() - 1) {
+                resultMsg.append("\n");
+            }
+        }
+        return new Result(true, resultMsg.toString());
     }
 }
