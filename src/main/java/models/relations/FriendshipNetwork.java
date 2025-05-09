@@ -3,13 +3,14 @@ package models.relations;
 import models.character.Character;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class FriendshipNetwork {
     private final Set<Character> people;
 
     public FriendshipNetwork() {
-        this.people = new HashSet<>();
+        this.people = new LinkedHashSet<>();
     }
 
     public void addPerson(Character person) {
@@ -18,10 +19,5 @@ public class FriendshipNetwork {
 
     public Set<Character> getPeople() {
         return people;
-    }
-
-    public void establishFriendship(Character p1, Character p2, int level) {
-        p1.addRelationship(p2, level);
-        p2.addRelationship(p1, level);
     }
 }
