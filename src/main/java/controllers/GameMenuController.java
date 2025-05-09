@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Game;
 import models.Result;
 import models.data.Repository;
 import models.data.User;
@@ -77,6 +78,10 @@ public class GameMenuController extends Controller {
                 if (user.getGame() != null) {
                     return new Result(false,"User already in another game: " + username);
                 }
+            }
+            repo.addGame(new Game(repo.getCurrentUser().getPlayer()));
+            for () {
+
             }
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }

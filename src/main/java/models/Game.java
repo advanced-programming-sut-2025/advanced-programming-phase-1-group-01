@@ -16,8 +16,9 @@ public class Game {
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
 
-    public Game() {
+    public Game(Player player) {
         players = new HashMap<>();
+        currentPlayer = player;
         timeManager = new TimeManager(this);
         weatherManager = new WeatherManager(this);
         farmingManager = new FarmingManager(this);

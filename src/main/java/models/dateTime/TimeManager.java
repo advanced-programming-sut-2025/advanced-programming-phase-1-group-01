@@ -1,6 +1,7 @@
 package models.dateTime;
 
 import models.Game;
+import models.character.player.Player;
 
 import java.util.*;
 
@@ -74,5 +75,16 @@ public class TimeManager {
     public void prepareForNewDay() {
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
+
+        Player player = game.getCurrentPlayer();
+
+        if (player.getEnergy().isHasPassedOut()) {
+            player.getEnergy().setHasPassedOut(false);
+            player.getEnergy().fillEnergyPassedOut();
+        }
+
+        else {
+            player.getEnergy().fillEnergy();
+        }
     }
 }
