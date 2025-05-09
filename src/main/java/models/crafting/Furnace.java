@@ -1,0 +1,7 @@
+package models.crafting;
+
+public class Furnace extends CraftingSystem implements Device {
+    public Furnace(int amount) {
+        super(amount);
+    }
+}
