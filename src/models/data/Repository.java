@@ -3,10 +3,13 @@ package models.data;
 import models.Game;
 import models.enums.commands.Menu;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Repository {
+    private List<Game> games;
     private User currentUser;
     private Menu currentMenu;
     private Game currentGame;
@@ -14,6 +17,7 @@ public class Repository {
     private FileManager fileManager;
 
     public Repository() {
+        games = new ArrayList<>();
         users = new HashMap<>();
         currentMenu = Menu.LOGIN;
         fileManager = new FileManager();
@@ -53,5 +57,13 @@ public class Repository {
 
     public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
+    }
+
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void addGame(Game game) {
+        games.add(game);
     }
 }
