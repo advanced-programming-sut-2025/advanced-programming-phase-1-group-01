@@ -59,6 +59,10 @@ public class RelationshipService {
         return friendships.get(friend);
     }
 
+    public Map<Character, Friendship> getFriendships() {
+        return friendships;
+    }
+
     public boolean isFriendWith(Character friend) {
         return friendships.containsKey(friend);
     }
