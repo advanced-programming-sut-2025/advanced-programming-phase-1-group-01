@@ -7,8 +7,8 @@ import models.Result;
 import models.character.player.InventorySlot;
 import models.character.player.Player;
 import models.data.Repository;
-import models.dateTime.DateTime;
 import models.enums.commands.RelationshipCommands;
+import models.dateTime.DateTime;
 import models.relations.Friendship;
 import models.relations.Gift;
 
@@ -48,6 +48,9 @@ public class RelationshipController extends Controller {
             case TALK_HISTORY:
                 username = commandLine.split("\\s+")[3];
                 return talkHistory(username);
+            case HUG:
+                username = commandLine.split("\\s+")[2];
+                return hug(username);
             case GIFT:
                 username = commandLine.split("\\s+")[2];
                 String item = commandLine.substring(commandLine.indexOf("-i") + 2, commandLine.indexOf("-a") - 1).trim();
@@ -132,7 +135,24 @@ public class RelationshipController extends Controller {
         return new Result(true, resultMsg.toString());
     }
 
-    private Result gift(String username, String itemName, int amount) {
+    private Result hug(String username) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+
+        else if (currentPlayer.getPosition().isNearTo(friend)) {
+            return new Result(false, "you should be near of %s".formatted(friend));
+        }
+
+        Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
+
+        if (friendship.getLevel() < 2 ) {
+            return new Result(false, "you are not enough level");
+        }
+        return null;
         Player receiver = repo.getUserByUsername(username).getPlayer();
         Player sender = repo.getCurrentGame().getCurrentPlayer();
         Friendship friendship = sender.getRelationService().getFriendship(receiver);

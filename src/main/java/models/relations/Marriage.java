@@ -13,7 +13,9 @@ public class Marriage extends Relationship {
         else if (p1.getGender() == Gender.MALE) {
             husband = p1;
             wife = p2;
-        } else {
+        }
+
+        else {
             husband = p2;
             wife = p1;
         }
