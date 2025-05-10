@@ -64,6 +64,14 @@ public class Gift {
 
     @Override
     public String toString() {
-        return "%s sent you %d number of %s".formatted(sender.getUser().getUsername(), amount, item.getName());
+        return "%s sent %s, %d number of %s".formatted(sender.getUser().getUsername(), receiver.getUser().getUsername(), amount, item.getName());
+    }
+
+    public int getGiftXp() {
+        if (rate == 0) {
+            return 0;
+        }
+
+        return (rate - 3) * 30 + 15;
     }
 }

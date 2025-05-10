@@ -15,7 +15,7 @@ public class Friendship extends Relationship {
     private final Player secondFriend;
 
     private final Map<MessageEntry, Boolean> messages;
-    private final Map<String, Gift> gifts;
+    private final Map<Integer, Gift> gifts;
 
     public static final int TALK_XP;
     public static final int DEAL_SUCCESS_XP;
@@ -31,7 +31,7 @@ public class Friendship extends Relationship {
         firstFriend = p1;
         secondFriend = p2;
         messages = new LinkedHashMap<>();
-        gifts = new LinkedHashMap<>();
+        gifts = new LinkedHashMap<Integer, Gift>();
     }
 
     public Player getFirstFriend() {
@@ -53,7 +53,7 @@ public class Friendship extends Relationship {
         return firstFriend;
     }
 
-    public Map<String, Gift> getGifts() {
+    public Map<Integer, Gift> getGifts() {
         return gifts;
     }
 
@@ -66,13 +66,14 @@ public class Friendship extends Relationship {
     }
 
     public void addGift(Player sender, Player receiver, InventoryItem item, int amount, DateTime now) {
-        gifts.put(item.getName(), new GiftBuilder()
+        Gift gift = new GiftBuilder()
                 .setSender(sender)
                 .setReceiver(receiver)
                 .setItem(item)
                 .setAmount(amount)
                 .setSentTime(now)
-                .build());
+                .build();
+        gifts.put(gift.giftNumber(), gift);
     }
 
     public List<Gift> getReceivedGifts(Player receiver) {
@@ -83,5 +84,9 @@ public class Friendship extends Relationship {
             }
         }
         return receivedGifts;
+    }
+
+    public Gift getGift(int giftNumber) {
+        return gifts.get(giftNumber);
     }
 }
