@@ -2,11 +2,11 @@ package models.initializer;
 
 import models.Position;
 import models.building.*;
-import models.enums.TreeType;
+import models.farming.TreeType;
 import models.enums.StoneType;
-import models.foraging.ForagingCrops;
-import models.foraging.ForagingMinerals;
-import models.foraging.ForagingTrees;
+import models.foraging.ForagingCrop;
+import models.foraging.ForagingMineral;
+import models.foraging.ForagingTree;
 import models.random;
 
 import java.util.ArrayList;
@@ -223,7 +223,7 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_CROPS; i++) {
-            ForagingCrops foragingCrop = ForagingCrops.randomForagingCrop();
+            ForagingCrop foragingCrop = ForagingCrop.randomForagingCrop();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
@@ -233,7 +233,7 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_MINERALS; i++) {
-            ForagingMinerals foragingMineral = ForagingMinerals.randomForagingMineral();
+            ForagingMineral foragingMineral = ForagingMineral.randomForagingMineral();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
@@ -243,7 +243,7 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_TREES; i++) {
-            ForagingTrees foragingTree = ForagingTrees.randomForagingTree();
+            ForagingTree foragingTree = ForagingTree.randomForagingTree();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {

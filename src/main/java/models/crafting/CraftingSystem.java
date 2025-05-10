@@ -2,7 +2,7 @@ package models.crafting;
 
 import models.character.NPC.TradeItem;
 
-public class CraftingSystem extends TradeItem {
+public class CraftingSystem implements TradeItem {
     private int amount;
 
     public CraftingSystem(int amount) {
