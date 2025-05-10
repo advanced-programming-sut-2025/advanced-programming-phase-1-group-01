@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.character.player.Player;
-import models.data.User;
 import models.dateTime.TimeManager;
 import models.farming.FarmingManager;
+import models.shop.*;
 import models.weather.WeatherManager;
 
 public class Game {
@@ -15,6 +15,14 @@ public class Game {
     private final TimeManager timeManager;
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
+
+    private final Blacksmith blacksmith = new Blacksmith();
+    private final JojaMart jojaMart = new JojaMart();
+    private final PierreGeneralStore pierreGeneralStore = new PierreGeneralStore();
+    private final CarpenterShop carpenterShop = new CarpenterShop();
+    private final FishShop fishShop = new FishShop();
+    private final MarnieRanch marnieRanch = new MarnieRanch();
+    private final TheStardropSaloon theStarDropSaloon = new TheStardropSaloon();
 
     public Game(Player player) {
         players = new HashMap<>();
@@ -54,5 +62,33 @@ public class Game {
 
     public FarmingManager getFarmingManager() {
         return farmingManager;
+    }
+
+    public Blacksmith getBlacksmith() {
+        return blacksmith;
+    }
+
+    public JojaMart getJojaMart() {
+        return jojaMart;
+    }
+
+    public PierreGeneralStore getPierreGeneralStore() {
+        return pierreGeneralStore;
+    }
+
+    public CarpenterShop getCarpenterShop() {
+        return carpenterShop;
+    }
+
+    public FishShop getFishShop() {
+        return fishShop;
+    }
+
+    public MarnieRanch getMarnieRanch() {
+        return marnieRanch;
+    }
+
+    public TheStardropSaloon getTheStardropSaloon() {
+        return theStarDropSaloon;
     }
 }

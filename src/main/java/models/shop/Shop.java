@@ -1,5 +1,6 @@
 package models.shop;
 
-public class Shop {
+public abstract class Shop {
     protected ShopkeeperName shopkeeperName;
 }
+
