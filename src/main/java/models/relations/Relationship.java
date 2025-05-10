@@ -8,8 +8,6 @@ public abstract class Relationship {
     protected int level;
     protected int xp; // xp is different for each level
 
-    private static final int MAX_XP = 100;
-
     public int getXp() {
         return xp;
     }
@@ -17,10 +15,23 @@ public abstract class Relationship {
     public void increaseXp(int amount) {
         for (int i = 0; i < amount; i++) {
             xp++;
-            if (xp >= MAX_XP) {
+            if (xp >= getMaxXp()) {
                 incrementLevel();
             }
         }
+    }
+
+    public void decreaseXp(int amount) {
+        for (int i = 0; i < amount; i++) {
+            xp--;
+            if (xp <= 0) {
+                decrementLevel();
+            }
+        }
+    }
+
+    public int getMaxXp() {
+        return (level + 1) * 100;
     }
 
     public void incrementLevel() {
@@ -36,6 +47,6 @@ public abstract class Relationship {
     public void decrementLevel() {
         // here some stuff should be checked
         level--;
-        xp = 100;
+        xp = getMaxXp() ;
     }
 }

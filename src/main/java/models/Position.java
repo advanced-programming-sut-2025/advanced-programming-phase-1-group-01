@@ -25,8 +25,4 @@ public class Position {
     public void setY(int y) {
         this.y = y;
     }
-
-    public boolean isNearTo(Player p) {
-        return Math.abs(p.getPosition().getX() - x) <= 1 && Math.abs(p.getPosition().getY() - y) <= 1;
-    }
 }

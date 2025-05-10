@@ -1,6 +1,13 @@
 package models.farming;
 
-public class Crop extends Plant {
-    CropType type;
-    CropState state;
+import models.InventoryItem;
+
+public class Crop extends Plant implements InventoryItem {
+    private CropType type;
+    private CropState state;
+
+    @Override
+    public String getName() {
+        return type.getName();
+    }
 }
