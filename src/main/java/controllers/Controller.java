@@ -6,7 +6,7 @@ import models.Result;
 public abstract class Controller {
     protected final Repository repo;
 
-    Controller(Repository repo) {
+    public Controller(Repository repo) {
         this.repo = repo;
     }
 

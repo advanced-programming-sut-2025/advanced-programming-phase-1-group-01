@@ -9,7 +9,6 @@ public class TimeManager {
     private List<DateTime> eventTimes;
     private Game game;
     private DateTime now;
-
     private final int START_HOUR_OF_DAY = 9;
     private final int END_HOUR_OF_DAY = 22;
 
@@ -76,13 +75,19 @@ public class TimeManager {
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
 
-        Player player = game.getCurrentPlayer();
+        game.getBlacksmith().resetDailyStock();
+        game.getJojaMart().resetDailyStock();
+        game.getPierreGeneralStore().resetDailyStock();
+        game.getCarpenterShop().resetDailyStock();
+        game.getFishShop().resetDailyStock();
+        game.getMarnieRanch().resetDailyStock();
+        game.getTheStardropSaloon().resetDailyStock();
 
+        Player player = game.getCurrentPlayer();
         if (player.getEnergy().isHasPassedOut()) {
             player.getEnergy().setHasPassedOut(false);
             player.getEnergy().fillEnergyPassedOut();
         }
-
         else {
             player.getEnergy().fillEnergy();
         }

@@ -5,9 +5,6 @@ import models.character.player.Energy;
 import models.data.Repository;
 import models.enums.commands.EnergyCommands;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class EnergyController extends Controller {
     EnergyController(Repository repo) {
         super(repo);
@@ -47,7 +44,8 @@ public class EnergyController extends Controller {
 
     private Result cheatEnergySet(String command) {
 
-        String valueStr = extractValue(command,"-v",null);
+        String[] commandParts = command.split(" ");
+        String valueStr = commandParts[3];
         int value = Integer.parseInt(valueStr);
         energy.setAmount(value);
 
@@ -57,26 +55,5 @@ public class EnergyController extends Controller {
     private void cheatEnergyUnlimited() {
         energy.setAmount(Double.MAX_VALUE);
         new Result(true, "Sets the energy to a unlimited value");
-    }
-
-    public static String extractValue(String command, String startFlag, String endFlag) {
-        String patternString;
-
-        if (endFlag != null) {
-            patternString = startFlag + " (.*?) " + endFlag;
-        }
-
-        else {
-            patternString = startFlag + " (.*)";
-        }
-
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(command);
-
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-
-        return null;
     }
 }
