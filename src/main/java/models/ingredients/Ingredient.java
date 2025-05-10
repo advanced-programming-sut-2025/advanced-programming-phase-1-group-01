@@ -2,7 +2,7 @@ package models.ingredients;
 
 import models.character.NPC.TradeItem;
 
-public class Ingredient extends TradeItem {
+public class Ingredient implements TradeItem {
     private int amount;
 
     public Ingredient(int amount) {

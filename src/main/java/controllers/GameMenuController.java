@@ -80,9 +80,9 @@ public class GameMenuController extends Controller {
                 }
             }
             repo.addGame(new Game(repo.getCurrentUser().getPlayer()));
-            for () {
-
-            }
+//            for () {
+//
+//            }
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }
 
