@@ -2,7 +2,7 @@ package models.enums.commands;
 
 public enum EnergyCommands {
     ENERGY_SHOW("show energy"),
-    CHEAT_ENERGY("energy set \\s*-v (.+?)"),
+    CHEAT_ENERGY("energy set -v (.+?)"),
     ENERGY_UNLIMITED("energy unlimited"),
     ;
 

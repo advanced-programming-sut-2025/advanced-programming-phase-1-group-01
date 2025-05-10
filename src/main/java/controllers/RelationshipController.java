@@ -5,10 +5,8 @@ import models.MessageEntry;
 import models.Result;
 import models.character.player.Player;
 import models.data.Repository;
-import models.data.User;
 import models.enums.commands.RelationshipCommands;
 import models.relations.Friendship;
-import models.relations.RelationshipService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +43,9 @@ public class RelationshipController extends Controller {
             case TALK_HISTORY:
                 username = commandLine.split("\\s+")[3];
                 return talkHistory(username);
+            case HUG:
+                username = commandLine.split("\\s+")[2];
+                return hug(username);
         }
         return new Result(true, "");
     }
@@ -103,5 +104,25 @@ public class RelationshipController extends Controller {
             }
         }
         return new Result(true, resultMsg.toString());
+    }
+
+    private Result hug(String username) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+
+        else if (currentPlayer.getPosition().isNearTo(friend)) {
+            return new Result(false, "you should be near of %s".formatted(friend));
+        }
+
+        Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
+
+        if (friendship.getLevel() < 2 ) {
+            return new Result(false, "you are not enough level");
+        }
+        return null;
     }
 }

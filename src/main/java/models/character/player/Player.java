@@ -10,9 +10,7 @@ import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Player extends Character {
@@ -28,7 +26,6 @@ public class Player extends Character {
     private AbilityService abilityService;
     private RelationshipService relationshipService;
     private final Map<MessageEntry, Boolean> notifications;
-
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
 
@@ -68,6 +65,14 @@ public class Player extends Character {
 
     public void setNumOfCoins(int numOfCoins) {
         this.numOfCoins = numOfCoins;
+    }
+
+    public void consume(int amount) {
+        numOfCoins -= amount;
+    }
+
+    public void increase(int amount) {
+        numOfCoins += amount;
     }
 
     public Inventory getInventory() {

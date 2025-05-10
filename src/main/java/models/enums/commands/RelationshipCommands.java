@@ -8,7 +8,7 @@ public enum RelationshipCommands {
     GIST_LIST(""),
     GIFT_RATE(""),
     GIFT_HISTORY(""),
-    HUG(""),
+    HUG("hug -u (.+?)"),
     FLOWER(""),
     ASK_MARRIAGE(""),
     RESPOND_MARRIAGE(""),

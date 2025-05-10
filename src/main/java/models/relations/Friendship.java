@@ -12,6 +12,7 @@ public class Friendship extends Relationship {
     private final Map<MessageEntry, Boolean> messages;
 
     public static final int TALK_XP;
+
     static {
         TALK_XP = 20;
 
