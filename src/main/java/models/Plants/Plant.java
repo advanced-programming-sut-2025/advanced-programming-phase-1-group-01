@@ -3,7 +3,7 @@ package models.Plants;
 import models.character.NPC.NPC;
 import models.character.NPC.TradeItem;
 
-public class Plant extends TradeItem {
+public class Plant implements TradeItem {
     private int amount;
 
     public Plant(int amount) {

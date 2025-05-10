@@ -4,7 +4,9 @@ import models.Position;
 import models.Result;
 import models.data.Repository;
 import models.enums.Direction;
-import models.farming.SeedType;
+import models.farming.*;
+import models.foraging.ForagingCrop;
+import models.foraging.ForagingTree;
 
 public class FarmingController extends Controller {
     FarmingController(Repository repo) {
@@ -17,7 +19,21 @@ public class FarmingController extends Controller {
     }
 
     private Result showCropInfo(String name) {
-        return null;
+        FarmingEnum farmingConstant = null;
+        
+        if (CropType.fromString(name) != null) {
+            farmingConstant = CropType.fromString(name);            
+        } else if (TreeType.fromString(name) != null) {
+            farmingConstant = TreeType.fromString(name);
+        } else if (ForagingCrop.fromString(name) != null) {
+            farmingConstant = ForagingCrop.fromString(name);
+        } else if (ForagingTree.fromString(name) != null) {
+            farmingConstant = ForagingTree.fromString(name);
+        } else {
+            return new Result(false, "crop not found");
+        }
+
+        return new Result(true, farmingConstant.toString());
     }
 
     private Result plant(SeedType seedType, Direction dir) {
@@ -31,6 +47,4 @@ public class FarmingController extends Controller {
     private Result howMuchWater() {
         return null;
     }
-
-
 }

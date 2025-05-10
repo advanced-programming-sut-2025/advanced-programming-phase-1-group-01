@@ -4,7 +4,7 @@ import models.building.TileObject;
 
 import java.util.Random;
 
-public enum ForagingMinerals implements TileObject {
+public enum ForagingMineral implements TileObject {
     QUARTZ("A clear crystal commonly found in caves and mines.", 25, "💎"),
     EARTH_CRISTAL("A resinous substance found near the surface.", 50, "🪨"),
     FROZEN_TEAR("A crystal fabled to be the frozen tears of a yeti.", 75, "🗿"),
@@ -27,7 +27,7 @@ public enum ForagingMinerals implements TileObject {
     private int sellPrice;
     private final String symbol ;
 
-    ForagingMinerals(String description, int sellPrice, String symbol) {
+    ForagingMineral(String description, int sellPrice, String symbol) {
         this.description = description;
         this.sellPrice = sellPrice;
         this.symbol = symbol;
@@ -35,8 +35,8 @@ public enum ForagingMinerals implements TileObject {
 
     private static final Random RANDOM = new Random();
 
-    public static ForagingMinerals randomForagingMineral() {
-        ForagingMinerals[] values = ForagingMinerals.values();
+    public static ForagingMineral randomForagingMineral() {
+        ForagingMineral[] values = ForagingMineral.values();
         return values[RANDOM.nextInt(values.length)];
     }
 
