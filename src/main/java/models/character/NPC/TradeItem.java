@@ -1,4 +1,6 @@
 package models.character.NPC;
 
-public class TradeItem {
+public interface TradeItem {
+    int getAmount();
+    void setAmount(int amount);
 }

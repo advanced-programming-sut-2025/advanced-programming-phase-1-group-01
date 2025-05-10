@@ -20,4 +20,21 @@ public enum Season {
     public List<Weather> getWeathers() {
         return weathers;
     }
+
+    @Override
+    public String toString() {
+        if (this == SPRING) {
+            return "Spring";
+        } else if (this == SUMMER) {
+            return "Summer";
+        } else if (this == FALL) {
+            return "Fall";
+        } else if (this == WINTER) {
+            return "Winter";
+        } else if (this == SPECIAL) {
+            return "Special";
+        } else {
+            return super.toString();
+        }
+    }
 }

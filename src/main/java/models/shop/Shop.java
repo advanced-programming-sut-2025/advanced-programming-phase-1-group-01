@@ -1,6 +1,7 @@
 package models.shop;
 
-public abstract class Shop {
+import models.building.Building;
+
+public class Shop extends Building {
     protected ShopkeeperName shopkeeperName;
 }
-

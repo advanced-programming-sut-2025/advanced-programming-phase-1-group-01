@@ -3,7 +3,7 @@ package models.cooking;
 import models.character.NPC.TradeItem;
 import models.ingredients.Ingredient;
 
-public class CookingSystem extends TradeItem {
+public class CookingSystem implements TradeItem {
     private int amount;
 
     CookingSystem(int amount) {
@@ -17,5 +17,4 @@ public class CookingSystem extends TradeItem {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-
 }

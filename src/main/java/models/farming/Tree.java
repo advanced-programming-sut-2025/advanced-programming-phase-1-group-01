@@ -3,7 +3,8 @@ package models.farming;
 public class Tree extends Plant {
     private TreeState state;
 
-    public Tree() {
+    public Tree(int amount) {
+        super(amount);
         state = TreeState.HEALTHY;
     }
 

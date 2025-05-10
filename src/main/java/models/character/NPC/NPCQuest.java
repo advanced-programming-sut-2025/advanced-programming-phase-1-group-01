@@ -2,11 +2,11 @@ package models.character.NPC;
 
 //import models.Plants.Plant;
 
-import models.Plants.Plant;
 import models.cooking.*;
 import models.crafting.BeeHouse;
 import models.crafting.DeluxeScarecrow;
 import models.crafting.IridiumSprinkler;
+import models.farming.Plant;
 import models.ingredients.*;
 
 public enum NPCQuest {
