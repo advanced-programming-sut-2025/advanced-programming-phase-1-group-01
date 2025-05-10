@@ -5,7 +5,7 @@ public enum RelationshipCommands {
     TALK("talk -u (.+?) -m (.+?)"),
     TALK_HISTORY("talk history -u (.+?)"),
     GIFT("gift -u (.+?) -i (.+?) -a (.+?)"),
-    GIFT_LIST(""),
+    GIFT_LIST("gift -i (.+?) -r (.+?)"),
     GIFT_RATE(""),
     GIFT_HISTORY(""),
     HUG(""),

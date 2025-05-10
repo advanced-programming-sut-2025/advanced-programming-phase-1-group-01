@@ -5,7 +5,9 @@ import models.MessageEntry;
 import models.character.player.Player;
 import models.dateTime.DateTime;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Friendship extends Relationship {
@@ -18,6 +20,7 @@ public class Friendship extends Relationship {
     public static final int TALK_XP;
     public static final int DEAL_SUCCESS_XP;
     public static final int DEAL_FAILURE_XP;
+
     static {
         TALK_XP = 20;
         DEAL_SUCCESS_XP = 50;
@@ -63,6 +66,22 @@ public class Friendship extends Relationship {
     }
 
     public void addGift(Player sender, Player receiver, InventoryItem item, int amount, DateTime now) {
-        gifts.put(item.getName(), new Gift(sender, receiver, item, amount, now, Gift.nextGiftNumber++));
+        gifts.put(item.getName(), new GiftBuilder()
+                .setSender(sender)
+                .setReceiver(receiver)
+                .setItem(item)
+                .setAmount(amount)
+                .setSentTime(now)
+                .build());
+    }
+
+    public List<Gift> getReceivedGifts(Player receiver) {
+        List<Gift> receivedGifts = new ArrayList<>();
+        for (Gift gift : gifts.values()) {
+            if (gift.receiver() == receiver) {
+                receivedGifts.add(gift);
+            }
+        }
+        return receivedGifts;
     }
 }

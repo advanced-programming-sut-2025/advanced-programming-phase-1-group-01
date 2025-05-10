@@ -10,9 +10,11 @@ import models.data.Repository;
 import models.dateTime.DateTime;
 import models.enums.commands.RelationshipCommands;
 import models.relations.Friendship;
+import models.relations.Gift;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.Map;
 
 public class RelationshipController extends Controller {
@@ -57,6 +59,7 @@ public class RelationshipController extends Controller {
                 }
                 return gift(username, item, amount);
             case GIFT_LIST:
+                return giftList();
         }
         return new Result(true, "");
     }
@@ -142,5 +145,25 @@ public class RelationshipController extends Controller {
         friendship.addGift(sender, receiver, item, amount, now);
         receiver.addNotification(sender, "%s sent you a gift! %d number of %s".formatted(sender.getUser().getUsername(), amount, itemName));
         return new Result(true, "your gift sent to " + receiver.getUser().getUsername() + " successfully");
+    }
+
+    private Result giftList() {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        List<Gift> receivedGifts = new ArrayList<>();
+
+        for (Friendship friendship : currentPlayer.getRelationService().getFriendships().values()) {
+            receivedGifts.addAll(friendship.getReceivedGifts(currentPlayer));
+        }
+
+        StringBuilder resultMsg = new StringBuilder();
+
+        for (Gift gift : receivedGifts) {
+            resultMsg.append(gift);
+            if (receivedGifts.indexOf(gift) != receivedGifts.size() - 1) {
+                resultMsg.append("\n");
+            }
+        }
+
+        return new Result(true, resultMsg.toString());
     }
 }
