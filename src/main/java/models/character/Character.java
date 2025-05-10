@@ -1,15 +1,15 @@
 package models.character;
 
-import java.util.Map;
+import models.relations.RelationshipService;
 
 public class Character {
-    private java.util.Map<Character, Integer> relationships;
+    protected final RelationshipService relationshipService;
 
-    public Map<Character, Integer> getRelationships() {
-        return relationships;
+    public Character() {
+        this.relationshipService = new RelationshipService(this);
     }
 
-    public void addRelationship(Character character, int level) {
-        relationships.put(character, level);
+    public RelationshipService getRelationService() {
+        return relationshipService;
     }
 }

@@ -1,7 +1,9 @@
 package controllers;
 
 import models.Result;
+import models.character.player.Energy;
 import models.data.Repository;
+import models.enums.commands.EnergyCommands;
 
 public class EnergyController extends Controller {
     EnergyController(Repository repo) {
@@ -9,20 +11,49 @@ public class EnergyController extends Controller {
     }
 
     @Override
-    public Result handleCommand(String commandLine) {
+    public Result handleCommand(String command) {
+        EnergyCommands matchedCommand = null;
+
+        for (EnergyCommands cmd : EnergyCommands.values()) {
+            if (command.matches(cmd.getRegex())) {
+                matchedCommand = cmd;
+                break;
+            }
+        }
+
+        if (matchedCommand == null) {
+            return new Result(false, "invalid command!");
+        }
+
+        switch (matchedCommand) {
+            case ENERGY_SHOW:
+                return showEnergy();
+            case CHEAT_ENERGY:
+                return cheatEnergySet(command);
+            case ENERGY_UNLIMITED:
+                cheatEnergyUnlimited();
+        }
         return null;
     }
+
+    Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
 
     private Result showEnergy() {
-        return null;
+        return new Result(true, energy.toString());
     }
 
-    private Result cheatEnergySet() {
-        return null;
+    private Result cheatEnergySet(String command) {
+
+        String[] commandParts = command.split(" ");
+        String valueStr = commandParts[3];
+        int value = Integer.parseInt(valueStr);
+        energy.setAmount(value);
+
+        return new Result(true,"Sets the energy to a specified value");
     }
 
-    private Result cheatEnergyUnlimited() {
-        return null;
+    private void cheatEnergyUnlimited() {
+        energy.setAmount(Double.MAX_VALUE);
+        new Result(true, "Sets the energy to a unlimited value");
     }
-
 }

@@ -4,35 +4,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.character.player.Player;
-import models.data.User;
 import models.dateTime.TimeManager;
 import models.farming.FarmingManager;
+import models.shop.*;
 import models.weather.WeatherManager;
 
 public class Game {
     private Player currentPlayer;
-    private final Map<String, User> users;
+    private final Map<String, Player> players;
     private final TimeManager timeManager;
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
 
-    public Game() {
-        users = new HashMap<>();
+    private final Blacksmith blacksmith = new Blacksmith();
+    private final JojaMart jojaMart = new JojaMart();
+    private final PierreGeneralStore pierreGeneralStore = new PierreGeneralStore();
+    private final CarpenterShop carpenterShop = new CarpenterShop();
+    private final FishShop fishShop = new FishShop();
+    private final MarnieRanch marnieRanch = new MarnieRanch();
+    private final TheStardropSaloon theStarDropSaloon = new TheStardropSaloon();
+
+    public Game(Player player) {
+        players = new HashMap<>();
+        currentPlayer = player;
         timeManager = new TimeManager(this);
         weatherManager = new WeatherManager(this);
         farmingManager = new FarmingManager(this);
     }
 
-    public void addUser(User user) {
-        users.put(user.getUsername(), user);
+    public void addPlayer(Player player) {
+        players.put(player.getUser().getUsername(), player);
     }
 
-    public void removeUser(String username) {
-        users.remove(username);
+    public void removePlayer(String username) {
+        players.remove(username);
     }
 
-    public Map<String, User> users() {
-        return users;
+    public Map<String, Player> players() {
+        return players;
     }
 
     public WeatherManager getWeatherManager() {
@@ -53,5 +62,33 @@ public class Game {
 
     public FarmingManager getFarmingManager() {
         return farmingManager;
+    }
+
+    public Blacksmith getBlacksmith() {
+        return blacksmith;
+    }
+
+    public JojaMart getJojaMart() {
+        return jojaMart;
+    }
+
+    public PierreGeneralStore getPierreGeneralStore() {
+        return pierreGeneralStore;
+    }
+
+    public CarpenterShop getCarpenterShop() {
+        return carpenterShop;
+    }
+
+    public FishShop getFishShop() {
+        return fishShop;
+    }
+
+    public MarnieRanch getMarnieRanch() {
+        return marnieRanch;
+    }
+
+    public TheStardropSaloon getTheStardropSaloon() {
+        return theStarDropSaloon;
     }
 }

@@ -1,5 +1,7 @@
 package models;
 
+import models.character.player.Player;
+
 public class Position {
     private int x, y;
 

@@ -20,6 +20,10 @@ public class User {
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.email = email;
+        this.gender = gender;
     }
 
     public Player getPlayer() {
