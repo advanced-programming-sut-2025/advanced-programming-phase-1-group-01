@@ -25,7 +25,7 @@ public class ReduceEnergy {
                     Position secondPos = path.get(i);
                     Position firstPos = path.get(i - 2);
 
-                    if ((Math.abs(firstPos.getX() - secondPos.getX()) + Math.abs(firstPos.getY() - secondPos.getY()) > 1)) {
+                    if ((Math.abs(firstPos.x() - secondPos.x()) + Math.abs(firstPos.y() - secondPos.y()) > 1)) {
                         if (player.getEnergy().getAmount() >= 10) {
                             player.getEnergy().consume(10);
                             end = path.get(i);

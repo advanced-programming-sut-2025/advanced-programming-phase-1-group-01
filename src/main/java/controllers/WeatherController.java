@@ -59,9 +59,9 @@ public class WeatherController extends Controller {
     }
 
     private Result handleCheatThor(Position position) {
-        Tile tile = repo.getCurrentGame().getCurrentPlayer().getFarm().getTileByPosition(position);
+        Tile tile = repo.getCurrentGame().getCurrentPlayer().getFarm().getTile(position);
         repo.getCurrentGame().getWeatherManager().invokeThor(tile);
-        return new Result(true, "cheat thor applied on <%d, %d> tile.".formatted(position.getX(), position.getY()));
+        return new Result(true, "cheat thor applied on <%d, %d> tile.".formatted(position.x(), position.y()));
     }
 
     private Result showWeather() {

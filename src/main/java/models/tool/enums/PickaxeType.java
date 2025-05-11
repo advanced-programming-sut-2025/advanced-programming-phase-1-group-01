@@ -3,17 +3,17 @@ package models.tool.enums;
 public enum PickaxeType {
     PRIMARY(5), COPPER(4), IRON(3), GOLD(2), IRIDIUM(1),;
 
-    private int useEnergy;
+    private int energyCost;
 
-    PickaxeType(int useEnergy) {
-        this.useEnergy = useEnergy;
+    PickaxeType(int energyCost) {
+        this.energyCost = energyCost;
     }
 
-    public int getUseEnergy() {
-        return useEnergy;
+    public int getEnergyCost() {
+        return energyCost;
     }
 
-    public void setUseEnergy(int useEnergy) {
-        this.useEnergy = useEnergy;
+    public void setEnergyCost(int energyCost) {
+        this.energyCost = energyCost;
     }
 }

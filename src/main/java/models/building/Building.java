@@ -24,10 +24,10 @@ public abstract class Building {
     }
 
     public Position getBottomRightCorner() {
-        return new Position(topLeftCorner.getX() + size.getWidth(), topLeftCorner.getY() + size.getHeight());
+        return new Position(topLeftCorner.x() + size.getWidth(), topLeftCorner.y() + size.getHeight());
     }
 
     public boolean isThatTileEmpty(Position position) {
-        return tiles.get(position.getX()).get(position.getY()).isEmpty();
+        return tiles.get(position.x()).get(position.y()).isEmpty();
     }
 }
