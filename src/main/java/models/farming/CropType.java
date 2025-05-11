@@ -46,7 +46,8 @@ public enum CropType {
     YAM("Yam", "Yam Seeds", "1-3-3-3", 10, true, -1, 160, true, 45, List.of(Season.FALL), false),
     SWEET_GEM_BERRY("Sweet Gem Berry", "Rare Seed", "2-4-6-6-6", 24, true, -1, 3000, false, 0, List.of(Season.FALL), false),
     POWDERMELON("Powdermelon", "Powdermelon Seeds", "1-2-1-2-1", 7, true, -1, 60, true, 63, List.of(Season.WINTER), true),
-    ANCIENT_FRUIT("Ancient Fruit", "Ancient Seeds", "2-7-7-7-5", 28, false, 7, 550, false, 0, List.of(Season.SPRING, Season.SUMMER, Season.FALL), false);
+    ANCIENT_FRUIT("Ancient Fruit", "Ancient Seeds", "2-7-7-7-5", 28, false, 7, 550, false, 0, List.of(Season.SPRING, Season.SUMMER, Season.FALL), false),
+    HAY("Hay", "Hay", "1-1-1", 1, false, -1, 0, false, 0, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), false);
 
     private final String name;
     private final String source;

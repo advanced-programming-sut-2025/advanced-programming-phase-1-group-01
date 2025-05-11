@@ -1,45 +1,41 @@
 package models.character.NPC;
 
+import models.Position;
+import models.building.Building;
 import models.character.Character;
+import models.character.player.Player;
+import models.enums.Direction;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class NPC extends Character {
-    NPCType type;
-    NPCHome home;
-    NPCVillage village;
-    final Map<Integer, NPCQuest> quests;
+    private NPCType type;
+    private Building home;
+    private Position position;
+    private Direction direction;
+    private final Map<Player, Boolean> hasTalkedToday = new HashMap<>();
+    private final Map<Integer, NPCQuest> quests;
 
-    public NPC(NPCType type, NPCHome home, NPCVillage village) {
+    public NPC(NPCType type, Building home, Position position, Direction direction) {
         this.type = type;
         this.home = home;
-        this.village = village;
+        this.position = position;
+        this.direction = direction;
         quests = new HashMap<>();
-//        initQuests();
     }
 
-//    private void initQuests() {
-//        if (type == NPCType.SEBASTIAN) {
-//            quests.put(1, NPCQuest.SEBASTIAN_1);
-//            quests.put(2, NPCQuest.SEBASTIAN_2);
-//            quests.put(3, NPCQuest.SEBASTIAN_3);
-//        } else if (type == NPCType.ABIGAIL) {
-//            quests.put(1, NPCQuest.ABIGAIL_1);
-//            quests.put(2, NPCQuest.ABIGAIL_2);
-//            quests.put(3, NPCQuest.ABIGAIL_3);
-//        } else if (type == NPCType.HARVEY) {
-//            quests.put(1, NPCQuest.HARVEY_1);
-//            quests.put(2, NPCQuest.HARVEY_2);
-//            quests.put(3, NPCQuest.HARVEY_3);
-//        } else if (type == NPCType.LEAH) {
-//            quests.put(1, NPCQuest.LEAH_1);
-//            quests.put(2, NPCQuest.LEAH_2);
-//            quests.put(3, NPCQuest.LEAH_3);
-//        } else if (type == NPCType.ROBIN) {
-//            quests.put(1, NPCQuest.ROBIN_1);
-//            quests.put(2, NPCQuest.ROBIN_2);
-//            quests.put(3, NPCQuest.ROBIN_3);
-//        }
-//    }
+    public void addPlayerToTalk(Player player) {
+        hasTalkedToday.put(player, false);
+    }
+
+    public void addQuest(int numberOfQuest, NPCQuest quest) {
+        quests.put(numberOfQuest, quest);
+    }
+
+    public void advanceFriendship(Player player, int amount) {
+        relationships.put(player, relationships.get(player) + amount);
+        if (relationships.get(player) > 799) relationships.put(player, 799);
+        if (relationships.get(player) >= 200) quests.get(2).activateQuest();
+    }
 }

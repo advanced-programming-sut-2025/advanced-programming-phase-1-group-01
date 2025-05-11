@@ -1,8 +1,6 @@
 package models.animal;
 
-import models.ingredients.Ingredient;
-
-public enum AnimalProduct { // implements Ingredient
+public enum AnimalProductType { // implements Ingredient
     EGG(50),
     BIG_EGG(95),
     DUCK_EGG(95),
@@ -17,9 +15,13 @@ public enum AnimalProduct { // implements Ingredient
     SHEEP_WOOL(340),
     TRUFFLE(625);
 
-    private int price;
+    private final int BasePrice;
 
-    AnimalProduct(int price) {
-        this.price = price;
+    AnimalProductType(int BasePrice) {
+        this.BasePrice = BasePrice;
+    }
+
+    public int getBasePrice() {
+        return BasePrice;
     }
 }

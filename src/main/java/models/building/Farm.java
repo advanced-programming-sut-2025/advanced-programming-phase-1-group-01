@@ -1,21 +1,19 @@
 package models.building;
 
-import models.farming.Plant;
+import models.animal.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class Farm extends Map {
+public class Farm extends Maps {
     private static final int FARM_HEIGHT = 75;
     private static final int FARM_WIDTH = 75;
     private Lake lake;
     private Greenhouse greenhouse;
     private Cottage cottage;
     private Quarry quarry;
-
-    public List<List<Tile>> getTiles() {
-        return tiles;
-    }
+    private final ArrayList<AnimalHouse> shelters = new ArrayList<>();
+    private final ArrayList<Animal> animals = new ArrayList<>();
 
     public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse) {
         super(tiles);
@@ -55,5 +53,115 @@ public class Farm extends Map {
 
     public void setQuarry(Quarry quarry) {
         this.quarry = quarry;
+    }
+
+    public void addAnimal(Animal animal) {
+        animals.add(animal);
+    }
+
+    public void addShelter(AnimalHouse shelter) {
+        shelters.add(shelter);
+    }
+
+    public void removeAnimal(Animal animal) {
+        animals.remove(animal);
+    }
+
+    public void removeShelter(AnimalHouse shelter) {
+        shelters.remove(shelter);
+    }
+
+    public Map<Animal, Integer> getBarnAnimals() {
+        return animals.stream()
+                .filter(animal -> animal.getAnimalType().getMainHouseType() == AnimalHouseType.BARN)
+                .collect(Collectors.toMap(
+                        animal -> animal,
+                        animal -> 1
+                ));
+    }
+
+    public Map<Animal, Integer> getCoopAnimals() {
+        return animals.stream()
+                .filter(animal -> animal.getAnimalType().getMainHouseType() == AnimalHouseType.COOP)
+                .collect(Collectors.toMap(
+                        animal -> animal,
+                        animal -> 1
+                ));
+    }
+
+    public boolean isEmptyShelter(AnimalType animalType) {
+        return shelters.stream()
+                .anyMatch(shelter -> {
+                    AnimalType shelterAnimalType = shelter.getAnimalType();
+                    return shelterAnimalType == null
+                            || (shelterAnimalType.equals(animalType) && shelter.hasEmptySpace());
+                });
+    }
+
+    public void addAnimalToShelter(Animal animal) {
+        AnimalType animalType = animal.getAnimalType();
+
+        Optional<AnimalHouse> matchingShelter = shelters.stream()
+                .filter(shelter -> animalType.equals(shelter.getAnimalType()))
+                .filter(AnimalHouse::hasEmptySpace)
+                .findFirst();
+
+        if (matchingShelter.isPresent()) {
+            matchingShelter.get().addAnimal(animal);
+            return;
+        }
+
+        Optional<AnimalHouse> emptyShelter = shelters.stream()
+                .filter(shelter -> shelter.getAnimalType() == null)
+                .findFirst();
+
+        if (emptyShelter.isPresent()) {
+            AnimalHouse shelter = emptyShelter.get();
+            shelter.setAnimalType(animalType);
+            shelter.addAnimal(animal);
+        }
+    }
+
+    public String getFormattedProducts() {
+        HashMap<Animal, Integer> products = new HashMap<>();
+        for (Animal animal : animals) {
+            if (animal.hasAnyProduct()) {
+                products.put(animal, products.getOrDefault(animal, 0) + 1);
+            }
+        }
+        StringBuilder productsBuilder = new StringBuilder();
+        for (Animal animal : products.keySet()) {
+            productsBuilder.append(animal.getAnimalType().name().toLowerCase().replace("_", " ")).append(": ").append(products.get(animal)).append("\n");
+        }
+        return productsBuilder.toString();
+    }
+
+    public List<AnimalProduct> collectProductsByType(AnimalProductType desiredType) {
+        Map<AnimalProductQuality, AnimalProduct> productMap = new HashMap<>();
+
+        for (Animal animal : animals) {
+            if (animal.hasAnyProduct() && animal.getAnimalProductType() == desiredType) {
+                AnimalProductType type = animal.getAnimalProductType();
+                AnimalProductQuality quality = animal.getAnimalProductQuality();
+
+                productMap.merge(
+                        quality,
+                        new AnimalProduct(type, quality, 1),
+                        (existingProduct, newProduct) -> {
+                            existingProduct.increaseAmount(1);
+                            return existingProduct;
+                        }
+                );
+            }
+        }
+
+        return new ArrayList<>(productMap.values());
+    }
+
+    public void addCollectedProductsToInventory(List<AnimalProduct> products) {
+        for (AnimalProduct product : products) {
+            //add to inventory
+            return;
+        }
     }
 }
