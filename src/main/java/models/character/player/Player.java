@@ -1,18 +1,22 @@
 package models.character.player;
 
 import models.Game;
+import models.MessageEntry;
 import models.Position;
 import models.building.Farm;
 import models.character.Character;
+import models.data.User;
 import models.enums.Direction;
-import models.relations.RelationService;
-import models.tool.Tool;
+import models.enums.Gender;
+import models.relations.RelationshipService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Player extends Character {
     private final Game game;
+    private final User user;
+    private final Gender gender;
     private Position position;
     private Direction direction;
     private Farm farm;
@@ -20,23 +24,23 @@ public class Player extends Character {
     private Inventory inventory;
     private Energy energy;
     private AbilityService abilityService;
-    private List<Tool> tools;
-    private Tool equippedTool;
-    private RelationService relationService;
+    private RelationshipService relationshipService;
+    private final Map<MessageEntry, Boolean> notifications;
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
 
-    public Player(Game game) {
+    public Player(Game game, User user) {
         this.game = game;
+        this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
         numOfCoins = 0;
         inventory = new Inventory(this);
         energy = new Energy();
         abilityService = new AbilityService();
-        tools = new ArrayList<>();
-        equippedTool = null;
-        relationService = new RelationService();
+        relationshipService = new RelationshipService(this);
+        gender = user.getGender();
+        notifications = new LinkedHashMap<>();
     }
 
     public Position getPosition() {
@@ -63,6 +67,14 @@ public class Player extends Character {
         this.numOfCoins = numOfCoins;
     }
 
+    public void consume(int amount) {
+        numOfCoins -= amount;
+    }
+
+    public void increase(int amount) {
+        numOfCoins += amount;
+    }
+
     public Inventory getInventory() {
         return inventory;
     }
@@ -87,28 +99,12 @@ public class Player extends Character {
         this.abilityService = abilityService;
     }
 
-    public List<Tool> getTools() {
-        return tools;
+    public RelationshipService getRelationService() {
+        return relationshipService;
     }
 
-    public void setTools(List<Tool> tools) {
-        this.tools = tools;
-    }
-
-    public Tool getEquippedTool() {
-        return equippedTool;
-    }
-
-    public void setEquippedTool(Tool equippedTool) {
-        this.equippedTool = equippedTool;
-    }
-
-    public RelationService getRelationService() {
-        return relationService;
-    }
-
-    public void setRelationService(RelationService relationService) {
-        this.relationService = relationService;
+    public void setRelationService(RelationshipService relationshipService) {
+        this.relationshipService = relationshipService;
     }
 
     public Farm getFarm() {
@@ -121,5 +117,37 @@ public class Player extends Character {
 
     public Game getGame() {
         return game;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public Map<MessageEntry, Boolean> getNotifications() {
+        return notifications;
+    }
+
+    public void addNotification(Player sender, String message) {
+        notifications.put(new MessageEntry(sender, message), false);
+    }
+
+    public void readNotification(MessageEntry notification) {
+        notifications.put(notification, true);
+    }
+
+    public void readNotifications() {
+        for (MessageEntry key : notifications.keySet()) {
+            if (!notifications.get(key)) {
+                readNotification(key);
+            }
+        }
+    }
+
+    public boolean isNearTo(Player p) {
+        return Math.abs(p.getPosition().getX() - position.getX()) <= 1 && Math.abs(p.getPosition().getY() - position.getY()) <= 1;
     }
 }

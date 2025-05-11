@@ -1,7 +1,6 @@
 package models.character.NPC;
 
-import models.ingredients.Ingredient;
-
-public class TradeItem {
-
+public interface TradeItem {
+    int getAmount();
+    void setAmount(int amount);
 }

@@ -5,7 +5,6 @@ import models.character.Character;
 import models.character.player.Player;
 import models.enums.Direction;
 import models.random;
-import models.relations.FriendshipNetwork;
 
 public class Animal extends Character {
     protected final AnimalType animalType;
@@ -33,9 +32,9 @@ public class Animal extends Character {
     }
 
     public void setProduct(AnimalProductType product) {
-        if ((getRelationshipLevel(owner) + 150 * random.rand(0.0, 1.0)) / 1500 >= 1) {
-            this.animalProductType = animalType.getWealthyProduct();
-        } else this.animalProductType = product;
+//        if ((getRelationshipLevel(owner) + 150 * random.rand(0.0, 1.0)) / 1500 >= 1) {
+//            this.animalProductType = animalType.getWealthyProduct();
+//        } else this.animalProductType = product;
     }
 
     private Position findAPlace(AnimalHouse shelter) {
@@ -62,13 +61,13 @@ public class Animal extends Character {
 
     public void petting() {
         hasBeenPetted = true;
-        FriendshipNetwork.increaseFriendshipLevel(this, owner, 15);
+//        FriendshipNetwork.increaseFriendshipLevel(this, owner, 15);
     }
 
     public void checkAnimalStatus() {
-        if (isHungry) FriendshipNetwork.decreaseFriendshipLevel(this, owner, 20);
-        if (isOut) FriendshipNetwork.increaseFriendshipLevel(this, owner, 20);
-        if (!hasBeenPetted) FriendshipNetwork.increaseFriendshipLevel(this, owner, 10);
+//        if (isHungry) FriendshipNetwork.decreaseFriendshipLevel(this, owner, 20);
+//        if (isOut) FriendshipNetwork.increaseFriendshipLevel(this, owner, 20);
+//        if (!hasBeenPetted) FriendshipNetwork.increaseFriendshipLevel(this, owner, 10);
 
     }
 
@@ -115,10 +114,10 @@ public class Animal extends Character {
     }
 
     public AnimalProductQuality getAnimalProductQuality() {
-        double QualityNumber = getRelationshipLevel(owner) * (0.5 + 0.5 * random.rand(0.0, 1.0)) / 1000;
-        if (QualityNumber <= 0.5) return AnimalProductQuality.NORMAL;
-        if (QualityNumber <= 0.7) return AnimalProductQuality.SILVER;
-        if (QualityNumber <= 0.9) return AnimalProductQuality.GOLD;
+//        double QualityNumber = getRelationshipLevel(owner) * (0.5 + 0.5 * random.rand(0.0, 1.0)) / 1000;
+//        if (QualityNumber <= 0.5) return AnimalProductQuality.NORMAL;
+//        if (QualityNumber <= 0.7) return AnimalProductQuality.SILVER;
+//        if (QualityNumber <= 0.9) return AnimalProductQuality.GOLD;
         return AnimalProductQuality.IRIDIUM;
     }
 

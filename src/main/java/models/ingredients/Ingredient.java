@@ -3,7 +3,7 @@ package models.ingredients;
 import models.character.NPC.TradeItem;
 import models.weather.Weather;
 
-public class Ingredient extends TradeItem {
+public class Ingredient implements TradeItem {
     protected int amount;
 
     public Ingredient(int amount) {

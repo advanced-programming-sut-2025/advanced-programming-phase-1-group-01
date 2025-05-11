@@ -34,8 +34,8 @@ public class NPC extends Character {
     }
 
     public void advanceFriendship(Player player, int amount) {
-        relationships.put(player, relationships.get(player) + amount);
-        if (relationships.get(player) > 799) relationships.put(player, 799);
-        if (relationships.get(player) >= 200) quests.get(2).activateQuest();
+//        relationships.put(player, relationships.get(player) + amount);
+//        if (relationships.get(player) > 799) relationships.put(player, 799);
+//        if (relationships.get(player) >= 200) quests.get(2).activateQuest();
     }
 }

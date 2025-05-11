@@ -3,9 +3,10 @@ package models.farming;
 import models.dateTime.Season;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 // this enum contains all kinds of crops
-public enum CropType {
+public enum CropType implements FarmingEnum {
     BLUE_JAZZ("Blue Jazz", "Jazz Seeds", "1-2-2-2", 7, true, -1, 50, true, 45, List.of(Season.SPRING), false),
     CARROT("Carrot", "Carrot Seeds", "1-1-1", 3, true, -1, 35, true, 75, List.of(Season.SPRING), false),
     CAULIFLOWER("Cauliflower", "Cauliflower Seeds", "1-2-4-4-1", 12, true, -1, 175, true, 75, List.of(Season.SPRING), true),
@@ -58,10 +59,10 @@ public enum CropType {
     private final int baseSellPrice;
     private final boolean isEdible;
     private final int energy;
-    private final List<Season> season;
+    private final List<Season> seasons;
     private final boolean canBecomeGiant;
 
-    CropType(String name, String source, String stages, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, int energy, List<Season> season, boolean canBecomeGiant) {
+    CropType(String name, String source, String stages, int totalHarvestTime, boolean oneTime, int regrowthTime, int baseSellPrice, boolean isEdible, int energy, List<Season> seasons, boolean canBecomeGiant) {
         this.name = name;
         this.source = source;
         this.stages = stages;
@@ -71,7 +72,7 @@ public enum CropType {
         this.baseSellPrice = baseSellPrice;
         this.isEdible = isEdible;
         this.energy = energy;
-        this.season = season;
+        this.seasons = seasons;
         this.canBecomeGiant = canBecomeGiant;
     }
 
@@ -111,11 +112,50 @@ public enum CropType {
         return energy;
     }
 
-    public List<Season> getSeason() {
-        return season;
+    public List<Season> getSeasons() {
+        return seasons;
+    }
+
+    public String getSeasonsStr() {
+        return seasons.stream().map(Season::toString).collect(Collectors.joining(" & "));
     }
 
     public boolean canBecomeGiant() {
         return canBecomeGiant;
+    }
+
+    public static CropType fromString(String name) {
+        for (CropType cropType : values()) {
+            if (cropType.getName().equalsIgnoreCase(name)) {
+                return cropType;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return """
+                Name: %s
+                Source: %s
+                Stages: %s
+                Total Harvest Time: %d
+                One Time: %B
+                Regrowth Time: %d
+                Base Sell Price: %d
+                Is Edible: %B
+                Base Energy: %d
+                Season: %s
+                Can Become Giant: %B""".formatted(name,
+                source,
+                stages,
+                totalHarvestTime,
+                oneTime,
+                regrowthTime,
+                baseSellPrice,
+                isEdible,
+                energy,
+                getSeasonsStr(),
+                canBecomeGiant);
     }
 }

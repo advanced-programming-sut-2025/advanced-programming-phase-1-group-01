@@ -8,7 +8,6 @@ import models.character.NPC.NPCQuest;
 import models.character.NPC.NPCType;
 import models.character.player.Player;
 import models.enums.Direction;
-import models.relations.FriendshipNetwork;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,11 +165,11 @@ public class VillageInitializer {
 
     private static void InitializeFriendship(List<Player> players) {
         for (Player player : players) {
-            FriendshipNetwork.establishFriendship(player, robin, 0);
-            FriendshipNetwork.establishFriendship(player, leah, 0);
-            FriendshipNetwork.establishFriendship(player, sebastian, 0);
-            FriendshipNetwork.establishFriendship(player, abigail, 0);
-            FriendshipNetwork.establishFriendship(player, harvey, 0);
+//            FriendshipNetwork.establishFriendship(player, robin, 0);
+//            FriendshipNetwork.establishFriendship(player, leah, 0);
+//            FriendshipNetwork.establishFriendship(player, sebastian, 0);
+//            FriendshipNetwork.establishFriendship(player, abigail, 0);
+//            FriendshipNetwork.establishFriendship(player, harvey, 0);
 
             robin.addPlayerToTalk(player);
             leah.addPlayerToTalk(player);

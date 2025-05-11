@@ -15,6 +15,7 @@ public class Sheep extends Animal {
 
     @Override
     public boolean isAValidIncrement() {
-        return getRelationshipLevel(owner) >= 70;
+//        return getRelationshipLevel(owner) >= 70;
+        return true;
     }
 }

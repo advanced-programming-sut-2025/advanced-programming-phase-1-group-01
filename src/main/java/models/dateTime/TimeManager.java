@@ -1,6 +1,7 @@
 package models.dateTime;
 
 import models.Game;
+import models.character.player.Player;
 
 import java.util.*;
 
@@ -8,16 +9,15 @@ public class TimeManager {
     private List<DateTime> eventTimes;
     private Game game;
     private DateTime now;
-
     private final int START_HOUR_OF_DAY = 9;
     private final int END_HOUR_OF_DAY = 22;
 
-    private final int DAY_START_HOUR = 9;
-    private final int DAY_END_HOUR = 22;
-    private final Season START_SEASON = Season.SPRING;
-    private final int START_DAY = 1;
-    private final WeekDay START_WEEKDAY = WeekDay.MONDAY;
-    private final int START_YEAR = 2025;
+    public static final int DAY_START_HOUR = 9;
+    public static final int DAY_END_HOUR = 22;
+    public static final Season START_SEASON = Season.SPRING;
+    public static final int START_DAY = 1;
+    public static final WeekDay START_WEEKDAY = WeekDay.MONDAY;
+    public static final int START_YEAR = 2025;
 
     public TimeManager(Game game) {
         this.eventTimes = new ArrayList<>();
@@ -74,5 +74,22 @@ public class TimeManager {
     public void prepareForNewDay() {
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
+
+        game.getBlacksmith().resetDailyStock();
+        game.getJojaMart().resetDailyStock();
+        game.getPierreGeneralStore().resetDailyStock();
+        game.getCarpenterShop().resetDailyStock();
+        game.getFishShop().resetDailyStock();
+        game.getMarnieRanch().resetDailyStock();
+        game.getTheStardropSaloon().resetDailyStock();
+
+        Player player = game.getCurrentPlayer();
+        if (player.getEnergy().isHasPassedOut()) {
+            player.getEnergy().setHasPassedOut(false);
+            player.getEnergy().fillEnergyPassedOut();
+        }
+        else {
+            player.getEnergy().fillEnergy();
+        }
     }
 }
