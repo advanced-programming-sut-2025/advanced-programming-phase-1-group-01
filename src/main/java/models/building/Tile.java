@@ -115,5 +115,9 @@ public class Tile {
             this.object = object;
             return this;
         }
+
+        public boolean isEmpty() {
+            return object == null;
+        }
     }
 }

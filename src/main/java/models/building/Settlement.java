@@ -5,7 +5,7 @@ import models.character.NPC.NPCVillage;
 
 import java.util.List;
 
-public class Settlement extends Map {
+public class Settlement extends Maps {
     private final int MAP_WIDTH = 0;
     private final int MAP_HEIGHT = 0;
 

@@ -161,7 +161,7 @@ public class FarmInitializer {
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
-                    .build();;;
+                    .build();
             tiles.get(i).set(GREENHOUSE_TP.getY() - 1, tile);
         }
 

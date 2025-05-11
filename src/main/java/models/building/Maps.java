@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Map {
+public abstract class Maps {
     protected List<List<Tile>> tiles;
 
-    public Map(List<List<Tile>> tiles) {
+    public Maps(List<List<Tile>> tiles) {
         this.tiles = tiles;
     }
 

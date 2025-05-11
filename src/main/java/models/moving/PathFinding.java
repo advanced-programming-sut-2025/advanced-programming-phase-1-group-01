@@ -1,5 +1,6 @@
-package models;
+package models.moving;
 
+import models.Position;
 import models.building.Tile;
 import java.util.*;
 
@@ -25,7 +26,6 @@ public class PathFinding {
         int iterations = 0;
 
         while (!openSet.isEmpty() && iterations++ < MAX_ITERATIONS) {
-            //System.out.println(openSet.size());
             Node currentNode = openSet.poll();
             Position current = currentNode.position;
 
@@ -97,7 +97,6 @@ public class PathFinding {
             Tile tile = grid.get(nx).get(ny);
             if (!tile.isMovable()) continue;
 
-            // جلوگیری از عبور قطری بین دو مانع
             if (isDiagonal(dir)) {
                 Position adj1 = new Position(pos.getX() + dir[0], pos.getY());
                 Position adj2 = new Position(pos.getX(), pos.getY() + dir[1]);

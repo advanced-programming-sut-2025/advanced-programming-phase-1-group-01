@@ -10,7 +10,7 @@ public enum CheesePressProducts { // implements Ingredient
             "Cheese",
             "It's your basic cheese.",
             100,
-            "3 Hours", // تو پروژه واقعیت می‌تونه DateTime باشه
+            "3 Hours",
             Map.of(
                     IngredientService.getIngredients().get("MILK"), 230,
                     IngredientService.getIngredients().get("BIG_MILK"), 345

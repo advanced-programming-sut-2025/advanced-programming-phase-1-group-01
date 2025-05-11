@@ -89,4 +89,8 @@ public class WeatherManager {
             }
         }
     }
+
+    public boolean isAGrazingDay() {
+        return todayWeather == Weather.SUNNY;
+    }
 }
