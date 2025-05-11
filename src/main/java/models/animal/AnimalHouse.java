@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AnimalHouse extends Building {
     private AnimalHouseType houseType;
-    private AnimalType animalType;
+    private AnimalInfo animalInfo;
     private int capacity;
     private final ArrayList<Animal> animals;
 
@@ -39,8 +39,8 @@ public class AnimalHouse extends Building {
         return houseType;
     }
 
-    public AnimalType getAnimalType() {
-        return animalType;
+    public AnimalInfo getAnimalInfo() {
+        return animalInfo;
     }
 
     public void addAnimal(Animal animal) {
@@ -55,7 +55,7 @@ public class AnimalHouse extends Building {
         animals.remove(animal);
     }
 
-    public void setAnimalType(AnimalType animalType) {
-        this.animalType = animalType;
+    public void setAnimalType(AnimalInfo animalInfo) {
+        this.animalInfo = animalInfo;
     }
 }

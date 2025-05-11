@@ -6,6 +6,7 @@ import java.util.Map;
 import models.character.player.Player;
 import models.dateTime.TimeManager;
 import models.farming.FarmingManager;
+import models.foraging.ForagingManager;
 import models.shop.*;
 import models.weather.WeatherManager;
 
@@ -15,6 +16,7 @@ public class Game {
     private final TimeManager timeManager;
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
+    private final ForagingManager foragingManager;
 
     private final Blacksmith blacksmith = new Blacksmith();
     private final JojaMart jojaMart = new JojaMart();
@@ -30,6 +32,7 @@ public class Game {
         timeManager = new TimeManager(this);
         weatherManager = new WeatherManager(this);
         farmingManager = new FarmingManager(this);
+        foragingManager = new ForagingManager(this);
     }
 
     public void addPlayer(Player player) {
@@ -90,5 +93,9 @@ public class Game {
 
     public TheStardropSaloon getTheStardropSaloon() {
         return theStarDropSaloon;
+    }
+
+    public ForagingManager getForagingManager() {
+        return foragingManager;
     }
 }

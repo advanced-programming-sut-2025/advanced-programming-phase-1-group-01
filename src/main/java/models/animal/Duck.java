@@ -4,8 +4,8 @@ import models.building.Building;
 import models.character.player.Player;
 
 public class Duck extends Animal {
-    public Duck(AnimalType animalType, Player owner, AnimalHouse shelter) {
-        super(animalType, owner, shelter);
+    public Duck(AnimalInfo animalInfo, Player owner, AnimalHouse shelter) {
+        super(animalInfo, owner, shelter);
     }
 
     @Override

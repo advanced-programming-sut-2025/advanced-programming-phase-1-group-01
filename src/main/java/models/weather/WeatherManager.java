@@ -46,7 +46,7 @@ public class WeatherManager {
         }
 
         if (object instanceof Tree tree) {
-            tree.broke();
+            tree.burn();
         } else if (object instanceof Crop) {
             tile.removeObject();
         }

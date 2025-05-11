@@ -4,24 +4,24 @@ import java.util.List;
 import java.util.Random;
 
 public enum MixedSeed implements FarmingEnum {
-    SPRING_SEEDS(List.of(CropType.CAULIFLOWER, CropType.PARSNIP, CropType.POTATO, CropType.BLUE_JAZZ, CropType.TULIP)),
-    SUMMER_SEEDS(List.of(CropType.CORN, CropType.HOT_PEPPER, CropType.RADISH, CropType.WHEAT, CropType.POPPY, CropType.SUNFLOWER, CropType.SUMMER_SPANGLE)),
-    FALL_SEEDS(List.of(CropType.ARTICHOKE, CropType.CORN, CropType.EGGPLANT, CropType.PUMPKIN, CropType.SUNFLOWER, CropType.FAIRY_ROSE)),
-    WINTER_SEEDS(List.of(CropType.POWDERMELON));
+    SPRING_SEEDS(List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP)),
+    SUMMER_SEEDS(List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE)),
+    FALL_SEEDS(List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE)),
+    WINTER_SEEDS(List.of(CropInfo.POWDERMELON));
 
-    private final List<CropType> crops;
+    private final List<CropInfo> crops;
 
-    MixedSeed(List<CropType> crops) {
+    MixedSeed(List<CropInfo> crops) {
         this.crops = crops;
     }
 
-    public List<CropType> getCrops() {
+    public List<CropInfo> getCrops() {
         return crops;
     }
 
     private static final Random random = new Random();
 
-    public CropType getRandomCrop() {
+    public CropInfo getRandomCrop() {
         int index = random.nextInt(crops.size());
         return crops.get(index);
     }

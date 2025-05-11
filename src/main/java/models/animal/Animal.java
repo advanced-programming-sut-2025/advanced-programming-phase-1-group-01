@@ -7,7 +7,7 @@ import models.enums.Direction;
 import models.random;
 
 public class Animal extends Character {
-    protected final AnimalType animalType;
+    protected final AnimalInfo animalInfo;
     protected Player owner;
     protected Position position;
     protected Direction direction;
@@ -20,8 +20,8 @@ public class Animal extends Character {
     protected int periodicDay = 0;
 
 
-    public Animal(AnimalType animalType, Player owner, AnimalHouse shelter) {
-        this.animalType = animalType;
+    public Animal(AnimalInfo animalInfo, Player owner, AnimalHouse shelter) {
+        this.animalInfo = animalInfo;
         this.owner = owner;
         this.shelter = shelter;
         this.position = findAPlace(shelter);
@@ -51,8 +51,8 @@ public class Animal extends Character {
         return position;
     }
 
-    public AnimalType getAnimalType() {
-        return animalType;
+    public AnimalInfo getAnimalInfo() {
+        return animalInfo;
     }
 
     public AnimalHouse getShelter() {

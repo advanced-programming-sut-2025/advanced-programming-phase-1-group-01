@@ -4,8 +4,8 @@ import models.building.Building;
 import models.character.player.Player;
 
 public class Sheep extends Animal {
-    public Sheep(AnimalType animalType, Player owner, AnimalHouse shelter) {
-        super(animalType, owner, shelter);
+    public Sheep(AnimalInfo animalInfo, Player owner, AnimalHouse shelter) {
+        super(animalInfo, owner, shelter);
     }
 
     @Override

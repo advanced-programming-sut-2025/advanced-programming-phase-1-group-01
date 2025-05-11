@@ -73,7 +73,7 @@ public class Farm extends Maps {
 
     public Map<Animal, Integer> getBarnAnimals() {
         return animals.stream()
-                .filter(animal -> animal.getAnimalType().getMainHouseType() == AnimalHouseType.BARN)
+                .filter(animal -> animal.getAnimalInfo().getMainHouseType() == AnimalHouseType.BARN)
                 .collect(Collectors.toMap(
                         animal -> animal,
                         animal -> 1
@@ -82,27 +82,27 @@ public class Farm extends Maps {
 
     public Map<Animal, Integer> getCoopAnimals() {
         return animals.stream()
-                .filter(animal -> animal.getAnimalType().getMainHouseType() == AnimalHouseType.COOP)
+                .filter(animal -> animal.getAnimalInfo().getMainHouseType() == AnimalHouseType.COOP)
                 .collect(Collectors.toMap(
                         animal -> animal,
                         animal -> 1
                 ));
     }
 
-    public boolean isEmptyShelter(AnimalType animalType) {
+    public boolean isEmptyShelter(AnimalInfo animalInfo) {
         return shelters.stream()
                 .anyMatch(shelter -> {
-                    AnimalType shelterAnimalType = shelter.getAnimalType();
-                    return shelterAnimalType == null
-                            || (shelterAnimalType.equals(animalType) && shelter.hasEmptySpace());
+                    AnimalInfo shelterAnimalInfo = shelter.getAnimalInfo();
+                    return shelterAnimalInfo == null
+                            || (shelterAnimalInfo.equals(animalInfo) && shelter.hasEmptySpace());
                 });
     }
 
     public void addAnimalToShelter(Animal animal) {
-        AnimalType animalType = animal.getAnimalType();
+        AnimalInfo animalInfo = animal.getAnimalInfo();
 
         Optional<AnimalHouse> matchingShelter = shelters.stream()
-                .filter(shelter -> animalType.equals(shelter.getAnimalType()))
+                .filter(shelter -> animalInfo.equals(shelter.getAnimalInfo()))
                 .filter(AnimalHouse::hasEmptySpace)
                 .findFirst();
 
@@ -112,12 +112,12 @@ public class Farm extends Maps {
         }
 
         Optional<AnimalHouse> emptyShelter = shelters.stream()
-                .filter(shelter -> shelter.getAnimalType() == null)
+                .filter(shelter -> shelter.getAnimalInfo() == null)
                 .findFirst();
 
         if (emptyShelter.isPresent()) {
             AnimalHouse shelter = emptyShelter.get();
-            shelter.setAnimalType(animalType);
+            shelter.setAnimalType(animalInfo);
             shelter.addAnimal(animal);
         }
     }
@@ -131,7 +131,7 @@ public class Farm extends Maps {
         }
         StringBuilder productsBuilder = new StringBuilder();
         for (Animal animal : products.keySet()) {
-            productsBuilder.append(animal.getAnimalType().name().toLowerCase().replace("_", " ")).append(": ").append(products.get(animal)).append("\n");
+            productsBuilder.append(animal.getAnimalInfo().name().toLowerCase().replace("_", " ")).append(": ").append(products.get(animal)).append("\n");
         }
         return productsBuilder.toString();
     }
