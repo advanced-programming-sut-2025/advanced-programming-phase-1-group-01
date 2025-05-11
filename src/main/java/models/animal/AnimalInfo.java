@@ -2,7 +2,7 @@ package models.animal;
 
 import java.util.List;
 
-public enum AnimalType {
+public enum AnimalInfo {
     COW(1500, List.of(AnimalProduct.MILK, AnimalProduct.BIG_MILK), List.of(AnimalHouse.BARN, AnimalHouse.DELUXE_BARN, AnimalHouse.BIG_BARN)),
     DINOSAUR(14000, List.of(AnimalProduct.DINOSAUR_EGG), List.of(AnimalHouse.BIG_COOP)),
     DUCK(1200, List.of(AnimalProduct.DUCK_EGG, AnimalProduct.DUCK_FEATHER), List.of(AnimalHouse.BIG_COOP, AnimalHouse.DELUXE_COOP)),
@@ -16,7 +16,7 @@ public enum AnimalType {
     private List<AnimalProduct> products;
     private List<AnimalHouse> houses;
 
-    AnimalType(int price, List<AnimalProduct> products, List<AnimalHouse> houses) {
+    AnimalInfo(int price, List<AnimalProduct> products, List<AnimalHouse> houses) {
         this.price = price;
         this.products = products;
         this.houses = houses;

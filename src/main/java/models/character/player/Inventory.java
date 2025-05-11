@@ -22,7 +22,11 @@ public class Inventory {
     public InventorySlot getSlot(String itemName) {
         for (InventorySlot slot : slots) {
             if (slot.getItem().getName().equals(itemName)) {
-                return slot;
+                if (slot.getQuantity() > 0) {
+                    return slot;
+                } else {
+                    removeSlot(slot);
+                }
             }
         }
         return null;

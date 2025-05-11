@@ -2,7 +2,7 @@ package models.initializer;
 
 import models.Position;
 import models.building.*;
-import models.farming.TreeType;
+import models.farming.TreeInfo;
 import models.enums.StoneType;
 import models.foraging.ForagingCrop;
 import models.foraging.ForagingMineral;
@@ -203,7 +203,7 @@ public class FarmInitializer {
 
 
         for (int i = 0; i < NUMBER_OF_TREES; i++) {
-            TreeType tree = TreeType.randomTree();
+            TreeInfo tree = TreeInfo.randomTree();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
