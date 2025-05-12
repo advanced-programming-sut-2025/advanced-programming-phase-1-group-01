@@ -30,6 +30,10 @@ public class FarmInitializer {
     private final static Position GREENHOUSE_BR = new Position(26, 7);
     private final static Position COTTAGE_TP = new Position(65, 4);
     private final static Position COTTAGE_BR = new Position(69, 9);
+    private final static Position SHIPPING_BIN_1_TP = new Position(4, 5);
+    private final static Position SHIPPING_BIN_1_BR = new Position(5, 6);
+    private final static Position SHIPPING_BIN_2_TP = new Position(70, 68);
+    private final static Position SHIPPING_BIN_2_BR = new Position(71, 69);
 
     private final static List<List<Tile>> tiles = new ArrayList<>();
     private static Cottage cottage;
@@ -200,7 +204,27 @@ public class FarmInitializer {
             tiles.get(GREENHOUSE_BR.x() + 1).set(i, tile);
         }
 
+        for (int i = SHIPPING_BIN_1_TP.getX(); i < SHIPPING_BIN_1_BR.getX(); i++) {
+            for (int j = SHIPPING_BIN_1_TP.getY(); j < SHIPPING_BIN_1_BR.getY(); j++) {
+                Tile tile = new Tile.Builder()
+                        .setPosition(new Position(i, j))
+                        .setType(TileType.SALE_BUCKET)
+                        .setMovable(false)
+                        .build();
+                tiles.get(i).set(j, tile);
+            }
+        }
 
+        for (int i = SHIPPING_BIN_2_TP.getX(); i < SHIPPING_BIN_2_BR.getX(); i++) {
+            for (int j = SHIPPING_BIN_2_TP.getY(); j < SHIPPING_BIN_2_BR.getY(); j++) {
+                Tile tile = new Tile.Builder()
+                        .setPosition(new Position(i, j))
+                        .setType(TileType.SALE_BUCKET)
+                        .setMovable(false)
+                        .build();
+                tiles.get(i).set(j, tile);
+            }
+        }
 
         for (int i = 0; i < NUMBER_OF_TREES; i++) {
             TreeInfo tree = TreeInfo.randomTree();
