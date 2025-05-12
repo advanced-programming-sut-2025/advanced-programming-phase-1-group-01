@@ -1,6 +1,5 @@
 package models.initializer;
 
-import models.Game;
 import models.Position;
 import models.building.*;
 import models.character.NPC.NPC;
@@ -42,7 +41,7 @@ public class VillageInitializer {
     private final static List<List<Tile>> tiles = new ArrayList<>();
 
     public static void initializeTiles() {
-        for (int i = VILLAGE_TP.getX(); i < VILLAGE_BR.getX(); i++) {
+        for (int i = VILLAGE_TP.x(); i < VILLAGE_BR.x(); i++) {
             tiles.add(new ArrayList<>());
         }
 
@@ -54,56 +53,56 @@ public class VillageInitializer {
         roomMaker(FIFTH_ROOM_TP, FIFTH_ROOM_BR, TileType.COTTAGE, true);
 
 
-        wallMaker(FIRST_ROOM_TP.getX() - 1, FIRST_ROOM_BR.getX() + 1, FIRST_ROOM_TP.getY() - 1,
+        wallMaker(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_TP.y() - 1,
                 TileType.WALL, false, false);
-        wallMaker(FIRST_ROOM_TP.getX() - 1, FIRST_ROOM_BR.getX() + 1, FIRST_ROOM_BR.getY() + 1,
+        wallMaker(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_BR.y() + 1,
                 TileType.WALL, false, true);
-        wallMaker(FIRST_ROOM_TP.getY() - 1, FIRST_ROOM_BR.getY() + 1, FIRST_ROOM_TP.getX() - 1,
+        wallMaker(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_TP.x() - 1,
                 TileType.WALL, false, false);
-        wallMaker(FIRST_ROOM_TP.getY() - 1, FIRST_ROOM_BR.getY() + 1, FIRST_ROOM_BR.getX() + 1,
+        wallMaker(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_BR.x() + 1,
                 TileType.WALL, false, false);
 
-        wallMaker(SECOND_ROOM_TP.getX() - 1, SECOND_ROOM_BR.getX() + 1, SECOND_ROOM_TP.getY() - 1,
+        wallMaker(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_TP.y() - 1,
                 TileType.WALL, false, false);
-        wallMaker(SECOND_ROOM_TP.getX() - 1, SECOND_ROOM_BR.getX() + 1, SECOND_ROOM_BR.getY() + 1,
+        wallMaker(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_BR.y() + 1,
                 TileType.WALL, false, true);
-        wallMaker(SECOND_ROOM_TP.getY() - 1, SECOND_ROOM_BR.getY() + 1, SECOND_ROOM_TP.getX() - 1,
+        wallMaker(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_TP.x() - 1,
                 TileType.WALL, false, false);
-        wallMaker(SECOND_ROOM_TP.getY() - 1, SECOND_ROOM_BR.getY() + 1, SECOND_ROOM_BR.getX() + 1,
+        wallMaker(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_BR.x() + 1,
                 TileType.WALL, false, false);
 
-        wallMaker(THIRD_ROOM_TP.getX() - 1, THIRD_ROOM_BR.getX() + 1, THIRD_ROOM_TP.getY() - 1,
+        wallMaker(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_TP.y() - 1,
                 TileType.WALL, false, false);
-        wallMaker(THIRD_ROOM_TP.getX() - 1, THIRD_ROOM_BR.getX() + 1, THIRD_ROOM_BR.getY() + 1,
+        wallMaker(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_BR.y() + 1,
                 TileType.WALL, false, true);
-        wallMaker(THIRD_ROOM_TP.getY() - 1, THIRD_ROOM_BR.getY() + 1, THIRD_ROOM_TP.getX() - 1,
+        wallMaker(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_TP.x() - 1,
                 TileType.WALL, false, false);
-        wallMaker(THIRD_ROOM_TP.getY() - 1, THIRD_ROOM_BR.getY() + 1, THIRD_ROOM_BR.getX() + 1,
+        wallMaker(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_BR.x() + 1,
                 TileType.WALL, false, false);
 
-        wallMaker(FOURTH_ROOM_TP.getX() - 1, FOURTH_ROOM_BR.getX() + 1, FOURTH_ROOM_TP.getY() - 1,
+        wallMaker(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_TP.y() - 1,
                 TileType.WALL, false, false);
-        wallMaker(FOURTH_ROOM_TP.getX() - 1, FOURTH_ROOM_BR.getX() + 1, FOURTH_ROOM_BR.getY() + 1,
+        wallMaker(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_BR.y() + 1,
                 TileType.WALL, false, true);
-        wallMaker(FOURTH_ROOM_TP.getY() - 1, FOURTH_ROOM_BR.getY() + 1, FOURTH_ROOM_TP.getX() - 1,
+        wallMaker(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_TP.x() - 1,
                 TileType.WALL, false, false);
-        wallMaker(FOURTH_ROOM_TP.getY() - 1, FOURTH_ROOM_BR.getY() + 1, FOURTH_ROOM_BR.getX() + 1,
+        wallMaker(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_BR.x() + 1,
                 TileType.WALL, false, false);
 
-        wallMaker(FIFTH_ROOM_TP.getX() - 1, FIFTH_ROOM_BR.getX() + 1, FIFTH_ROOM_TP.getY() - 1,
+        wallMaker(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_TP.y() - 1,
                 TileType.WALL, false, false);
-        wallMaker(FIFTH_ROOM_TP.getX() - 1, FIFTH_ROOM_BR.getX() + 1, FIFTH_ROOM_BR.getY() + 1,
+        wallMaker(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_BR.y() + 1,
                 TileType.WALL, false, true);
-        wallMaker(FIFTH_ROOM_TP.getY() - 1, FIFTH_ROOM_BR.getY() + 1, FIFTH_ROOM_TP.getX() - 1,
+        wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_TP.x() - 1,
                 TileType.WALL, false, false);
-        wallMaker(FIFTH_ROOM_TP.getY() - 1, FIFTH_ROOM_BR.getY() + 1, FIFTH_ROOM_BR.getX() + 1,
+        wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_BR.x() + 1,
                 TileType.WALL, false, false);
 
     }
 
     public static void roomMaker(Position start, Position end, TileType type, boolean isMovable) {
-        for (int i = start.getX(); i < end.getX(); i++) {
-            for (int j = start.getY(); j < end.getY(); j++) {
+        for (int i = start.x(); i < end.x(); i++) {
+            for (int j = start.y(); j < end.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(type)
@@ -130,36 +129,36 @@ public class VillageInitializer {
     }
 
     private static void InitializeBuilding() {
-        Room1 room1 = new Room1(new Position(FIRST_ROOM_TP.getX(), FIRST_ROOM_BR.getY()));
-        Room2 room2 = new Room2(new Position(SECOND_ROOM_TP.getX(), SECOND_ROOM_BR.getY()));
-        Room3 room3 = new Room3(new Position(THIRD_ROOM_TP.getX(), THIRD_ROOM_BR.getY()));
-        Room4 room4 = new Room4(new Position(FOURTH_ROOM_TP.getX(), FOURTH_ROOM_BR.getY()));
-        Room5 room5 = new Room5(new Position(FIFTH_ROOM_TP.getX(), FIFTH_ROOM_BR.getY()));
+        Room1 room1 = new Room1(new Position(FIRST_ROOM_TP.x(), FIRST_ROOM_BR.y()));
+        Room2 room2 = new Room2(new Position(SECOND_ROOM_TP.x(), SECOND_ROOM_BR.y()));
+        Room3 room3 = new Room3(new Position(THIRD_ROOM_TP.x(), THIRD_ROOM_BR.y()));
+        Room4 room4 = new Room4(new Position(FOURTH_ROOM_TP.x(), FOURTH_ROOM_BR.y()));
+        Room5 room5 = new Room5(new Position(FIFTH_ROOM_TP.x(), FIFTH_ROOM_BR.y()));
     }
 
     private static void InitializeSebastian() {
         NPC sebastian = new NPC(NPCType.SEBASTIAN, room1,
-                new Position((FIRST_ROOM_TP.getX() + FIRST_ROOM_BR.getX()) / 2, FIRST_ROOM_BR.getY() + 2),
+                new Position((FIRST_ROOM_TP.x() + FIRST_ROOM_BR.x()) / 2, FIRST_ROOM_BR.y() + 2),
                 Direction.DOWN);
     }
     private static void InitializeAbigail() {
         NPC abigail = new NPC(NPCType.ABIGAIL, room2,
-                new Position(SECOND_ROOM_BR.getX() + 2, (SECOND_ROOM_TP.getY() + SECOND_ROOM_BR.getY()) / 2),
+                new Position(SECOND_ROOM_BR.x() + 2, (SECOND_ROOM_TP.y() + SECOND_ROOM_BR.y()) / 2),
                 Direction.RIGHT);
     }
     private static void InitializeHarvey() {
         NPC harvey = new NPC(NPCType.HARVEY, room3,
-                new Position((THIRD_ROOM_TP.getX() + THIRD_ROOM_BR.getX()) / 2, THIRD_ROOM_BR.getX() - 2),
+                new Position((THIRD_ROOM_TP.x() + THIRD_ROOM_BR.x()) / 2, THIRD_ROOM_BR.x() - 2),
                 Direction.UP);
     }
     private static void InitializeLeah() {
         NPC leah = new NPC(NPCType.LEAH, room4,
-                new Position((FOURTH_ROOM_TP.getX() + FOURTH_ROOM_BR.getX()) / 2, FOURTH_ROOM_BR.getY() - 2),
+                new Position((FOURTH_ROOM_TP.x() + FOURTH_ROOM_BR.x()) / 2, FOURTH_ROOM_BR.y() - 2),
                 Direction.UP);
     }
     private static void InitializeRobin() {
         NPC robin = new NPC(NPCType.ROBIN, room5,
-                new Position(FIFTH_ROOM_TP.getX() - 2, (FIFTH_ROOM_TP.getY() + FIRST_ROOM_BR.getY()) / 2),
+                new Position(FIFTH_ROOM_TP.x() - 2, (FIFTH_ROOM_TP.y() + FIRST_ROOM_BR.y()) / 2),
                 Direction.LEFT);
     }
 

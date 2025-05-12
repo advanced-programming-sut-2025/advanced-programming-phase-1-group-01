@@ -11,21 +11,21 @@ import models.building.TileType;
 public class CreateShelter {
     public static AnimalHouse createShelter(Position position, Farm farm, AnimalHouseType animalHouseType) {
         setInteriorTiles(position, farm, animalHouseType.getSize());
-        setFence(position.getX() - 1, position.getX() + animalHouseType.getSize().getWidth(),
-                farm, position.getY() - 1, false);
-        setFence(position.getX() - 1, position.getX() + animalHouseType.getSize().getWidth() + 1,
-                farm, position.getY() + animalHouseType.getSize().getHeight() + 1, true);
-        setFence(position.getY() - 1, position.getY() + animalHouseType.getSize().getHeight() + 1,
-                farm, position.getX() - 1, false);
-        setFence(position.getY() - 1, position.getY() + animalHouseType.getSize().getHeight() + 1,
-                farm, position.getX() + animalHouseType.getSize().getWidth() + 1, false);
+        setFence(position.x() - 1, position.x() + animalHouseType.getSize().getWidth(),
+                farm, position.y() - 1, false);
+        setFence(position.x() - 1, position.x() + animalHouseType.getSize().getWidth() + 1,
+                farm, position.y() + animalHouseType.getSize().getHeight() + 1, true);
+        setFence(position.y() - 1, position.y() + animalHouseType.getSize().getHeight() + 1,
+                farm, position.x() - 1, false);
+        setFence(position.y() - 1, position.y() + animalHouseType.getSize().getHeight() + 1,
+                farm, position.x() + animalHouseType.getSize().getWidth() + 1, false);
         return new AnimalHouse(animalHouseType, position);
     }
 
     public static void setInteriorTiles(Position position, Farm farm, Size size) {
-        Position end = new Position(position.getX() + size.getWidth(), position.getY() + size.getHeight());
-        for (int i = position.getX(); i < end.getX(); i++) {
-            for (int j = position.getY(); j < end.getY(); j++) {
+        Position end = new Position(position.x() + size.getWidth(), position.y() + size.getHeight());
+        for (int i = position.x(); i < end.x(); i++) {
+            for (int j = position.y(); j < end.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.GREENHOUSE)

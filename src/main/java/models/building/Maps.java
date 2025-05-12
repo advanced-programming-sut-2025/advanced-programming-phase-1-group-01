@@ -47,8 +47,8 @@ public abstract class Maps {
         return shuffledTiles.remove(shuffledTiles.size() - 1);
     }
 
-    public Tile getTileByPosition(Position position) {
-        return tiles.get(position.getY()).get(position.getX());
+    public Tile getTile(Position position) {
+        return tiles.get(position.y()).get(position.x());
     }
 
     public List<List<Tile>> getTiles() {

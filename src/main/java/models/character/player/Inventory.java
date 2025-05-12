@@ -39,7 +39,7 @@ public class Inventory {
     public boolean addItem(String itemName, int quantity) {
         for (InventorySlot slot : slots) {
             if (slot.getItem().getName().equals(itemName)) {
-                slot.increaseQuantity(quantity);
+                slot.addQuantity(quantity);
                 return true;
             }
         }

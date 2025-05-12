@@ -1,5 +1,6 @@
 package models.tool;
 
+import models.enums.Direction;
 import models.tool.enums.PickaxeType;
 
 // related to mining.
@@ -7,7 +8,12 @@ public class Pickaxe extends Tool {
     private PickaxeType type;
 
     @Override
-    public void use() {
+    public int getBaseEnergyCost() {
+        return type.getEnergyCost();
+    }
+
+    @Override
+    public void use(Direction direction) {
         // what tool does
 
         double energyCost = getEffectiveEnergyCost();
