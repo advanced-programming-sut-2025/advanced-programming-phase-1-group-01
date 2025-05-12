@@ -2,6 +2,7 @@ package controllers;
 
 import models.Position;
 import models.Result;
+import models.building.Tile;
 import models.character.player.InventorySlot;
 import models.character.player.Player;
 import models.data.Repository;
@@ -70,13 +71,24 @@ public class FarmingController extends Controller {
         return new Result(true, farmingConstant.toString());
     }
 
-    private Result plant(String seedName, Direction dir) {
+    private Result plant(String seedName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         InventorySlot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(seedName);
+        Position appliedPosition = player.getPosition().applyDirection(direction);
+        Tile tile = player.getFarm().getTile(appliedPosition);
 
-        if (slot == null) {
+        if (tile == null) {
+            return new Result(false, "incorrect tile");
+        } else if (slot == null) {
             return new Result(false, "seed not found");
+        } else if (!tile.isPlowed()) {
+            return new Result(false, "tile is not plowed");
         }
+
+        slot.removeQuantity(1);
+        SeedInfo seedInfo = SeedInfo.fromString(seedName);
+        Seed seed = new Seed(seedInfo);
+        repo.getCurrentGame().getFarmingManager().plant(seed, tile);
 
         return new Result(true, "");
     }

@@ -14,7 +14,6 @@ import models.relations.Gift;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListResourceBundle;
 import java.util.Map;
 
 public class RelationshipController extends Controller {
@@ -168,7 +167,7 @@ public class RelationshipController extends Controller {
         InventorySlot slot = sender.getInventory().getSlot(itemName);
         InventoryItem item = slot.getItem();
         if (slot.getQuantity() <= amount) {
-            slot.decreaseQuantity(amount);
+            slot.removeQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);
         } else {
             return new Result(false, "not enough item");

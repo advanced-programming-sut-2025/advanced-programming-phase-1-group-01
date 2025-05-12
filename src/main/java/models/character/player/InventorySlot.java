@@ -25,15 +25,11 @@ public class InventorySlot {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void increaseQuantity(int amount) {
+    public void addQuantity(int amount) {
         if (amount > 0) quantity += amount;
     }
 
-    public void decreaseQuantity(int amount) {
+    public void removeQuantity(int amount) {
         if (amount > 0) quantity -= amount;
         if (amount == 0) inventory.removeSlot(this);
     }

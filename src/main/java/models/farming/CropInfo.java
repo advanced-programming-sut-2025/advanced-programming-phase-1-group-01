@@ -123,6 +123,15 @@ public enum CropInfo implements FarmingEnum {
         return canBecomeGiant;
     }
 
+    public static CropInfo fromSeed(SeedInfo seedInfo) {
+        for (CropInfo info : CropInfo.values()) {
+            if (info.source == seedInfo) {
+                return info;
+            }
+        }
+        return null;
+    }
+
     public static CropInfo fromString(String name) {
         for (CropInfo cropInfo : values()) {
             if (cropInfo.getName().equalsIgnoreCase(name)) {
