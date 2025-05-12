@@ -14,7 +14,6 @@ import models.relations.Gift;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListResourceBundle;
 import java.util.Map;
 
 public class RelationshipController extends Controller {
@@ -141,18 +140,19 @@ public class RelationshipController extends Controller {
 
         if (friend == null) {
             return new Result(false, "player not found");
-        }
-
-        else if (currentPlayer.getPosition().isNearTo(friend)) {
+        } else if (currentPlayer.isNearTo(friend)) {
             return new Result(false, "you should be near of %s".formatted(friend));
         }
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
 
-        if (friendship.getLevel() < 2 ) {
+        if (friendship.getLevel() < 2) {
             return new Result(false, "you are not enough level");
         }
         return null;
+    }
+
+    private Result gift(String username, String itemName, int amount) {
         Player receiver = repo.getUserByUsername(username).getPlayer();
         Player sender = repo.getCurrentGame().getCurrentPlayer();
         Friendship friendship = sender.getRelationService().getFriendship(receiver);
@@ -167,7 +167,7 @@ public class RelationshipController extends Controller {
         InventorySlot slot = sender.getInventory().getSlot(itemName);
         InventoryItem item = slot.getItem();
         if (slot.getQuantity() <= amount) {
-            slot.decreaseQuantity(amount);
+            slot.removeQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);
         } else {
             return new Result(false, "not enough item");

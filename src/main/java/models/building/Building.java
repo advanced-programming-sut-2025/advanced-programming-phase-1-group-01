@@ -18,4 +18,16 @@ public abstract class Building {
         this.size = size;
         this.tiles = new ArrayList<>();
     }
+
+    public Position getTopLeftCorner() {
+        return topLeftCorner;
+    }
+
+    public Position getBottomRightCorner() {
+        return new Position(topLeftCorner.x() + size.getWidth(), topLeftCorner.y() + size.getHeight());
+    }
+
+    public boolean isThatTileEmpty(Position position) {
+        return tiles.get(position.x()).get(position.y()).isEmpty();
+    }
 }

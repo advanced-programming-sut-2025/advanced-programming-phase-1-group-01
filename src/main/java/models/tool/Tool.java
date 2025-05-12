@@ -2,17 +2,19 @@ package models.tool;
 
 import models.InventoryItem;
 import models.character.player.Inventory;
+import models.enums.Direction;
 
 public abstract class Tool implements InventoryItem {
     protected Inventory inventory;
     protected String name;
-    protected double baseEnergyCost;
 
     public double getEffectiveEnergyCost() {
-        return inventory.getPlayer().getGame().getWeatherManager().getToolEnergyCostMultiplier() * baseEnergyCost;
+        return inventory.getPlayer().getGame().getWeatherManager().getToolEnergyCostMultiplier() * getBaseEnergyCost();
     }
 
-    public abstract void use();
+    public abstract int getBaseEnergyCost();
+
+    public abstract void use(Direction direction);
 
     @Override
     public String getName() {

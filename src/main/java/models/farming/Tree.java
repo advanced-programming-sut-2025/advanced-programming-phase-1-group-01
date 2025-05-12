@@ -16,6 +16,10 @@ public class Tree extends Plant {
         state = TreeState.BROKEN;
     }
 
+    public void burn() {
+        state = TreeState.BURNT;
+    }
+
     public void repair() {
         state = TreeState.HEALTHY;
     }

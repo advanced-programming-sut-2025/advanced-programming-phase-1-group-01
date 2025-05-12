@@ -74,6 +74,8 @@ public class TimeManager {
     public void prepareForNewDay() {
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
+        game.getForagingManager().prepareForaging();
+        game.getFarmingManager().resetAllPlantsWatered();
 
         game.getBlacksmith().resetDailyStock();
         game.getJojaMart().resetDailyStock();

@@ -1,9 +1,10 @@
 package models.ingredients;
 
 import models.character.NPC.TradeItem;
+import models.weather.Weather;
 
 public class Ingredient implements TradeItem {
-    private int amount;
+    protected int amount;
 
     public Ingredient(int amount) {
         this.amount = amount;

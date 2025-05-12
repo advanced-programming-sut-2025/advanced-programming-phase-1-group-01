@@ -148,6 +148,6 @@ public class Player extends Character {
     }
 
     public boolean isNearTo(Player p) {
-        return Math.abs(p.getPosition().getX() - position.getX()) <= 1 && Math.abs(p.getPosition().getY() - position.getY()) <= 1;
+        return Math.abs(p.getPosition().x() - position.x()) <= 1 && Math.abs(p.getPosition().y() - position.y()) <= 1;
     }
 }
