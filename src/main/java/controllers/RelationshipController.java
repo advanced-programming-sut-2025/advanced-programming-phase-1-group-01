@@ -166,8 +166,11 @@ public class RelationshipController extends Controller {
         }
 
         InventorySlot slot = sender.getInventory().getSlot(itemName);
+        if (slot == null) {
+            return new Result(false, "item not found");
+        }
         InventoryItem item = slot.getItem();
-        if (slot.getQuantity() <= amount) {
+        if (slot.getQuantity() >= amount) {
             slot.decreaseQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);
         } else {

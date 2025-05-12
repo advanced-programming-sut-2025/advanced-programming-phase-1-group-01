@@ -1,7 +1,8 @@
 package models.building;
 
 public enum TileType {
-    GROUND("🟩"), RIVER("〰️"), MINE("⛰️"), GREENHOUSE("🍀"), COTTAGE("🟫"), WALL("🧱");
+    GROUND("🟩"), RIVER("〰️"), MINE("⛰️"), GREENHOUSE("🍀"), COTTAGE("🟫"), WALL("🧱"),
+    SALE_BUCKET("🚽");
 
     private final String symbol;
 
