@@ -21,7 +21,7 @@ public class Inventory {
 
     public InventorySlot getSlot(String itemName) {
         for (InventorySlot slot : slots) {
-            if (slot.getItem().getName().equals(itemName)) {
+            if (slot.getItem().getName().equalsIgnoreCase(itemName)) {
                 if (slot.getQuantity() > 0) {
                     return slot;
                 } else {
@@ -52,6 +52,7 @@ public class Inventory {
         return false;
     }
 
+
     public Player getPlayer() {
         return player;
     }
@@ -74,8 +75,8 @@ public class Inventory {
                 return new FishingPole();
             case "hoe":
                 return new Hoe();
-            case "milk pail"
-                : return new MilkPail();
+            case "milk pail":
+                return new MilkPail();
             case "pickaxe":
                 return new Pickaxe();
             case "scythe":

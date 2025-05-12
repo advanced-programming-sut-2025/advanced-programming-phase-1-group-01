@@ -55,7 +55,7 @@ public class TheStardropSaloonController extends ShopController {
 
         try {
             count = Integer.parseInt(tokens[3]);
-        } catch (Exception e) {
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
             count = 1;
         }
 

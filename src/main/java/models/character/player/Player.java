@@ -3,14 +3,19 @@ package models.character.player;
 import models.Game;
 import models.MessageEntry;
 import models.Position;
+import models.building.Building;
 import models.building.Farm;
+import models.building.Tile;
+import models.building.TileObject;
 import models.character.Character;
 import models.data.User;
 import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Player extends Character {
@@ -149,5 +154,26 @@ public class Player extends Character {
 
     public boolean isNearTo(Player p) {
         return Math.abs(p.getPosition().x() - position.x()) <= 1 && Math.abs(p.getPosition().y() - position.y()) <= 1;
+    }
+
+    public boolean isNearTo(Position position) {
+        return Math.abs(this.position.getX() - position.getX()) <= 1 && Math.abs(this.position.getY() - position.getY()) <= 1;
+    }
+
+    public boolean isNearToSellBucket() {
+        List<Position> neighbors = new ArrayList<>();
+        int[][] directions = {{0,1}, {1,0}, {0,-1}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+
+        for (int[] dir : directions) {
+            int nx = position.getX() + dir[0];
+            int ny = position.getY() + dir[1];
+            Position neighbor = new Position(nx, ny);
+            neighbors.add(neighbor);
+        }
+
+        for (Position p : neighbors) {
+            if (farm.getTiles().get(p.getX()).get(p.getY()).getObject() == null) return true;
+        }
+        return false;
     }
 }
