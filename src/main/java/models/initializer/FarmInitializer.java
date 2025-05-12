@@ -2,7 +2,7 @@ package models.initializer;
 
 import models.Position;
 import models.building.*;
-import models.farming.TreeType;
+import models.farming.TreeInfo;
 import models.enums.StoneType;
 import models.foraging.ForagingCrop;
 import models.foraging.ForagingMineral;
@@ -43,12 +43,12 @@ public class FarmInitializer {
 
     private static void initializeTiles() {
 
-        for (int i = FARM_TP.getX(); i < FARM_BR.getX(); i++) {
+        for (int i = FARM_TP.x(); i < FARM_BR.x(); i++) {
             tiles.add(new ArrayList<>());
         }
 
-        for (int i = GROUND_TP.getX(); i < GROUND_BR.getX(); i++) {
-            for (int j = GROUND_TP.getY(); j < GROUND_BR.getY(); j++) {
+        for (int i = GROUND_TP.x(); i < GROUND_BR.x(); i++) {
+            for (int j = GROUND_TP.y(); j < GROUND_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.GROUND)
@@ -60,8 +60,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = MINE_TP.getY(); j < MINE_BR.getY(); j++) {
-            for (int i = MINE_TP.getX(); i < MINE_BR.getX(); i++) {
+        for (int j = MINE_TP.y(); j < MINE_BR.y(); j++) {
+            for (int i = MINE_TP.x(); i < MINE_BR.x(); i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.MINE)
@@ -73,8 +73,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = RIVER_TP.getY(); j < RIVER_BR.getY(); j++) {
-            for (int i = RIVER_TP.getX(); i < RIVER_BR.getX(); i++) {
+        for (int j = RIVER_TP.y(); j < RIVER_BR.y(); j++) {
+            for (int i = RIVER_TP.x(); i < RIVER_BR.x(); i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.RIVER)
@@ -86,8 +86,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = GREENHOUSE_TP.getY(); j < GREENHOUSE_BR.getY(); j++) {
-            for (int i = GREENHOUSE_TP.getX(); i < GREENHOUSE_BR.getX(); i++) {
+        for (int j = GREENHOUSE_TP.y(); j < GREENHOUSE_BR.y(); j++) {
+            for (int i = GREENHOUSE_TP.x(); i < GREENHOUSE_BR.x(); i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.GREENHOUSE)
@@ -99,8 +99,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = COTTAGE_TP.getY(); j < COTTAGE_BR.getY(); j++) {
-            for (int i = COTTAGE_TP.getX(); i < COTTAGE_BR.getX(); i++) {
+        for (int j = COTTAGE_TP.y(); j < COTTAGE_BR.y(); j++) {
+            for (int i = COTTAGE_TP.x(); i < COTTAGE_BR.x(); i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.COTTAGE)
@@ -112,96 +112,96 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = COTTAGE_TP.getX() - 1; i < COTTAGE_BR.getX() + 1; i++) {
+        for (int i = COTTAGE_TP.x() - 1; i < COTTAGE_BR.x() + 1; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, COTTAGE_TP.getY() - 1))
+                    .setPosition(new Position(i, COTTAGE_TP.y() - 1))
                     .setType(TileType.WALL)
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
                     .build();;
-            tiles.get(i).set(COTTAGE_TP.getY() - 1, tile);
+            tiles.get(i).set(COTTAGE_TP.y() - 1, tile);
         }
 
-        for (int i = COTTAGE_TP.getX() - 1; i < COTTAGE_BR.getX() + 1; i++) {
-            if (i != (COTTAGE_BR.getX() + COTTAGE_TP.getX()) / 2) {
+        for (int i = COTTAGE_TP.x() - 1; i < COTTAGE_BR.x() + 1; i++) {
+            if (i != (COTTAGE_BR.x() + COTTAGE_TP.x()) / 2) {
                 Tile tile = new Tile.Builder()
-                        .setPosition(new Position(i, COTTAGE_BR.getY() + 1))
+                        .setPosition(new Position(i, COTTAGE_BR.y() + 1))
                         .setType(TileType.WALL)
                         .setMovable(false)
                         .setBuilding(null)
                         .setObject(null)
                         .build();;
-                tiles.get(i).set(COTTAGE_BR.getY() + 1, tile);
+                tiles.get(i).set(COTTAGE_BR.y() + 1, tile);
             }
         }
 
-        for (int i = COTTAGE_TP.getY() - 1; i < COTTAGE_BR.getY() + 1; i++) {
+        for (int i = COTTAGE_TP.y() - 1; i < COTTAGE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, COTTAGE_TP.getX() - 1))
+                    .setPosition(new Position(i, COTTAGE_TP.x() - 1))
                     .setType(TileType.WALL)
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
                     .build();;
-            tiles.get(COTTAGE_TP.getX() - 1).set(i, tile);
+            tiles.get(COTTAGE_TP.x() - 1).set(i, tile);
         }
 
-        for (int i = COTTAGE_TP.getY() - 1; i < COTTAGE_BR.getY() + 1; i++) {
+        for (int i = COTTAGE_TP.y() - 1; i < COTTAGE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, COTTAGE_BR.getX() + 1))
+                    .setPosition(new Position(i, COTTAGE_BR.x() + 1))
                     .setType(TileType.WALL)
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-            tiles.get(COTTAGE_BR.getX() + 1).set(i, tile);
+            tiles.get(COTTAGE_BR.x() + 1).set(i, tile);
         }
 
-        for (int i = GREENHOUSE_TP.getX() - 1; i < GREENHOUSE_BR.getX() + 1; i++) {
+        for (int i = GREENHOUSE_TP.x() - 1; i < GREENHOUSE_BR.x() + 1; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, COTTAGE_TP.getY() - 1))
+                    .setPosition(new Position(i, COTTAGE_TP.y() - 1))
                     .setType(TileType.WALL)
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
-                    .build();;;
-            tiles.get(i).set(GREENHOUSE_TP.getY() - 1, tile);
+                    .build();
+            tiles.get(i).set(GREENHOUSE_TP.y() - 1, tile);
         }
 
-        for (int i = GREENHOUSE_TP.getX() - 1; i < GREENHOUSE_BR.getX() + 1; i++) {
-            if (i != (GREENHOUSE_BR.getX() + GREENHOUSE_TP.getX()) / 2) {
+        for (int i = GREENHOUSE_TP.x() - 1; i < GREENHOUSE_BR.x() + 1; i++) {
+            if (i != (GREENHOUSE_BR.x() + GREENHOUSE_TP.x()) / 2) {
                 Tile tile = new Tile.Builder()
-                        .setPosition(new Position(i, GREENHOUSE_BR.getY() + 1))
+                        .setPosition(new Position(i, GREENHOUSE_BR.y() + 1))
                         .setType(TileType.WALL)
                         .setMovable(false)
                         .setBuilding(null)
                         .setObject(null)
                         .build();;
-                tiles.get(i).set(GREENHOUSE_BR.getY() + 1, tile);
+                tiles.get(i).set(GREENHOUSE_BR.y() + 1, tile);
             }
         }
 
-        for (int i = GREENHOUSE_TP.getY() - 1; i < GREENHOUSE_BR.getY() + 1; i++) {
+        for (int i = GREENHOUSE_TP.y() - 1; i < GREENHOUSE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, GREENHOUSE_TP.getX() - 1))
+                    .setPosition(new Position(i, GREENHOUSE_TP.x() - 1))
                     .setType(TileType.WALL)
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-            tiles.get(GREENHOUSE_TP.getX() - 1).set(i, tile);
+            tiles.get(GREENHOUSE_TP.x() - 1).set(i, tile);
         }
 
-        for (int i = GREENHOUSE_TP.getY() - 1; i < GREENHOUSE_BR.getY() + 1; i++) {
+        for (int i = GREENHOUSE_TP.y() - 1; i < GREENHOUSE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, GREENHOUSE_BR.getX() + 1))
+                    .setPosition(new Position(i, GREENHOUSE_BR.x() + 1))
                     .setType(TileType.WALL)
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-            tiles.get(GREENHOUSE_BR.getX() + 1).set(i, tile);
+            tiles.get(GREENHOUSE_BR.x() + 1).set(i, tile);
         }
 
         for (int i = SHIPPING_BIN_1_TP.getX(); i < SHIPPING_BIN_1_BR.getX(); i++) {
@@ -227,12 +227,12 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_TREES; i++) {
-            TreeType tree = TreeType.randomTree();
+            TreeInfo tree = TreeInfo.randomTree();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.getX()).get(position.getY()).setObject(tree);
-                tiles.get(position.getX()).get(position.getY()).setMovable(false);
+                tiles.get(position.x()).get(position.y()).setObject(tree);
+                tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
@@ -241,8 +241,8 @@ public class FarmInitializer {
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.getX()).get(position.getY()).setObject(stone);
-                tiles.get(position.getX()).get(position.getY()).setMovable(false);
+                tiles.get(position.x()).get(position.y()).setObject(stone);
+                tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
@@ -251,8 +251,8 @@ public class FarmInitializer {
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.getX()).get(position.getY()).setObject(foragingCrop);
-                tiles.get(position.getX()).get(position.getY()).setMovable(false);
+                tiles.get(position.x()).get(position.y()).setObject(foragingCrop);
+                tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
@@ -261,8 +261,8 @@ public class FarmInitializer {
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.getX()).get(position.getY()).setObject(foragingMineral);
-                tiles.get(position.getX()).get(position.getY()).setMovable(false);
+                tiles.get(position.x()).get(position.y()).setObject(foragingMineral);
+                tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
@@ -271,28 +271,28 @@ public class FarmInitializer {
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.getX()).get(position.getY()).setObject(foragingTree);
-                tiles.get(position.getX()).get(position.getY()).setMovable(false);
+                tiles.get(position.x()).get(position.y()).setObject(foragingTree);
+                tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
     }
 
 
     private static void initializeBuildings() {
-        cottage = new Cottage(new Position(COTTAGE_TP.getX(), COTTAGE_TP.getY()));
-        greenhouse = new Greenhouse(new Position(GREENHOUSE_TP.getX(), GREENHOUSE_TP.getY()));
-        lake = new Lake(new Position(RIVER_TP.getX(), RIVER_TP.getY()));
-        quarry = new Quarry(new Position(MINE_TP.getX(), MINE_TP.getY()));
+        cottage = new Cottage(new Position(COTTAGE_TP.x(), COTTAGE_TP.y()));
+        greenhouse = new Greenhouse(new Position(GREENHOUSE_TP.x(), GREENHOUSE_TP.y()));
+        lake = new Lake(new Position(RIVER_TP.x(), RIVER_TP.y()));
+        quarry = new Quarry(new Position(MINE_TP.x(), MINE_TP.y()));
     }
 
 
     private static boolean canBePlanted(Position position) {
-        return tiles.get(position.getX()).get(position.getY()).getType() == TileType.GROUND
-                && tiles.get(position.getX()).get(position.getY()).getObject() == null;
+        return tiles.get(position.x()).get(position.y()).getType() == TileType.GROUND
+                && tiles.get(position.x()).get(position.y()).getObject() == null;
     }
 
     private static Position randomPosition() {
-        return new Position(random.rand(GROUND_TP.getX(), GROUND_BR.getX()), random.rand(GROUND_TP.getY(), GROUND_BR.getY()));
+        return new Position(random.rand(GROUND_TP.x(), GROUND_BR.x()), random.rand(GROUND_TP.y(), GROUND_BR.y()));
     }
 
     public static Farm initializeFarm() {

@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Map {
+public abstract class Maps {
     protected List<List<Tile>> tiles;
 
-    public Map(List<List<Tile>> tiles) {
+    public Maps(List<List<Tile>> tiles) {
         this.tiles = tiles;
     }
 
@@ -47,8 +47,8 @@ public abstract class Map {
         return shuffledTiles.remove(shuffledTiles.size() - 1);
     }
 
-    public Tile getTileByPosition(Position position) {
-        return tiles.get(position.getY()).get(position.getX());
+    public Tile getTile(Position position) {
+        return tiles.get(position.y()).get(position.x());
     }
 
     public List<List<Tile>> getTiles() {

@@ -170,8 +170,8 @@ public class RelationshipController extends Controller {
             return new Result(false, "item not found");
         }
         InventoryItem item = slot.getItem();
-        if (slot.getQuantity() >= amount) {
-            slot.decreaseQuantity(amount);
+        if (slot.getQuantity() <= amount) {
+            slot.removeQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);
         } else {
             return new Result(false, "not enough item");

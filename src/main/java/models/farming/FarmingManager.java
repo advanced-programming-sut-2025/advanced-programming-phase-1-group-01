@@ -9,7 +9,6 @@ import java.util.List;
 
 public class FarmingManager {
     private final Game game;
-    private Crop crop;
 
     public FarmingManager(Game game) {
         this.game = game;
@@ -35,5 +34,9 @@ public class FarmingManager {
                 }
             }
         }
+    }
+
+    public void plant(Seed seed, Tile tile) {
+        tile.setObject(new Crop(seed));
     }
 }

@@ -3,20 +3,44 @@ package models.farming;
 import models.InventoryItem;
 
 public class Crop extends Plant implements InventoryItem {
-    private CropType type;
+    private CropInfo info;
     private CropState state;
+    private final Seed seed;
+    private boolean becameGiant;
 
-    public Crop(int amount) {
-        super(amount);
+    public Crop(Seed seed) {
+        this.seed = seed;
+        info = CropInfo.fromSeed(seed.getInfo());
+        state = CropState.HEALTHY;
     }
 
     @Override
     public String getName() {
-        return type.getName();
+        return info.getName();
     }
 
     @Override
     public String getSymbol() {
         return "";
+    }
+
+    public boolean isBecameGiant() {
+        return becameGiant;
+    }
+
+    public void setBecameGiant(boolean becameGiant) {
+        this.becameGiant = becameGiant;
+    }
+
+    public CropState getState() {
+        return state;
+    }
+
+    public void setState(CropState state) {
+        this.state = state;
+    }
+
+    public Seed getSeed() {
+        return seed;
     }
 }

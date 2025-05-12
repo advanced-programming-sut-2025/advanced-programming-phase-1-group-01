@@ -1,5 +1,6 @@
-package models;
+package models.moving;
 
+import models.Position;
 import models.building.Tile;
 import java.util.*;
 
@@ -7,7 +8,7 @@ public class PathFinding {
     private static final int MAX_ITERATIONS = 10000;
 
     public static List<Position> findPath(Position start, Position goal, List<List<Tile>> grid) {
-        if (checkValid(start, grid) || checkValid(goal, grid) || !grid.get(goal.getX()).get(goal.getY()).isMovable()) {
+        if (checkValid(start, grid) || checkValid(goal, grid) || !grid.get(goal.x()).get(goal.y()).isMovable()) {
             return Collections.emptyList();
         }
 
@@ -25,12 +26,11 @@ public class PathFinding {
         int iterations = 0;
 
         while (!openSet.isEmpty() && iterations++ < MAX_ITERATIONS) {
-            //System.out.println(openSet.size());
             Node currentNode = openSet.poll();
             Position current = currentNode.position;
 
 
-            if (current.getX() == goal.getX() && current.getY() == goal.getY()) {
+            if (current.x() == goal.x() && current.y() == goal.y()) {
                 return reconstructPath(cameFrom, current);
             }
 
@@ -69,8 +69,8 @@ public class PathFinding {
     }
 
     private static int heuristic(Position a, Position b) {
-        int dx = Math.abs(a.getX() - b.getX());
-        int dy = Math.abs(a.getY() - b.getY());
+        int dx = Math.abs(a.x() - b.x());
+        int dy = Math.abs(a.y() - b.y());
         return 10 * (dx + dy) + (4 * Math.min(dx, dy));
     }
 
@@ -89,20 +89,19 @@ public class PathFinding {
         int[][] directions = {{0,1}, {1,0}, {0,-1}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
 
         for (int[] dir : directions) {
-            int nx = pos.getX() + dir[0];
-            int ny = pos.getY() + dir[1];
+            int nx = pos.x() + dir[0];
+            int ny = pos.y() + dir[1];
             Position neighbor = new Position(nx, ny);
 
             if (checkValid(neighbor, grid)) continue;
             Tile tile = grid.get(nx).get(ny);
             if (!tile.isMovable()) continue;
 
-            // جلوگیری از عبور قطری بین دو مانع
             if (isDiagonal(dir)) {
-                Position adj1 = new Position(pos.getX() + dir[0], pos.getY());
-                Position adj2 = new Position(pos.getX(), pos.getY() + dir[1]);
-                if (checkValid(adj1, grid) || !grid.get(adj1.getX()).get(adj1.getY()).isMovable()) continue;
-                if (checkValid(adj2, grid) || !grid.get(adj2.getX()).get(adj2.getY()).isMovable()) continue;
+                Position adj1 = new Position(pos.x() + dir[0], pos.y());
+                Position adj2 = new Position(pos.x(), pos.y() + dir[1]);
+                if (checkValid(adj1, grid) || !grid.get(adj1.x()).get(adj1.y()).isMovable()) continue;
+                if (checkValid(adj2, grid) || !grid.get(adj2.x()).get(adj2.y()).isMovable()) continue;
             }
 
             neighbors.add(neighbor);
@@ -115,12 +114,12 @@ public class PathFinding {
     }
 
     private static boolean checkValid(Position pos, List<List<Tile>> grid) {
-        return pos.getX() < 0 || pos.getX() >= grid.size() ||
-                pos.getY() < 0 || pos.getY() >= grid.get(pos.getX()).size();
+        return pos.x() < 0 || pos.x() >= grid.size() ||
+                pos.y() < 0 || pos.y() >= grid.get(pos.x()).size();
     }
 
     private static int getMoveCost(Position current, Position neighbor) {
-        return (Math.abs(current.getX() - neighbor.getX()) +
-                Math.abs(current.getY() - neighbor.getY()) == 2) ? 14 : 10;
+        return (Math.abs(current.x() - neighbor.x()) +
+                Math.abs(current.y() - neighbor.y()) == 2) ? 14 : 10;
     }
 }

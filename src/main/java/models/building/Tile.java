@@ -5,6 +5,7 @@ import models.Position;
 public class Tile {
     private final Position position;
     private TileType type;
+    private boolean isPlowed;
     private boolean isMovable;
     private Building building;
     private TileObject object;
@@ -30,6 +31,15 @@ public class Tile {
 
     public boolean isMovable() {
         return isMovable;
+    }
+
+    public boolean isPlowed() {
+        return isPlowed;
+    }
+
+    public boolean plow() {
+        if (type != TileType.RIVER) isPlowed = true;
+        return false;
     }
 
     public void setMovable(boolean movable) {
@@ -114,6 +124,10 @@ public class Tile {
         public Builder setObject(TileObject object) {
             this.object = object;
             return this;
+        }
+
+        public boolean isEmpty() {
+            return object == null;
         }
     }
 }
