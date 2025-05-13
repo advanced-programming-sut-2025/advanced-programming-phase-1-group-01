@@ -157,7 +157,7 @@ public class Player extends Character {
     }
 
     public boolean isNearTo(Position position) {
-        return Math.abs(this.position.getX() - position.getX()) <= 1 && Math.abs(this.position.getY() - position.getY()) <= 1;
+        return Math.abs(this.position.x() - position.x()) <= 1 && Math.abs(this.position.y() - position.y()) <= 1;
     }
 
     public boolean isNearToSellBucket() {
@@ -165,14 +165,14 @@ public class Player extends Character {
         int[][] directions = {{0,1}, {1,0}, {0,-1}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
 
         for (int[] dir : directions) {
-            int nx = position.getX() + dir[0];
-            int ny = position.getY() + dir[1];
+            int nx = position.x() + dir[0];
+            int ny = position.y() + dir[1];
             Position neighbor = new Position(nx, ny);
             neighbors.add(neighbor);
         }
 
         for (Position p : neighbors) {
-            if (farm.getTiles().get(p.getX()).get(p.getY()).getObject() == null) return true;
+            if (farm.getTiles().get(p.x()).get(p.y()).getObject() == null) return true;
         }
         return false;
     }

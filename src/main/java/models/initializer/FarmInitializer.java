@@ -4,9 +4,9 @@ import models.Position;
 import models.building.*;
 import models.farming.TreeInfo;
 import models.enums.StoneType;
-import models.foraging.ForagingCrop;
-import models.foraging.ForagingMineral;
-import models.foraging.ForagingTree;
+import models.foraging.ForagingCropInfo;
+import models.foraging.ForagingMineralInfo;
+import models.foraging.ForagingTreeInfo;
 import models.Random;
 
 import java.util.ArrayList;
@@ -204,22 +204,22 @@ public class FarmInitializer {
             tiles.get(GREENHOUSE_BR.x() + 1).set(i, tile);
         }
 
-        for (int i = SHIPPING_BIN_1_TP.getX(); i < SHIPPING_BIN_1_BR.getX(); i++) {
-            for (int j = SHIPPING_BIN_1_TP.getY(); j < SHIPPING_BIN_1_BR.getY(); j++) {
+        for (int i = SHIPPING_BIN_1_TP.x(); i < SHIPPING_BIN_1_BR.x(); i++) {
+            for (int j = SHIPPING_BIN_1_TP.y(); j < SHIPPING_BIN_1_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
-                        .setType(TileType.SALE_BUCKET)
+//                        .setType(TileType.SALE_BUCKET) errorcheck
                         .setMovable(false)
                         .build();
                 tiles.get(i).set(j, tile);
             }
         }
 
-        for (int i = SHIPPING_BIN_2_TP.getX(); i < SHIPPING_BIN_2_BR.getX(); i++) {
-            for (int j = SHIPPING_BIN_2_TP.getY(); j < SHIPPING_BIN_2_BR.getY(); j++) {
+        for (int i = SHIPPING_BIN_2_TP.x(); i < SHIPPING_BIN_2_BR.x(); i++) {
+            for (int j = SHIPPING_BIN_2_TP.y(); j < SHIPPING_BIN_2_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
-                        .setType(TileType.SALE_BUCKET)
+//                        .setType(TileType.SALE_BUCKET) errorcheck
                         .setMovable(false)
                         .build();
                 tiles.get(i).set(j, tile);
@@ -247,31 +247,31 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_CROPS; i++) {
-            ForagingCrop foragingCrop = ForagingCrop.randomForagingCrop();
+            ForagingCropInfo foragingCropInfo = ForagingCropInfo.randomForagingCrop();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.x()).get(position.y()).setObject(foragingCrop);
+                tiles.get(position.x()).get(position.y()).setObject(foragingCropInfo);
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_MINERALS; i++) {
-            ForagingMineral foragingMineral = ForagingMineral.randomForagingMineral();
+            ForagingMineralInfo foragingMineralInfo = ForagingMineralInfo.randomForagingMineral();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.x()).get(position.y()).setObject(foragingMineral);
+                tiles.get(position.x()).get(position.y()).setObject(foragingMineralInfo);
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_TREES; i++) {
-            ForagingTree foragingTree = ForagingTree.randomForagingTree();
+            ForagingTreeInfo foragingTreeInfo = ForagingTreeInfo.randomForagingTree();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.x()).get(position.y()).setObject(foragingTree);
+                tiles.get(position.x()).get(position.y()).setObject(foragingTreeInfo);
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }

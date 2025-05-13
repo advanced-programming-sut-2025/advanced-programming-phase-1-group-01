@@ -168,13 +168,13 @@ public class Farm extends Maps {
         }
     }
 
-    public List<Plant> getPlants() {
-        List<Plant> plants = new ArrayList<>();
+    public Map<Plant, Tile> getPlantsToTilesMap() {
+        Map<Plant, Tile> map = new LinkedHashMap<>();
         for (List<Tile> row : tiles) {
             for (Tile tile : row) {
-                if (tile.getObject() instanceof Plant plant) plants.add(plant);
+                if (tile.getObject() instanceof Plant plant) map.put(plant, tile);
             }
         }
-        return plants;
+        return map;
     }
 }

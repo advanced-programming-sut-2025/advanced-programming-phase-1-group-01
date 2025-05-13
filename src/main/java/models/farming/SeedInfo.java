@@ -2,6 +2,8 @@ package models.farming;
 
 import models.dateTime.Season;
 
+import java.util.Random;
+
 public enum SeedInfo {
     JAZZ_SEEDS("Jazz Seeds", Season.SPRING),
     CARROT_SEEDS("Carrot Seeds", Season.SPRING),
@@ -52,6 +54,13 @@ public enum SeedInfo {
     SeedInfo(String name, Season season) {
         this.name = name;
         this.season = season;
+    }
+
+    private static final Random RANDOM = new Random();
+
+    public static SeedInfo randomForagingSeed() {
+        SeedInfo[] seedInfos = SeedInfo.values();
+        return seedInfos[RANDOM.nextInt(seedInfos.length)];
     }
 
     public Season getSeason() {

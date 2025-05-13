@@ -2,48 +2,43 @@ package models.farming;
 
 import models.building.TileObject;
 import models.dateTime.Season;
+import models.foraging.ForagingTreeInfo;
 
 import java.util.Random;
 
 public enum TreeInfo implements TileObject, FarmingEnum {
-    APRICOT_TREE("Apricot Tree", "Apricot new int[]Sapling", new int[]{7, 7, 7, 7}, 28, "Apricot", 1, 59, true, 38, Season.SPRING, "🟡"),
-    CHERRY_TREE("Cherry Tree", "Cherry Sapling", new int[]{7, 7, 7, 7}, 28, "Cherry", 1, 80, true, 38, Season.SPRING, "🍒"),
-    BANANA_TREE("Banana Tree", "Banana Sapling", new int[]{7, 7, 7, 7}, 28, "Banana", 1, 150, true, 75, Season.SUMMER, "🍌"),
-    MANGO_TREE("Mango Tree", "Mango Sapling", new int[]{7, 7, 7, 7}, 28, "Mango", 1, 130, true, 100, Season.SUMMER, "🥭"),
-    ORANGE_TREE("Orange Tree", "Orange Sapling", new int[]{7, 7, 7, 7}, 28, "Orange", 1, 100, true, 38, Season.SUMMER, "🍊"),
-    PEACH_TREE("Peach Tree", "Peach Sapling", new int[]{7, 7, 7, 7}, 28, "Peach", 1, 140, true, 38, Season.SUMMER, "🍑"),
-    APPLE_TREE("Apple Tree", "Apple Sapling", new int[]{7, 7, 7, 7}, 28, "Apple", 1, 100, true, 38, Season.FALL, "🍏"),
-    POMEGRANATE_TREE("Pomegranate Tree", "Pomegranate Sapling", new int[]{7, 7, 7, 7}, 28, "Pomegranate", 1, 140, true, 38, Season.FALL, "🍎"),
-    OAK_TREE("Oak Tree", "Acorns", new int[]{7, 7, 7, 7}, 28, "Oak Resin", 7, 150, false, 0, Season.SPECIAL, "🌳"),
-    MAPLE_TREE("Maple Tree", "Maple Seeds", new int[]{7, 7, 7, 7}, 28, "Maple Syrup", 9, 200, false, 0, Season.SPECIAL, "🍁"),
-    PINE_TREE("Pine Tree", "Pine Cones", new int[]{7, 7, 7, 7}, 28, "Pine Tar", 5, 100, false, 0, Season.SPECIAL, "🌲"),
-    MAHOGANY_TREE("Mahogany Tree", "Mahogany Seeds", new int[]{7, 7, 7, 7}, 28, "Sap", 1, 2, true, -2, Season.SPECIAL, "🌴"),
-    MUSHROOM_TREE("Mushroom Tree", "Mushroom Tree Seeds", new int[]{7, 7, 7, 7}, 28, "Common Mushroom", 1, 40, true, 38, Season.SPECIAL, "🍄"),
-    MYSTIC_TREE("Mystic Tree", "Mystic Tree Seeds", new int[]{7, 7, 7, 7}, 28, "Mystic Syrup", 7, 1000, true, 500, Season.SPECIAL, "🎄"),
+    APRICOT_TREE("Apricot Tree", null/*"Apricot Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APRICOT, 1, Season.SPRING, "🟡"),
+    CHERRY_TREE("Cherry Tree", null/*"Cherry Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.CHERRY, 1, Season.SPRING, "🍒"),
+    BANANA_TREE("Banana Tree", null/*"Banana Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.BANANA, 1, Season.SUMMER, "🍌"),
+    MANGO_TREE("Mango Tree", null/*"Mango Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MANGO, 1, Season.SUMMER, "🥭"),
+    ORANGE_TREE("Orange Tree", null/*"Orange Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.ORANGE, 1, Season.SUMMER, "🍊"),
+    PEACH_TREE("Peach Tree", null/*"Peach Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.PEACH, 1, Season.SUMMER, "🍑"),
+    APPLE_TREE("Apple Tree", null/*"Apple Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APPLE, 1, Season.FALL, "🍏"),
+    POMEGRANATE_TREE("Pomegranate Tree", null/*"Pomegranate Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.POMEGRANATE, 1, Season.FALL, "🍎"),
+    OAK_TREE("Oak Tree", ForagingTreeInfo.ACORNS, new int[]{7, 7, 7, 7}, 28, FruitInfo.OAK_RESIN, 7, Season.SPECIAL, "🌳"),
+    MAPLE_TREE("Maple Tree", ForagingTreeInfo.MAPLE_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.MAPLE_SYRUP, 9, Season.SPECIAL, "🍁"),
+    PINE_TREE("Pine Tree", ForagingTreeInfo.PINE_CONS, new int[]{7, 7, 7, 7}, 28, FruitInfo.PINE_TAR, 5, Season.SPECIAL, "🌲"),
+    MAHOGANY_TREE("Mahogany Tree", ForagingTreeInfo.MAHOGANY_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.SAP, 1, Season.SPECIAL, "🌴"),
+    MUSHROOM_TREE("Mushroom Tree", ForagingTreeInfo.MUSHROOMS_TREE_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.COMMON_MUSHROOM, 1, Season.SPECIAL, "🍄"),
+    MYSTIC_TREE("Mystic Tree", null/*"Mystic Tree Seeds"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MYSTIC_SYRUP, 7, Season.SPECIAL, "🎄"),
     ;
 
     private final String name;
-    private final String source;
+    private final FarmingEnum source;
     private final int[] stages;
     private final int totalHarvestTime;
-    private final String fruit;
+    private final FruitInfo fruitInfo;
     private final int fruitHarvestCycle;
-    private final int fruitBaseSellPrice;
-    private final boolean isFruitEdible;
-    private final int fruitEnergy;
     private final Season season;
     private final String symbol;
 
-    TreeInfo(String name, String source, int[] stages, int totalHarvestTime, String fruit, int fruitHarvestCycle, int fruitBaseSellPrice, boolean isFruitEdible, int fruitEnergy, Season season, String symbol) {
+    TreeInfo(String name, FarmingEnum source, int[] stages, int totalHarvestTime, FruitInfo fruitInfo, int fruitHarvestCycle, Season season, String symbol) {
         this.name = name;
         this.source = source;
         this.stages = stages;
         this.totalHarvestTime = totalHarvestTime;
-        this.fruit = fruit;
+        this.fruitInfo = fruitInfo;
         this.fruitHarvestCycle = fruitHarvestCycle;
-        this.fruitBaseSellPrice = fruitBaseSellPrice;
-        this.isFruitEdible = isFruitEdible;
-        this.fruitEnergy = fruitEnergy;
         this.season = season;
         this.symbol = symbol;
     }
@@ -59,7 +54,7 @@ public enum TreeInfo implements TileObject, FarmingEnum {
         return name;
     }
 
-    public String getSource() {
+    public FarmingEnum getSource() {
         return source;
     }
 
@@ -67,28 +62,16 @@ public enum TreeInfo implements TileObject, FarmingEnum {
         return stages;
     }
 
+    public FruitInfo getFruitInfo() {
+        return fruitInfo;
+    }
+
     public int getTotalHarvestTime() {
         return totalHarvestTime;
     }
 
-    public String getFruit() {
-        return fruit;
-    }
-
     public int getFruitHarvestCycle() {
         return fruitHarvestCycle;
-    }
-
-    public int getFruitBaseSellPrice() {
-        return fruitBaseSellPrice;
-    }
-
-    public boolean isFruitEdible() {
-        return isFruitEdible;
-    }
-
-    public int getFruitEnergy() {
-        return fruitEnergy;
     }
 
     public Season getSeason() {
@@ -108,6 +91,15 @@ public enum TreeInfo implements TileObject, FarmingEnum {
         return null;
     }
 
+    public static TreeInfo fromTreeSource(TreeSource source) {
+        for (TreeInfo treeInfo : values()) {
+            if (treeInfo.source == source.getInfo()) {
+                return treeInfo;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return """
@@ -120,6 +112,6 @@ public enum TreeInfo implements TileObject, FarmingEnum {
                 Fruit Base Sell Price: %d
                 Is Fruit Edible: %B
                 Fruit Energy: %d
-                Season: %s""".formatted(name, source, stages, totalHarvestTime, fruit, fruitHarvestCycle, fruitBaseSellPrice, isFruitEdible, fruitEnergy, season);
+                Season: %s""".formatted(name, source, stages, totalHarvestTime, fruitInfo.getName(), fruitHarvestCycle, fruitInfo.getBaseSellPrice(), fruitInfo.isEdible(), fruitInfo.getEnergy(), season);
     }
 }

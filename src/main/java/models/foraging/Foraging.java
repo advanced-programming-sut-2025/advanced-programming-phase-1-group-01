@@ -1,5 +1,6 @@
 package models.foraging;
 
-public class Foraging {
-    private Foraging() {}
+import models.building.TileObject;
+
+public abstract class Foraging implements TileObject {
 }
