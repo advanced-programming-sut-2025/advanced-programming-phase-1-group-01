@@ -111,6 +111,10 @@ public class FarmingController extends Controller {
         return new Result(true, crop.toString());
     }
 
+    private Result fertilize() {
+        return null;
+    }
+
     private Result howMuchWater() {
         return null;
     }

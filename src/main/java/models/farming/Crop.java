@@ -25,8 +25,22 @@ public class Crop extends Plant implements InventoryItem {
     }
 
     @Override
-    public boolean grow() {
-        return false;
+    public void grow() { // this method should be called every day
+        int[] growthStages = info.getStages();
+
+        if (isFullyGrown()) return;
+
+        int currentLevelDays = growthStages[growthLevel];
+
+        if (daysInCurrentLevel >= currentLevelDays) {
+            growthLevel++;
+        }
+
+        daysInCurrentLevel++;
+    }
+
+    public boolean isFullyGrown() {
+        return growthLevel >= info.getStages().length;
     }
 
     @Override
