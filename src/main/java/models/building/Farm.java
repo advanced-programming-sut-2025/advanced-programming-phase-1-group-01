@@ -142,12 +142,12 @@ public class Farm extends Maps {
     }
 
     public List<AnimalProduct> collectProductsByType(AnimalProductType desiredType) {
-        Map<AnimalProductQuality, AnimalProduct> productMap = new HashMap<>();
+        Map<ProductQuality, AnimalProduct> productMap = new HashMap<>();
 
         for (Animal animal : animals) {
             if (animal.hasAnyProduct() && animal.getAnimalProductType() == desiredType) {
                 AnimalProductType type = animal.getAnimalProductType();
-                AnimalProductQuality quality = animal.getAnimalProductQuality();
+                ProductQuality quality = animal.getAnimalProductQuality();
 
                 productMap.merge(
                         quality,

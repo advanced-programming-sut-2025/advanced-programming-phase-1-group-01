@@ -108,7 +108,20 @@ public class FarmingController extends Controller {
             return new Result(false, "crop not found");
         }
 
-        return new Result(true, crop.toString());
+        return new Result(true, """
+                Name: %s
+                Remaining Time to Fully Grown: %d
+                Growth Level: %d
+                Is Watered Today: %B
+                Quality: %s
+                Is Fertilized: %B""".formatted(
+                crop.getName(),
+                crop.getInfo().getTotalHarvestTime() - crop.getTotalGrownDays(),
+                crop.getGrowthLevel(),
+                crop.isWatered(),
+                crop.getQuality(),
+                crop.isFertilized()
+                ));
     }
 
     private Result fertilize() {

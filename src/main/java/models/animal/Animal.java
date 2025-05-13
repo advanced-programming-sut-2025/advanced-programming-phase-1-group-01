@@ -113,12 +113,12 @@ public class Animal extends Character {
         return true;
     }
 
-    public AnimalProductQuality getAnimalProductQuality() {
+    public ProductQuality getAnimalProductQuality() {
 //        double QualityNumber = getRelationshipLevel(owner) * (0.5 + 0.5 * random.rand(0.0, 1.0)) / 1000;
 //        if (QualityNumber <= 0.5) return AnimalProductQuality.NORMAL;
 //        if (QualityNumber <= 0.7) return AnimalProductQuality.SILVER;
 //        if (QualityNumber <= 0.9) return AnimalProductQuality.GOLD;
-        return AnimalProductQuality.IRIDIUM;
+        return ProductQuality.IRIDIUM;
     }
 
 }

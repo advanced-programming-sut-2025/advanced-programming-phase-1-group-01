@@ -1,11 +1,18 @@
 package models.farming;
 
+import models.animal.ProductQuality;
 import models.building.TileObject;
 
 public abstract class Plant implements TileObject {
     protected boolean isWatered;
     protected int growthLevel;
     protected int daysInCurrentLevel;
+    protected Fertilizer fertilizer;
+    protected final ProductQuality quality;
+
+    protected Plant() {
+        this.quality = ProductQuality.getRandomProductQuality();
+    }
 
     public void water() {
         isWatered = true;
@@ -36,6 +43,22 @@ public abstract class Plant implements TileObject {
     }
 
     public abstract void grow();
+
+    public Fertilizer getFertilizer() {
+        return fertilizer;
+    }
+
+    public void setFertilizer(Fertilizer fertilizer) {
+        this.fertilizer = fertilizer;
+    }
+
+    public boolean isFertilized() {
+        return fertilizer != null;
+    }
+
+    public ProductQuality getQuality() {
+        return quality;
+    }
 
     @Override
     public String getSymbol() {

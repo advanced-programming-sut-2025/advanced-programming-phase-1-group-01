@@ -13,6 +13,7 @@ public class Crop extends Plant implements InventoryItem {
         info = CropInfo.fromSeed(seed.getInfo());
         state = CropState.HEALTHY;
         becameGiant = false;
+        fertilizer = null;
     }
 
     @Override
@@ -41,6 +42,18 @@ public class Crop extends Plant implements InventoryItem {
 
     public boolean isFullyGrown() {
         return growthLevel >= info.getStages().length;
+    }
+
+    public int getTotalGrownDays() {
+        int totalGrownDays = 0;
+        int[] growthStages = info.getStages();
+
+        for (int i = 0; i < growthLevel; i++) {
+            totalGrownDays += growthStages[i];
+        }
+
+        totalGrownDays += daysInCurrentLevel;
+        return totalGrownDays;
     }
 
     @Override
