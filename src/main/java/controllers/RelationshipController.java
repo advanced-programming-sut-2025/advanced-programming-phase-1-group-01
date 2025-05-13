@@ -14,6 +14,7 @@ import models.relations.Gift;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.Map;
 
 public class RelationshipController extends Controller {
@@ -166,6 +167,9 @@ public class RelationshipController extends Controller {
 
         Slot slot = sender.getInventory().getSlot(itemName);
         Item item = slot.getItem();
+        if (slot == null) {
+            return new Result(false, "item not found");
+        }
         if (slot.getQuantity() <= amount) {
             slot.removeQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);
