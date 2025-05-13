@@ -1,5 +1,6 @@
 package controllers;
 
+import models.InventoryItem;
 import models.Position;
 import models.Result;
 import models.building.Tile;
@@ -32,13 +33,14 @@ public class FarmingController extends Controller {
             return new Result(false, "invalid command");
         }
 
+        Direction direction;
         switch (matchedCommand) {
             case CRAFT_INFO:
                 String name = commandLine.substring(commandLine.indexOf("-n") + 2).trim();
                 return craftInfo(name);
             case PLANT:
                 String seedName = commandLine.split("\\s+")[2];
-                Direction direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2).trim());
+                direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2).trim());
                 return plant(seedName, direction);
             case SHOW_PLANT:
                 int x, y;
@@ -49,6 +51,10 @@ public class FarmingController extends Controller {
                     return new Result(false, "invalid x, y");
                 }
                 return showPlantInfo(new Position(x, y));
+            case FERTILIZE:
+                String fertilizerName = commandLine.substring(commandLine.indexOf("-f") + 2, commandLine.indexOf("-d") - 1).trim();
+                direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2));
+                return fertilize(fertilizerName, direction);
         }
         return new Result(false, "invalid command");
     }
@@ -124,8 +130,30 @@ public class FarmingController extends Controller {
                 ));
     }
 
-    private Result fertilize() {
-        return null;
+    private Result fertilize(String fertilizerName, Direction direction) {
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        InventorySlot slot = player.getInventory().getSlot(fertilizerName);
+
+        if (slot == null) {
+            return new Result(false, "you don't have this fertilizer");
+        }
+
+        Position appliedPosition = player.getPosition().applyDirection(direction);
+        Tile tile = player.getFarm().getTile(appliedPosition);
+
+        if (tile == null) {
+            return new Result(false, "tile not found");
+        } else if (!(tile.getObject() instanceof Plant)) {
+            return new Result(false, "plant not found");
+        }
+
+        Fertilizer fertilizer = (Fertilizer) slot.getItem();
+        slot.removeQuantity(1);
+
+        Plant plant = (Plant) tile.getObject();
+        plant.setFertilizer(fertilizer);
+
+        return new Result(true, "%s fertilized with %s successfully".formatted(plant.getInfo().getName(), fertilizerName));
     }
 
     private Result howMuchWater() {

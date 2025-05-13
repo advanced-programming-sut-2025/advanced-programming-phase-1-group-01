@@ -14,6 +14,8 @@ public abstract class Plant implements TileObject {
         this.quality = ProductQuality.getRandomProductQuality();
     }
 
+    public abstract FarmingEnum getInfo();
+
     public void water() {
         isWatered = true;
     }

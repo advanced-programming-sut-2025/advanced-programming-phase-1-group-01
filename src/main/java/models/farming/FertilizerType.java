@@ -1,5 +1,14 @@
 package models.farming;
 
 public enum FertilizerType {
-    FERTILIZER_1, FERTILIZER_2, FERTILIZER_3;
+    BASIC, QUALITY, DELUXE;
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case BASIC -> "Basic";
+            case QUALITY -> "Quality";
+            case DELUXE -> "Deluxe";
+        };
+    }
 }

@@ -21,6 +21,7 @@ public class Crop extends Plant implements InventoryItem {
         return info.getName();
     }
 
+    @Override
     public CropInfo getInfo() {
         return info;
     }

@@ -26,6 +26,11 @@ public class Tree extends Plant {
     }
 
     @Override
+    public TreeInfo getInfo() {
+        return info;
+    }
+
+    @Override
     public void grow() { // this method should be called every day
         int[] growthStages = info.getStages();
         if (isFullyGrown()) return;
