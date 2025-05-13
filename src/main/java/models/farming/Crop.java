@@ -26,7 +26,7 @@ public class Crop extends Plant implements InventoryItem {
 
     @Override
     public boolean grow() {
-
+        return false;
     }
 
     @Override
@@ -52,5 +52,10 @@ public class Crop extends Plant implements InventoryItem {
 
     public Seed getSeed() {
         return seed;
+    }
+
+    @Override
+    public String toString() {
+        return info.toString();
     }
 }

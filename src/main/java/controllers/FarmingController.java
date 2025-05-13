@@ -94,7 +94,21 @@ public class FarmingController extends Controller {
     }
 
     private Result showPlantInfo(Position position) {
-        return null;
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Tile tile = player.getFarm().getTile(position);
+
+        Crop crop;
+        try {
+            crop = (Crop) tile.getObject();
+        } catch (ClassCastException e) {
+            return new Result(false, "crop not found");
+        }
+
+        if (crop == null) {
+            return new Result(false, "crop not found");
+        }
+
+        return new Result(true, crop.toString());
     }
 
     private Result howMuchWater() {
