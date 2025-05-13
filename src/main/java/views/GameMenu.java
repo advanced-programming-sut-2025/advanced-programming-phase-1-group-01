@@ -2,9 +2,8 @@ package views;
 
 import controllers.GameMenuController;
 import models.Result;
-import models.enums.commands.Menu;
 
-public class GameMenu extends AppMenu {
+public class GameMenu extends View {
     private final GameMenuController controller;
 
     public GameMenu(GameMenuController controller, AppView appView) {
@@ -15,13 +14,13 @@ public class GameMenu extends AppMenu {
     @Override
     public void handleInput() {
 
-        while (controller.getRepo().getCurrentMenu().equals(Menu.GAME)){
+        while (controller.getRepo().getCurrentView().equals(models.enums.commands.View.GAME_MENU)){
             String input = appView.readLine();
             Result result = controller.handleCommand(input);
             appView.showMessage(result.message());
 
             if (result.success() && result.message().contains("")){
-                controller.getRepo().setCurrentMenu(Menu.GAME);
+                controller.getRepo().setCurrentMenu(models.enums.commands.View.GAME_MENU);
             }
         }
     }

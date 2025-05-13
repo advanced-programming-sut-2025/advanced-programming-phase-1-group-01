@@ -1,6 +1,7 @@
 package models.building;
 
 import models.animal.*;
+import models.farming.Plant;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,8 +13,8 @@ public class Farm extends Maps {
     private Greenhouse greenhouse;
     private Cottage cottage;
     private Quarry quarry;
-    private final ArrayList<AnimalHouse> shelters = new ArrayList<>();
-    private final ArrayList<Animal> animals = new ArrayList<>();
+    private final List<AnimalHouse> shelters;
+    private final List<Animal> animals;
 
     public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse) {
         super(tiles);
@@ -21,6 +22,8 @@ public class Farm extends Maps {
         this.cottage = cottage;
         this.quarry = quarry;
         this.greenhouse = greenhouse;
+        shelters = new ArrayList<>();
+        animals = new ArrayList<>();
     }
 
     public Lake getLake() {
@@ -137,12 +140,12 @@ public class Farm extends Maps {
     }
 
     public List<AnimalProduct> collectProductsByType(AnimalProductType desiredType) {
-        Map<AnimalProductQuality, AnimalProduct> productMap = new HashMap<>();
+        Map<ProductQuality, AnimalProduct> productMap = new HashMap<>();
 
         for (Animal animal : animals) {
             if (animal.hasAnyProduct() && animal.getAnimalProductType() == desiredType) {
                 AnimalProductType type = animal.getAnimalProductType();
-                AnimalProductQuality quality = animal.getAnimalProductQuality();
+                ProductQuality quality = animal.getAnimalProductQuality();
 
                 productMap.merge(
                         quality,
@@ -163,5 +166,15 @@ public class Farm extends Maps {
             //add to inventory
             return;
         }
+    }
+
+    public List<Plant> getPlants() {
+        List<Plant> plants = new ArrayList<>();
+        for (List<Tile> row : tiles) {
+            for (Tile tile : row) {
+                if (tile.getObject() instanceof Plant plant) plants.add(plant);
+            }
+        }
+        return plants;
     }
 }

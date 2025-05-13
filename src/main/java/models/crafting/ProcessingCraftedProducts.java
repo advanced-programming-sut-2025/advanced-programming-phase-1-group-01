@@ -1,6 +1,5 @@
 package models.crafting;
 
-import models.InventoryItem;
 import models.character.player.Inventory;
 
 import java.util.ArrayList;

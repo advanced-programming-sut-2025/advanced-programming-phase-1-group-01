@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum WeatherCommands {
+public enum WeatherCommands implements Command {
     CHEAT_THOR("cheat Thor -l (.+?)"),
     WEATHER("weather"),
     WEATHER_FORECAST("weather forecast"),
@@ -13,7 +13,8 @@ public enum WeatherCommands {
         this.regex = regex;
     }
 
-    public String regex() {
+    @Override
+    public String getRegex() {
         return regex;
     }
 }

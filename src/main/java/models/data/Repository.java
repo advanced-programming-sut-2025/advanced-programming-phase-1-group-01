@@ -1,7 +1,7 @@
 package models.data;
 
 import models.Game;
-import models.enums.commands.Menu;
+import models.enums.commands.View;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
 public class Repository {
     private List<Game> games;
     private User currentUser;
-    private Menu currentMenu;
+    private View currentView;
     private Game currentGame;
     private static Map<String, User> users;
     private FileManager fileManager;
@@ -19,7 +19,7 @@ public class Repository {
     public Repository() {
         games = new ArrayList<>();
         users = new HashMap<>();
-        currentMenu = Menu.LOGIN;
+        currentView = View.LOGIN_MENU;
         fileManager = new FileManager();
     }
 
@@ -43,12 +43,12 @@ public class Repository {
         users.put(user.getUsername(), user);
     }
 
-    public Menu getCurrentMenu() {
-        return currentMenu;
+    public View getCurrentView() {
+        return currentView;
     }
 
-    public void setCurrentMenu(Menu currentMenu) {
-        this.currentMenu = currentMenu;
+    public void setCurrentMenu(View currentView) {
+        this.currentView = currentView;
     }
 
     public Game getCurrentGame() {

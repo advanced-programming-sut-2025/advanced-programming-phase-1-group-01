@@ -37,6 +37,7 @@ public class FarmingManager {
     }
 
     public void plant(Seed seed, Tile tile) {
-        tile.setObject(new Crop(seed));
+        Crop crop = new Crop(seed);
+        tile.setObject(crop);
     }
 }

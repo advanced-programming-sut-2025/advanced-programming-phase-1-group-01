@@ -1,5 +1,5 @@
 package models;
 
-public interface InventoryItem {
+public interface Item {
     public String getName();
 }
