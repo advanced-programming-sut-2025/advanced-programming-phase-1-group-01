@@ -157,6 +157,13 @@ public class FarmingController extends Controller {
     }
 
     private Result howMuchWater() {
-        return null;
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        WateringCan wateringCan = (WateringCan) player.getInventory().getSlot("watering can").getItem();
+
+        if (wateringCan == null) {
+            return new Result(false, "you have no watering can");
+        }
+
+        return new Result(true, String.valueOf(wateringCan.getWaterAmount()));
     }
 }
