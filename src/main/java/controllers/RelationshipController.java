@@ -1,10 +1,10 @@
 package controllers;
 
 import models.Game;
-import models.InventoryItem;
+import models.Item;
 import models.MessageEntry;
 import models.Result;
-import models.character.player.InventorySlot;
+import models.character.player.Slot;
 import models.character.player.Player;
 import models.data.Repository;
 import models.enums.commands.RelationshipCommands;
@@ -164,8 +164,8 @@ public class RelationshipController extends Controller {
             return new Result(false, "you should be near of %s".formatted(receiver));
         }
 
-        InventorySlot slot = sender.getInventory().getSlot(itemName);
-        InventoryItem item = slot.getItem();
+        Slot slot = sender.getInventory().getSlot(itemName);
+        Item item = slot.getItem();
         if (slot.getQuantity() <= amount) {
             slot.removeQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);

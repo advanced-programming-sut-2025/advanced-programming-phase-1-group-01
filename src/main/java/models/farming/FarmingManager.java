@@ -39,6 +39,5 @@ public class FarmingManager {
     public void plant(Seed seed, Tile tile) {
         Crop crop = new Crop(seed);
         tile.setObject(crop);
-        game.getCurrentPlayer().getFarm().addPlant(crop);
     }
 }

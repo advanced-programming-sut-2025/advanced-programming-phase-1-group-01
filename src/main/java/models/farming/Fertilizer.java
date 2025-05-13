@@ -1,8 +1,8 @@
 package models.farming;
 
-import models.InventoryItem;
+import models.Item;
 
-public class Fertilizer implements InventoryItem {
+public class Fertilizer implements Item {
     FertilizerType type;
 
     @Override

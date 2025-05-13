@@ -1,13 +1,13 @@
 package models.relations;
 
-import models.InventoryItem;
+import models.Item;
 import models.character.player.Player;
 import models.dateTime.DateTime;
 
 public class Gift {
     private final Player sender;
     private final Player receiver;
-    private final InventoryItem item;
+    private final Item item;
     private final int amount;
     private final DateTime sentTime;
     private final int giftNumber;
@@ -15,7 +15,7 @@ public class Gift {
 
     private static int nextGiftNumber = 1;
 
-    public Gift(Player sender, Player receiver, InventoryItem item, int amount, DateTime sentTime) {
+    public Gift(Player sender, Player receiver, Item item, int amount, DateTime sentTime) {
         this.sender = sender;
         this.receiver = receiver;
         this.item = item;
@@ -32,7 +32,7 @@ public class Gift {
         return receiver;
     }
 
-    public InventoryItem item() {
+    public Item item() {
         return item;
     }
 

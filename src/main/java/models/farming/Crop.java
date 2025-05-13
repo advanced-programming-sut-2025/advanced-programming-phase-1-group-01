@@ -1,12 +1,15 @@
 package models.farming;
 
-import models.InventoryItem;
+import models.Item;
 
-public class Crop extends Plant implements InventoryItem {
+import java.util.List;
+
+public class Crop extends Plant implements Item {
     private final CropInfo info;
     private CropState state;
     private final Seed seed;
     private boolean becameGiant;
+
 
     public Crop(Seed seed) {
         this.seed = seed;
@@ -80,6 +83,16 @@ public class Crop extends Plant implements InventoryItem {
 
     public Seed getSeed() {
         return seed;
+    }
+
+    @Override
+    public boolean hasProduct() {
+        return false;
+    }
+
+    @Override
+    public List<Item> getProducts() {
+        return List.of();
     }
 
     @Override

@@ -1,8 +1,8 @@
 package models.farming;
 
-import models.InventoryItem;
+import models.Item;
 
-public class Seed implements InventoryItem {
+public class Seed implements Item {
     private final SeedInfo info;
 
     public Seed(SeedInfo info) {

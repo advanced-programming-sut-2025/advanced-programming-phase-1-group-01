@@ -5,6 +5,7 @@ public enum FarmingCommands implements Command {
     PLANT("plant -s (.+?) -d (.+?)"),
     SHOW_PLANT("showplant -l (.+?)"),
     FERTILIZE("fertilize -f (.+?) -d (.+?)"),
+    HOW_MUCH_WATER("howmuch water"),
     ;
 
     private String regex;

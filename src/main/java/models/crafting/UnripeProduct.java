@@ -1,13 +1,13 @@
 package models.crafting;
 
-import models.InventoryItem;
+import models.Item;
 
 public class UnripeProduct {
-    private final InventoryItem inventoryItem;
+    private final Item item;
     private final int harvestTime;
 
-    public UnripeProduct(InventoryItem inventoryItem, int harvestTime) {
-        this.inventoryItem = inventoryItem;
+    public UnripeProduct(Item item, int harvestTime) {
+        this.item = item;
         this.harvestTime = harvestTime;
     }
 
@@ -23,7 +23,7 @@ public class UnripeProduct {
         return isRipe;
     }
 
-    public InventoryItem getInventoryItem() {
-        return inventoryItem;
+    public Item getInventoryItem() {
+        return item;
     }
 }

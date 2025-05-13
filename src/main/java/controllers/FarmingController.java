@@ -1,10 +1,9 @@
 package controllers;
 
-import models.InventoryItem;
 import models.Position;
 import models.Result;
 import models.building.Tile;
-import models.character.player.InventorySlot;
+import models.character.player.Slot;
 import models.character.player.Player;
 import models.data.Repository;
 import models.enums.Direction;
@@ -12,6 +11,7 @@ import models.enums.commands.FarmingCommands;
 import models.farming.*;
 import models.foraging.ForagingCrop;
 import models.foraging.ForagingTree;
+import models.tool.WateringCan;
 
 public class FarmingController extends Controller {
     FarmingController(Repository repo) {
@@ -55,6 +55,8 @@ public class FarmingController extends Controller {
                 String fertilizerName = commandLine.substring(commandLine.indexOf("-f") + 2, commandLine.indexOf("-d") - 1).trim();
                 direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2));
                 return fertilize(fertilizerName, direction);
+            case HOW_MUCH_WATER:
+                return howMuchWater();
         }
         return new Result(false, "invalid command");
     }
@@ -79,7 +81,7 @@ public class FarmingController extends Controller {
 
     private Result plant(String seedName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        InventorySlot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(seedName);
+        Slot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(seedName);
         Position appliedPosition = player.getPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
 
@@ -132,7 +134,7 @@ public class FarmingController extends Controller {
 
     private Result fertilize(String fertilizerName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        InventorySlot slot = player.getInventory().getSlot(fertilizerName);
+        Slot slot = player.getInventory().getSlot(fertilizerName);
 
         if (slot == null) {
             return new Result(false, "you don't have this fertilizer");

@@ -1,7 +1,10 @@
 package models.farming;
 
+import models.Item;
 import models.animal.ProductQuality;
 import models.building.TileObject;
+
+import java.util.List;
 
 public abstract class Plant implements TileObject {
     protected boolean isWatered;
@@ -50,6 +53,8 @@ public abstract class Plant implements TileObject {
         return fertilizer;
     }
 
+    public abstract boolean isFullyGrown();
+
     public void setFertilizer(Fertilizer fertilizer) {
         this.fertilizer = fertilizer;
     }
@@ -61,6 +66,10 @@ public abstract class Plant implements TileObject {
     public ProductQuality getQuality() {
         return quality;
     }
+
+    public abstract boolean hasProduct();
+
+    public abstract List<Item> getProducts();
 
     @Override
     public String getSymbol() {

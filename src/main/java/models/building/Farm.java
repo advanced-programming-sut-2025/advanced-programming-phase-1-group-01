@@ -15,7 +15,6 @@ public class Farm extends Maps {
     private Quarry quarry;
     private final List<AnimalHouse> shelters;
     private final List<Animal> animals;
-    private final List<Plant> plants;
 
     public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse) {
         super(tiles);
@@ -25,7 +24,6 @@ public class Farm extends Maps {
         this.greenhouse = greenhouse;
         shelters = new ArrayList<>();
         animals = new ArrayList<>();
-        plants = new ArrayList<>();
     }
 
     public Lake getLake() {
@@ -171,10 +169,12 @@ public class Farm extends Maps {
     }
 
     public List<Plant> getPlants() {
+        List<Plant> plants = new ArrayList<>();
+        for (List<Tile> row : tiles) {
+            for (Tile tile : row) {
+                if (tile.getObject() instanceof Plant plant) plants.add(plant);
+            }
+        }
         return plants;
-    }
-
-    public void addPlant(Plant plant) {
-        plants.add(plant);
     }
 }
