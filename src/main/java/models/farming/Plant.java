@@ -4,17 +4,17 @@ import models.Item;
 import models.animal.ProductQuality;
 import models.building.TileObject;
 
-import java.util.List;
-
 public abstract class Plant implements TileObject {
     protected boolean isWatered;
     protected int growthLevel;
     protected int daysInCurrentLevel;
     protected Fertilizer fertilizer;
     protected final ProductQuality quality;
+    protected boolean hasProduct;
 
     protected Plant() {
         this.quality = ProductQuality.getRandomProductQuality();
+        growthLevel = 1;
     }
 
     public abstract FarmingEnum getInfo();
@@ -33,18 +33,6 @@ public abstract class Plant implements TileObject {
 
     public int getGrowthLevel() {
         return growthLevel;
-    }
-
-    public void incrementGrowthLevel() {
-        growthLevel++;
-    }
-
-    public int getDaysInCurrentLevel() {
-        return daysInCurrentLevel;
-    }
-
-    public void incrementDaysInCurrentLevel() {
-        daysInCurrentLevel++;
     }
 
     public abstract void grow();
@@ -67,9 +55,13 @@ public abstract class Plant implements TileObject {
         return quality;
     }
 
-    public abstract boolean hasProduct();
+    public boolean hasProduct() {
+        return hasProduct;
+    }
 
-    public abstract List<Item> getProducts();
+    public abstract Item getProduct();
+
+    public abstract String getName();
 
     @Override
     public String getSymbol() {

@@ -1,16 +1,18 @@
 package controllers;
 
+import models.Item;
 import models.Position;
 import models.Result;
 import models.building.Tile;
 import models.character.player.Slot;
 import models.character.player.Player;
 import models.data.Repository;
+import models.dateTime.Season;
 import models.enums.Direction;
 import models.enums.commands.FarmingCommands;
 import models.farming.*;
-import models.foraging.ForagingCrop;
-import models.foraging.ForagingTree;
+import models.foraging.ForagingCropInfo;
+import models.foraging.ForagingTreeInfo;
 import models.tool.WateringCan;
 
 public class FarmingController extends Controller {
@@ -62,16 +64,16 @@ public class FarmingController extends Controller {
     }
 
     private Result craftInfo(String name) {
-        FarmingEnum farmingConstant = null;
+        FarmingEnum farmingConstant;
 
         if (CropInfo.fromString(name) != null) {
             farmingConstant = CropInfo.fromString(name);
         } else if (TreeInfo.fromString(name) != null) {
             farmingConstant = TreeInfo.fromString(name);
-        } else if (ForagingCrop.fromString(name) != null) {
-            farmingConstant = ForagingCrop.fromString(name);
-        } else if (ForagingTree.fromString(name) != null) {
-            farmingConstant = ForagingTree.fromString(name);
+        } else if (ForagingCropInfo.fromString(name) != null) {
+            farmingConstant = ForagingCropInfo.fromString(name);
+        } else if (ForagingTreeInfo.fromString(name) != null) {
+            farmingConstant = ForagingTreeInfo.fromString(name);
         } else {
             return new Result(false, "crop not found");
         }
@@ -79,26 +81,41 @@ public class FarmingController extends Controller {
         return new Result(true, farmingConstant.toString());
     }
 
-    private Result plant(String seedName, Direction direction) {
+    private Result plant(String sourceName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        Slot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(seedName);
+        Slot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(sourceName);
         Position appliedPosition = player.getPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
+        Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
         if (tile == null) {
             return new Result(false, "incorrect tile");
         } else if (slot == null) {
-            return new Result(false, "seed not found");
+            return new Result(false, "source not found");
         } else if (!tile.isPlowed()) {
             return new Result(false, "tile is not plowed");
         }
 
-        Seed seed = (Seed) slot.getItem();
-        slot.removeQuantity(1);
-        repo.getCurrentGame().getFarmingManager().plant(seed, tile);
-        Crop crop = (Crop) tile.getObject();
+        if (slot.getItem() instanceof Seed seed) {
+            CropInfo cropInfo = CropInfo.fromSeed(seed);
+            if (!cropInfo.getSeasons().contains(currSeason) && !cropInfo.getSeasons().contains(Season.SPECIAL)) {
+                return new Result(false, "you can't plant this crop in this season");
+            }
+        } else if (slot.getItem() instanceof TreeSource treeSource) {
+            TreeInfo treeInfo = TreeInfo.fromTreeSource(treeSource);
+            assert treeInfo != null;
+            if (!treeInfo.getSeason().equals(Season.SPECIAL) && treeInfo.getSeason().equals(currSeason)) {
+                return new Result(false, "you can't plant this tree in this season");
+            }
+        }
 
-        return new Result(true, "%s planted in <%d, %d> successfully".formatted(crop.getName(), appliedPosition.x(), appliedPosition.y()));
+        Item source = slot.getItem();
+        slot.removeQuantity(1);
+
+        repo.getCurrentGame().getFarmingManager().plant(source, tile);
+        Plant plant = (Plant) tile.getObject();
+
+        return new Result(true, "%s planted in <%d, %d> successfully".formatted(plant.getName(), appliedPosition.x(), appliedPosition.y()));
     }
 
     private Result showPlantInfo(Position position) {
@@ -129,7 +146,7 @@ public class FarmingController extends Controller {
                 crop.isWatered(),
                 crop.getQuality(),
                 crop.isFertilized()
-                ));
+        ));
     }
 
     private Result fertilize(String fertilizerName, Direction direction) {

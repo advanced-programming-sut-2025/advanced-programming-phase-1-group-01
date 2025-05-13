@@ -1,9 +1,11 @@
 package models.tool;
 
+import models.Item;
 import models.Position;
 import models.building.Tile;
 import models.character.player.Player;
 import models.enums.Direction;
+import models.farming.Crop;
 import models.farming.Plant;
 
 public class Scythe extends Tool {
@@ -20,10 +22,13 @@ public class Scythe extends Tool {
         Position appliedPosition = player.getPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
 
-        if (tile.getObject() instanceof Plant plant) {
-            if (plant.isFullyGrown()) {
-
+        Item product;
+        if (tile.getObject() instanceof Plant plant && plant.hasProduct()) {
+            product = plant.getProduct();
+            if (product instanceof Crop crop && crop.getInfo().isOneTime()) {
+                tile.setObject(null);
             }
+            player.getInventory().addItem(product.getName() ,1);
         }
 
         double energyCost = getEffectiveEnergyCost();
