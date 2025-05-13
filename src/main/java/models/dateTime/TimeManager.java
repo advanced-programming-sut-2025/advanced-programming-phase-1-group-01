@@ -86,7 +86,7 @@ public class TimeManager {
         game.getTheStardropSaloon().resetDailyStock();
 
         Player player = game.getCurrentPlayer();
-        if (player.getEnergy().isHasPassedOut()) {
+        if (player.getEnergy().hasPassedOut()) {
             player.getEnergy().setHasPassedOut(false);
             player.getEnergy().fillEnergyPassedOut();
         }

@@ -2,9 +2,8 @@ package views;
 
 import controllers.MainMenuController;
 import models.Result;
-import models.enums.commands.Menu;
 
-public class MainMenu extends AppMenu {
+public class MainMenu extends View {
     private final MainMenuController controller;
 
     public MainMenu(MainMenuController controller, AppView appView) {
@@ -15,7 +14,7 @@ public class MainMenu extends AppMenu {
     @Override
     public void handleInput() {
 
-        while (controller.getRepo().getCurrentMenu().equals(Menu.MAIN)) {
+        while (controller.getRepo().getCurrentView().equals(models.enums.commands.View.MAIN_MENU)) {
 
             String input = appView.readLine();
             Result result = controller.handleCommand(input);
@@ -24,19 +23,19 @@ public class MainMenu extends AppMenu {
             if (result.success()) {
 
                 if (result.message().contains("profile")) {
-                    controller.getRepo().setCurrentMenu(Menu.MAIN);
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
                 }
 
                 if (result.message().contains("game")) {
-                    controller.getRepo().setCurrentMenu(Menu.GAME);
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.GAME_MENU);
                 }
 
                 if (result.message().contains("login")) {
-                    controller.getRepo().setCurrentMenu(Menu.LOGIN);
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.LOGIN_MENU);
                 }
 
                 if (result.message().contains("logged out")) {
-                    controller.getRepo().setCurrentMenu(Menu.LOGIN);
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.LOGIN_MENU);
                 }
             }
         }

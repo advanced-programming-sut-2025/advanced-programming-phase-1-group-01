@@ -1,10 +1,10 @@
 package models.tool;
 
-import models.InventoryItem;
+import models.Item;
 import models.character.player.Inventory;
 import models.enums.Direction;
 
-public abstract class Tool implements InventoryItem {
+public abstract class Tool implements Item {
     protected Inventory inventory;
     protected String name;
 

@@ -17,7 +17,7 @@ public class WeatherController extends Controller {
         WeatherCommands matchedCommand = null;
 
         for (WeatherCommands cmd : WeatherCommands.values()) {
-            if (commandLine.matches(cmd.regex())) {
+            if (commandLine.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }

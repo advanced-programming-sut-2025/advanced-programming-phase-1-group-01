@@ -8,8 +8,8 @@ import models.enums.commands.ProfileMenuCommands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ProfileController extends Controller {
-    public ProfileController(Repository repo) {
+public class ProfileMenuController extends Controller {
+    public ProfileMenuController(Repository repo) {
         super(repo);
     }
 

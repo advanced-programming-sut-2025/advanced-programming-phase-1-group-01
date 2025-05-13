@@ -1,13 +1,12 @@
 package views;
 
-import controllers.ProfileController;
+import controllers.ProfileMenuController;
 import models.Result;
-import models.enums.commands.Menu;
 
-public class ProfileMenu extends AppMenu {
-    private final ProfileController controller;
+public class ProfileMenu extends View {
+    private final ProfileMenuController controller;
 
-    public ProfileMenu(ProfileController controller, AppView appView) {
+    public ProfileMenu(ProfileMenuController controller, AppView appView) {
         this.controller = controller;
         this.appView = appView;
     }
@@ -15,14 +14,14 @@ public class ProfileMenu extends AppMenu {
     @Override
     public void handleInput() {
 
-        while (controller.getRepo().getCurrentMenu().equals(Menu.PROFILE)) {
+        while (controller.getRepo().getCurrentView().equals(models.enums.commands.View.PROFILE_MENU)) {
 
             String input = appView.readLine();
             Result result = controller.handleCommand(input);
             appView.showMessage(result.message());
 
             if (result.success() && result.message().equals("main")) {
-                controller.getRepo().setCurrentMenu(Menu.MAIN);
+                controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
             }
         }
     }

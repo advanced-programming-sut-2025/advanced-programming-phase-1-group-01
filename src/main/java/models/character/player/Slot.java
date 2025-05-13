@@ -1,23 +1,29 @@
 package models.character.player;
 
-import models.InventoryItem;
+import models.Item;
 
-public class InventorySlot {
+public class Slot {
     private final Inventory inventory;
-    private InventoryItem item;
+    private Item item;
     private int quantity;
 
-    public InventorySlot(Inventory inventory, String itemName, int quantity) {
+    public Slot(Inventory inventory, String itemName, int quantity) {
         this.inventory = inventory;
         this.item = Inventory.getNewItem(itemName);
         this.quantity = quantity;
     }
 
-    public InventoryItem getItem() {
+    public Slot(Inventory inventory, Item item, int quantity) {
+        this.inventory = inventory;
+        this.item = item;
+        this.quantity = quantity;
+    }
+
+    public Item getItem() {
         return item;
     }
 
-    public void setItem(InventoryItem item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 

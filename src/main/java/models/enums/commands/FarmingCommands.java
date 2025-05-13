@@ -1,10 +1,11 @@
 package models.enums.commands;
 
-public enum FarmingCommands {
+public enum FarmingCommands implements Command {
     CRAFT_INFO("craftinfo -n (.+?)"),
     PLANT("plant -s (.+?) -d (.+?)"),
     SHOW_PLANT("showplant -l (.+?)"),
     FERTILIZE("fertilize -f (.+?) -d (.+?)"),
+    HOW_MUCH_WATER("howmuch water"),
     ;
 
     private String regex;
@@ -13,6 +14,7 @@ public enum FarmingCommands {
         this.regex = regex;
     }
 
+    @Override
     public String getRegex() {
         return regex;
     }

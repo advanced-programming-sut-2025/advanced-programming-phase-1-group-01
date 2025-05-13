@@ -4,20 +4,20 @@ import models.ingredients.Ingredient;
 
 public class AnimalProduct extends Ingredient {
     private final AnimalProductType animalProductType;
-    private final AnimalProductQuality animalProductQuality;
+    private final ProductQuality productQuality;
 
-    public AnimalProduct(AnimalProductType animalProductType, AnimalProductQuality animalProductQuality, int amount) {
+    public AnimalProduct(AnimalProductType animalProductType, ProductQuality productQuality, int amount) {
         super(amount);
         this.animalProductType = animalProductType;
-        this.animalProductQuality = animalProductQuality;
+        this.productQuality = productQuality;
     }
 
     public AnimalProductType getAnimalProductType() {
         return animalProductType;
     }
 
-    public AnimalProductQuality getAnimalProductQuality() {
-        return animalProductQuality;
+    public ProductQuality getAnimalProductQuality() {
+        return productQuality;
     }
 
     public void increaseAmount(int increment) {
