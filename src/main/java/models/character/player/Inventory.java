@@ -58,11 +58,19 @@ public class Inventory {
     }
 
     public int getCapacity() {
-        return capacity;
+        return slots.size();
+    }
+
+    public boolean hasCapacity() {
+        return slots.size() <= INVENTORY_CAPACITY;
     }
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public List<InventorySlot> getSlots() {
+        return slots;
     }
 
     public static InventoryItem getNewItem(String itemName) {

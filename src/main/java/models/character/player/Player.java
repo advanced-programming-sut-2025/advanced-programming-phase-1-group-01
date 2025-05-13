@@ -3,11 +3,13 @@ package models.character.player;
 import models.Game;
 import models.MessageEntry;
 import models.Position;
+import models.Size;
 import models.building.Building;
 import models.building.Farm;
 import models.building.Tile;
 import models.building.TileObject;
 import models.character.Character;
+import models.crafting.Recipe;
 import models.data.User;
 import models.enums.Direction;
 import models.enums.Gender;
@@ -33,6 +35,7 @@ public class Player extends Character {
     private final Map<MessageEntry, Boolean> notifications;
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
+    private final List<Recipe> recipes;
 
     public Player(Game game, User user) {
         this.game = game;
@@ -46,6 +49,7 @@ public class Player extends Character {
         relationshipService = new RelationshipService(this);
         gender = user.getGender();
         notifications = new LinkedHashMap<>();
+        recipes = new ArrayList<>();
     }
 
     public Position getPosition() {
@@ -157,7 +161,7 @@ public class Player extends Character {
     }
 
     public boolean isNearTo(Position position) {
-        return Math.abs(this.position.getX() - position.getX()) <= 1 && Math.abs(this.position.getY() - position.getY()) <= 1;
+        return Math.abs(this.position.x() - position.x()) <= 1 && Math.abs(this.position.y() - position.y()) <= 1;
     }
 
     public boolean isNearToSellBucket() {
@@ -165,15 +169,36 @@ public class Player extends Character {
         int[][] directions = {{0,1}, {1,0}, {0,-1}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
 
         for (int[] dir : directions) {
-            int nx = position.getX() + dir[0];
-            int ny = position.getY() + dir[1];
+            int nx = position.x() + dir[0];
+            int ny = position.y() + dir[1];
             Position neighbor = new Position(nx, ny);
             neighbors.add(neighbor);
         }
 
         for (Position p : neighbors) {
-            if (farm.getTiles().get(p.getX()).get(p.getY()).getObject() == null) return true;
+            if (farm.getTiles().get(p.x()).get(p.y()).getObject() == null) return true;
         }
         return false;
+    }
+
+    public boolean isPlayerNearBuilding(Building building) {
+        Position buildingPos = building.getPosition();
+        Size size = building.getSize();
+
+        int x1 = buildingPos.x() - 1;
+        int y1 = buildingPos.y() - 1;
+        int x2 = buildingPos.x() + size.getWidth();
+        int y2 = buildingPos.y() + size.getHeight();
+
+        return this.position.x() >= x1 && this.position.x() <= x2 &&
+                this.position.y() >= y1 && this.position.y() <= y2;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
     }
 }

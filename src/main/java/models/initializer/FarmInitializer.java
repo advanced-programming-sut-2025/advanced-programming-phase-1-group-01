@@ -204,8 +204,8 @@ public class FarmInitializer {
             tiles.get(GREENHOUSE_BR.x() + 1).set(i, tile);
         }
 
-        for (int i = SHIPPING_BIN_1_TP.getX(); i < SHIPPING_BIN_1_BR.getX(); i++) {
-            for (int j = SHIPPING_BIN_1_TP.getY(); j < SHIPPING_BIN_1_BR.getY(); j++) {
+        for (int i = SHIPPING_BIN_1_TP.x(); i < SHIPPING_BIN_1_BR.x(); i++) {
+            for (int j = SHIPPING_BIN_1_TP.y(); j < SHIPPING_BIN_1_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.SALE_BUCKET)
@@ -215,8 +215,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = SHIPPING_BIN_2_TP.getX(); i < SHIPPING_BIN_2_BR.getX(); i++) {
-            for (int j = SHIPPING_BIN_2_TP.getY(); j < SHIPPING_BIN_2_BR.getY(); j++) {
+        for (int i = SHIPPING_BIN_2_TP.x(); i < SHIPPING_BIN_2_BR.x(); i++) {
+            for (int j = SHIPPING_BIN_2_TP.y(); j < SHIPPING_BIN_2_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.SALE_BUCKET)
