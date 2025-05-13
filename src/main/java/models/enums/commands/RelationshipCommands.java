@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum RelationshipCommands {
+public enum RelationshipCommands implements Command {
     SHOW_FRIENDSHIPS("friendships"),
     TALK("talk -u (.+?) -m (.+?)"),
     TALK_HISTORY("talk history -u (.+?)"),
@@ -24,6 +24,7 @@ public enum RelationshipCommands {
 
     private final String regex;
 
+    @Override
     public String getRegex() {
         return regex;
     }

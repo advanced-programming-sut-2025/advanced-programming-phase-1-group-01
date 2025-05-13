@@ -7,7 +7,7 @@ import models.enums.StoneType;
 import models.foraging.ForagingCrop;
 import models.foraging.ForagingMineral;
 import models.foraging.ForagingTree;
-import models.random;
+import models.Random;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -268,7 +268,7 @@ public class FarmInitializer {
     }
 
     private static Position randomPosition() {
-        return new Position(random.rand(GROUND_TP.x(), GROUND_BR.x()), random.rand(GROUND_TP.y(), GROUND_BR.y()));
+        return new Position(Random.rand(GROUND_TP.x(), GROUND_BR.x()), Random.rand(GROUND_TP.y(), GROUND_BR.y()));
     }
 
     public static Farm initializeFarm() {

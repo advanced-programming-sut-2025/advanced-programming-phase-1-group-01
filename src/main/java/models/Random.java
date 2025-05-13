@@ -2,8 +2,8 @@ package models;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class random {
-    private random() {
+public class Random {
+    private Random() {
     }
 
     public static int rand(int min, int max) {

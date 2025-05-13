@@ -85,12 +85,12 @@ public class FarmingController extends Controller {
             return new Result(false, "tile is not plowed");
         }
 
+        Seed seed = (Seed) slot.getItem();
         slot.removeQuantity(1);
-        SeedInfo seedInfo = SeedInfo.fromString(seedName);
-        Seed seed = new Seed(seedInfo);
         repo.getCurrentGame().getFarmingManager().plant(seed, tile);
+        Crop crop = (Crop) tile.getObject();
 
-        return new Result(true, "");
+        return new Result(true, "%s planted in <%d, %d> successfully".formatted(crop.getName(), appliedPosition.x(), appliedPosition.y()));
     }
 
     private Result showPlantInfo(Position position) {

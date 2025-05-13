@@ -3,7 +3,7 @@ package models.farming;
 import models.building.TileObject;
 import models.character.NPC.TradeItem;
 
-public class Plant implements TileObject {
+public abstract class Plant implements TileObject {
     protected boolean isWatered;
     protected int growthLevel;
     protected int daysInCurrentLevel;
@@ -35,6 +35,8 @@ public class Plant implements TileObject {
     public void incrementDaysInCurrentLevel() {
         daysInCurrentLevel++;
     }
+
+    public abstract boolean grow();
 
     @Override
     public String getSymbol() {

@@ -2,9 +2,8 @@ package views;
 
 import controllers.LoginMenuController;
 import models.Result;
-import models.enums.commands.Menu;
 
-public class LoginMenu extends AppMenu {
+public class LoginMenu extends View {
     private final LoginMenuController controller;
 
     public LoginMenu(LoginMenuController controller, AppView appView) {
@@ -14,14 +13,13 @@ public class LoginMenu extends AppMenu {
 
     @Override
     public void handleInput() {
-
-        while (controller.getRepo().getCurrentMenu().equals(Menu.LOGIN)) {
+        while (controller.getRepo().getCurrentView().equals(models.enums.commands.View.LOGIN_MENU)) {
             String input = appView.readLine();
             Result result = controller.handleCommand(input);
             appView.showMessage(result.message());
 
             if (result.success() && result.message().contains("logged in")) {
-                controller.getRepo().setCurrentMenu(Menu.MAIN);
+                controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
             }
         }
     }

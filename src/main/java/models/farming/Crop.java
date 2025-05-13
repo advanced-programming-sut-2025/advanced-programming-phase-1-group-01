@@ -3,7 +3,7 @@ package models.farming;
 import models.InventoryItem;
 
 public class Crop extends Plant implements InventoryItem {
-    private CropInfo info;
+    private final CropInfo info;
     private CropState state;
     private final Seed seed;
     private boolean becameGiant;
@@ -12,11 +12,21 @@ public class Crop extends Plant implements InventoryItem {
         this.seed = seed;
         info = CropInfo.fromSeed(seed.getInfo());
         state = CropState.HEALTHY;
+        becameGiant = false;
     }
 
     @Override
     public String getName() {
         return info.getName();
+    }
+
+    public CropInfo getInfo() {
+        return info;
+    }
+
+    @Override
+    public boolean grow() {
+
     }
 
     @Override

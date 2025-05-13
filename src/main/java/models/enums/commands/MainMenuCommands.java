@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum MainMenuCommands {
+public enum MainMenuCommands implements Command {
     SHOW_CURRENT_MENU("show current menu"),
     MENU_ENTER_PROFILE_MENU("menu enter profile menu"),
     MENU_Enter_GAME_MENU("menu enter game menu"),
@@ -14,6 +14,7 @@ public enum MainMenuCommands {
         this.regex = regex;
     }
 
+    @Override
     public String getRegex() {
         return regex;
     }

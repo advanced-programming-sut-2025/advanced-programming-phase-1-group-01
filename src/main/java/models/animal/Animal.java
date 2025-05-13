@@ -4,7 +4,7 @@ import models.Position;
 import models.character.Character;
 import models.character.player.Player;
 import models.enums.Direction;
-import models.random;
+import models.Random;
 
 public class Animal extends Character {
     protected final AnimalInfo animalInfo;
@@ -41,8 +41,8 @@ public class Animal extends Character {
         int counter = 0;
         Position position = null;
         while (position == null && counter < 1000) {
-            int randomX = random.rand(shelter.getTopLeftCorner().x(), shelter.getBottomRightCorner().x());
-            int randomY = random.rand(shelter.getTopLeftCorner().y(), shelter.getBottomRightCorner().y());
+            int randomX = Random.rand(shelter.getTopLeftCorner().x(), shelter.getBottomRightCorner().x());
+            int randomY = Random.rand(shelter.getTopLeftCorner().y(), shelter.getBottomRightCorner().y());
             if (shelter.isThatTileEmpty(new Position(randomX, randomY))) {
                 position = new Position(randomX, randomY);
             }
