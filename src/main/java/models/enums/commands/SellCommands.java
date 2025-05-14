@@ -1,8 +1,7 @@
 package models.enums.commands;
 
 public enum SellCommands {
-        SELL("sell (.+?) -n (.+?)")
-    ;
+    SELL("sell (.+?) -n (.+?)");
 
     private final String regex;
 

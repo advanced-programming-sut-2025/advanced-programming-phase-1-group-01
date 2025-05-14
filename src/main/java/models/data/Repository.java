@@ -66,4 +66,10 @@ public class Repository {
     public void addGame(Game game) {
         games.add(game);
     }
+
+
+    //@
+    public void nextTurn() {
+        return;
+    }
 }

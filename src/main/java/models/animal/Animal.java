@@ -4,10 +4,15 @@ import models.Position;
 import models.character.Character;
 import models.character.player.Player;
 import models.enums.Direction;
+import models.enums.Emoji;
+import models.random;
+import models.relations.Friendship;
+import models.relations.FriendshipLevel;
 import models.Random;
 
 public class Animal extends Character {
     protected final AnimalInfo animalInfo;
+    protected final String name;
     protected Player owner;
     protected Position position;
     protected Direction direction;
@@ -18,13 +23,15 @@ public class Animal extends Character {
     protected AnimalHouse shelter;
     protected AnimalProductType animalProductType;
     protected int periodicDay = 0;
+    protected int friendshipLevel = 0;
 
 
-    public Animal(AnimalInfo animalInfo, Player owner, AnimalHouse shelter) {
+    public Animal(AnimalInfo animalInfo,String name, Player owner, AnimalHouse shelter) {
         this.animalInfo = animalInfo;
         this.owner = owner;
         this.shelter = shelter;
         this.position = findAPlace(shelter);
+        this.name = name;
     }
 
     public AnimalProductType getAnimalProductType() {
@@ -61,6 +68,7 @@ public class Animal extends Character {
 
     public void petting() {
         hasBeenPetted = true;
+        advanceFriendshipLevel(15);
 //        FriendshipNetwork.increaseFriendshipLevel(this, owner, 15);
     }
 
@@ -109,6 +117,14 @@ public class Animal extends Character {
 
     }
 
+    public void advanceFriendshipLevel(int amount) {
+        if (friendshipLevel + amount <= 1000) friendshipLevel += amount;
+    }
+
+    private void decreaseFriendshipLevel(int amount) {
+        if (friendshipLevel - amount >= 0) friendshipLevel -= amount;
+    }
+
     public boolean isAValidIncrement() {
         return true;
     }
@@ -121,4 +137,29 @@ public class Animal extends Character {
         return ProductQuality.IRIDIUM;
     }
 
+    public String getAnimalName() {
+        return name;
+    }
+
+    public String hasBeenPetted() {
+        if (hasBeenPetted) return Emoji.TRUE.getSymbol();
+        else return Emoji.FALSE.getSymbol();
+    }
+
+    public String isHungry() {
+        if (isHungry) return Emoji.TRUE.getSymbol();
+        else return Emoji.FALSE.getSymbol();
+    }
+
+    public int getFriendshipLevel() {
+        return friendshipLevel;
+    }
+
+    public boolean getIsHungry() {
+        return isHungry;
+    }
+
+    public int calculateSellPrice() {
+        return (int)(animalInfo.getPrice() * (friendshipLevel / 1000.0 + 0.3));
+    }
 }

@@ -4,6 +4,7 @@ public enum FriendshipLevel {
     LEVEL_0, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4;
 
     public static String getLevelDescription(int level) {
+        level = (level + 5) % 200;
         return switch (level) {
             case 0 -> "Cold, distant, or even hostile; like complete strangers with no connection";
             case 1 -> "Familiar but formal; polite interactions with little personal warmth";
