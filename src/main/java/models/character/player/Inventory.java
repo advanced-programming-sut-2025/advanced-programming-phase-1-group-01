@@ -10,6 +10,7 @@ public class Inventory {
     private final Player player;
     private int capacity;
     private final List<Slot> slots;
+    private Slot equippedSlot;
 
     private static final int INVENTORY_CAPACITY = 50;
 
@@ -21,7 +22,7 @@ public class Inventory {
 
     public Slot getSlot(String itemName) {
         for (Slot slot : slots) {
-            if (slot.getItem().getName().equals(itemName)) {
+            if (slot.getItem().getName().equalsIgnoreCase(itemName)) {
                 if (slot.getQuantity() > 0) {
                     return slot;
                 } else {
@@ -31,6 +32,7 @@ public class Inventory {
         }
         return null;
     }
+
 
     public void removeSlot(Slot slot) {
         slots.remove(slot);
@@ -79,5 +81,23 @@ public class Inventory {
             case "watering can" -> new WateringCan();
             default -> null;
         };
+    }
+
+    public Slot getEquippedSlot() {
+        return equippedSlot;
+    }
+
+    public void setEquippedSlot(Slot equippedSlot) {
+        this.equippedSlot = equippedSlot;
+    }
+
+    public List<Tool> getTools() {
+        List<Tool> tools = new ArrayList<>();
+        for (Slot slot : slots) {
+            if (slot.getItem() instanceof Tool) {
+                tools.add((Tool) slot.getItem());
+            }
+        }
+        return tools;
     }
 }
