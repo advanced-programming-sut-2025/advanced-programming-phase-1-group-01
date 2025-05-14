@@ -44,4 +44,8 @@ public enum AnimalInfo {
                 .findFirst()
                 .orElse(AnimalHouseType.COOP);
     }
+
+    public int getPrice() {
+        return price;
+    }
 }

@@ -8,6 +8,8 @@ import models.building.Farm;
 import models.building.Tile;
 import models.building.TileType;
 
+import java.util.List;
+
 public class CreateShelter {
     public static AnimalHouse createShelter(Position position, Farm farm, AnimalHouseType animalHouseType) {
         setInteriorTiles(position, farm, animalHouseType.getSize());
@@ -22,7 +24,7 @@ public class CreateShelter {
         return new AnimalHouse(animalHouseType, position);
     }
 
-    public static void setInteriorTiles(Position position, Farm farm, Size size) {
+    private static void setInteriorTiles(Position position, Farm farm, Size size) {
         Position end = new Position(position.x() + size.getWidth(), position.y() + size.getHeight());
         for (int i = position.x(); i < end.x(); i++) {
             for (int j = position.y(); j < end.y(); j++) {
@@ -38,7 +40,7 @@ public class CreateShelter {
         }
     }
 
-    public static void setFence(int start, int end, Farm farm, int constantVar, boolean hasDoor) {
+    private static void setFence(int start, int end, Farm farm, int constantVar, boolean hasDoor) {
         for (int i = start; i < end; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, constantVar))
@@ -49,5 +51,17 @@ public class CreateShelter {
                     .build();
             if (!hasDoor || (i != (start + end) / 2)) farm.getTiles().get(i).set(constantVar, tile);
         }
+    }
+
+    public static boolean isEmptyPlace(List<List<Tile>> tiles, int x, int y, int size) {
+        if (x + size > tiles.size() || y + size > tiles.get(0).size()) return false;
+        for (int i = x; i < x + size; i++) {
+            for (int j = y; j < y + size; j++) {
+                if (tiles.get(i).get(j).getType() != TileType.GROUND || tiles.get(i).get(j).getObject() != null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

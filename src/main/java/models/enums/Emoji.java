@@ -1,6 +1,8 @@
 package models.enums;
 
 
+import models.building.TileType;
+
 public enum Emoji {
 
     GRINNING_FACE("😀"),
@@ -400,7 +402,7 @@ public enum Emoji {
     SEAL("🦭"),
     //TURTLE("🐢"),
     SEAHORSE("🪼"),
-    STARFISH("🌟"), // (جایگزین: برخی فونت‌ها از ⭐ استفاده می‌کنند)
+    STARFISH("🌟"),
     CORAL("🪸"),
     SHELL("🐚"),
 
@@ -526,6 +528,8 @@ public enum Emoji {
     SPOON("🥄"),
     KITCHEN_KNIFE("🔪"),
     JAR("🫙"),
+    TRUE("✅"),
+    FALSE("❌"),
 
     // دسته‌بندی: سنگ‌ها و مواد معدنی (Stones & Minerals)
 //    ROCK("🪨"),
@@ -545,4 +549,16 @@ public enum Emoji {
     public String getSymbol() {
         return symbol;
     }
+
+    public static String getFormattedGuidance() {
+        TileType[] values = TileType.values();
+        StringBuilder output = new StringBuilder();
+        for (TileType value : values) {
+            String formattedLine = String.format("%-" + 15 + "s", value.name());
+            output.append(formattedLine).append(" : ").append(value.getSymbol()).append("\n");
+        }
+        return output.toString();
+    }
+
+
 }

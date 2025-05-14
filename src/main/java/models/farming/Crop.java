@@ -1,5 +1,7 @@
 package models.farming;
 
+
+import models.enums.Emoji;
 import models.Item;
 import models.dateTime.Season;
 
@@ -80,8 +82,9 @@ public class Crop extends Plant implements Item, Cloneable {
 
     @Override
     public String getSymbol() {
-        return "";
+        return Emoji.CORN.getSymbol();
     }
+
 
     public boolean isBecameGiant() {
         return becameGiant;
