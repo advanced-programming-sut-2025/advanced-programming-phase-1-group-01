@@ -1,15 +1,21 @@
 package models.tool.enums;
 
 public enum FishingPoleType {
-   PRACTICAL(8), BAMBOO(8), FIBERGLASS(6), IRIDIUM(4);
+    TRAINING(8, 0.1), BAMBOO(8, 0.5), FIBERGLASS(6, 0.9), IRIDIUM(4, 1.2);
 
-   private final int energyCost;
+    private final int energyCost;
+    private final double fishingFactor;
 
-    FishingPoleType(int energyCost) {
+    FishingPoleType(int energyCost, double fishingFactor) {
         this.energyCost = energyCost;
+        this.fishingFactor = fishingFactor;
     }
 
     public int getEnergyCost() {
         return energyCost;
+    }
+
+    public double getFishingFactor() {
+        return fishingFactor;
     }
 }

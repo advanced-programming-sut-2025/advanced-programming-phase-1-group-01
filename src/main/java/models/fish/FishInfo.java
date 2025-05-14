@@ -2,6 +2,10 @@ package models.fish;
 
 import models.dateTime.Season;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public enum FishInfo {
     SALMON("Salmon", 75, Season.FALL),
     SARDINE("Sardine", 40, Season.FALL),
@@ -44,6 +48,20 @@ public enum FishInfo {
 
     public Season getSeason() {
         return season;
+    }
+
+    private static final Random RANDOM = new Random();
+
+    public static FishInfo getRandomFish(Season season) {
+        List<FishInfo> fishInfos = new ArrayList<>();
+        for (FishInfo fishInfo : FishInfo.values()) {
+            if (fishInfo.getSeason() == season) {
+                fishInfos.add(fishInfo);
+            }
+        }
+
+        int index = RANDOM.nextInt(fishInfos.size());
+        return fishInfos.get(index);
     }
 
     @Override
