@@ -1,13 +1,13 @@
 package models.relations;
 
-import models.InventoryItem;
+import models.Item;
 import models.character.player.Player;
 import models.dateTime.DateTime;
 
 public class GiftBuilder {
     private Player sender;
     private Player receiver;
-    private InventoryItem item;
+    private Item item;
     private int amount;
     private DateTime sentTime;
 
@@ -21,7 +21,7 @@ public class GiftBuilder {
         return this;
     }
 
-    public GiftBuilder setItem(InventoryItem item) {
+    public GiftBuilder setItem(Item item) {
         this.item = item;
         return this;
     }

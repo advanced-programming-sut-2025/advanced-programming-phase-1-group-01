@@ -8,6 +8,7 @@ import models.enums.Emoji;
 import models.random;
 import models.relations.Friendship;
 import models.relations.FriendshipLevel;
+import models.Random;
 
 public class Animal extends Character {
     protected final AnimalInfo animalInfo;
@@ -47,8 +48,8 @@ public class Animal extends Character {
         int counter = 0;
         Position position = null;
         while (position == null && counter < 1000) {
-            int randomX = random.rand(shelter.getTopLeftCorner().x(), shelter.getBottomRightCorner().x());
-            int randomY = random.rand(shelter.getTopLeftCorner().y(), shelter.getBottomRightCorner().y());
+            int randomX = Random.rand(shelter.getTopLeftCorner().x(), shelter.getBottomRightCorner().x());
+            int randomY = Random.rand(shelter.getTopLeftCorner().y(), shelter.getBottomRightCorner().y());
             if (shelter.isThatTileEmpty(new Position(randomX, randomY))) {
                 position = new Position(randomX, randomY);
             }
@@ -128,12 +129,12 @@ public class Animal extends Character {
         return true;
     }
 
-    public AnimalProductQuality getAnimalProductQuality() {
+    public ProductQuality getAnimalProductQuality() {
 //        double QualityNumber = getRelationshipLevel(owner) * (0.5 + 0.5 * random.rand(0.0, 1.0)) / 1000;
 //        if (QualityNumber <= 0.5) return AnimalProductQuality.NORMAL;
 //        if (QualityNumber <= 0.7) return AnimalProductQuality.SILVER;
 //        if (QualityNumber <= 0.9) return AnimalProductQuality.GOLD;
-        return AnimalProductQuality.IRIDIUM;
+        return ProductQuality.IRIDIUM;
     }
 
     public String getAnimalName() {

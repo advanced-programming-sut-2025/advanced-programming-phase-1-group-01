@@ -44,7 +44,7 @@ public class Energy {
         this.amount = 0;
     }
 
-    public boolean isHasPassedOut() {
+    public boolean hasPassedOut() {
         return hasPassedOut;
     }
 

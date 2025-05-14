@@ -38,7 +38,7 @@ public class Tile {
     }
 
     public boolean plow() {
-        if (type != TileType.RIVER) isPlowed = true;
+        if (type != TileType.RIVER && isEmpty()) isPlowed = true;
         return false;
     }
 
@@ -67,7 +67,7 @@ public class Tile {
     }
 
     public boolean isEmpty() {
-        return position == null || object == null;
+        return object == null;
     }
 
     public static class Builder {

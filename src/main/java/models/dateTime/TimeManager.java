@@ -68,14 +68,14 @@ public class TimeManager {
     }
 
     public void updateEvents() {
-
     }
 
     public void prepareForNewDay() {
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
-        game.getForagingManager().prepareForaging();
+        game.getForagingManager().prepareNewDayForaging();
         game.getFarmingManager().resetAllPlantsWatered();
+        game.getFarmingManager().growAllPlants();
 
         game.getBlacksmith().resetDailyStock();
         game.getJojaMart().resetDailyStock();
@@ -86,7 +86,7 @@ public class TimeManager {
         game.getTheStardropSaloon().resetDailyStock();
 
         Player player = game.getCurrentPlayer();
-        if (player.getEnergy().isHasPassedOut()) {
+        if (player.getEnergy().hasPassedOut()) {
             player.getEnergy().setHasPassedOut(false);
             player.getEnergy().fillEnergyPassedOut();
         }

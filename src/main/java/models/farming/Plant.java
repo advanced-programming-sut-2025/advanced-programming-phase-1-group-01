@@ -1,12 +1,23 @@
 package models.farming;
 
+import models.Item;
+import models.animal.ProductQuality;
 import models.building.TileObject;
-import models.character.NPC.TradeItem;
 
-public class Plant implements TileObject {
+public abstract class Plant implements TileObject {
     protected boolean isWatered;
     protected int growthLevel;
     protected int daysInCurrentLevel;
+    protected Fertilizer fertilizer;
+    protected final ProductQuality quality;
+    protected boolean hasProduct;
+
+    protected Plant() {
+        this.quality = ProductQuality.getRandomProductQuality();
+        growthLevel = 1;
+    }
+
+    public abstract FarmingEnum getInfo();
 
     public void water() {
         isWatered = true;
@@ -24,17 +35,33 @@ public class Plant implements TileObject {
         return growthLevel;
     }
 
-    public void incrementGrowthLevel() {
-        growthLevel++;
+    public abstract void grow();
+
+    public Fertilizer getFertilizer() {
+        return fertilizer;
     }
 
-    public int getDaysInCurrentLevel() {
-        return daysInCurrentLevel;
+    public abstract boolean isFullyGrown();
+
+    public void setFertilizer(Fertilizer fertilizer) {
+        this.fertilizer = fertilizer;
     }
 
-    public void incrementDaysInCurrentLevel() {
-        daysInCurrentLevel++;
+    public boolean isFertilized() {
+        return fertilizer != null;
     }
+
+    public ProductQuality getQuality() {
+        return quality;
+    }
+
+    public boolean hasProduct() {
+        return hasProduct;
+    }
+
+    public abstract Item getProduct();
+
+    public abstract String getName();
 
     @Override
     public String getSymbol() {

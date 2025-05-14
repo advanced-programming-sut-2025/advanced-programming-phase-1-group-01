@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum EnergyCommands {
+public enum EnergyCommands implements Command {
     ENERGY_SHOW("show energy"),
     CHEAT_ENERGY("energy set -v (.+?)"),
     ENERGY_UNLIMITED("energy unlimited"),
@@ -12,6 +12,7 @@ public enum EnergyCommands {
         this.regex = regex;
     }
 
+    @Override
     public String getRegex() {
         return regex;
     }

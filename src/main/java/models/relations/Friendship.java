@@ -1,6 +1,6 @@
 package models.relations;
 
-import models.InventoryItem;
+import models.Item;
 import models.MessageEntry;
 import models.character.Character;
 import models.character.player.Player;
@@ -66,7 +66,7 @@ public class Friendship extends Relationship {
         return messages;
     }
 
-    public void addGift(Player sender, Player receiver, InventoryItem item, int amount, DateTime now) {
+    public void addGift(Player sender, Player receiver, Item item, int amount, DateTime now) {
         Gift gift = new GiftBuilder()
                 .setSender(sender)
                 .setReceiver(receiver)

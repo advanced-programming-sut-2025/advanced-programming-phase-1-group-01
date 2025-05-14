@@ -3,9 +3,8 @@ package views;
 import controllers.GameMenuController;
 import controllers.LoginMenuController;
 import controllers.MainMenuController;
-import controllers.ProfileController;
+import controllers.ProfileMenuController;
 import models.data.Repository;
-import models.enums.commands.Menu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +12,11 @@ import java.util.Scanner;
 
 public class AppView {
 
-    private final Map<Menu,AppMenu> menus;
+    private final Map<models.enums.commands.View, View> views;
     private final Repository repo;
 
     public AppView() {
-        this.menus = new HashMap<>();
+        this.views = new HashMap<>();
         this.repo = new Repository();
     }
 
@@ -38,20 +37,20 @@ public class AppView {
     }
     
     public void run() {
-        initMenus();
+        initViews();
         while (true) {
-            AppMenu appMenu = menus.get(repo.getCurrentMenu());
-            if (appMenu != null) {
-                appMenu.handleInput();
+            View view = views.get(repo.getCurrentView());
+            if (view != null) {
+                view.handleInput();
             }
         }
     }
 
-    private void initMenus() {
-        menus.put(Menu.LOGIN, new LoginMenu(new LoginMenuController(repo), this));
-        menus.put(Menu.MAIN, new MainMenu(new MainMenuController(repo), this));
-        menus.put(Menu.PROFILE, new ProfileMenu(new ProfileController(repo), this));
-        menus.put(Menu.GAME, new GameMenu(new GameMenuController(repo), this));
+    private void initViews() {
+        views.put(models.enums.commands.View.LOGIN_MENU, new LoginMenu(new LoginMenuController(repo), this));
+        views.put(models.enums.commands.View.MAIN_MENU, new MainMenu(new MainMenuController(repo), this));
+        views.put(models.enums.commands.View.PROFILE_MENU, new ProfileMenu(new ProfileMenuController(repo), this));
+        views.put(models.enums.commands.View.GAME_MENU, new GameMenu(new GameMenuController(repo), this));
 
     }
 }

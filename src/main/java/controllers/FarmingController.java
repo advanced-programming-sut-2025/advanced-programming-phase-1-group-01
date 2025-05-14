@@ -1,16 +1,19 @@
 package controllers;
 
+import models.Item;
 import models.Position;
 import models.Result;
 import models.building.Tile;
-import models.character.player.InventorySlot;
+import models.character.player.Slot;
 import models.character.player.Player;
 import models.data.Repository;
+import models.dateTime.Season;
 import models.enums.Direction;
 import models.enums.commands.FarmingCommands;
 import models.farming.*;
-import models.foraging.ForagingCrop;
-import models.foraging.ForagingTree;
+import models.foraging.ForagingCropInfo;
+import models.foraging.ForagingTreeInfo;
+import models.tool.WateringCan;
 
 public class FarmingController extends Controller {
     FarmingController(Repository repo) {
@@ -32,13 +35,14 @@ public class FarmingController extends Controller {
             return new Result(false, "invalid command");
         }
 
+        Direction direction;
         switch (matchedCommand) {
             case CRAFT_INFO:
                 String name = commandLine.substring(commandLine.indexOf("-n") + 2).trim();
                 return craftInfo(name);
             case PLANT:
                 String seedName = commandLine.split("\\s+")[2];
-                Direction direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2).trim());
+                direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2).trim());
                 return plant(seedName, direction);
             case SHOW_PLANT:
                 int x, y;
@@ -49,21 +53,27 @@ public class FarmingController extends Controller {
                     return new Result(false, "invalid x, y");
                 }
                 return showPlantInfo(new Position(x, y));
+            case FERTILIZE:
+                String fertilizerName = commandLine.substring(commandLine.indexOf("-f") + 2, commandLine.indexOf("-d") - 1).trim();
+                direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2));
+                return fertilize(fertilizerName, direction);
+            case HOW_MUCH_WATER:
+                return howMuchWater();
         }
         return new Result(false, "invalid command");
     }
 
     private Result craftInfo(String name) {
-        FarmingEnum farmingConstant = null;
+        FarmingEnum farmingConstant;
 
         if (CropInfo.fromString(name) != null) {
             farmingConstant = CropInfo.fromString(name);
         } else if (TreeInfo.fromString(name) != null) {
             farmingConstant = TreeInfo.fromString(name);
-        } else if (ForagingCrop.fromString(name) != null) {
-            farmingConstant = ForagingCrop.fromString(name);
-        } else if (ForagingTree.fromString(name) != null) {
-            farmingConstant = ForagingTree.fromString(name);
+        } else if (ForagingCropInfo.fromString(name) != null) {
+            farmingConstant = ForagingCropInfo.fromString(name);
+        } else if (ForagingTreeInfo.fromString(name) != null) {
+            farmingConstant = ForagingTreeInfo.fromString(name);
         } else {
             return new Result(false, "crop not found");
         }
@@ -71,33 +81,108 @@ public class FarmingController extends Controller {
         return new Result(true, farmingConstant.toString());
     }
 
-    private Result plant(String seedName, Direction direction) {
+    private Result plant(String sourceName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        InventorySlot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(seedName);
+        Slot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(sourceName);
         Position appliedPosition = player.getPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
+        Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
         if (tile == null) {
             return new Result(false, "incorrect tile");
         } else if (slot == null) {
-            return new Result(false, "seed not found");
+            return new Result(false, "source not found");
         } else if (!tile.isPlowed()) {
             return new Result(false, "tile is not plowed");
         }
 
-        slot.removeQuantity(1);
-        SeedInfo seedInfo = SeedInfo.fromString(seedName);
-        Seed seed = new Seed(seedInfo);
-        repo.getCurrentGame().getFarmingManager().plant(seed, tile);
+        if (slot.getItem() instanceof Seed seed) {
+            CropInfo cropInfo = CropInfo.fromSeed(seed);
+            if (!cropInfo.getSeasons().contains(currSeason) && !cropInfo.getSeasons().contains(Season.SPECIAL)) {
+                return new Result(false, "you can't plant this crop in this season");
+            }
+        } else if (slot.getItem() instanceof TreeSource treeSource) {
+            TreeInfo treeInfo = TreeInfo.fromTreeSource(treeSource);
+            assert treeInfo != null;
+            if (!treeInfo.getSeason().equals(Season.SPECIAL) && treeInfo.getSeason().equals(currSeason)) {
+                return new Result(false, "you can't plant this tree in this season");
+            }
+        }
 
-        return new Result(true, "");
+        Item source = slot.getItem();
+        slot.removeQuantity(1);
+
+        repo.getCurrentGame().getFarmingManager().plant(source, tile);
+        Plant plant = (Plant) tile.getObject();
+
+        return new Result(true, "%s planted in <%d, %d> successfully".formatted(plant.getName(), appliedPosition.x(), appliedPosition.y()));
     }
 
     private Result showPlantInfo(Position position) {
-        return null;
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Tile tile = player.getFarm().getTile(position);
+
+        Crop crop;
+        try {
+            crop = (Crop) tile.getObject();
+        } catch (ClassCastException e) {
+            return new Result(false, "crop not found");
+        }
+
+        if (crop == null) {
+            return new Result(false, "crop not found");
+        }
+
+        return new Result(true, """
+                Name: %s
+                Remaining Time to Fully Grown: %d
+                Growth Level: %d
+                Is Watered Today: %B
+                Quality: %s
+                Is Fertilized: %B""".formatted(
+                crop.getName(),
+                crop.getInfo().getTotalHarvestTime() - crop.getTotalGrownDays(),
+                crop.getGrowthLevel(),
+                crop.isWatered(),
+                crop.getQuality(),
+                crop.isFertilized()
+        ));
+    }
+
+    private Result fertilize(String fertilizerName, Direction direction) {
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Slot slot = player.getInventory().getSlot(fertilizerName);
+
+        if (slot == null) {
+            return new Result(false, "you don't have this fertilizer");
+        }
+
+        Position appliedPosition = player.getPosition().applyDirection(direction);
+        Tile tile = player.getFarm().getTile(appliedPosition);
+
+        if (tile == null) {
+            return new Result(false, "tile not found");
+        } else if (!(tile.getObject() instanceof Plant)) {
+            return new Result(false, "plant not found");
+        }
+
+        Fertilizer fertilizer = (Fertilizer) slot.getItem();
+        slot.removeQuantity(1);
+
+        Plant plant = (Plant) tile.getObject();
+        plant.setFertilizer(fertilizer);
+
+        return new Result(true, "%s fertilized with %s successfully".formatted(plant.getInfo().getName(), fertilizerName));
     }
 
     private Result howMuchWater() {
-        return null;
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        WateringCan wateringCan = (WateringCan) player.getInventory().getSlot("watering can").getItem();
+
+        if (wateringCan == null) {
+            return new Result(false, "you have no watering can");
+        }
+
+        return new Result(true, String.valueOf(wateringCan.getWaterAmount()));
     }
 }
