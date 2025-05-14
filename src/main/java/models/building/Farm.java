@@ -1,13 +1,16 @@
 package models.building;
 
+import models.Position;
 import models.animal.*;
+import models.character.player.Player;
+import models.dateTime.Season;
+import models.initializer.CreateShelter;
+import models.weather.Weather;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Farm extends Maps {
-    private static final int FARM_HEIGHT = 75;
-    private static final int FARM_WIDTH = 75;
     private Lake lake;
     private Greenhouse greenhouse;
     private Cottage cottage;
@@ -55,6 +58,8 @@ public class Farm extends Maps {
         this.quarry = quarry;
     }
 
+    public List<Animal> getAnimals() { return animals; }
+
     public void addAnimal(Animal animal) {
         animals.add(animal);
     }
@@ -89,14 +94,23 @@ public class Farm extends Maps {
                 ));
     }
 
-    public boolean isEmptyShelter(AnimalInfo animalInfo) {
-        return shelters.stream()
-                .anyMatch(shelter -> {
+    public AnimalHouse findEmptyShelter(AnimalInfo animalInfo) {
+        Optional<AnimalHouse> preferred = shelters.stream()
+                .filter(shelter -> {
                     AnimalInfo shelterAnimalInfo = shelter.getAnimalInfo();
-                    return shelterAnimalInfo == null
-                            || (shelterAnimalInfo.equals(animalInfo) && shelter.hasEmptySpace());
-                });
+                    return shelterAnimalInfo != null
+                            && shelterAnimalInfo.equals(animalInfo)
+                            && shelter.hasEmptySpace();
+                })
+                .findFirst();
+
+        return preferred.orElseGet(() -> shelters.stream()
+                .filter(shelter -> shelter.getAnimalInfo() == null)
+                .findFirst()
+                .orElse(null));
+
     }
+
 
     public void addAnimalToShelter(Animal animal) {
         AnimalInfo animalInfo = animal.getAnimalInfo();
@@ -163,5 +177,118 @@ public class Farm extends Maps {
             //add to inventory
             return;
         }
+    }
+
+    public String printMap(int x, int y, int size) {
+        if (x + size > tiles.size() || y + size > tiles.get(x).size()) {
+            return "invalid map";
+        }
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Tile tile = tiles.get(i + x).get(j + y);
+                if (tile.getObject() == null) {
+                    output.append(tile.getType().getSymbol());
+                } else {
+                    output.append(tile.getObject().getSymbol());
+                }
+            }
+            output.append("\n");
+        }
+        return output.toString();
+    }
+
+    private AnimalHouseType stringToAnimalHouseType(String animalType) {
+        return switch (animalType) {
+            case "coop" -> AnimalHouseType.COOP;
+            case "big_coop" -> AnimalHouseType.BIG_COOP;
+            case "deluxe_coop" -> AnimalHouseType.DELUXE_COOP;
+            case "barn" -> AnimalHouseType.BARN;
+            case "big_barn" -> AnimalHouseType.BIG_BARN;
+            case "deluxe_barn" -> AnimalHouseType.DELUXE_BARN;
+            default -> null;
+        };
+    }
+
+    public String buildShelter(Position position, String houseType) {
+        AnimalHouseType animalHouseType = stringToAnimalHouseType(houseType);
+
+        if (animalHouseType == null) return "Invalid animal house";
+        if (!CreateShelter.isEmptyPlace(tiles, position.x(), position.y(), animalHouseType.getSize().getHeight())) {
+            return "Invalid shelter position";
+        }
+
+        shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+
+        return "Shelter created";
+    }
+
+    public boolean isAnimalNameUnique(String animalName) {
+        for (Animal animal : animals) {
+            if (animal.getAnimalName().equals(animalName)) return false;
+        }
+        return true;
+    }
+
+    public Animal fineAnimalByName(String animalName) {
+        for (Animal animal : animals) {
+            if (animal.getAnimalName().equals(animalName)) return animal;
+        }
+        return null;
+    }
+
+    public String moveAnimal(String animalName, Position position) {
+        Animal animal = fineAnimalByName(animalName);
+        if (animal == null) return "Invalid animal name";
+        Tile tile = tiles.get(position.x()).get(position.y());
+        if (tile == null) return "Invalid position";
+        if (tile.getType() != TileType.GROUND || tile.getObject() != null) return "Invalid tile";
+        animal.moveAnimal(position);
+        return "Animal moved";
+    }
+
+    public String feedByHay(String animalName) {
+        Animal animal = fineAnimalByName(animalName);
+        if (animal == null) return "Invalid animal name";
+        if (!animal.getIsHungry()) return "Animal is not hungry";
+        //@ check if the player has enough hay
+        animal.feedByHay();
+        return "Animal feed by hay";
+    }
+
+    public String collectProduct(String animalName, Player player, Season season) {
+        Animal animal = fineAnimalByName(animalName);
+        if (animal == null) return "Invalid animal name";
+        if (!animal.hasAnyProduct()) return "No produce for this animal";
+        if (animal.getAnimalInfo() == AnimalInfo.COW || animal.getAnimalInfo() == AnimalInfo.GOAT) {
+            //@ check if player has bucket
+        } else if (animal.getAnimalInfo() == AnimalInfo.SHEEP) {
+            //@check if player has scissors
+        } else if (animal.getAnimalInfo() == AnimalInfo.PIG) {
+            if (season == Season.WINTER) return "Pigs don't produce in winter";
+        }
+        animal.collectProduct();
+        return "Product collected";
+    }
+
+    public String sellAnimal(String animalName) {
+        Animal animal = fineAnimalByName(animalName);
+        if (animal == null) return "Invalid animal name";
+        int income = animal.calculateSellPrice();
+        //@ add money
+        sellAnimal(animal);
+        return "Animal is sold";
+    }
+
+    private void sellAnimal(Animal animal) {
+        animal.getShelter().removeAnimal(animal);
+        removeAnimal(animal);
+    }
+
+    public String friendshipCheatCode(String animalName, int amount) {
+        Animal animal = fineAnimalByName(animalName);
+        if (animal == null) return "Invalid animal name";
+        animal.advanceFriendshipLevel(amount);
+        return "Friendship cheated";
     }
 }

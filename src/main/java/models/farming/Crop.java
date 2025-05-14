@@ -1,6 +1,7 @@
 package models.farming;
 
 import models.InventoryItem;
+import models.enums.Emoji;
 
 public class Crop extends Plant implements InventoryItem {
     private CropInfo info;
@@ -21,8 +22,9 @@ public class Crop extends Plant implements InventoryItem {
 
     @Override
     public String getSymbol() {
-        return "";
+        return Emoji.CORN.getSymbol();
     }
+
 
     public boolean isBecameGiant() {
         return becameGiant;
