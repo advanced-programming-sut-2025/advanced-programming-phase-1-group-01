@@ -2,10 +2,13 @@ package controllers;
 
 import models.Game;
 import models.Result;
+import models.building.Farm;
 import models.character.player.Player;
 import models.data.Repository;
 import models.data.User;
 import models.enums.commands.GameMenuCommands;
+import models.initializer.FarmInitializer;
+import models.initializer.VillageInitializer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static models.Game.PLAYERS_STARTING_POSITION;
 
 public class GameMenuController extends Controller {
     public GameMenuController(Repository repo) {
@@ -48,6 +53,11 @@ public class GameMenuController extends Controller {
                 return handleGameNewCommand(command);
 
             case GAME_MAP:
+                String mapNumberStr = command.split("\\s+")[2];
+                int mapNumber = Integer.parseInt(mapNumberStr);
+                return chooseGameMap(mapNumber);
+            case NEXT_TURN:
+                handleNextTurn();
         }
         return null;
     }
@@ -66,6 +76,7 @@ public class GameMenuController extends Controller {
             }
 
             Set<String> usernameSet = new HashSet<>();
+            usernameSet.add(repo.getCurrentUser().getUsername());
 
             for (String username : usernames) {
                 User user = repo.getUserByUsername(username);
@@ -90,13 +101,45 @@ public class GameMenuController extends Controller {
                 players.add(repo.getUserByUsername(username).getPlayer());
             }
 
-            repo.addGame(new Game(players));
+            Game game = new Game(players);
+            repo.addGame(game);
+            repo.setCurrentGame(game);
+            repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(players));
+            repo.getCurrentUser().getPlayer().setPosition(Game.PLAYERS_STARTING_POSITION);
 
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }
 
+    private int index = 0;
     private Result chooseGameMap(int mapNumber) {
-        return null;
+
+        if (mapNumber < 1 || mapNumber > 3) {
+            return new Result(false,"Invalid map number");
+        }
+
+        List<Player> players= repo.getCurrentGame().getPlayers();
+        Player currentPlayer = players.get(index);
+        Farm farm1 = FarmInitializer.initializeFarm(2,3);
+        Farm farm2 = FarmInitializer.initializeFarm(3,4);
+
+        if (mapNumber == 1) {
+            currentPlayer.setFarm(farm1);
+        }
+
+        if (mapNumber == 2) {
+            currentPlayer.setFarm(farm2);
+        }
+        index++;
+
+        if (index == players.size()) {
+            return new Result(true, "All players have selected their maps. Game starting...");
+        }
+
+        else {
+            Player nextPlayer = players.get(index);
+            return new Result(true, "Map " + mapNumber + " selected for player " + currentPlayer.getUser().getUsername() +
+                    ". Next player: " + nextPlayer.getUser().getUsername() + ", please select your map.");
+        }
     }
 
     private Result loadGame() {

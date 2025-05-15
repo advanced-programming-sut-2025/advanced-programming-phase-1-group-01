@@ -16,6 +16,7 @@ import models.enums.commands.CookingCommands;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CookingController extends Controller {
     CookingController(Repository repo) {
@@ -150,7 +151,7 @@ public class CookingController extends Controller {
         String[] tokens = command.split(" ");
         String itemName = tokens[2];
 
-        List<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
+        Set<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
         CookingRecipe targetRecipe = null;
 
         for (CookingRecipe recipe : recipes) {
@@ -211,6 +212,10 @@ public class CookingController extends Controller {
 
         inventory.addItem(itemName,1);
         player.getEnergy().consume(3);
+        if (player.getEnergy().getAmount() == 0) {
+            player.getEnergy().setHasPassedOut(true);
+            repo.getCurrentGame().nextTurn();
+        }
 
         return new Result(true, "Item added to your inventory");
     }

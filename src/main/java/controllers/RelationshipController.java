@@ -13,7 +13,6 @@ import models.enums.commands.RelationshipCommands;
 import models.dateTime.DateTime;
 import models.relations.Friendship;
 import models.relations.Gift;
-import models.relations.Marriage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +112,7 @@ public class RelationshipController extends Controller {
 
         StringBuilder resultMsg = new StringBuilder();
 
-        for (Player gamePlayer : game.players().values()) {
+        for (Player gamePlayer : game.getPlayers()) {
             if (player.getRelationService().isFriendWith(gamePlayer)) {
                 resultMsg.append("%s : %d\n".formatted(gamePlayer.getUser().getUsername(), player.getRelationService().getFriendship(gamePlayer).getLevel()));
             } else {
@@ -377,12 +376,12 @@ public class RelationshipController extends Controller {
 
     private Result startTrade() {
         Game currentGame = repo.getCurrentGame();
-        Map<String,Player> players = currentGame.players();
+        List<Player> players = currentGame.getPlayers();
 
         StringBuilder info = new StringBuilder();
         info.append("List of players:\n");
 
-        for (Player player : players.values()) {
+        for (Player player : players) {
             info.append("- ").append(player.getUser().getUsername()).append("\n");
         }
 
