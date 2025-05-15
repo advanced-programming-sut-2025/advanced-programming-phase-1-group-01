@@ -114,7 +114,8 @@ public class CraftingController extends Controller {
         player.getEnergy().consume(2);
 
         if (player.getEnergy().getAmount() == 0) {
-            player.getEnergy().passOut();
+            player.getEnergy().setHasPassedOut(true);
+            repo.getCurrentGame().nextTurn();
         }
 
             switch (itemName) {

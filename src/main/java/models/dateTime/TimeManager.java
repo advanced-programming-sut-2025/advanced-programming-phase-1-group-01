@@ -90,6 +90,7 @@ public class TimeManager {
             player.getEnergy().setHasPassedOut(false);
             player.getEnergy().fillEnergyPassedOut();
         }
+
         else {
             player.getEnergy().fillEnergy();
         }

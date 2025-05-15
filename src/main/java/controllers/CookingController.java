@@ -212,6 +212,10 @@ public class CookingController extends Controller {
 
         inventory.addItem(itemName,1);
         player.getEnergy().consume(3);
+        if (player.getEnergy().getAmount() == 0) {
+            player.getEnergy().setHasPassedOut(true);
+            repo.getCurrentGame().nextTurn();
+        }
 
         return new Result(true, "Item added to your inventory");
     }

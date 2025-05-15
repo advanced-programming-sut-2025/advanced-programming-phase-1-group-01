@@ -233,7 +233,7 @@ public class LoginMenuController extends Controller {
         if (!password.matches(".*\\d.*")) {
             return "Password must contain at least one digit.";
         }
-        if (!password.matches("[?><,\"';:\\\\/|\\\\\\[\\]{}+=)(*&^%$#!-]")) {
+        if (!password.matches(".*[?><,\"';:\\\\|\\[\\]{}+=)(*&^%$#!].*")) {
             return "Password must contain at least one special character.";
         }
         return null;
