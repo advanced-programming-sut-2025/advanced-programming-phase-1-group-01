@@ -19,6 +19,11 @@ public class ForagingMineral extends Foraging implements Item {
     }
 
     @Override
+    public int getPrice() {
+        return 0;
+    }
+
+    @Override
     public String getSymbol() {
         return info.getSymbol();
     }

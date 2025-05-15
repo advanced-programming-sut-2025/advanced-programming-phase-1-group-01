@@ -9,4 +9,9 @@ public class Fertilizer implements Item {
     public String getName() {
         return type.toString();
     }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

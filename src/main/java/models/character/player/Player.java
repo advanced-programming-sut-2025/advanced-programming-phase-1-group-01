@@ -92,14 +92,14 @@ public class Player extends Character {
         this.numOfCoins = numOfCoins;
     }
 
-    public void consume(int amount) {
+    public void consumeCoin(int amount) {
         if (relationshipService.getMarriage() != null) {
-            relationshipService.getMarriage().getPartner(this).consume(amount);
+            relationshipService.getMarriage().getPartner(this).consumeCoin(amount);
         }
         numOfCoins -= amount;
     }
 
-    public void increase(int amount) {
+    public void addCoin(int amount) {
         numOfCoins += amount;
     }
 

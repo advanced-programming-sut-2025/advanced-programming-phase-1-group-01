@@ -36,23 +36,24 @@ public class EnergyController extends Controller {
         return null;
     }
 
-    Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
 
     private Result showEnergy() {
+        Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
         return new Result(true, energy.toString());
     }
 
     private Result cheatEnergySet(String command) {
-
+        Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
         String[] commandParts = command.split(" ");
         String valueStr = commandParts[3];
         int value = Integer.parseInt(valueStr);
         energy.setAmount(value);
 
-        return new Result(true,"Sets the energy to a specified value");
+        return new Result(true, "Sets the energy to a specified value");
     }
 
     private void cheatEnergyUnlimited() {
+        Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
         energy.setAmount(Double.MAX_VALUE);
         new Result(true, "Sets the energy to a unlimited value");
     }

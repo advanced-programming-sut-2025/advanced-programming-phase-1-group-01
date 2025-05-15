@@ -16,6 +16,11 @@ public class CraftingIngredients implements Item{
         return type.name();
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public int getQuantity() {
         return quantity;
     }

@@ -16,7 +16,7 @@ public enum FruitInfo implements FarmingEnum {
     PINE_TAR("Pine Tar", 100, false, 0),
     SAP("Sap", 2, true, -2),
     COMMON_MUSHROOM("Common Mushroom", 40, true, 38),
-    MYSTIC_SYRUP("Mystic Syrup", 1000, true, 500)
+    MYSTIC_SYRUP("Mystic Syrup", 1000, true, 500),
     ;
 
     private final String name;

@@ -48,7 +48,7 @@ public abstract class ShopController extends Controller {
     protected Result cheatCoins(String command) {
         String[] tokens = command.split(" ");
         int count = Integer.parseInt(tokens[2]);
-        repo.getCurrentGame().getCurrentPlayer().increase(count);
+        repo.getCurrentGame().getCurrentPlayer().addCoin(count);
         return new Result(true, "coins have been added to your balance: " + count);
     }
 

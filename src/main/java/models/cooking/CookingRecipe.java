@@ -11,4 +11,9 @@ public record CookingRecipe(String name, Map<String, Integer> ingredients, Strin
     public String getName() {
         return name;
     }
+
+    @Override
+    public int getPrice() {
+        return -1;
+    }
 }

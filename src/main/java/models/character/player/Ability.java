@@ -36,6 +36,10 @@ public class Ability {
         this.level = level;
     }
 
+    public boolean isFull() {
+        return true; // should be overwritten
+    }
+
     public void increaseXp(int amount) {
         for (int i = 0; i < amount; i++) {
             xp++;

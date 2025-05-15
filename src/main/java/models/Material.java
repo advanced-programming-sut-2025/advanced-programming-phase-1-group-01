@@ -13,6 +13,11 @@ public class Material implements Item {
         return name;
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public int getQuantity() {
         return quantity;
     }

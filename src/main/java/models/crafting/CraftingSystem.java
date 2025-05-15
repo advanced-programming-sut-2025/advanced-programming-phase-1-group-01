@@ -21,4 +21,9 @@ public class CraftingSystem implements TradeItem {
     public String getName() {
         return "CookingSystem";
     }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

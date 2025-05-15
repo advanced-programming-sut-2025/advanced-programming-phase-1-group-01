@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameController extends Controller {
-    private final List<Command> commands = new ArrayList<>();
+    private final List<Command> commands;
 
     private final DateTimeController dateTimeController;
     private final EnergyController energyController;
@@ -22,18 +22,19 @@ public class GameController extends Controller {
     private final ToolController toolController;
     private final WeatherController weatherController;
 
-    GameController(Repository repo, DateTimeController dateTimeController, EnergyController energyController, FarmingController farmingController, GameMenuController gameMenuController, LoginMenuController loginMenuController, MainMenuController mainMenuController, ProfileMenuController profileMenuController, RelationshipController relationshipController, ToolController toolController, WeatherController weatherController) {
+    public GameController(Repository repo) {
         super(repo);
-        this.dateTimeController = dateTimeController;
-        this.energyController = energyController;
-        this.farmingController = farmingController;
-        this.gameMenuController = gameMenuController;
-        this.loginMenuController = loginMenuController;
-        this.mainMenuController = mainMenuController;
-        this.profileMenuController = profileMenuController;
-        this.relationshipController = relationshipController;
-        this.toolController = toolController;
-        this.weatherController = weatherController;
+        this.dateTimeController = new DateTimeController(repo);
+        this.energyController = new EnergyController(repo);
+        this.farmingController = new FarmingController(repo);
+        this.gameMenuController = new GameMenuController(repo);
+        this.loginMenuController = new LoginMenuController(repo);
+        this.mainMenuController = new MainMenuController(repo);
+        this.profileMenuController = new ProfileMenuController(repo);
+        this.relationshipController = new RelationshipController(repo);
+        this.toolController = new ToolController(repo);
+        this.weatherController = new WeatherController(repo);
+        commands = new ArrayList<>();
         initCommands();
     }
 
@@ -46,6 +47,7 @@ public class GameController extends Controller {
         commands.addAll(Arrays.stream(MainMenuCommands.values()).toList());
         commands.addAll(Arrays.stream(ProfileMenuCommands.values()).toList());
         commands.addAll(Arrays.stream(RelationshipCommands.values()).toList());
+        commands.addAll(Arrays.stream(ToolCommands.values()).toList());
         commands.addAll(Arrays.stream(WeatherCommands.values()).toList());
     }
 
@@ -56,6 +58,7 @@ public class GameController extends Controller {
         for (Command command : commands) {
             if (commandLine.matches(command.getRegex())) {
                 matchedCommand = command;
+                break;
             }
         }
 
@@ -79,83 +82,12 @@ public class GameController extends Controller {
             profileMenuController.handleCommand(commandLine);
         } else if (matchedCommand instanceof RelationshipCommands) {
             relationshipController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof ToolCommands) {
+            toolController.handleCommand(commandLine);
         } else if (matchedCommand instanceof WeatherCommands) {
             weatherController.handleCommand(commandLine);
         }
 
         return null;
-    }
-
-    public static class GameControllerBuilder {
-        private Repository repo;
-        private DateTimeController dateTimeController;
-        private EnergyController energyController;
-        private FarmingController farmingController;
-        private GameMenuController gameMenuController;
-        private LoginMenuController loginMenuController;
-        private MainMenuController mainMenuController;
-        private ProfileMenuController profileMenuController;
-        private RelationshipController relationshipController;
-        private ToolController toolController;
-        private WeatherController weatherController;
-
-        public GameControllerBuilder setRepo(Repository repo) {
-            this.repo = repo;
-            return this;
-        }
-
-        public GameControllerBuilder setDateTimeController(DateTimeController dateTimeController) {
-            this.dateTimeController = dateTimeController;
-            return this;
-        }
-
-        public GameControllerBuilder setEnergyController(EnergyController energyController) {
-            this.energyController = energyController;
-            return this;
-        }
-
-        public GameControllerBuilder setFarmingController(FarmingController farmingController) {
-            this.farmingController = farmingController;
-            return this;
-        }
-
-        public GameControllerBuilder setGameMenuController(GameMenuController gameMenuController) {
-            this.gameMenuController = gameMenuController;
-            return this;
-        }
-
-        public GameControllerBuilder setLoginMenuController(LoginMenuController loginMenuController) {
-            this.loginMenuController = loginMenuController;
-            return this;
-        }
-
-        public GameControllerBuilder setMainMenuController(MainMenuController mainMenuController) {
-            this.mainMenuController = mainMenuController;
-            return this;
-        }
-
-        public GameControllerBuilder setProfileMenuController(ProfileMenuController profileMenuController) {
-            this.profileMenuController = profileMenuController;
-            return this;
-        }
-
-        public GameControllerBuilder setRelationshipController(RelationshipController relationshipController) {
-            this.relationshipController = relationshipController;
-            return this;
-        }
-
-        public GameControllerBuilder setToolController(ToolController toolController) {
-            this.toolController = toolController;
-            return this;
-        }
-
-        public GameControllerBuilder setWeatherController(WeatherController weatherController) {
-            this.weatherController = weatherController;
-            return this;
-        }
-
-        public GameController build() {
-            return new GameController(repo, dateTimeController, energyController, farmingController, gameMenuController, loginMenuController, mainMenuController, profileMenuController, relationshipController, toolController, weatherController);
-        }
     }
 }
