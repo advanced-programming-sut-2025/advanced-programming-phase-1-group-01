@@ -11,11 +11,13 @@ public class RelationshipService {
     private final Map<Character, Friendship> friendships;
     private Marriage marriage;
     private final Map<Character, Relationship> relationships;
+    private int lastHugDate;
 
     public RelationshipService(Character character) {
         this.character = character;
         this.friendships = new LinkedHashMap<>();
         this.relationships = new LinkedHashMap<>();
+        this.lastHugDate = 0;
     }
 
     public Map<Character, Relationship> getRelationships() {
@@ -69,5 +71,13 @@ public class RelationshipService {
 
     public Character getCharacter() {
         return character;
+    }
+
+    public int getLastHugDate() {
+        return lastHugDate;
+    }
+
+    public void setLastHugDate(int lastHugDate) {
+        this.lastHugDate = lastHugDate;
     }
 }

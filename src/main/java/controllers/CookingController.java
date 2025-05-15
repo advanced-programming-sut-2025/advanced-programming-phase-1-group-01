@@ -1,7 +1,21 @@
 package controllers;
 
+import models.Item;
 import models.Result;
+import models.building.Building;
+import models.character.player.Inventory;
+import models.character.player.Player;
+import models.character.player.Refrigerator;
+import models.character.player.Slot;
+import models.cooking.CookingRecipes;
+import models.cooking.CookingRecipe;
+import models.cooking.NotEatable;
+import models.crafting.enums.CraftingRecipes;
 import models.data.Repository;
+import models.enums.commands.CookingCommands;
+
+import java.util.List;
+import java.util.Map;
 
 public class CookingController extends Controller {
     CookingController(Repository repo) {
@@ -9,7 +23,228 @@ public class CookingController extends Controller {
     }
 
     @Override
-    public Result handleCommand(String commandLine) {
+    public Result handleCommand(String command) {
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Building cottage = player.getFarm().getCottage();
+        if (!player.isPlayerNearBuilding(cottage)) {
+            return new Result(false, "You are not near Cottage");
+        }
+
+        CookingCommands matchedCommand = null;
+
+        for (CookingCommands cmd : CookingCommands.values()) {
+            if (command.matches(cmd.getRegex())) {
+                matchedCommand = cmd;
+                break;
+            }
+        }
+
+        if(matchedCommand == null) {
+            return new Result(false, "invalid command");
+        }
+
+        switch (matchedCommand) {
+            case SHOW_RECIPE:
+                return showRecipe();
+            case CHEAT_ADD_RECIPE:
+                cheatAddRecipe(command);
+            case PUT_REFRIGERATOR:
+                putRefrigerator(command);
+            case PICK_REFRIGERATOR:
+                pickRefrigerator(command);
+            case COOKING_PREPARE:
+                cookingPrepare(command);
+            case EAT:
+                eat(command);
+        }
         return null;
+    }
+
+    private Result showRecipe() {
+        StringBuilder info = new StringBuilder("Available Recipes:\n");
+
+        for (CookingRecipe recipe : repo.getCurrentUser().getPlayer().getCookingRecipes()) {
+            info.append("- ").append(recipe.name()).append("\n");
+        }
+
+        return new Result(true,info.toString());
+    }
+
+    private Result cheatAddRecipe(String command) {
+        String[] tokens = command.split(" ");
+        String recipeName = tokens[4];
+
+        Player player = repo.getCurrentUser().getPlayer();
+
+        CookingRecipes matched = null;
+
+        for (CookingRecipes recipeEnum : CookingRecipes.values()) {
+            if (recipeEnum.name().equalsIgnoreCase(recipeName)) {
+                matched = recipeEnum;
+                break;
+            }
+        }
+
+        if (matched == null) {
+            return new Result(false, "Recipe \"" + recipeName + "\" does not exist.");
+        }
+
+        CookingRecipe recipeToLearn = matched.toRecipe();
+        player.addCookingRecipe(recipeToLearn);
+
+        return new Result(true, "Recipe added");
+    }
+
+    private Result putRefrigerator(String command) {
+        String[] tokens = command.split(" ");
+        String itemStr = tokens[3];
+        String itemCountStr = tokens[4];
+        int itemCount = Integer.parseInt(itemCountStr);
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Inventory inventory = player.getInventory();
+
+        if (inventory.getSlot(itemStr) == null) {
+            return new Result(false, "You do not have this " + itemStr + " in your inventory.");
+        }
+
+        if (NotEatable.isNotEatable(itemStr)) {
+            return new Result(false, "You cannot place non-food items in the fridge.");
+        }
+
+        Item item = inventory.getSlot(itemStr).getItem();
+        Slot slot = inventory.getSlot(itemStr);
+
+        slot.removeQuantity(itemCount);
+        player.getRefrigerator().addItem(item,itemCount);
+        return new Result(true, "Item added to refrigerator");
+    }
+
+    private Result pickRefrigerator(String command) {
+        String[] tokens = command.split(" ");
+        String itemStr = tokens[3];
+        String itemCountStr = tokens[4];
+        int itemCount = Integer.parseInt(itemCountStr);
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Refrigerator refrigerator = player.getRefrigerator();
+        Inventory inventory = player.getInventory();
+        Item item = inventory.getSlot(itemStr).getItem();
+
+        if (refrigerator.containsItem(item)) {
+            return new Result(false, "You do not have this " + itemStr + " in your refrigerator.");
+        }
+
+        if (refrigerator.containsItem(item, itemCount)) {
+            return new Result(false, "You do not have enough of this " + itemStr + " in your refrigerator.");
+        }
+
+        Slot slot = inventory.getSlot(itemStr);
+        slot.addQuantity(itemCount);
+        refrigerator.removeItem(item,itemCount);
+        return new Result(true, "Item added to inventory");
+    }
+
+    private Result cookingPrepare(String command) {
+        String[] tokens = command.split(" ");
+        String itemName = tokens[2];
+
+        List<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
+        CookingRecipe targetRecipe = null;
+
+        for (CookingRecipe recipe : recipes) {
+            if (recipe.name().equalsIgnoreCase(itemName)) {
+                targetRecipe = recipe;
+                break;
+            }
+        }
+
+        if (targetRecipe == null) {
+            return new Result(false, "Recipe not found.");
+        }
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Inventory inventory = player.getInventory();
+        Refrigerator refrigerator = player.getRefrigerator();
+
+        if (!inventory.hasCapacity()) {
+            return new Result(false, "You do not have enough capacity.");
+        }
+
+        Map<String, Integer> requiredIngredients = targetRecipe.ingredients();
+
+
+        for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
+            String materialName = entry.getKey();
+            int requiredAmount = entry.getValue();
+
+            int fridgeAmount = refrigerator.getQuantity(itemName);
+            Slot slot = inventory.getSlot(materialName);
+            int inventoryAmount = slot.getQuantity();
+
+            if (fridgeAmount + inventoryAmount < requiredAmount) {
+                return new Result(false, "You do not have enough" + materialName + " in your inventory and refrigerator.");
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
+            String materialNameStr = entry.getKey();
+            int requiredAmount = entry.getValue();
+
+            Item item = inventory.getSlot(materialNameStr).getItem();
+            Slot slot = inventory.getSlot(materialNameStr);
+
+            int fridgeAmount = refrigerator.getQuantity(materialNameStr);
+            int remaining = requiredAmount;
+
+            if (fridgeAmount >= remaining) {
+                refrigerator.removeItem(item, remaining);
+            }
+
+            else {
+                refrigerator.removeItem(item, fridgeAmount);
+                remaining -= fridgeAmount;
+                slot.removeQuantity(remaining);
+            }
+        }
+
+        inventory.addItem(itemName,1);
+        player.getEnergy().consume(3);
+
+        return new Result(true, "Item added to your inventory");
+    }
+
+    private Result eat(String command) {
+        String[] tokens = command.split(" ");
+        String foodName = tokens[1];
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Inventory inventory = player.getInventory();
+        Slot slot = inventory.getSlot(foodName);
+
+        Item item = inventory.getSlot(foodName).getItem();
+
+        if (item == null) {
+            return new Result(false, foodName + " not found.");
+        }
+
+        if (slot.getQuantity() == 0) {
+            return new Result(false, "You do not have" + foodName + " in your inventory.");
+        }
+
+        CookingRecipes matched = null;
+
+        for (CookingRecipes recipeEnum : CookingRecipes.values()) {
+            if (recipeEnum.name().equalsIgnoreCase(foodName)) {
+                matched = recipeEnum;
+                break;
+            }
+        }
+
+        slot.removeQuantity(1);
+        player.getEnergy().increase(matched.toRecipe().energy());
+
+        return new Result(true, "This " + foodName + " has been eaten.");
     }
 }

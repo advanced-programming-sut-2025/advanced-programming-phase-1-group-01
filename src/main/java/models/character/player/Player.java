@@ -7,8 +7,14 @@ import models.animal.Animal;
 import models.animal.AnimalHouse;
 import models.animal.AnimalInfo;
 import models.building.*;
+import models.Size;
+import models.building.Building;
+import models.building.Farm;
 import models.character.Character;
 import models.character.NPC.NPC;
+import models.cooking.CookingRecipe;
+import models.cooking.CookingRecipes;
+import models.crafting.CraftingRecipe;
 import models.data.User;
 import models.dateTime.Season;
 import models.enums.Color;
@@ -37,7 +43,6 @@ public class Player extends Character {
     private final Map<MessageEntry, Boolean> notifications;
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
-    private Maps currentMap;
     //@ list unripe
     //@ list ripe and ready to get items
 
@@ -238,10 +243,6 @@ public class Player extends Character {
             animals.append("\n");
         }
         return animals.toString();
-    }
-
-    public void setCurrentMap(Maps currentMap) {
-        this.currentMap = currentMap;
     }
 
     //@ get artisan by name, error

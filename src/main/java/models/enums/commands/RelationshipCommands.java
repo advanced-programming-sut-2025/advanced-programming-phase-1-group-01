@@ -9,14 +9,15 @@ public enum RelationshipCommands implements Command {
     GIFT_LIST("gift list"),
     GIFT_RATE("gift rate -i (.+?) -r (.+?)"),
     GIFT_HISTORY("gift history -u (.+?)"),
-    FLOWER(""),
-    ASK_MARRIAGE(""),
-    RESPOND_MARRIAGE(""),
-    START_TRADE(""),
-    TRADE(""),
-    TRADE_LIST(""),
-    TRADE_RESPONSE(""),
-    TRADE_HISTORY("");
+    FLOWER("flower -u (.+?)"),
+    ASK_MARRIAGE(" ask marriage -u (.+?) -r (.+?)"),
+    RESPOND_MARRIAGE("respond (.+?) -u (.+?)"),
+    START_TRADE("start trade"),
+    TRADE_REQUEST("trade -u (.+?) -t request -i (.+?) -a (.+?) -p (.+?)"),
+    TRADE_OFFER("trade -u (.+?) -t offer -i (.+?) -a (.+?) -ti (.+?) -ta (.+?)"),
+    TRADE_LIST("trade list"),
+    TRADE_RESPONSE("trade response (.+?) -i (.+?)"),
+    TRADE_HISTORY("trade history"),;
 
     RelationshipCommands(String regex) {
         this.regex = regex;
