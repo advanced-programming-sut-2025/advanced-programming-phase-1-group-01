@@ -1,6 +1,9 @@
 package models.character.player;
 
 import models.Item;
+
+import models.cooking.CookingRecipes;
+import models.crafting.enums.CraftingRecipes;
 import models.tool.*;
 
 import java.util.ArrayList;
@@ -60,7 +63,11 @@ public class Inventory {
     }
 
     public int getCapacity() {
-        return capacity;
+        return slots.size();
+    }
+
+    public boolean hasCapacity() {
+        return slots.size() <= INVENTORY_CAPACITY;
     }
 
     public void setCapacity(int capacity) {
@@ -79,7 +86,21 @@ public class Inventory {
             case "shear" -> new Shear();
             case "trash can" -> new TrashCan();
             case "watering can" -> new WateringCan();
-            default -> null;
+            default -> {
+                for (CookingRecipes recipeEnum : CookingRecipes.values()) {
+                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                        yield recipeEnum.toRecipe();
+                    }
+                }
+
+                for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
+                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                        yield recipeEnum.toRecipe();
+                    }
+                }
+
+                yield null;
+            }
         };
     }
 
