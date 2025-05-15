@@ -5,6 +5,7 @@ import models.Position;
 import models.building.Building;
 import models.character.Character;
 import models.character.player.Player;
+import models.character.player.Slot;
 import models.dateTime.Season;
 import models.enums.Direction;
 import models.weather.Weather;
@@ -47,10 +48,10 @@ public class NPC extends Character {
         hasTalkedToday.put(player, false);
     }
 
-    private void acceptGift(Player player/*, Item gift*/) {
-        if (!hasTalkedToday.get(player)) advanceFriendshipLevel(player, 50);
-        //check if it is favorite
-        //@ decrease inventory
+    private void acceptGift(Player player, Slot slot) {
+        if (!hasReceivedToday.get(player)) advanceFriendshipLevel(player, 50);
+        if (type.isFavorite(slot.getItem())) advanceFriendshipLevel(player, 200);
+        slot.removeQuantity(1);
     }
 
     public void advanceFriendshipLevel(Player player, int amount) {
@@ -65,9 +66,6 @@ public class NPC extends Character {
         }
     }
 
-//    public void addQuest(int numberOfQuest, NPCQuestType quest) {
-//        quests.put(numberOfQuest, quest);
-//    }
 
     public Position getPosition() {
         return position;
@@ -88,11 +86,12 @@ public class NPC extends Character {
     }
 
     public String giftNPC(Player player, String gift) {
-        //@ get gift item by ID
-        //@ check if player has item
-        //@ if it has, decrease
-        //@ receive gift
-        return null;
+        Slot slot = player.getInventory().getSlot(gift);
+        if (slot == null) return "invalid gift";
+        if (slot.getQuantity() >= 0) {
+            acceptGift(player, slot);
+        }
+        return "You gifted successfully";
     }
 
     public NPCType getType() {
@@ -110,5 +109,10 @@ public class NPC extends Character {
 
     public List<NPCQuest> getQuests() {
         return quests;
+    }
+
+    public void resetForNewDay() {
+        hasTalkedToday.replaceAll((p, v) -> false);
+        hasReceivedToday.replaceAll((p, v) -> false);
     }
 }

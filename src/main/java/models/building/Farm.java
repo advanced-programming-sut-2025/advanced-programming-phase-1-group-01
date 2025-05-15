@@ -252,11 +252,12 @@ public class Farm extends Maps {
         return "Animal moved";
     }
 
-    public String feedByHay(String animalName) {
+    public String feedByHay(String animalName, Player player) {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         if (!animal.getIsHungry()) return "Animal is not hungry";
-        //@ check if the player has enough hay
+        if (player.getInventory().getSlot("hay") == null) return "You have no hay";
+        player.getInventory().getSlot("hay").removeQuantity(1);
         animal.feedByHay();
         return "Animal feed by hay";
     }
@@ -266,9 +267,9 @@ public class Farm extends Maps {
         if (animal == null) return "Invalid animal name";
         if (!animal.hasAnyProduct()) return "No produce for this animal";
         if (animal.getAnimalInfo() == AnimalInfo.COW || animal.getAnimalInfo() == AnimalInfo.GOAT) {
-            //@ check if player has bucket
+            if (player.getInventory().getSlot("milkPail") == null) return "You have no milk pail";
         } else if (animal.getAnimalInfo() == AnimalInfo.SHEEP) {
-            //@check if player has scissors
+            if (player.getInventory().getSlot("scissors") == null) return "You have no scissors";
         } else if (animal.getAnimalInfo() == AnimalInfo.PIG) {
             if (season == Season.WINTER) return "Pigs don't produce in winter";
         }
@@ -276,11 +277,11 @@ public class Farm extends Maps {
         return "Product collected";
     }
 
-    public String sellAnimal(String animalName) {
+    public String sellAnimal(String animalName, Player player) {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         int income = animal.calculateSellPrice();
-        //@ add money
+        player.increase(income);
         sellAnimal(animal);
         return "Animal is sold";
     }

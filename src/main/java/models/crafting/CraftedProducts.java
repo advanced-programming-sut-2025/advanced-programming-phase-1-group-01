@@ -1,5 +1,6 @@
 package models.crafting;
 
+import models.Item;
 import models.crafting.enums.CraftingDevices;
 
 public class CraftedProducts {
@@ -8,7 +9,7 @@ public class CraftedProducts {
     private int processingTime;
     private int energy;
     private int sellingPrice;
-    //@ private item inventory item;
+    private Item inventoryItem;
     private int dayCounterToRipe = 0;
     private boolean isRipe = false;
 
@@ -26,5 +27,7 @@ public class CraftedProducts {
         }
     }
 
-    //@ make item to add to inventory
+    public Item getInventoryItem() {
+        return inventoryItem;
+    }
 }

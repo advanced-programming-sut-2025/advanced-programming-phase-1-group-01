@@ -89,7 +89,12 @@ public class Animal extends Character {
 
     public void moveAnimal(Position newPosition) {
         setPosition(newPosition);
-        isHungry = false;
+        if (isInShelter(newPosition)) {
+            isOut = false;
+        } else {
+            isOut = true;
+            isHungry = false;
+        }
     }
 
     public void feedByHay() {
@@ -114,7 +119,8 @@ public class Animal extends Character {
     }
 
     public void DailyResetAndStart() {
-
+        isHungry = true;
+        hasBeenPetted = false;
     }
 
     public void advanceFriendshipLevel(int amount) {
@@ -161,5 +167,12 @@ public class Animal extends Character {
 
     public int calculateSellPrice() {
         return (int)(animalInfo.getPrice() * (friendshipLevel / 1000.0 + 0.3));
+    }
+
+    private boolean isInShelter(Position position) {
+        return position.x() >= shelter.getTopLeftCorner().x()
+                && position.x() <= shelter.getBottomRightCorner().x()
+                && position.y() >= shelter.getTopLeftCorner().y()
+                && position.y() <= shelter.getBottomRightCorner().y();
     }
 }

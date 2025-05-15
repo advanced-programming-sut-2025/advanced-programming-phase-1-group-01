@@ -173,6 +173,12 @@ public class VillageInitializer {
             abigail.addPlayerToTalk(player);
             harvey.addPlayerToTalk(player);
 
+            robin.addGiftDailyStatus(player);
+            leah.addGiftDailyStatus(player);
+            sebastian.addGiftDailyStatus(player);
+            abigail.addGiftDailyStatus(player);
+            harvey.addGiftDailyStatus(player);
+            robin.addGiftDailyStatus(player);
 
             robin.addFriendshipAndLevel(player);
             leah.addFriendshipAndLevel(player);

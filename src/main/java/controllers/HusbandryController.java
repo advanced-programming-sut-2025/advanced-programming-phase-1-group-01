@@ -107,9 +107,10 @@ public class HusbandryController extends Controller {
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
+            Player player = repo.getCurrentGame().getCurrentPlayer();
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
-            return new Result(true, farm.feedByHay(animalName));
+            return new Result(true, farm.feedByHay(animalName, player));
         } else return new Result(false, "Invalid command");
     }
 
@@ -143,9 +144,10 @@ public class HusbandryController extends Controller {
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
+            Player player = repo.getCurrentGame().getCurrentPlayer();
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
-            return new Result(true, farm.sellAnimal(animalName));
+            return new Result(true, farm.sellAnimal(animalName, player));
         } else return new Result(false, "Invalid command");
     }
 
