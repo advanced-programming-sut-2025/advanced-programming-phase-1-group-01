@@ -9,6 +9,10 @@ import models.data.User;
 import models.enums.commands.GameMenuCommands;
 import models.initializer.FarmInitializer;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,14 +92,14 @@ public class GameMenuController extends Controller {
                 }
             }
 
-            Game newGame = new Game(repo.getCurrentUser().getPlayer());
-            repo.addGame(newGame);
-            repo.setCurrentGame(newGame);
+            List<Player> players = new ArrayList<>();
+            players.add(repo.getCurrentUser().getPlayer());
 
-            for (String username : usernameSet) {
-                User user = repo.getUserByUsername(username);
-                newGame.addPlayer(user.getPlayer());
+            for (String username : usernames) {
+                players.add(repo.getUserByUsername(username).getPlayer());
             }
+
+            repo.addGame(new Game(players));
 
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }

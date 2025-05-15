@@ -6,6 +6,7 @@ import models.Position;
 import models.animal.Animal;
 import models.animal.AnimalHouse;
 import models.animal.AnimalInfo;
+import models.building.*;
 import models.Size;
 import models.building.Building;
 import models.building.Farm;

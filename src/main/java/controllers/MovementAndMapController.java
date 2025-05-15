@@ -25,6 +25,8 @@ public class MovementAndMapController extends Controller {
             return printMap(commandLine);
         } else if (commandLine.matches(MovementAndMapCommands.HELP_READING_MAP.getRegex())) {
             return printMapGuidance(commandLine);
+        } else if (commandLine.matches(MovementAndMapCommands.ENTER_OTHERS_ROOM.getRegex())) {
+            return handleEnterRoom(commandLine);
         } else return new Result(false, "invalid command");
     }
 
@@ -45,7 +47,7 @@ public class MovementAndMapController extends Controller {
 
     private Result walk(Position position) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        ReduceEnergy.movePlayer(player, position);
+        ReduceEnergy.movePlayer(player, position, repo.getCurrentGame());
         return new Result(true, "-1");
     }
 
@@ -57,7 +59,7 @@ public class MovementAndMapController extends Controller {
             int y = parseInt(matcher.group("Y"));
             int size = parseInt(matcher.group("size"));
             Player player = repo.getCurrentGame().getCurrentPlayer();
-            return new Result(true, player.getFarm().printMap(x, y, size));
+            return new Result(true, repo.getCurrentGame().getCurrentMap().printMap(x, y, size, repo.getCurrentGame()));
         } else return new Result(false, "invalid command");
     }
 
@@ -72,6 +74,16 @@ public class MovementAndMapController extends Controller {
             output.append("Contents:\n");
             output.append(Emoji.getFormattedGuidance());
             return new Result(true, output.toString());
+        } else return new Result(false, "invalid command");
+    }
+
+    private Result handleEnterRoom(String commandLine) {
+        Pattern pattern = Pattern.compile(MovementAndMapCommands.ENTER_OTHERS_ROOM.getRegex());
+        Matcher matcher = pattern.matcher(commandLine);
+
+        if (matcher.matches()) {
+            int roomId = parseInt(matcher.group("roomNumber"));
+            return new Result(true, repo.getCurrentGame().enterOthersRoom(roomId));
         } else return new Result(false, "invalid command");
     }
 }

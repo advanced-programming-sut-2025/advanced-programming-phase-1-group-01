@@ -184,24 +184,24 @@ public class Farm extends Maps {
     }
 
 
-    public String printMap(int x, int y, int size) {
-        if (x + size > tiles.size() || y + size > tiles.get(x).size()) {
-            return "invalid map";
-        }
-        StringBuilder output = new StringBuilder();
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Tile tile = tiles.get(i + x).get(j + y);
-                if (tile.getObject() == null) {
-                    output.append(tile.getType().getSymbol());
-                } else {
-                    output.append(tile.getObject().getSymbol());
-                }
-            }
-            output.append("\n");
-        }
-        return output.toString();
-    }
+//    public String printMap(int x, int y, int size) {
+//        if (x + size > tiles.size() || y + size > tiles.get(x).size()) {
+//            return "invalid map";
+//        }
+//        StringBuilder output = new StringBuilder();
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                Tile tile = tiles.get(i + x).get(j + y);
+//                if (tile.getObject() == null) {
+//                    output.append(tile.getType().getSymbol());
+//                } else {
+//                    output.append(tile.getObject().getSymbol());
+//                }
+//            }
+//            output.append("\n");
+//        }
+//        return output.toString();
+//    }
 
     private AnimalHouseType stringToAnimalHouseType(String animalType) {
         return switch (animalType) {
@@ -295,6 +295,7 @@ public class Farm extends Maps {
         if (animal == null) return "Invalid animal name";
         animal.advanceFriendshipLevel(amount);
         return "Friendship cheated";
+    }
     public Map<Plant, Tile> getPlantsToTilesMap() {
         Map<Plant, Tile> map = new LinkedHashMap<>();
         for (List<Tile> row : tiles) {
