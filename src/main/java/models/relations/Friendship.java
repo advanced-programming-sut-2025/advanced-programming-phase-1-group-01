@@ -21,11 +21,13 @@ public class Friendship extends Relationship {
     public static final int TALK_XP;
     public static final int DEAL_SUCCESS_XP;
     public static final int DEAL_FAILURE_XP;
+    public static final int HUG_XP;
 
     static {
         TALK_XP = 20;
         DEAL_SUCCESS_XP = 50;
         DEAL_FAILURE_XP = 30;
+        HUG_XP = 60;
     }
 
     public Friendship(Character p1, Character p2) {

@@ -1,6 +1,8 @@
 package models.character.NPC;
 
-public enum TradeItemType {
+import models.Item;
+
+public enum TradeItemType implements Item {
     WOOL,
     PUMPKIN_PIE,
     PIZZA,
@@ -14,4 +16,14 @@ public enum TradeItemType {
     SPAGHETTI,
     WOOD,
     IRON_BAR;
+
+    @Override
+    public String getName() {
+        return "CookingSystem";
+    }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

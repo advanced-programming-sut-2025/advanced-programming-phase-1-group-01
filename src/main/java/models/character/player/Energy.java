@@ -51,4 +51,12 @@ public class Energy {
     public void setHasPassedOut(boolean hasPassedOut) {
         this.hasPassedOut = hasPassedOut;
     }
+
+    public void setMAX_ENERGY(double MAX_ENERGY) {
+        this.MAX_ENERGY = MAX_ENERGY;
+    }
+
+    public double getMAX_ENERGY() {
+        return MAX_ENERGY;
+    }
 }

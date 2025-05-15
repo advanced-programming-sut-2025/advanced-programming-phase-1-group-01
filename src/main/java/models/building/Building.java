@@ -30,4 +30,12 @@ public abstract class Building {
     public boolean isThatTileEmpty(Position position) {
         return tiles.get(position.x()).get(position.y()).isEmpty();
     }
+
+    public Position getPosition() {
+        return new Position(topLeftCorner.x(), topLeftCorner.y());
+    }
+
+    public Size getSize() {
+        return size;
+    }
 }

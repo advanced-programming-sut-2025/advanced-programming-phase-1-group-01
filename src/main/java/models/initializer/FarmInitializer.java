@@ -1,13 +1,13 @@
 package models.initializer;
 
 import models.Position;
+import models.Random;
 import models.building.*;
 import models.farming.TreeInfo;
 import models.enums.StoneType;
 import models.foraging.ForagingCropInfo;
 import models.foraging.ForagingMineralInfo;
 import models.foraging.ForagingTreeInfo;
-import models.Random;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class FarmInitializer {
     private static Lake lake;
     private static Quarry quarry;
 
-    private static void initializeTiles() {
+    private static void initializeTiles(int additionalX, int additionalY) {
 
         for (int i = FARM_TP.x(); i < FARM_BR.x(); i++) {
             tiles.add(new ArrayList<>());
@@ -60,8 +60,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = MINE_TP.y(); j < MINE_BR.y(); j++) {
-            for (int i = MINE_TP.x(); i < MINE_BR.x(); i++) {
+        for (int j = MINE_TP.y(); j < MINE_BR.y() + additionalX; j++) {
+            for (int i = MINE_TP.x(); i < MINE_BR.x() + additionalY; i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.MINE)
@@ -226,7 +226,7 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = 0; i < NUMBER_OF_TREES; i++) {
+        for (int i = 0; i < NUMBER_OF_TREES - additionalX * 10; i++) {
             TreeInfo tree = TreeInfo.randomTree();
             Position position = randomPosition();
 
@@ -236,7 +236,7 @@ public class FarmInitializer {
             } else i--;
         }
 
-        for (int i = 0; i < NUMBER_OF_STONES; i++) {
+        for (int i = 0; i < NUMBER_OF_STONES + additionalY * 10; i++) {
             StoneType stone = StoneType.randomStone();
             Position position = randomPosition();
 
@@ -295,8 +295,8 @@ public class FarmInitializer {
         return new Position(Random.rand(GROUND_TP.x(), GROUND_BR.x()), Random.rand(GROUND_TP.y(), GROUND_BR.y()));
     }
 
-    public static Farm initializeFarm() {
-        initializeTiles();
+    public static Farm initializeFarm(int x, int y) {
+        initializeTiles(x, y);
         initializeBuildings();
 
         return new Farm(tiles, lake, cottage, quarry, greenhouse);

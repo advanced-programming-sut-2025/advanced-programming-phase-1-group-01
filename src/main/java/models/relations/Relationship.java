@@ -35,9 +35,14 @@ public abstract class Relationship {
     }
 
     public void incrementLevel() {
+        if (level == 2) {
+            xp = getMaxXp();
+        }
         // here some stuff should be checked
-        level++;
-        xp = 0;
+        else {
+            level++;
+            xp = 0;
+        }
     }
 
     public int getLevel() {
@@ -48,5 +53,14 @@ public abstract class Relationship {
         // here some stuff should be checked
         level--;
         xp = getMaxXp() ;
+    }
+
+    public void flower() {
+        level = 3;
+        xp = 0;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

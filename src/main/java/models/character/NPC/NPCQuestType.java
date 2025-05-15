@@ -2,6 +2,8 @@ package models.character.NPC;
 
 //import models.Plants.Plant;
 
+import models.character.player.Player;
+import models.character.player.Slot;
 import models.cooking.*;
 import models.crafting.BeeHouse;
 import models.crafting.DeluxeScarecrow;
@@ -41,5 +43,21 @@ public enum NPCQuestType {
 
     public int getMissionNumber() {
         return missionNumber;
+    }
+
+    public int getQuestAmount() {
+        return questItem.getAmount();
+    }
+
+    public int getRewardAmount() {
+        return rewardItem.getAmount();
+    }
+
+    public String getQuestItem() {
+        return questItem.getName();
+    }
+
+    public String getRewardItem() {
+        return rewardItem.getName();
     }
 }

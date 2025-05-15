@@ -4,9 +4,11 @@ import models.Game;
 import models.Item;
 import models.MessageEntry;
 import models.Result;
+import models.character.player.Inventory;
 import models.character.player.Slot;
 import models.character.player.Player;
 import models.data.Repository;
+import models.enums.Gender;
 import models.enums.commands.RelationshipCommands;
 import models.dateTime.DateTime;
 import models.relations.Friendship;
@@ -14,7 +16,6 @@ import models.relations.Gift;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListResourceBundle;
 import java.util.Map;
 
 public class RelationshipController extends Controller {
@@ -75,6 +76,32 @@ public class RelationshipController extends Controller {
             case GIFT_HISTORY:
                 username = commandLine.split("\\s+")[3];
                 return giftHistory(username);
+            case FLOWER:
+                username = commandLine.split("\\s+")[2];
+                return flower(username);
+            case ASK_MARRIAGE:
+                username = commandLine.split("\\s+")[3];
+                String ring = commandLine.split("\\s+")[5];
+                return askMarriage(username, ring);
+            case RESPOND_MARRIAGE:
+                username = commandLine.split("\\s+")[3];
+                String respond = commandLine.split("\\s+")[1];
+                return respondMarriage(username, respond);
+            case START_TRADE:
+                return startTrade();
+            case TRADE_REQUEST:
+                username = commandLine.split("\\s+")[2];
+                String itemName = commandLine.split("\\s+")[6];
+                String amountStr = commandLine.split("\\s+")[8];
+                String priceStr = commandLine.split("\\s+")[10];
+                return tradeRequest(username, itemName, amountStr, priceStr);
+            case TRADE_OFFER:
+                username = commandLine.split("\\s+")[2];
+                String itemName1 = commandLine.split("\\s+")[6];
+                String amountStr1 = commandLine.split("\\s+")[8];
+                String itemName2 = commandLine.split("\\s+")[10];
+                String amountStr2 = commandLine.split("\\s+")[12];
+                return tradeOffer(username, itemName1, amountStr1, itemName2, amountStr2);
         }
         return new Result(true, "");
     }
@@ -85,7 +112,7 @@ public class RelationshipController extends Controller {
 
         StringBuilder resultMsg = new StringBuilder();
 
-        for (Player gamePlayer : game.players().values()) {
+        for (Player gamePlayer : game.getPlayers()) {
             if (player.getRelationService().isFriendWith(gamePlayer)) {
                 resultMsg.append("%s : %d\n".formatted(gamePlayer.getUser().getUsername(), player.getRelationService().getFriendship(gamePlayer).getLevel()));
             } else {
@@ -141,8 +168,8 @@ public class RelationshipController extends Controller {
 
         if (friend == null) {
             return new Result(false, "player not found");
-        } else if (currentPlayer.isNearTo(friend)) {
-            return new Result(false, "you should be near of %s".formatted(friend));
+        } else if (!currentPlayer.isNearTo(friend)) {
+            return new Result(false, "you should be near to " + friend.getUser().getNickname());
         }
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
@@ -150,7 +177,16 @@ public class RelationshipController extends Controller {
         if (friendship.getLevel() < 2) {
             return new Result(false, "you are not enough level");
         }
-        return null;
+
+        DateTime currentTime = repo.getCurrentGame().getTimeManager().getNow();
+
+        if (currentPlayer.getRelationService().getLastHugDate() == currentTime.getDay()) {
+            return new Result(false, "You can only hug once per day.");
+        }
+
+        currentPlayer.setLastHugDate(currentTime.getDay());
+        friendship.increaseXp(Friendship.HUG_XP);
+        return new Result(true, "you hugged each other! jooon");
     }
 
     private Result gift(String username, String itemName, int amount) {
@@ -251,5 +287,175 @@ public class RelationshipController extends Controller {
         }
 
         return new Result(true, resultMsg.toString());
+    }
+
+    private Result flower(String username) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+        if (!currentPlayer.isNearTo(friend)) {
+            return new Result(false, "you should be near to " + friend.getUser().getUsername());
+        }
+
+        String flower = "flower";
+
+        if (currentPlayer.getInventory().getSlot(flower) == null) {
+            return new Result(false, "you don't have flower in your inventory");
+        }
+
+        Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
+
+        if (friendship.getLevel() != 2 && friendship.getXp() != friendship.getMaxXp()) {
+            return new Result(false, "you have not enough level and xp");
+        }
+
+        currentPlayer.getInventory().getSlot(flower).removeQuantity(1);
+        friend.getInventory().getSlot(flower).addQuantity(1);
+
+        friendship.flower();
+        return new Result(true, "you hugged each other! jooon");
+    }
+
+    private Result askMarriage(String username, String ring) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+
+        Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
+        if (friendship == null || friendship.getLevel() != 3) {
+            return new Result(false, "you have not enough level");
+        }
+
+        if (!currentPlayer.isNearTo(friend)) {
+            return new Result(false, "you should be near to " + friend.getUser().getUsername());
+        }
+
+        if (currentPlayer.getGender() != Gender.FEMALE) {
+            return new Result(false, "you are girl and you can't request marriage");
+        }
+
+        if (currentPlayer.getInventory().getSlot(ring) == null) {
+            return new Result(false, "you don't have ring in your inventory");
+        }
+
+        //send message
+        return new Result(true, "your request send to " + friend.getUser().getUsername());
+    }
+
+    private Result respondMarriage(String username, String respond) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+
+        Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
+
+        String ring = "ring";
+
+        if (respond.equals("reject")) {
+            friendship.setLevel(0);
+            double energy = friend.getEnergy().getMAX_ENERGY();
+            friend.getEnergy().setMAX_ENERGY(energy/2);
+            //7 roooz
+            return new Result(true, currentPlayer + "reject" + friend.getUser().getUsername() + "request for marriage");
+        }
+
+        else if (respond.equals("accept")) {
+            friendship.setLevel(4);
+            friend.getInventory().getSlot(ring).removeQuantity(1);
+            currentPlayer.getInventory().getSlot(ring).addQuantity(1);
+
+            currentPlayer.getRelationService().marry(friend);
+            currentPlayer.updateOfMarriage(friend);
+            //har rooz 50 energy
+            return new Result(true, currentPlayer + "accept" + friend.getUser().getUsername() + "request for ring");
+        }
+        return null;
+    }
+
+    private Result startTrade() {
+        Game currentGame = repo.getCurrentGame();
+        List<Player> players = currentGame.getPlayers();
+
+        StringBuilder info = new StringBuilder();
+        info.append("List of players:\n");
+
+        for (Player player : players) {
+            info.append("- ").append(player.getUser().getUsername()).append("\n");
+        }
+
+        return new Result(true, info.toString());
+    }
+
+    private Result tradeRequest(String username, String itemName, String amountStr, String priceStr) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+        int amount;
+
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+
+        Item item = Inventory.getNewItem(itemName);
+
+        if (item == null) {
+            return new Result(false, "item not found");
+        }
+
+        if (!amountStr.matches("^\\d+$")) {
+            return new Result(false, "invalid amount " + amountStr);
+        }
+
+        else {
+            amount = Integer.parseInt(amountStr);
+        }
+
+        int price = Integer.parseInt(priceStr);
+
+        if (price > currentPlayer.getNumOfCoins()) {
+            return new Result(false, "you have not enough coins");
+        }
+
+        //send message
+        return new Result(true, "your request trade sent to " + friend.getUser().getUsername());
+    }
+
+    private Result tradeOffer(String username, String itemName, String amountStr, String itemName2, String amountStr2) {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player friend = repo.getUserByUsername(username).getPlayer();
+        int amount;
+
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+
+        Item item = Inventory.getNewItem(itemName);
+
+        if (item == null) {
+            return new Result(false, "item not found");
+        }
+
+        if (!amountStr.matches("^\\d+$")) {
+            return new Result(false, "invalid amount " + amountStr);
+        }
+
+        else {
+            amount = Integer.parseInt(amountStr);
+        }
+
+        Inventory inventory = currentPlayer.getInventory();
+        Slot slot = inventory.getSlot(itemName);
+
+        if (slot == null) {
+            return new Result(false, "you don't have slot " + itemName2);
+        }
+
+        if (slot.getQuantity() < amount) {
+            return new Result(false, "you have not enough " + itemName2 );
+        }
+
+        //send message
+
+        return new Result(true, "your offer trade sent to " + friend.getUser().getUsername());
     }
 }

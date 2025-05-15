@@ -102,8 +102,8 @@ public class NPCVillage extends Maps {
         if (!quest.isActive()) return "The Quest is not active";
         if (!quest.getOwner().equals(player)) return "You are not the owner of this quest";
         if (!player.isNearTo(npc.getPosition())) return "You are not near the npc";
-        //@ check if the player has not enough items
-        //@ add rewards to inventory
+        if (! (player.getInventory().getSlot(quest.getQuestType().getQuestItem()).getQuantity() < quest.getQuestType().getQuestAmount())) return "You do not have enough item";
+        player.getInventory().addItem(quest.getQuestType().getRewardItem(), quest.getQuestType().getRewardAmount());
         quest.completeQuest();
         return "Quest completed successfully";
     }

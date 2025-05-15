@@ -1,23 +1,27 @@
 package models.character.player;
 
-import models.Game;
-import models.MessageEntry;
-import models.Position;
+import models.*;
 import models.animal.Animal;
 import models.animal.AnimalHouse;
 import models.animal.AnimalInfo;
+import models.building.*;
+import models.building.Building;
 import models.building.Farm;
 import models.character.Character;
+import models.character.NPC.NPC;
+import models.cooking.CookingRecipe;
+import models.cooking.CookingRecipes;
+import models.crafting.CraftedProducts;
+import models.crafting.CraftingRecipe;
 import models.data.User;
+import models.dateTime.Season;
 import models.enums.Color;
 import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
+import models.weather.Weather;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player extends Character {
     private final Game game;
@@ -28,12 +32,20 @@ public class Player extends Character {
     private Farm farm;
     private int numOfCoins;
     private Inventory inventory;
+    private Refrigerator refrigerator;
     private Energy energy;
     private AbilityService abilityService;
     private RelationshipService relationshipService;
     private final Map<MessageEntry, Boolean> notifications;
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
+    private final List<CraftedProducts> craftedProducts = new ArrayList<>();
+    private final List<Item> readyToHarvest = new ArrayList<>();
+    private Maps currentMap;
+    private boolean isEnergyHalved = false;
+    private final Set<CraftingRecipe> craftingRecipes;
+    private final Set<CookingRecipe> cookingRecipes;
+    private Farm partnerFarm ;
     //@ list unripe
     //@ list ripe and ready to get items
 
@@ -44,11 +56,15 @@ public class Player extends Character {
         direction = Direction.UP;
         numOfCoins = 0;
         inventory = new Inventory(this);
+        refrigerator = new Refrigerator(this);
         energy = new Energy();
-        abilityService = new AbilityService();
+        abilityService = new AbilityService(this);
         relationshipService = new RelationshipService(this);
         gender = user.getGender();
         notifications = new LinkedHashMap<>();
+        craftingRecipes = new HashSet<>();
+        cookingRecipes = new HashSet<>();
+        initializeCookingRecipes();
     }
 
     public Position getPosition() {
@@ -72,10 +88,16 @@ public class Player extends Character {
     }
 
     public void setNumOfCoins(int numOfCoins) {
+        if (relationshipService.getMarriage() != null) {
+            relationshipService.getMarriage().getPartner(this).setNumOfCoins(numOfCoins);
+        }
         this.numOfCoins = numOfCoins;
     }
 
     public void consumeCoin(int amount) {
+        if (relationshipService.getMarriage() != null) {
+            relationshipService.getMarriage().getPartner(this).consumeCoin(amount);
+        }
         numOfCoins -= amount;
     }
 
@@ -181,6 +203,59 @@ public class Player extends Character {
         return false;
     }
 
+    public boolean isPlayerNearBuilding(Building building) {
+        Position buildingPos = building.getPosition();
+        Size size = building.getSize();
+
+        int x1 = buildingPos.x() - 1;
+        int y1 = buildingPos.y() - 1;
+        int x2 = buildingPos.x() + size.getWidth();
+        int y2 = buildingPos.y() + size.getHeight();
+
+        return this.position.x() >= x1 && this.position.x() <= x2 &&
+                this.position.y() >= y1 && this.position.y() <= y2;
+    }
+
+    public Set<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
+    }
+
+    public void addCraftingRecipe(CraftingRecipe recipe) {
+        craftingRecipes.add(recipe);
+    }
+
+    public Set<CookingRecipe> getCookingRecipes() {
+        return cookingRecipes;
+    }
+
+    public void initializeCookingRecipes() {
+        addCookingRecipe(CookingRecipes.FRIED_EGG.toRecipe());
+        addCookingRecipe(CookingRecipes.BAKED_FISH.toRecipe());
+        addCookingRecipe(CookingRecipes.SALAD.toRecipe());
+    }
+
+    public void addCookingRecipe(CookingRecipe recipe) {
+        cookingRecipes.add(recipe);
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+
+    public void setLastHugDate(int lastHugDate) {
+        relationshipService.setLastHugDate(lastHugDate);
+    }
+
+    public void setPartnerFarm(Farm farm) {
+        this.partnerFarm = farm;
+    }
+
+    public void updateOfMarriage(Player player) {
+        numOfCoins += player.getNumOfCoins();
+        player.setNumOfCoins(numOfCoins);
+        setPartnerFarm(player.getFarm());
+    }
+
     private AnimalInfo stringToAnimalInfo(String string) {
         return switch (string) {
             case "cow" -> AnimalInfo.COW;
@@ -201,7 +276,7 @@ public class Player extends Character {
         if (!farm.isAnimalNameUnique(animalName)) return "Animal name is not unique";
         AnimalHouse shelter = farm.findEmptyShelter(animalInfo);
         if (shelter == null) return "No empty shelter";
-        //@ check if player has no enough money
+        if (numOfCoins < animalInfo.getPrice()) return "Insufficient funds";
         farm.addAnimalToShelter(new Animal(animalInfo, animalName, this, shelter));
         return "Successfully built the shelter";
     }
@@ -236,12 +311,32 @@ public class Player extends Character {
         return animals.toString();
     }
 
-    //@ get artisan by name, error
+    public void addCraftedProduct(CraftedProducts craftedProduct) {
+        craftedProducts.add(craftedProduct);
+    }
 
-    //@ get Item
+    public void setCurrentMap(Maps currentMap) {
+        this.currentMap = currentMap;
+    }
 
-    //@ check if are not close
-    //@ add to unripe list
+    public Maps getCurrentMap() {
+        return currentMap;
+    }
 
-    //@ conditions and get
+    //@ l get artisan by name, error
+
+    //@ l get Item
+
+    //@ l check if are not close
+    //@ l add to unripe list
+
+    //@ l conditions and get
+
+    public String makeAUnripeProduct() {
+        return null;
+    }
+
+    public void setEnergyHalved() {
+        isEnergyHalved = true;
+    }
 }

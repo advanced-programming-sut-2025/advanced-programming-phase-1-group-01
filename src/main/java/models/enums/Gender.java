@@ -1,5 +1,15 @@
 package models.enums;
 
 public enum Gender {
-    MALE, FEMALE;
+    MALE("🧑"), FEMALE("👩");
+
+    private final String symbol;
+
+    Gender(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
 }

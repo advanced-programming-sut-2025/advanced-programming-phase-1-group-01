@@ -37,7 +37,7 @@ public class Slot {
 
     public void removeQuantity(int amount) {
         if (amount > 0) quantity -= amount;
-        if (amount == 0) inventory.removeSlot(this);
+        if (quantity == 0) inventory.removeSlot(this);
     }
 
     public Inventory getInventory() {

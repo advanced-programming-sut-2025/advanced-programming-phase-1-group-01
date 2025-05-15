@@ -17,4 +17,14 @@ public class Plant implements TradeItem {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String getName() {
+        return "CookingSystem";
+    }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

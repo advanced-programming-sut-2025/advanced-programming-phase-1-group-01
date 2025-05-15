@@ -81,7 +81,7 @@ public class InventoryController extends Controller {
         for (int i = 0; i < quantity; i++) {
             player.addCoin(trashCan.getReturnValue(slot.getItem().getPrice()));
         }
-        
+
         if (inventory.getSlots().contains(slot)) {
             return new Result(true, "%d of %s has been trashed successfully".formatted(quantity, itemName));
         } else {
