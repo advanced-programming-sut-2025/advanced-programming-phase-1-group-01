@@ -2,11 +2,14 @@ package controllers;
 
 import models.Game;
 import models.Result;
+import models.character.player.Player;
 import models.data.Repository;
 import models.data.User;
 import models.enums.commands.GameMenuCommands;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,10 +82,16 @@ public class GameMenuController extends Controller {
                     return new Result(false,"User already in another game: " + username);
                 }
             }
-            repo.addGame(new Game(repo.getCurrentUser().getPlayer()));
-//            for () {
-//
-//            }
+
+            List<Player> players = new ArrayList<>();
+            players.add(repo.getCurrentUser().getPlayer());
+
+            for (String username : usernames) {
+                players.add(repo.getUserByUsername(username).getPlayer());
+            }
+
+            repo.addGame(new Game(players));
+
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }
 

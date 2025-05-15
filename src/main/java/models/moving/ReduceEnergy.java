@@ -1,18 +1,19 @@
 package models.moving;
 
+import models.Game;
 import models.Position;
 import models.character.player.Player;
 
 import java.util.List;
 
 public class ReduceEnergy {
-    public static void movePlayer(Player player, Position end) {
+    public static void movePlayer(Player player, Position end, Game game) {
         List<Position> path = PathFinding.findPath(player.getPosition(), end, player.getFarm().getTiles());
-        Position realEnd = FindRealEnd(path, player);
+        Position realEnd = FindRealEnd(path, player, game);
         player.setPosition(realEnd);
     }
 
-    public static Position FindRealEnd(List<Position> path, Player player) {
+    private static Position FindRealEnd(List<Position> path, Player player, Game game) {
         if (path.isEmpty()) return player.getPosition();
 
         Position end = path.get(0);
@@ -30,11 +31,13 @@ public class ReduceEnergy {
                             player.getEnergy().consume(0.5);
                             end = path.get(i);
                         } else {
+                            game.nextTurn();
                             return end;
                         }
                     }
                 }
             } else {
+                game.nextTurn();
                 return end;
             }
         }
