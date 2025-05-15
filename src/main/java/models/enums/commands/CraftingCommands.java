@@ -1,4 +1,4 @@
-package models.crafting.enums;
+package models.enums.commands;
 
 public enum CraftingCommands {
     SHOW_RECIPE("crafting show recipe"),

@@ -1,29 +1,36 @@
 package models.crafting;
 
-import models.character.player.Inventory;
+import models.character.player.Player;
 import models.crafting.enums.AllCraftedProductsType;
 
-public abstract class CraftingDevice {
+public abstract class CraftingDevice implements Craftable {
     protected String name;
-    protected int energy;
-    protected int hours;
+    protected int energyRequired;
+    protected int workingTimeInHours;
 
-    public CraftingDevice(String name, int energy, int hours) {
+    public CraftingDevice(String name, int energyRequired, int workingTimeInHours) {
         this.name = name;
-        this.energy = energy;
-        this.hours = hours;
+        this.energyRequired = energyRequired;
+        this.workingTimeInHours = workingTimeInHours;
     }
 
-    public abstract boolean canCraft(Inventory inventory, AllCraftedProductsType productType);
-
-    public abstract void craftProduct(Inventory inventory, AllCraftedProductsType productType);
+    public String getName() {
+        return name;
+    }
 
     public int getEnergyRequired() {
-        return energy;
+        return energyRequired;
     }
 
-    public int getCraftingTime() {
-        return hours;
+    public int getWorkingTimeInHours() {
+        return workingTimeInHours;
     }
+
+    public void logCrafting(String itemName) {
+        System.out.println("Crafted: " + itemName + " using " + name);
+    }
+
+    public abstract boolean canCraft(AllCraftedProductsType product, Player player);
+    public abstract void craftProduct(AllCraftedProductsType product, Player player);
 }
 

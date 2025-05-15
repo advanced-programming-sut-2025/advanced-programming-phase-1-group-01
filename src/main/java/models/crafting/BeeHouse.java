@@ -1,6 +1,6 @@
 package models.crafting;
 
-public class BeeHouse extends CraftingSystem implements Device {
+public class BeeHouse extends CraftingSystem {
     public BeeHouse(int amount) {
         super(amount);
     }

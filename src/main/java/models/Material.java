@@ -1,6 +1,6 @@
 package models;
 
-public class Material implements InventoryItem {
+public class Material implements Item {
     private final String name;
     private final int quantity;
 

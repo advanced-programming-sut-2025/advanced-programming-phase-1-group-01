@@ -1,6 +1,6 @@
 package models.crafting.enums;
 
-import models.crafting.Recipe;
+import models.crafting.CraftingRecipe;
 
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public enum CraftingRecipes {
         this.sellPrice = sellPrice;
     }
 
-    public Recipe toRecipe() {
-        return new Recipe(name, ingredients, ability, level, sellPrice);
+    public CraftingRecipe toRecipe() {
+        return new CraftingRecipe(name, ingredients, ability, level, sellPrice);
     }
 }

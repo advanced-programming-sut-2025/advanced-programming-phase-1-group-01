@@ -1,6 +1,6 @@
 package models.crafting;
 
-public class OilMaker extends CraftingSystem implements Device {
+public class OilMaker extends CraftingSystem {
     public OilMaker(int amount) {
         super(amount);
     }

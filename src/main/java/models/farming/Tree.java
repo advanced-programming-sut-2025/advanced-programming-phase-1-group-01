@@ -1,5 +1,9 @@
 package models.farming;
 
+import models.Item;
+
+import java.util.List;
+
 public class Tree extends Plant {
     private final TreeInfo info;
     private TreeState state;
@@ -45,5 +49,15 @@ public class Tree extends Plant {
 
     public boolean isFullyGrown() {
         return growthLevel >= info.getStages().length;
+    }
+
+    @Override
+    public boolean hasProduct() {
+        return false;
+    }
+
+    @Override
+    public List<Item> getProducts() {
+        return List.of();
     }
 }

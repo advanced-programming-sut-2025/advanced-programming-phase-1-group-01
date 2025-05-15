@@ -1,15 +1,15 @@
 package controllers;
 
-import models.InventoryItem;
+import models.Item;
 import models.Result;
 import models.building.Building;
 import models.character.player.Inventory;
-import models.character.player.InventorySlot;
+import models.character.player.Slot;
 import models.character.player.Player;
-import models.crafting.Recipe;
+import models.crafting.CraftingRecipe;
 import models.crafting.enums.CraftingRecipes;
 import models.enums.BanItem;
-import models.crafting.enums.CraftingCommands;
+import models.enums.commands.CraftingCommands;
 import models.data.Repository;
 
 import java.util.List;
@@ -58,8 +58,8 @@ public class CraftingController extends Controller {
     private Result showRecipe() {
         StringBuilder info = new StringBuilder("Available Recipes:\n");
 
-        for (Recipe recipe : repo.getCurrentUser().getPlayer().getRecipes()) {
-            info.append("- ").append(recipe.getName()).append("\n");
+        for (CraftingRecipe recipe : repo.getCurrentUser().getPlayer().getCraftingRecipes()) {
+            info.append("- ").append(recipe.name()).append("\n");
         }
 
         return new Result(true,info.toString());
@@ -69,12 +69,12 @@ public class CraftingController extends Controller {
         String[] tokens = command.split(" ");
         String itemName = tokens[2];
 
-        List<Recipe> recipes = repo.getCurrentUser().getPlayer().getRecipes();
+        List<CraftingRecipe> recipes = repo.getCurrentUser().getPlayer().getCraftingRecipes();
 
-        Recipe targetRecipe = null;
+        CraftingRecipe targetRecipe = null;
 
-        for (Recipe recipe : recipes) {
-            if (recipe.getName().equalsIgnoreCase(itemName)) {
+        for (CraftingRecipe recipe : recipes) {
+            if (recipe.name().equalsIgnoreCase(itemName)) {
                 targetRecipe = recipe;
                 break;
             }
@@ -84,7 +84,7 @@ public class CraftingController extends Controller {
             return new Result(false, "Recipe not found.");
         }
 
-        Map<String, Integer> requiredIngredients = targetRecipe.getIngredients();
+        Map<String, Integer> requiredIngredients = targetRecipe.ingredients();
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
@@ -93,7 +93,7 @@ public class CraftingController extends Controller {
             String materialName = entry.getKey();
             int requiredAmount = entry.getValue();
 
-            InventorySlot inventorySlot = inventory.getSlot(materialName);
+            Slot inventorySlot = inventory.getSlot(materialName);
             int itemCount = inventorySlot.getQuantity();
 
             if (itemCount < requiredAmount) {
@@ -104,7 +104,7 @@ public class CraftingController extends Controller {
         for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
             String materialName = entry.getKey();
             int requiredAmount = entry.getValue();
-            InventorySlot inventorySlot = inventory.getSlot(materialName);
+            Slot inventorySlot = inventory.getSlot(materialName);
             inventorySlot.removeQuantity(requiredAmount);
         }
 
@@ -155,7 +155,7 @@ public class CraftingController extends Controller {
                     //return new MysticTreeSeed();
             }
 
-        return new Result(true, "Crafted " + targetRecipe.getName() + " successfully!");
+        return new Result(true, "Crafted " + targetRecipe.name() + " successfully!");
     }
 
     private Result cheatAddRecipe(String command) {
@@ -167,7 +167,7 @@ public class CraftingController extends Controller {
         CraftingRecipes matched = null;
 
         for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
-            if (recipeEnum.name.equalsIgnoreCase(recipeName)) {
+            if (recipeEnum.name().equalsIgnoreCase(recipeName)) {
                 matched = recipeEnum;
                 break;
             }
@@ -177,8 +177,8 @@ public class CraftingController extends Controller {
             return new Result(false, "Recipe \"" + recipeName + "\" does not exist.");
         }
 
-        Recipe recipeToLearn = matched.toRecipe();
-        player.addRecipe(recipeToLearn);
+        CraftingRecipe recipeToLearn = matched.toRecipe();
+        player.addCraftingRecipe(recipeToLearn);
 
         return new Result(true, "Recipe added");
     }
@@ -191,7 +191,7 @@ public class CraftingController extends Controller {
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
-        InventoryItem item = Inventory.getNewItem(itemName);
+        Item item = Inventory.getNewItem(itemName);
 
         if (item == null) {
             return new Result(false, "item not found");

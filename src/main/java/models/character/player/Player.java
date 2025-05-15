@@ -6,10 +6,10 @@ import models.Position;
 import models.Size;
 import models.building.Building;
 import models.building.Farm;
-import models.building.Tile;
-import models.building.TileObject;
 import models.character.Character;
-import models.crafting.Recipe;
+import models.cooking.CookingRecipe;
+import models.cooking.CookingRecipes;
+import models.crafting.CraftingRecipe;
 import models.data.User;
 import models.enums.Direction;
 import models.enums.Gender;
@@ -29,13 +29,16 @@ public class Player extends Character {
     private Farm farm;
     private int numOfCoins;
     private Inventory inventory;
+    private Refrigerator refrigerator;
     private Energy energy;
     private AbilityService abilityService;
     private RelationshipService relationshipService;
     private final Map<MessageEntry, Boolean> notifications;
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
-    private final List<Recipe> recipes;
+    private final List<CraftingRecipe> craftingRecipes;
+    private final List<CookingRecipe> cookingRecipes;
+    private Farm partnerFarm ;
 
     public Player(Game game, User user) {
         this.game = game;
@@ -44,12 +47,15 @@ public class Player extends Character {
         direction = Direction.UP;
         numOfCoins = 0;
         inventory = new Inventory(this);
+        refrigerator = new Refrigerator(this);
         energy = new Energy();
         abilityService = new AbilityService();
         relationshipService = new RelationshipService(this);
         gender = user.getGender();
         notifications = new LinkedHashMap<>();
-        recipes = new ArrayList<>();
+        craftingRecipes = new ArrayList<>();
+        cookingRecipes = new ArrayList<>();
+        initializeCookingRecipes();
     }
 
     public Position getPosition() {
@@ -73,14 +79,23 @@ public class Player extends Character {
     }
 
     public void setNumOfCoins(int numOfCoins) {
+        if (relationshipService.getMarriage() != null) {
+            relationshipService.getMarriage().getPartner(this).setNumOfCoins(numOfCoins);
+        }
         this.numOfCoins = numOfCoins;
     }
 
     public void consume(int amount) {
+        if (relationshipService.getMarriage() != null) {
+            relationshipService.getMarriage().getPartner(this).consume(amount);
+        }
         numOfCoins -= amount;
     }
 
     public void increase(int amount) {
+        if (relationshipService.getMarriage() != null) {
+            relationshipService.getMarriage().getPartner(this).increase(amount);
+        }
         numOfCoins += amount;
     }
 
@@ -194,11 +209,47 @@ public class Player extends Character {
                 this.position.y() >= y1 && this.position.y() <= y2;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public List<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
     }
 
-    public void addRecipe(Recipe recipe) {
-        recipes.add(recipe);
+    public void addCraftingRecipe(CraftingRecipe recipe) {
+        craftingRecipes.add(recipe);
+    }
+
+    public List<CookingRecipe> getCookingRecipes() {
+        return cookingRecipes;
+    }
+
+    public void initializeCookingRecipes() {
+        addCookingRecipe(CookingRecipes.FRIED_EGG.toRecipe());
+        addCookingRecipe(CookingRecipes.BAKED_FISH.toRecipe());
+        addCookingRecipe(CookingRecipes.SALAD.toRecipe());
+    }
+
+    public void addCookingRecipe(CookingRecipe recipe) {
+        cookingRecipes.add(recipe);
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+
+    public void setLastHugDate(int lastHugDate) {
+        relationshipService.setLastHugDate(lastHugDate);
+    }
+
+    public int getLastHugDate() {
+        return relationshipService.getLastHugDate();
+    }
+
+    public void setPartnerFarm(Farm farm) {
+        this.partnerFarm = farm;
+    }
+
+    public void updateOfMarriage(Player player) {
+        numOfCoins += player.getNumOfCoins();
+        player.setNumOfCoins(numOfCoins);
+        setPartnerFarm(player.getFarm());
     }
 }
