@@ -16,6 +16,11 @@ public class ForagingTree extends Foraging implements Item, TreeSource {
         return info.getName();
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public ForagingTreeInfo getInfo() {
         return info;
     }

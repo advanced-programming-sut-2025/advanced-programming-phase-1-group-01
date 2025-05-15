@@ -5,7 +5,7 @@ import models.character.Character;
 import models.character.player.Player;
 import models.enums.Direction;
 import models.enums.Emoji;
-import models.random;
+import models.Random;
 import models.relations.Friendship;
 import models.relations.FriendshipLevel;
 import models.Random;
@@ -130,11 +130,20 @@ public class Animal extends Character {
     }
 
     public ProductQuality getAnimalProductQuality() {
-//        double QualityNumber = getRelationshipLevel(owner) * (0.5 + 0.5 * random.rand(0.0, 1.0)) / 1000;
-//        if (QualityNumber <= 0.5) return AnimalProductQuality.NORMAL;
-//        if (QualityNumber <= 0.7) return AnimalProductQuality.SILVER;
-//        if (QualityNumber <= 0.9) return AnimalProductQuality.GOLD;
+//        double QualityNumber = getRelationshipLevel(owner) * (0.5 + 0.5 * Random.rand(0.0, 1.0)) / 1000;
+//        if (QualityNumber <= 0.5) return ProductQuality.REGULAR;
+//        if (QualityNumber <= 0.7) return ProductQuality.SILVER;
+//        if (QualityNumber <= 0.9) return ProductQuality.GOLD;
         return ProductQuality.IRIDIUM;
+    }
+
+    public static ProductQuality getProductQuality(double num) {
+        if (num < 0) return null;
+
+        if (num <= 0.5) return ProductQuality.REGULAR;
+        else if (num < 0.7) return ProductQuality.SILVER;
+        else if (num < 0.9) return ProductQuality.GOLD;
+        else return ProductQuality.REGULAR;
     }
 
     public String getAnimalName() {

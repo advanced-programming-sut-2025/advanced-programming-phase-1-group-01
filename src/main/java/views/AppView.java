@@ -1,9 +1,6 @@
 package views;
 
-import controllers.GameMenuController;
-import controllers.LoginMenuController;
-import controllers.MainMenuController;
-import controllers.ProfileMenuController;
+import controllers.*;
 import models.data.Repository;
 
 import java.util.HashMap;
@@ -23,12 +20,10 @@ public class AppView {
     private static final Scanner scanner = new Scanner(System.in);
 
     public String readLine() {
-
         return scanner.nextLine().trim();
     }
 
     public void showMessage(String message) {
-
         System.out.println(message);
     }
 
@@ -51,6 +46,6 @@ public class AppView {
         views.put(models.enums.commands.View.MAIN_MENU, new MainMenu(new MainMenuController(repo), this));
         views.put(models.enums.commands.View.PROFILE_MENU, new ProfileMenu(new ProfileMenuController(repo), this));
         views.put(models.enums.commands.View.GAME_MENU, new GameMenu(new GameMenuController(repo), this));
-
+        views.put(models.enums.commands.View.GAME, new GameView(new GameController(repo), this));
     }
 }

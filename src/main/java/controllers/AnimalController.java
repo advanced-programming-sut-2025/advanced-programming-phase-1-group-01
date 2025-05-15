@@ -2,9 +2,15 @@ package controllers;
 
 import models.Item;
 import models.Result;
+import models.animal.Animal;
+import models.animal.ProductQuality;
 import models.character.player.Inventory;
 import models.character.player.Player;
+import models.character.player.Slot;
 import models.data.Repository;
+import models.dateTime.Season;
+import models.fish.Fish;
+import models.fish.FishInfo;
 import models.tool.FishingPole;
 import models.tool.Tool;
 
@@ -26,6 +32,7 @@ public class AnimalController extends Controller {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = player.getInventory();
         Item item = inventory.getSlot(poleName).getItem();
+        Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
         if (item == null) {
             return new Result(false, "item not found");
@@ -50,8 +57,16 @@ public class AnimalController extends Controller {
 
         int numOfFishes = (int) Math.min(6, Math.ceil(R * M * (skill + 2)));
 
+        R = RANDOM.nextDouble();
+        double qualityNum = (R * (skill + 2) * pole.getInfo().getFishingFactor()) / (7 - numOfFishes);
+        ProductQuality quality = Animal.getProductQuality(qualityNum);
 
+        FishInfo fishType = FishInfo.getRandomFish(currSeason, player.getAbilityService().getFishing().isFull());
+        inventory.addItem(fishType.getName(), numOfFishes);
+        Slot slot = inventory.getSlot(fishType.getName());
+        Fish fish = (Fish) slot.getItem();
+        fish.setQuality(quality);
 
-        return null;
+        return new Result(true, "%d of %s added to inventory".formatted(numOfFishes, fishType.getName()));
     }
 }

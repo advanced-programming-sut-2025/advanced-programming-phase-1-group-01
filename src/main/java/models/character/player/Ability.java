@@ -34,4 +34,8 @@ public class Ability {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    public boolean isFull() {
+        return true; // should be overwritten
+    }
 }

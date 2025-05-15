@@ -20,6 +20,10 @@ public class Inventory {
         slots = new ArrayList<>();
     }
 
+    public List<Slot> getSlots() {
+        return slots;
+    }
+
     public Slot getSlot(String itemName) {
         for (Slot slot : slots) {
             if (slot.getItem().getName().equalsIgnoreCase(itemName)) {

@@ -43,4 +43,9 @@ public class Slot {
     public Inventory getInventory() {
         return inventory;
     }
+
+    @Override
+    public String toString() {
+        return "%s (%d)".formatted(item.getName(), quantity);
+    }
 }

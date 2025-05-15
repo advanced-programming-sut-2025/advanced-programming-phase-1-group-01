@@ -6,19 +6,13 @@ import models.Position;
 import models.animal.Animal;
 import models.animal.AnimalHouse;
 import models.animal.AnimalInfo;
-import models.building.Building;
 import models.building.Farm;
-import models.building.Tile;
-import models.building.TileObject;
 import models.character.Character;
-import models.character.NPC.NPC;
 import models.data.User;
-import models.dateTime.Season;
 import models.enums.Color;
 import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
-import models.weather.Weather;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -81,11 +75,11 @@ public class Player extends Character {
         this.numOfCoins = numOfCoins;
     }
 
-    public void consume(int amount) {
+    public void consumeCoin(int amount) {
         numOfCoins -= amount;
     }
 
-    public void increase(int amount) {
+    public void addCoin(int amount) {
         numOfCoins += amount;
     }
 
