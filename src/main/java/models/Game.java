@@ -3,6 +3,7 @@ package models;
 import java.util.HashMap;
 import java.util.Map;
 
+import models.character.NPC.NPCVillage;
 import models.character.player.Player;
 import models.dateTime.TimeManager;
 import models.farming.FarmingManager;
@@ -17,6 +18,7 @@ public class Game {
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
     private final ForagingManager foragingManager;
+    private NPCVillage npcVillage;
 
     private final Blacksmith blacksmith = new Blacksmith();
     private final JojaMart jojaMart = new JojaMart();
@@ -97,5 +99,13 @@ public class Game {
 
     public ForagingManager getForagingManager() {
         return foragingManager;
+    }
+
+    public NPCVillage getNPCVillage() {
+        return npcVillage;
+    }
+
+    public void setNPCVillage(NPCVillage npcVillage) {
+        this.npcVillage = npcVillage;
     }
 }

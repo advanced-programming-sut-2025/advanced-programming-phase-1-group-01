@@ -3,17 +3,24 @@ package models.character.player;
 import models.Game;
 import models.MessageEntry;
 import models.Position;
+import models.animal.Animal;
+import models.animal.AnimalHouse;
+import models.animal.AnimalInfo;
 import models.Size;
 import models.building.Building;
 import models.building.Farm;
 import models.character.Character;
+import models.character.NPC.NPC;
 import models.cooking.CookingRecipe;
 import models.cooking.CookingRecipes;
 import models.crafting.CraftingRecipe;
 import models.data.User;
+import models.dateTime.Season;
+import models.enums.Color;
 import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
+import models.weather.Weather;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -39,6 +46,8 @@ public class Player extends Character {
     private final List<CraftingRecipe> craftingRecipes;
     private final List<CookingRecipe> cookingRecipes;
     private Farm partnerFarm ;
+    //@ list unripe
+    //@ list ripe and ready to get items
 
     public Player(Game game, User user) {
         this.game = game;
@@ -93,9 +102,6 @@ public class Player extends Character {
     }
 
     public void increase(int amount) {
-        if (relationshipService.getMarriage() != null) {
-            relationshipService.getMarriage().getPartner(this).increase(amount);
-        }
         numOfCoins += amount;
     }
 
@@ -179,6 +185,7 @@ public class Player extends Character {
         return Math.abs(this.position.x() - position.x()) <= 1 && Math.abs(this.position.y() - position.y()) <= 1;
     }
 
+
     public boolean isNearToSellBucket() {
         List<Position> neighbors = new ArrayList<>();
         int[][] directions = {{0,1}, {1,0}, {0,-1}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
@@ -252,4 +259,68 @@ public class Player extends Character {
         player.setNumOfCoins(numOfCoins);
         setPartnerFarm(player.getFarm());
     }
+
+    private AnimalInfo stringToAnimalInfo(String string) {
+        return switch (string) {
+            case "cow" -> AnimalInfo.COW;
+            case "dinosaur" -> AnimalInfo.DINOSAUR;
+            case "duck" -> AnimalInfo.DUCK;
+            case "goat" -> AnimalInfo.GOAT;
+            case "hen" -> AnimalInfo.HEN;
+            case "pig" -> AnimalInfo.PIG;
+            case "rabbit" -> AnimalInfo.RABBIT;
+            case "sheep" -> AnimalInfo.SHEEP;
+            default -> null;
+        };
+    }
+
+    public String buyAnimal(String animalType, String animalName) {
+        AnimalInfo animalInfo = stringToAnimalInfo(animalType);
+        if (animalInfo == null) return "Invalid animal type";
+        if (!farm.isAnimalNameUnique(animalName)) return "Animal name is not unique";
+        AnimalHouse shelter = farm.findEmptyShelter(animalInfo);
+        if (shelter == null) return "No empty shelter";
+        //@ check if player has no enough money
+        farm.addAnimalToShelter(new Animal(animalInfo, animalName, this, shelter));
+        return "Successfully built the shelter";
+    }
+
+    public String petAnimal(String animalName) {
+        Animal animal = farm.fineAnimalByName(animalName);
+        if (animal == null) return "Animal not found";
+        if (!isNearTo(animal.getPosition())) return "Animal is not near to you found";
+        animal.petting();
+        return "Successfully petted the animal";
+    }
+
+    public String getFormattedAnimals() {
+        StringBuilder animals = new StringBuilder();
+        int maxLength = farm.getAnimals().stream()
+                .mapToInt(animal -> animal.getAnimalName().length())
+                .max()
+                .orElse(0);
+
+        animals.append("Animal Type, Animal Name, Has Been Petted, Is Hungry, Friendship Level:\n");
+        for (Animal animal : farm.getAnimals()) {
+            String formattedAnimalType = Color.YELLOW_BOLD.colorize(String.format("%-" + 8 + "s", animal.getAnimalInfo()
+                    .name().toLowerCase()));
+            animals.append(formattedAnimalType);
+            String formattedAnimalName = Color.GREEN.colorize(String.format("%-" + maxLength + "s", animal.getAnimalName()));
+            animals.append(formattedAnimalName);
+            animals.append(animal.hasBeenPetted());
+            animals.append(animal.isHungry());
+            animals.append(animal.getFriendshipLevel());
+            animals.append("\n");
+        }
+        return animals.toString();
+    }
+
+    //@ get artisan by name, error
+
+    //@ get Item
+
+    //@ check if are not close
+    //@ add to unripe list
+
+    //@ conditions and get
 }

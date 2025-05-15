@@ -2,6 +2,7 @@ package models.relations;
 
 import models.Item;
 import models.MessageEntry;
+import models.character.Character;
 import models.character.player.Player;
 import models.dateTime.DateTime;
 
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Friendship extends Relationship {
-    private final Player firstFriend;
-    private final Player secondFriend;
+    private final Character firstFriend;
+    private final Character secondFriend;
 
     private final Map<MessageEntry, Boolean> messages;
     private final Map<Integer, Gift> gifts;
@@ -29,22 +30,22 @@ public class Friendship extends Relationship {
         HUG_XP = 60;
     }
 
-    public Friendship(Player p1, Player p2) {
+    public Friendship(Character p1, Character p2) {
         firstFriend = p1;
         secondFriend = p2;
         messages = new LinkedHashMap<>();
         gifts = new LinkedHashMap<Integer, Gift>();
     }
 
-    public Player getFirstFriend() {
+    public Character getFirstFriend() {
         return firstFriend;
     }
 
-    public Player getSecondFriend() {
+    public Character getSecondFriend() {
         return secondFriend;
     }
 
-    public Player getFriend(Player p) {
+    public Character getFriend(Player p) {
         if (p != firstFriend && p != secondFriend) {
             return null;
         }

@@ -1,5 +1,6 @@
 package models.tool;
 
+import models.character.player.Player;
 import models.enums.Direction;
 import models.tool.enums.PickaxeType;
 
@@ -14,7 +15,8 @@ public class Pickaxe extends Tool {
 
     @Override
     public void use(Direction direction) {
-        // what tool does
+        Player player = inventory.getPlayer();
+
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);

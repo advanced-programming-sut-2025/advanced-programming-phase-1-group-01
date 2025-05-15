@@ -7,9 +7,13 @@ import java.util.List;
 public class Tree extends Plant {
     private final TreeInfo info;
     private TreeState state;
+    private TreeSource source;
+    private Fruit fruit;
+    private boolean isAttackedByCrow;
 
-    public Tree(TreeInfo info) {
-        this.info = info;
+    public Tree(TreeSource source) {
+        this.source = source;
+        this.info = TreeInfo.fromTreeSource(source);
         state = TreeState.HEALTHY;
     }
 
@@ -37,14 +41,27 @@ public class Tree extends Plant {
     @Override
     public void grow() { // this method should be called every day
         int[] growthStages = info.getStages();
-        if (isFullyGrown()) return;
-        int currentLevelDays = growthStages[growthLevel];
+        int fruitHarvestCycle = info.getFruitHarvestCycle();
 
-        if (daysInCurrentLevel >= currentLevelDays) {
-            growthLevel++;
+        if (!isFullyGrown()) {
+            int currentLevelDays = growthStages[growthLevel - 1];
+
+            if (daysInCurrentLevel >= currentLevelDays) {
+                growthLevel++;
+            }
+
+            daysInCurrentLevel++;
+            return;
         }
 
-        daysInCurrentLevel++;
+        if (hasProduct) return;
+
+        if (daysInCurrentLevel < fruitHarvestCycle) {
+            daysInCurrentLevel++;
+        } else {
+            hasProduct = true;
+            daysInCurrentLevel = 0;
+        }
     }
 
     public boolean isFullyGrown() {
@@ -53,11 +70,38 @@ public class Tree extends Plant {
 
     @Override
     public boolean hasProduct() {
-        return false;
+        return hasProduct;
     }
 
     @Override
-    public List<Item> getProducts() {
-        return List.of();
+    public Item getProduct() {
+        if (state == TreeState.BURNT) {
+//            return new Coal();
+        }
+
+        if (!hasProduct || isAttackedByCrow) return null;
+        hasProduct = false;
+        return fruit;
+    }
+
+    @Override
+    public String getName() {
+        return info.getName();
+    }
+
+    public TreeSource getSource() {
+        return source;
+    }
+
+    public void setSource(TreeSource source) {
+        this.source = source;
+    }
+
+    public boolean isAttackedByCrow() {
+        return isAttackedByCrow;
+    }
+
+    public void applyCrowAttack() {
+        isAttackedByCrow = true;
     }
 }
