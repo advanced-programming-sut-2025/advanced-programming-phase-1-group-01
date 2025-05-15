@@ -96,7 +96,7 @@ public class TimeManager {
             player.getEnergy().fillEnergy();
         }
 
-        for (Player p : game.players()) {
+        for (Player p : game.getPlayers()) {
             for (Animal animal: p.getFarm().getAnimals()) {
                 animal.DailyResetAndStart();
             }
