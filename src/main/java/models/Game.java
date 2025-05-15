@@ -1,8 +1,6 @@
 package models;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import models.animal.Animal;
 import models.building.Maps;
@@ -126,7 +124,7 @@ public class Game {
 
     private void initializeGame(List<Player> players) {
         for (Player player : players) {
-            player.setFarm(FarmInitializer.initializeFarm());
+            player.setFarm(FarmInitializer.initializeFarm(3, 5));
             player.setPosition(PLAYERS_STARTING_POSITION);
         }
         setNpcVillage(VillageInitializer.initializeVillage(players));
