@@ -50,6 +50,8 @@ public class CraftingController extends Controller {
                 return craft(command);
             case CHEAT_ADD_RECIPE:
                 return cheatAddRecipe(command);
+            case PLACE_ITEM:
+                return placeItem(command);
             case CHEAT_ADD_ITEM:
                 return cheatAddItem(command);
         }
@@ -110,6 +112,10 @@ public class CraftingController extends Controller {
         }
 
         player.getEnergy().consume(2);
+
+        if (player.getEnergy().getAmount() == 0) {
+            player.getEnergy().passOut();
+        }
 
             switch (itemName) {
                 case "Cherry Bomb":
@@ -182,6 +188,25 @@ public class CraftingController extends Controller {
         player.addCraftingRecipe(recipeToLearn);
 
         return new Result(true, "Recipe added");
+    }
+
+    private Result placeItem(String command) {
+        String[] tokens = command.split(" ");
+        String itemName = tokens[3];
+        String direction = tokens[5];
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Inventory inventory = player.getInventory();
+        Slot slot = inventory.getSlot(itemName);
+
+        if (slot == null) {
+            return new Result(false, "you don't have" + itemName);
+        }
+
+        if (direction.equals("up")) {
+            return new Result(true, "direction error");
+        }
+        return null;
     }
 
     private Result cheatAddItem(String command) {

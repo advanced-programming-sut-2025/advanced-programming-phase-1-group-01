@@ -29,12 +29,12 @@ public class ArtisanController extends Controller {
             String itemName = matcher.group("itemName");
 
             Player player = repo.getCurrentGame().getCurrentPlayer();
+            return null;
         }
+        return null;
     }
 
-    private Result handleGet(String commandLine) {}
-
-
-
-
+    private Result handleGet(String commandLine) {
+        return null;
+    }
 }

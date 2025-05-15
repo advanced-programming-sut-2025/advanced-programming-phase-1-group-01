@@ -1,15 +1,11 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import models.animal.Animal;
 import models.building.Maps;
 import models.character.NPC.NPC;
 import models.character.NPC.NPCVillage;
-import models.character.player.AbilityManager;
 import models.character.player.Player;
 import models.dateTime.TimeManager;
 import models.farming.FarmingManager;
@@ -20,7 +16,7 @@ import models.shop.*;
 import models.weather.WeatherManager;
 
 public class Game {
-    private final static Position PLAYERS_STARTING_POSITION = new Position(67, 6);
+    public final static Position PLAYERS_STARTING_POSITION = new Position(67, 6);
     private Player currentPlayer;
     private final List<Player> players;
     private final TimeManager timeManager;
@@ -50,7 +46,7 @@ public class Game {
     }
 
 
-    public List<Player> players() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -114,7 +110,7 @@ public class Game {
         this.npcVillage = npcVillage;
     }
 
-    private void setNpcVillage(NPCVillage npcVillage) {
+    public void setNpcVillage(NPCVillage npcVillage) {
         this.npcVillage = npcVillage;
     }
 

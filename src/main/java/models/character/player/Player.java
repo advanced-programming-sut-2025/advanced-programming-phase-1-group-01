@@ -56,7 +56,7 @@ public class Player extends Character {
         inventory = new Inventory(this);
         refrigerator = new Refrigerator(this);
         energy = new Energy();
-        abilityService = new AbilityService();
+        abilityService = new AbilityService(this);
         relationshipService = new RelationshipService(this);
         gender = user.getGender();
         notifications = new LinkedHashMap<>();

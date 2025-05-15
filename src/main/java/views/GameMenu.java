@@ -19,8 +19,13 @@ public class GameMenu extends View {
             Result result = controller.handleCommand(input);
             appView.showMessage(result.message());
 
-            if (result.success() && result.message().contains("main menu")){
-                controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
+            if (result.success()) {
+                if (result.message().contains("main menu")) {
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
+                }
+                if (result.message().contains("Game starting")) {
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.GAME);
+                }
             }
         }
     }

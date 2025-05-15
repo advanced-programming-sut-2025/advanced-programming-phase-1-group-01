@@ -2,9 +2,9 @@ package models.character.player;
 
 public class Ability {
     private AbilityType abilityType;
+    private AbilityService abilityService;
     private int level;
     private int xp;
-    private AbilityManager abilityManager;
 
     Ability(AbilityType abilityType, int level, int xp) {
         this.abilityType = abilityType;
@@ -52,6 +52,6 @@ public class Ability {
     public void incrementLevel() {
         level++;
         xp = 0;
-        abilityManager.recipe(level,abilityType);
+        abilityService.recipe(level,abilityType);
     }
 }
