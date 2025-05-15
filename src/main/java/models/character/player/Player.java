@@ -246,10 +246,6 @@ public class Player extends Character {
         relationshipService.setLastHugDate(lastHugDate);
     }
 
-    public int getLastHugDate() {
-        return relationshipService.getLastHugDate();
-    }
-
     public void setPartnerFarm(Farm farm) {
         this.partnerFarm = farm;
     }

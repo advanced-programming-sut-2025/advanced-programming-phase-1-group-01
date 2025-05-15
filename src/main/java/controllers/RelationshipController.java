@@ -169,7 +169,7 @@ public class RelationshipController extends Controller {
         if (friend == null) {
             return new Result(false, "player not found");
         } else if (!currentPlayer.isNearTo(friend)) {
-            return new Result(false, "you should be near to " + friend.getUser().getUsername());
+            return new Result(false, "you should be near to " + friend.getUser().getNickname());
         }
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
@@ -180,7 +180,7 @@ public class RelationshipController extends Controller {
 
         DateTime currentTime = repo.getCurrentGame().getTimeManager().getNow();
 
-        if (currentPlayer.getLastHugDate() == currentTime.getDay()) {
+        if (currentPlayer.getRelationService().getLastHugDate() == currentTime.getDay()) {
             return new Result(false, "You can only hug once per day.");
         }
 
@@ -188,7 +188,6 @@ public class RelationshipController extends Controller {
         friendship.increaseXp(Friendship.HUG_XP);
         return new Result(true, "you hugged each other! jooon");
     }
-
 
     private Result gift(String username, String itemName, int amount) {
         Player receiver = repo.getUserByUsername(username).getPlayer();
