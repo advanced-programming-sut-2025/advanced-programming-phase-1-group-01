@@ -87,15 +87,15 @@ public class LoginMenuController extends Controller {
             return new Result(false, "Re-entered password is incorrect.");
         }
 
-        new User(username,password,nickname,email,Gender.valueOf(gender));
+        User user = new User(username,password,nickname,email,Gender.valueOf(gender));
+        repo.addUser(user);
+        repo.setTempUser(user);
         return new Result(true, """
                 User registered successfully!
                 please pick a question :
                 1.What is your dream job?
                 2.What is your favorite color?
-                3.What is your favorite team?
-                
-                """);
+                3.What is your favorite team?""");
     }
 
     private Result handleUsernameTaken(String baseUsername) {
@@ -144,7 +144,7 @@ public class LoginMenuController extends Controller {
             return new Result(false, "Your answer does not match with confirmation answer.");
         }
 
-        User user = repo.getCurrentUser();
+        User user = repo.getTempUser();
 
         switch (questionNumber) {
             case 1:

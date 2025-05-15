@@ -2,6 +2,7 @@ package models.relations;
 
 import models.character.Character;
 import models.character.player.Player;
+import models.data.User;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,9 +12,11 @@ public class RelationshipService {
     private final Map<Character, Friendship> friendships;
     private Marriage marriage;
     private final Map<Character, Relationship> relationships;
+    private User partner;
     private int lastHugDate;
 
     public RelationshipService(Character character) {
+        this.partner = null;
         this.character = character;
         this.friendships = new LinkedHashMap<>();
         this.relationships = new LinkedHashMap<>();
@@ -79,5 +82,13 @@ public class RelationshipService {
 
     public void setLastHugDate(int lastHugDate) {
         this.lastHugDate = lastHugDate;
+    }
+
+    public void setPartner(User partner) {
+        this.partner = partner;
+    }
+
+    public User getPartner() {
+        return partner;
     }
 }
