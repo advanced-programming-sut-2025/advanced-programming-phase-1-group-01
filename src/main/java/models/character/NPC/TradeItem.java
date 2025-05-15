@@ -1,6 +1,8 @@
 package models.character.NPC;
 
-public interface TradeItem {
+import models.Item;
+
+public interface TradeItem extends Item {
     int getAmount();
     void setAmount(int amount);
 }

@@ -1,0 +1,30 @@
+package models.ingredients;
+
+public enum CraftingIngredientType {
+    WHEAT,
+    RICE,
+    COFFEE_BEAN,
+    VEGETABLE,
+    HONEY,
+    HOPS,
+    FRUIT,
+    MUSHROOM,
+    GRAPES,
+    WOOD,
+    MILK,
+    LARGE_MILK,
+    GOAT_MILK,
+    LARGE_GOAT_MILK,
+    WOOL,
+    EGG,
+    LARGE_EGG,
+    DUCK_EGG,
+    DINOSAUR_EGG,
+    TRUFFLE,
+    CORN,
+    SUNFLOWER_SEEDS,
+    SUNFLOWER,
+    FISH,
+    COAL,
+    ORE;
+}

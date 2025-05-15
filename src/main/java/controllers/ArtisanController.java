@@ -30,11 +30,14 @@ public class ArtisanController extends Controller {
 
             Player player = repo.getCurrentGame().getCurrentPlayer();
             return null;
-        }
-        return null;
+        } return null;
     }
 
     private Result handleGet(String commandLine) {
         return null;
     }
+
+
+
+
 }

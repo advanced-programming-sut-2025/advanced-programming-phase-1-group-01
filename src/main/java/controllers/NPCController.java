@@ -105,7 +105,7 @@ public class NPCController extends Controller {
             Player player = repo.getCurrentGame().getCurrentPlayer();
             NPCVillage npcVillage = repo.getCurrentGame().getNPCVillage();
 
-            return new Result(true, npcVillage.getListedQuests(player));
+            return new Result(true, npcVillage.finishQuest(player, index));
         } else return new Result(false, "Unknown command");
     }
 }

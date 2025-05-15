@@ -1,6 +1,8 @@
 package models.dateTime;
 
 import models.Game;
+import models.animal.Animal;
+import models.character.NPC.NPC;
 import models.character.player.Player;
 
 import java.util.*;
@@ -90,9 +92,18 @@ public class TimeManager {
             player.getEnergy().setHasPassedOut(false);
             player.getEnergy().fillEnergyPassedOut();
         }
-
         else {
             player.getEnergy().fillEnergy();
+        }
+
+        for (Player p : game.getPlayers()) {
+            for (Animal animal: p.getFarm().getAnimals()) {
+                animal.DailyResetAndStart();
+            }
+        }
+
+        for (NPC npc : game.getNPCVillage().getNPCs()) {
+            npc.resetForNewDay();
         }
     }
 }

@@ -1,5 +1,6 @@
 package models.character.NPC;
 
+import models.Item;
 import models.enums.Emoji;
 
 import java.util.ArrayList;
@@ -13,12 +14,12 @@ public enum NPCType {
     ROBIN("Robin", List.of(TradeItemType.SPAGHETTI, TradeItemType.WOOD, TradeItemType.IRON_BAR), Emoji.MONOCLE_FACE.getSymbol()),;
 
     private final String name;
-    private List<TradeItemType> favoriteItems = new ArrayList<>();
+    private List<Item> favoriteItems = new ArrayList<>();
     private final String symbol;
 
 
 
-    NPCType(String name, List<TradeItemType> favoriteItems, String symbol) {
+    NPCType(String name, List<Item> favoriteItems, String symbol) {
         this.name = name;
         this.favoriteItems = favoriteItems;
         this.symbol = symbol;
@@ -30,5 +31,9 @@ public enum NPCType {
 
     public String getSymbol() {
         return symbol;
+    }
+
+    public boolean isFavorite(Item item) {
+        return favoriteItems.contains(item);
     }
 }

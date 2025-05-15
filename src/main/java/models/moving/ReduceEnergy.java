@@ -32,12 +32,14 @@ public class ReduceEnergy {
                             end = path.get(i);
                         } else {
                             game.nextTurn();
+                            player.getEnergy().passOut();
                             return end;
                         }
                     }
                 }
             } else {
                 game.nextTurn();
+                player.getEnergy().passOut();
                 return end;
             }
         }

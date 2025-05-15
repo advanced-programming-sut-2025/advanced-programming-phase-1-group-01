@@ -17,4 +17,9 @@ public class Ingredient implements TradeItem {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String getName() {
+        return Ingredient.class.getSimpleName();
+    }
 }
