@@ -297,7 +297,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "player not found");
         }
         if (!currentPlayer.isNearTo(friend)) {
-            return new Result(false, "you should be near to " + friend.getUser().getUsername());
+            return new Result(false, "you should be near to " + friend.getUser().getNickname());
         }
 
         String flower = "flower";
@@ -308,7 +308,7 @@ public class RelationshipController extends Controller {
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
 
-        if (friendship.getLevel() != 2 && friendship.getXp() != friendship.getMaxXp()) {
+        if (friendship.getLevel() != 2 || friendship.getXp() != friendship.getMaxXp()) {
             return new Result(false, "you have not enough level and xp");
         }
 
@@ -323,6 +323,10 @@ public class RelationshipController extends Controller {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Player friend = repo.getUserByUsername(username).getPlayer();
 
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
         if (friendship == null || friendship.getLevel() != 3) {
             return new Result(false, "you have not enough level");
@@ -332,7 +336,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "you should be near to " + friend.getUser().getUsername());
         }
 
-        if (currentPlayer.getGender() != Gender.FEMALE) {
+        if (currentPlayer.getGender() == Gender.FEMALE) {
             return new Result(false, "you are girl and you can't request marriage");
         }
 
@@ -340,15 +344,26 @@ public class RelationshipController extends Controller {
             return new Result(false, "you don't have ring in your inventory");
         }
 
-        //send message
-        return new Result(true, "your request send to " + friend.getUser().getUsername());
+        friend.setPartner(repo.getCurrentUser());
+        return new Result(true, "your request send to " + friend.getUser().getNickname());
     }
 
     private Result respondMarriage(String username, String respond) {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Player friend = repo.getUserByUsername(username).getPlayer();
 
+        if (friend == null) {
+            return new Result(false, "player not found");
+        }
+
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
+        if (friendship == null || friendship.getLevel() != 3) {
+            return new Result(false, "you have not enough level");
+        }
+
+        if (currentPlayer.getPartner().equals(friend.getUser())) {
+            return new Result(false, "you don't have request from " + friend.getPartner().getNickname());
+        }
 
         String ring = "ring";
 
