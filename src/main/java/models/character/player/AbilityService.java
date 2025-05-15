@@ -12,15 +12,6 @@ public class AbilityService {
     private final Ability fishing;
     private final Ability foraging;
 
-    private final int LEVEL_0_XP_NEEDED = 50;
-    private final int LEVEL_1_XP_NEEDED = 150;
-    private final int LEVEL_2_XP_NEEDED = 250;
-    private final int LEVEL_3_XP_NEEDED = 300;
-    private final int LEVEL_4_XP_NEEDED = 350;
-
-    private final int MAX_LEVEL = 4;
-    private final int INITIAL_LEVEL = 0;
-
     public AbilityService() {
         this.farming = new Ability(AbilityType.FARMING, 0, 0);
         this.mining = new Ability(AbilityType.MINING, 0, 0);

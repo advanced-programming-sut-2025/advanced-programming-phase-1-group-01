@@ -112,7 +112,7 @@ public class ProfileMenuController extends Controller {
         }
 
         if (isPasswordValid(newPassword) != null) {
-            return new Result(false, "Password format is invalid");
+            return new Result(false, isPasswordValid(newPassword));
         }
 
         user.setPassword(newPassword);

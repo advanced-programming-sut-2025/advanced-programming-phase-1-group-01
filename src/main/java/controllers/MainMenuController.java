@@ -27,7 +27,7 @@ public class MainMenuController extends Controller {
         return switch (matchedCommand) {
             case SHOW_CURRENT_MENU -> new Result(true, "now you are in main menu");
             case MENU_EXIT -> new Result(true, "now you are in login menu");
-            case MENU_Enter_GAME_MENU -> new Result(true, "now you are in game menu");
+            case MENU_ENTER_GAME_MENU -> new Result(true, "now you are in game menu");
             case MENU_ENTER_PROFILE_MENU -> new Result(true, "now you are in profile menu");
             case USER_LOGOUT -> userLogout();
         };

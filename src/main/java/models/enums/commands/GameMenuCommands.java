@@ -6,6 +6,7 @@ public enum GameMenuCommands implements Command {
     SHOW_CURRENT_MENU("show current menu"),
     GAME_NEW("game new -u (.+?)"),
     GAME_MAP("game map (.+?)"),
+    NEXT_TURN("next turn"),
     ;
 
     private final String regex;

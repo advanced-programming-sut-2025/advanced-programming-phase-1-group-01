@@ -4,6 +4,7 @@ public class Ability {
     private AbilityType abilityType;
     private int level;
     private int xp;
+    private AbilityManager abilityManager;
 
     Ability(AbilityType abilityType, int level, int xp) {
         this.abilityType = abilityType;
@@ -33,5 +34,24 @@ public class Ability {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public void increaseXp(int amount) {
+        for (int i = 0; i < amount; i++) {
+            xp++;
+            if (xp >= getMaxXp()) {
+                incrementLevel();
+            }
+        }
+    }
+
+    public int getMaxXp() {
+        return level * 100 + 50;
+    }
+
+    public void incrementLevel() {
+        level++;
+        xp = 0;
+        abilityManager.recipe(level,abilityType);
     }
 }

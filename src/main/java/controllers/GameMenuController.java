@@ -2,12 +2,14 @@ package controllers;
 
 import models.Game;
 import models.Result;
+import models.building.Farm;
+import models.character.player.Player;
 import models.data.Repository;
 import models.data.User;
 import models.enums.commands.GameMenuCommands;
+import models.initializer.FarmInitializer;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +47,11 @@ public class GameMenuController extends Controller {
                 return handleGameNewCommand(command);
 
             case GAME_MAP:
+                String mapNumberStr = command.split("\\s+")[2];
+                int mapNumber = Integer.parseInt(mapNumberStr);
+                return chooseGameMap(mapNumber);
+            case NEXT_TURN:
+                handleNextTurn();
         }
         return null;
     }
@@ -63,6 +70,7 @@ public class GameMenuController extends Controller {
             }
 
             Set<String> usernameSet = new HashSet<>();
+            usernameSet.add(repo.getCurrentUser().getUsername());
 
             for (String username : usernames) {
                 User user = repo.getUserByUsername(username);
@@ -79,15 +87,41 @@ public class GameMenuController extends Controller {
                     return new Result(false,"User already in another game: " + username);
                 }
             }
-            repo.addGame(new Game(repo.getCurrentUser().getPlayer()));
-//            for () {
-//
-//            }
+
+            Game newGame = new Game(repo.getCurrentUser().getPlayer());
+            repo.addGame(newGame);
+            repo.setCurrentGame(newGame);
+
+            for (String username : usernameSet) {
+                User user = repo.getUserByUsername(username);
+                newGame.addPlayer(user.getPlayer());
+            }
+
             return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
     }
 
+    private int index = 0;
     private Result chooseGameMap(int mapNumber) {
-        return null;
+
+        if (mapNumber < 1 || mapNumber > 3) {
+            return new Result(false,"Invalid map number");
+        }
+
+        List<Player> players= repo.getCurrentGame().playersList();
+        Player currentPlayer = players.get(index);
+        currentPlayer.setFarm(FarmInitializer.initializeFarm());
+        index++;
+
+        if (index == players.size()) {
+            return new Result(true, "All players have selected their maps. Game starting...");
+            //startgame
+        }
+
+        else {
+            Player nextPlayer = players.get(index);
+            return new Result(true, "Map " + mapNumber + " selected for player " + currentPlayer.getUser().getUsername() +
+                    ". Next player: " + nextPlayer.getUser().getUsername() + ", please select your map.");
+        }
     }
 
     private Result loadGame() {

@@ -14,6 +14,7 @@ import models.data.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CraftingController extends Controller {
     CraftingController(Repository repo) {
@@ -69,7 +70,7 @@ public class CraftingController extends Controller {
         String[] tokens = command.split(" ");
         String itemName = tokens[2];
 
-        List<CraftingRecipe> recipes = repo.getCurrentUser().getPlayer().getCraftingRecipes();
+        Set<CraftingRecipe> recipes = repo.getCurrentUser().getPlayer().getCraftingRecipes();
 
         CraftingRecipe targetRecipe = null;
 

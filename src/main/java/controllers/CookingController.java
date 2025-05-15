@@ -16,6 +16,7 @@ import models.enums.commands.CookingCommands;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CookingController extends Controller {
     CookingController(Repository repo) {
@@ -150,7 +151,7 @@ public class CookingController extends Controller {
         String[] tokens = command.split(" ");
         String itemName = tokens[2];
 
-        List<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
+        Set<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
         CookingRecipe targetRecipe = null;
 
         for (CookingRecipe recipe : recipes) {

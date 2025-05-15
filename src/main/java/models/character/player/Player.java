@@ -22,10 +22,7 @@ import models.enums.Gender;
 import models.relations.RelationshipService;
 import models.weather.Weather;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player extends Character {
     private final Game game;
@@ -43,8 +40,8 @@ public class Player extends Character {
     private final Map<MessageEntry, Boolean> notifications;
     private static final int INITIAL_PLAYER_X = 0;
     private static final int INITIAL_PLAYER_Y = 0;
-    private final List<CraftingRecipe> craftingRecipes;
-    private final List<CookingRecipe> cookingRecipes;
+    private final Set<CraftingRecipe> craftingRecipes;
+    private final Set<CookingRecipe> cookingRecipes;
     private Farm partnerFarm ;
     //@ list unripe
     //@ list ripe and ready to get items
@@ -62,8 +59,8 @@ public class Player extends Character {
         relationshipService = new RelationshipService(this);
         gender = user.getGender();
         notifications = new LinkedHashMap<>();
-        craftingRecipes = new ArrayList<>();
-        cookingRecipes = new ArrayList<>();
+        craftingRecipes = new HashSet<>();
+        cookingRecipes = new HashSet<>();
         initializeCookingRecipes();
     }
 
@@ -216,7 +213,7 @@ public class Player extends Character {
                 this.position.y() >= y1 && this.position.y() <= y2;
     }
 
-    public List<CraftingRecipe> getCraftingRecipes() {
+    public Set<CraftingRecipe> getCraftingRecipes() {
         return craftingRecipes;
     }
 
@@ -224,7 +221,7 @@ public class Player extends Character {
         craftingRecipes.add(recipe);
     }
 
-    public List<CookingRecipe> getCookingRecipes() {
+    public Set<CookingRecipe> getCookingRecipes() {
         return cookingRecipes;
     }
 

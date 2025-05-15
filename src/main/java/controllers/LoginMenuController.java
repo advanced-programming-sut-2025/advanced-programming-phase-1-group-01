@@ -1,5 +1,6 @@
 package controllers;
 
+import models.data.FileManager;
 import models.data.Repository;
 import models.Result;
 import models.data.User;
@@ -70,11 +71,11 @@ public class LoginMenuController extends Controller {
             return handleUsernameTaken(username);
         }
 
-        if (isUsernameValid(username)) {
+        if (!isUsernameValid(username)) {
             return new Result(false, "Username format is invalid!");
         }
 
-        if (isEmailValid(email)) {
+        if (!isEmailValid(email)) {
             return new Result(false, "Email format is invalid!");
         }
 
@@ -126,7 +127,7 @@ public class LoginMenuController extends Controller {
             password.append(all.charAt(random.nextInt(all.length())));
         }
 
-        return new Result(true,"You can use this random password :" + password.toString());
+        return new Result(true,"You can use this random password :" + password);
     }
 
     private Result pickQuestion(String command) {
@@ -174,6 +175,10 @@ public class LoginMenuController extends Controller {
 
         if (!user.getPassword().equals(password)) {
             return new Result(false, "Wrong password!");
+        }
+
+        if (stayLoggedIn.equals("yes")) {
+            FileManager.saveLoginInfo(username, password);
         }
 
         repo.setCurrentUser(user);

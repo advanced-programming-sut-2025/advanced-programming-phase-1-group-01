@@ -1,9 +1,12 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import models.character.NPC.NPCVillage;
+import models.character.player.AbilityManager;
 import models.character.player.Player;
 import models.dateTime.TimeManager;
 import models.farming.FarmingManager;
@@ -14,10 +17,12 @@ import models.weather.WeatherManager;
 public class Game {
     private Player currentPlayer;
     private final Map<String, Player> players;
+    private final List<Player> playersList;
     private final TimeManager timeManager;
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
     private final ForagingManager foragingManager;
+    private final AbilityManager abilityManager;
     private NPCVillage npcVillage;
 
     private final Blacksmith blacksmith = new Blacksmith();
@@ -30,15 +35,18 @@ public class Game {
 
     public Game(Player player) {
         players = new HashMap<>();
+        playersList = new ArrayList<>();
         currentPlayer = player;
         timeManager = new TimeManager(this);
         weatherManager = new WeatherManager(this);
         farmingManager = new FarmingManager(this);
         foragingManager = new ForagingManager(this);
+        abilityManager = new AbilityManager(this);
     }
 
     public void addPlayer(Player player) {
         players.put(player.getUser().getUsername(), player);
+        playersList.add(player);
     }
 
     public void removePlayer(String username) {
@@ -47,6 +55,10 @@ public class Game {
 
     public Map<String, Player> players() {
         return players;
+    }
+
+    public List<Player> playersList() {
+        return playersList;
     }
 
     public WeatherManager getWeatherManager() {
@@ -67,6 +79,9 @@ public class Game {
 
     public FarmingManager getFarmingManager() {
         return farmingManager;
+    }
+    public AbilityManager getAbilityManager() {
+        return abilityManager;
     }
 
     public Blacksmith getBlacksmith() {

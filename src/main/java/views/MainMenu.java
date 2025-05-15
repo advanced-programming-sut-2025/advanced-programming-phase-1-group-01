@@ -23,7 +23,7 @@ public class MainMenu extends View {
             if (result.success()) {
 
                 if (result.message().contains("profile")) {
-                    controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
+                    controller.getRepo().setCurrentMenu(models.enums.commands.View.PROFILE_MENU);
                 }
 
                 if (result.message().contains("game")) {
