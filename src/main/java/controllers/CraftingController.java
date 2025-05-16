@@ -122,6 +122,9 @@ public class CraftingController extends Controller {
 
         inventory.addItem(itemName,1);
 
+        //Hi amirhosein
+        //chetori
+
         return new Result(true, "Crafted " + targetRecipe.name() + " successfully!");
     }
 
