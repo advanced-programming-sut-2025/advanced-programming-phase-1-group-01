@@ -145,39 +145,39 @@ public class VillageInitializer {
     }
 
     private static void InitializeBuilding() {
-        Room1 room1 = new Room1(new Position(FIRST_ROOM_TP.x(), FIRST_ROOM_BR.y()));
-        Room2 room2 = new Room2(new Position(SECOND_ROOM_TP.x(), SECOND_ROOM_BR.y()));
-        Room3 room3 = new Room3(new Position(THIRD_ROOM_TP.x(), THIRD_ROOM_BR.y()));
-        Room4 room4 = new Room4(new Position(FOURTH_ROOM_TP.x(), FOURTH_ROOM_BR.y()));
-        Room5 room5 = new Room5(new Position(FIFTH_ROOM_TP.x(), FIFTH_ROOM_BR.y()));
+        room1 = new Room1(new Position(FIRST_ROOM_TP.x(), FIRST_ROOM_BR.y()));
+        room2 = new Room2(new Position(SECOND_ROOM_TP.x(), SECOND_ROOM_BR.y()));
+        room3 = new Room3(new Position(THIRD_ROOM_TP.x(), THIRD_ROOM_BR.y()));
+        room4 = new Room4(new Position(FOURTH_ROOM_TP.x(), FOURTH_ROOM_BR.y()));
+        room5 = new Room5(new Position(FIFTH_ROOM_TP.x(), FIFTH_ROOM_BR.y()));
     }
 
     private static void InitializeSebastian(List<Player> players) {
-        NPC sebastian = new NPC(NPCType.SEBASTIAN, room1,
+        sebastian = new NPC(NPCType.SEBASTIAN, room1,
                 new Position((FIRST_ROOM_TP.x() + FIRST_ROOM_BR.x()) / 2, FIRST_ROOM_BR.y() + 2),
                 Direction.DOWN, List.of(new NPCQuest(NPCQuestType.SEBASTIAN_1),
                 new NPCQuest(NPCQuestType.SEBASTIAN_2), new NPCQuest(NPCQuestType.SEBASTIAN_3)));
     }
     private static void InitializeAbigail(List<Player> players) {
-        NPC abigail = new NPC(NPCType.ABIGAIL, room2,
+        abigail = new NPC(NPCType.ABIGAIL, room2,
                 new Position(SECOND_ROOM_BR.x() + 2, (SECOND_ROOM_TP.y() + SECOND_ROOM_BR.y()) / 2),
                 Direction.RIGHT, List.of(new NPCQuest(NPCQuestType.ABIGAIL_1),
                 new NPCQuest(NPCQuestType.ABIGAIL_2), new NPCQuest(NPCQuestType.ABIGAIL_3)));
     }
     private static void InitializeHarvey(List<Player> players) {
-        NPC harvey = new NPC(NPCType.HARVEY, room3,
+        harvey = new NPC(NPCType.HARVEY, room3,
                 new Position((THIRD_ROOM_TP.x() + THIRD_ROOM_BR.x()) / 2, THIRD_ROOM_BR.x() - 2),
                 Direction.UP, List.of(new NPCQuest(NPCQuestType.HARVEY_1),
                 new NPCQuest(NPCQuestType.HARVEY_2), new NPCQuest(NPCQuestType.HARVEY_3)));
     }
     private static void InitializeLeah(List<Player> players) {
-        NPC leah = new NPC(NPCType.LEAH, room4,
+        leah = new NPC(NPCType.LEAH, room4,
                 new Position((FOURTH_ROOM_TP.x() + FOURTH_ROOM_BR.x()) / 2, FOURTH_ROOM_BR.y() - 2),
                 Direction.UP, List.of(new NPCQuest(NPCQuestType.LEAH_1),
                 new NPCQuest(NPCQuestType.LEAH_2), new NPCQuest(NPCQuestType.LEAH_3)));
     }
     private static void InitializeRobin(List<Player> players) {
-        NPC robin = new NPC(NPCType.ROBIN, room5,
+        robin = new NPC(NPCType.ROBIN, room5,
                 new Position(FIFTH_ROOM_TP.x() - 2, (FIFTH_ROOM_TP.y() + FIRST_ROOM_BR.y()) / 2),
                 Direction.LEFT, List.of(new NPCQuest(NPCQuestType.ROBIN_1),
                 new NPCQuest(NPCQuestType.ROBIN_2), new NPCQuest(NPCQuestType.ROBIN_3)));
@@ -215,7 +215,6 @@ public class VillageInitializer {
         InitializeLeah(players);
         InitializeAbigail(players);
         InitializeRobin(players);
-//        initializeQuests();
         InitializeFriendship(players);
         return new NPCVillage(tiles, List.of(sebastian, abigail, harvey, leah, robin), room1, room2, room3, room4, room5);
     }
