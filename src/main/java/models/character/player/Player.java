@@ -24,7 +24,7 @@ import models.weather.Weather;
 import java.util.*;
 
 public class Player extends Character {
-    private final Game game;
+    private Game game;
     private final User user;
     private final Gender gender;
     private Position position;
@@ -50,6 +50,23 @@ public class Player extends Character {
 
     //@ list unripe
     //@ list ripe and ready to get items
+
+    public Player(User user) {
+        this.user = user;
+        position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
+        direction = Direction.UP;
+        numOfCoins = 0;
+        inventory = new Inventory(this);
+        refrigerator = new Refrigerator(this);
+        energy = new Energy();
+        abilityService = new AbilityService(this);
+        relationshipService = new RelationshipService(this);
+        gender = user.getGender();
+        notifications = new LinkedHashMap<>();
+        craftingRecipes = new HashSet<>();
+        cookingRecipes = new HashSet<>();
+        initializeCookingRecipes();
+    }
 
     public Player(Game game, User user) {
         this.game = game;
@@ -149,6 +166,10 @@ public class Player extends Character {
 
     public Game getGame() {
         return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public User getUser() {
