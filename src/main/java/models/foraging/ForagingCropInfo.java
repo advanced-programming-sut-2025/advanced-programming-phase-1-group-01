@@ -37,6 +37,11 @@ public enum ForagingCropInfo implements TileObject, FarmingEnum {
     private final double energy;
     private final String symbol;
 
+    @Override
+    public int getPrice() {
+        return baseSellPrice;
+    }
+
     ForagingCropInfo(String name, Season season, int baseSellPrice, double energy, String symbol) {
         this.name = name;
         this.season = season;

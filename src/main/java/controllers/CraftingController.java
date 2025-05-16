@@ -16,6 +16,8 @@ import models.data.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CraftingController extends Controller {
     CraftingController(Repository repo) {
@@ -70,8 +72,7 @@ public class CraftingController extends Controller {
     }
 
     private Result craft(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[2];
+        String itemName = extractValue(command, "craft", null);
 
         Set<CraftingRecipe> recipes = repo.getCurrentUser().getPlayer().getCraftingRecipes();
 
@@ -125,15 +126,14 @@ public class CraftingController extends Controller {
     }
 
     private Result cheatAddRecipe(String command) {
-        String[] tokens = command.split(" ");
-        String recipeName = tokens[4];
+        String recipeName = extractValue(command, "-r", null);
 
         Player player = repo.getCurrentUser().getPlayer();
 
         CraftingRecipes matched = null;
 
         for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
-            if (recipeEnum.name().equalsIgnoreCase(recipeName)) {
+            if (recipeEnum.getName().equalsIgnoreCase(recipeName)) {
                 matched = recipeEnum;
                 break;
             }
@@ -150,9 +150,8 @@ public class CraftingController extends Controller {
     }
 
     private Result placeItem(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[3];
-        String directionStr = tokens[5];
+        String itemName = extractValue(command, "-n", "-d");
+        String directionStr = extractValue(command, "-d", null);
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
@@ -199,9 +198,8 @@ public class CraftingController extends Controller {
     }
 
     private Result cheatAddItem(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[4];
-        String itemCountStr = tokens[6];
+        String itemName = extractValue(command, "-n", "-c");
+        String itemCountStr = extractValue(command, "-c", null);
         int itemCount = Integer.parseInt(itemCountStr);
 
         Player player = repo.getCurrentUser().getPlayer();
@@ -222,5 +220,24 @@ public class CraftingController extends Controller {
 
         inventory.addItem(itemName, itemCount);
         return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+    }
+
+    private String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 }

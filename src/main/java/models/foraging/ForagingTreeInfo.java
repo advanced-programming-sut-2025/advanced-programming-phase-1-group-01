@@ -34,6 +34,11 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
         return name;
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public Season getSeason() {
         return season;
     }

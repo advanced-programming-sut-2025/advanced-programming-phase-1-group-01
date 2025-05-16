@@ -1,9 +1,5 @@
 package models.character.NPC;
 
-//import models.Plants.Plant;
-
-import models.character.player.Player;
-import models.character.player.Slot;
 import models.cooking.*;
 import models.crafting.BeeHouse;
 import models.crafting.DeluxeScarecrow;
@@ -25,7 +21,7 @@ public enum NPCQuestType {
     LEAH_2(11, NPCType.LEAH, new Salmon(1) /*1 SalmonFish*/, new SalmonDinner(1)),
     LEAH_3(12, NPCType.LEAH, new NormalWood(200) /*200 Wood*/, new DeluxeScarecrow(3)),
     ROBIN_1(13, NPCType.ROBIN, new NormalWood(80) /*80 Wood*/, new Coin(1000)),
-    ROBIN_2(14, NPCType.ROBIN, new IronBar(10) /*10 IronBar*/, new BeeHouse(3)),
+    ROBIN_2(14, NPCType.ROBIN, new IronBar(10) /*10 IronBar*/, new Coin(500)),
     ROBIN_3(15, NPCType.ROBIN, new NormalWood(1000) /*1000 Wood*/, new Coin(25000));
 
 
