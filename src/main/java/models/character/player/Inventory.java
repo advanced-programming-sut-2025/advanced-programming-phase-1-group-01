@@ -3,6 +3,7 @@ package models.character.player;
 import models.Item;
 
 import models.cooking.CookingRecipes;
+import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
 import models.tool.*;
 
@@ -91,6 +92,19 @@ public class Inventory {
             case "shear" -> new Shear();
             case "trash can" -> new TrashCan();
             case "watering can" -> new WateringCan();
+
+            case "bee house" -> new BeeHouse();
+            case "cheese press" -> new CheesePress();
+            case "keg" -> new Keg();
+            case "dehydrator" -> new Dehydrator();
+            case "charcoal kiln" -> new CharcoalKlin();
+            case "loom" -> new Loom();
+            case "mayonnaise machine" -> new MayonnaiseMachine();
+            case "oil maker" -> new OilMaker();
+            case "preserves jar" -> new PreservesJar();
+            case "fish smoker" -> new FishSmoker();
+            case "furnace" -> new Furnace();
+
             default -> {
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
                     if (recipeEnum.name().equalsIgnoreCase(itemName)) {
