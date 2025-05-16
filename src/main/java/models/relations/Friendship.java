@@ -4,6 +4,7 @@ import models.Item;
 import models.MessageEntry;
 import models.character.Character;
 import models.character.player.Player;
+import models.data.User;
 import models.dateTime.DateTime;
 
 import java.util.ArrayList;
@@ -17,6 +18,12 @@ public class Friendship extends Relationship {
 
     private final Map<MessageEntry, Boolean> messages;
     private final Map<Integer, Gift> gifts;
+
+    private int lastHugDay;
+    private int lastTalkDay;
+    private int lastGiftDay;
+    private int lastTradeDay;
+    private int lastRelation;
 
     public static final int TALK_XP;
     public static final int DEAL_SUCCESS_XP;
@@ -35,6 +42,11 @@ public class Friendship extends Relationship {
         secondFriend = p2;
         messages = new LinkedHashMap<>();
         gifts = new LinkedHashMap<Integer, Gift>();
+        lastHugDay = 0;
+        lastTalkDay = 0;
+        lastGiftDay = 0;
+        lastTradeDay = 0;
+        lastRelation = 0;
     }
 
     public Character getFirstFriend() {
@@ -91,5 +103,45 @@ public class Friendship extends Relationship {
 
     public Gift getGift(int giftNumber) {
         return gifts.get(giftNumber);
+    }
+
+    public int getLastHugDay() {
+        return lastHugDay;
+    }
+
+    public void setLastHugDay(int lastHugDay) {
+        this.lastHugDay = lastHugDay;
+    }
+
+    public void setLastRelation(int lastRelation) {
+        this.lastRelation = lastRelation;
+    }
+
+    public int getLastRelation() {
+        return lastRelation;
+    }
+
+    public void setLastTalkDay(int lastTalkDay) {
+        this.lastTalkDay = lastTalkDay;
+    }
+
+    public int getLastTalkDay() {
+        return lastTalkDay;
+    }
+
+    public void setLastGiftDay(int lastGiftDay) {
+        this.lastGiftDay = lastGiftDay;
+    }
+
+    public int getLastGiftDay() {
+        return lastGiftDay;
+    }
+
+    public void setLastTradeDay(int lastTradeDay) {
+        this.lastTradeDay = lastTradeDay;
+    }
+
+    public int getLastTradeDay() {
+        return lastTradeDay;
     }
 }

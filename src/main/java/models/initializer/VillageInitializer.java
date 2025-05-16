@@ -215,7 +215,6 @@ public class VillageInitializer {
         InitializeLeah(players);
         InitializeAbigail(players);
         InitializeRobin(players);
-//        initializeQuests();
         InitializeFriendship(players);
         return new NPCVillage(tiles, List.of(sebastian, abigail, harvey, leah, robin), room1, room2, room3, room4, room5);
     }

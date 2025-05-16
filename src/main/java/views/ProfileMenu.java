@@ -20,7 +20,7 @@ public class ProfileMenu extends View {
             Result result = controller.handleCommand(input);
             appView.showMessage(result.message());
 
-            if (result.success() && result.message().equals("main")) {
+            if (result.success() && result.message().contains("main")) {
                 controller.getRepo().setCurrentMenu(models.enums.commands.View.MAIN_MENU);
             }
         }

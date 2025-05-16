@@ -1,0 +1,7 @@
+Username: Amirreza1
+Password: Amirreza#1384
+Nickname: amirreza
+Email: amirreza5859@gmail.com
+Gender: MALE
+securityQuestion: QUESTION1
+securityAnswer: ali

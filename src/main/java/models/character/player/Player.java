@@ -265,10 +265,6 @@ public class Player extends Character {
         return refrigerator;
     }
 
-    public void setLastHugDate(int lastHugDate) {
-        relationshipService.setLastHugDate(lastHugDate);
-    }
-
     public void setPartnerFarm(Farm farm) {
         this.partnerFarm = farm;
     }
