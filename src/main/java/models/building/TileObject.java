@@ -1,5 +1,7 @@
 package models.building;
 
-public interface TileObject {
+import models.Item;
+
+public interface TileObject extends Item {
     String getSymbol();
 }

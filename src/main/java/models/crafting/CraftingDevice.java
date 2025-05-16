@@ -1,36 +1,40 @@
 package models.crafting;
 
-import models.character.player.Player;
-import models.crafting.enums.AllCraftedProductsType;
+import models.Item;
+import models.building.TileObject;
 
-public abstract class CraftingDevice implements Craftable {
-    protected String name;
-    protected int energyRequired;
-    protected int workingTimeInHours;
+import java.util.List;
 
-    public CraftingDevice(String name, int energyRequired, int workingTimeInHours) {
-        this.name = name;
-        this.energyRequired = energyRequired;
-        this.workingTimeInHours = workingTimeInHours;
+public abstract class CraftingDevice implements Item, TileObject {
+    protected int x;
+    protected int y;
+    protected boolean isWorking;
+
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public String getName() {
-        return name;
+    public int getX() { return x; }
+    public int getY() { return y; }
+
+    public boolean isWorking() {
+        return isWorking;
     }
 
-    public int getEnergyRequired() {
-        return energyRequired;
+    public void setWorking(boolean working) {
+        isWorking = working;
     }
 
-    public int getWorkingTimeInHours() {
-        return workingTimeInHours;
+    @Override
+    public int getPrice() {
+        return -1;
     }
 
-    public void logCrafting(String itemName) {
-        System.out.println("Crafted: " + itemName + " using " + name);
-    }
-
-    public abstract boolean canCraft(AllCraftedProductsType product, Player player);
-    public abstract void craftProduct(AllCraftedProductsType product, Player player);
+    public abstract boolean canProcess(Item item);
+    public abstract void insertItem(List<Item> items);
+    public abstract Item collectProduct();
+    public abstract int getRequiredTurns();
 }
 
