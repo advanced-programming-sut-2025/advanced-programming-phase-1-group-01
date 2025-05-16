@@ -20,11 +20,10 @@ public class GameController extends Controller {
     private final WeatherController weatherController;
     private final MovementAndMapController movementAndMapController;
     private final InventoryController inventoryController;
-    private final AnimalController animalController;
     private final ArtisanController artisanController;
     private final CookingController cookingController;
     private final CraftingController craftingController;
-    private final HusbandryController husbandryController;
+    private final AnimalHusbandryController animalHusbandryController;
     private final NPCController npcController;
     private final SellController sellController;
 
@@ -39,11 +38,10 @@ public class GameController extends Controller {
         weatherController = new WeatherController(repo);
         movementAndMapController = new MovementAndMapController(repo);
         inventoryController = new InventoryController(repo);
-        animalController = new AnimalController(repo);
         artisanController = new ArtisanController(repo);
         cookingController = new CookingController(repo);
         craftingController = new CraftingController(repo);
-        husbandryController = new HusbandryController(repo);
+        animalHusbandryController = new AnimalHusbandryController(repo);
         npcController = new NPCController(repo);
         sellController = new SellController(repo);
         commands = new ArrayList<>();
@@ -101,8 +99,20 @@ public class GameController extends Controller {
             return movementAndMapController.handleCommand(commandLine);
         } else if (matchedCommand instanceof InventoryCommands) {
             return inventoryController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof AnimalHusbandryCommands) {
+            return animalHusbandryController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof NPCCommands) {
+            return npcController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof SellCommands) {
+            return sellController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof CookingCommands) {
+            return cookingController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof CraftingCommands) {
+            return craftingController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof ProcessingCommands) {
+            return artisanController.handleCommand(commandLine);
         }
 
-        return null;
+        return new Result(false, "invalid command!");
     }
 }
