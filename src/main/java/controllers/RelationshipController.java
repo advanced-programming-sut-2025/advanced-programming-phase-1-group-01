@@ -137,7 +137,22 @@ public class RelationshipController extends Controller {
         friendship.sendMessage(sender, message);
         receiver.addNotification(sender, "You have a new message from " + sender.getUser().getUsername());
 
+        DateTime currentTime = repo.getCurrentGame().getTimeManager().getNow();
+        if (sender.getRelationService().getFriendship(receiver).getLastTalkDay() == currentTime.getDay()) {
+            return new Result(false, "You can only talk once per day.");
+        }
+
+        friendship.setLastTalkDay(currentTime.getDay());
         friendship.increaseXp(Friendship.TALK_XP);
+
+        if (sender.getRelationService().getMarriage().getPartner(receiver) != null){
+            if(sender.getRelationService().getMarriage().getLastRelation() != currentTime.getDay()) {
+            sender.getEnergy().increase(50);
+            receiver.getEnergy().increase(50);
+            sender.getRelationService().getMarriage().setLastRelation(currentTime.getDay());
+            }
+        }
+
         return new Result(true, "your message sent to " + receiver.getUser().getUsername());
     }
 
@@ -180,12 +195,20 @@ public class RelationshipController extends Controller {
 
         DateTime currentTime = repo.getCurrentGame().getTimeManager().getNow();
 
-        if (currentPlayer.getRelationService().getLastHugDate() == currentTime.getDay()) {
+        if (currentPlayer.getRelationService().getFriendship(friend).getLastHugDay() == currentTime.getDay()) {
             return new Result(false, "You can only hug once per day.");
         }
 
-        currentPlayer.setLastHugDate(currentTime.getDay());
+        currentPlayer.getRelationService().getFriendship(friend).setLastHugDay(currentTime.getDay());
         friendship.increaseXp(Friendship.HUG_XP);
+
+        if (currentPlayer.getRelationService().getMarriage().getPartner(friend) != null) {
+            if (currentPlayer.getRelationService().getMarriage().getLastRelation() != currentTime.getDay()) {
+                currentPlayer.getEnergy().increase(50);
+                friend.getEnergy().increase(50);
+                currentPlayer.getRelationService().getMarriage().setLastRelation(currentTime.getDay());
+            }
+        }
         return new Result(true, "you hugged each other! jooon");
     }
 
@@ -216,6 +239,21 @@ public class RelationshipController extends Controller {
         DateTime now = repo.getCurrentGame().getTimeManager().getNow();
         friendship.addGift(sender, receiver, item, amount, now);
         receiver.addNotification(sender, "%s sent you a gift! %d number of %s".formatted(sender.getUser().getUsername(), amount, itemName));
+
+        if (sender.getRelationService().getFriendship(receiver).getLastGiftDay() == now.getDay()) {
+            return new Result(false, "You can only send gift once per day.");
+        }
+
+        friendship.setLastGiftDay(now.getDay());
+
+        if (sender.getRelationService().getMarriage().getPartner(receiver) != null) {
+            if (sender.getRelationService().getMarriage().getLastRelation() != now.getDay()) {
+                    sender.getEnergy().increase(50);
+                    receiver.getEnergy().increase(50);
+                    sender.getRelationService().getMarriage().setLastRelation(now.getDay());
+                }
+        }
+
         return new Result(true, "your gift sent to " + receiver.getUser().getUsername() + " successfully");
     }
 
@@ -373,7 +411,7 @@ public class RelationshipController extends Controller {
             friendship.setXp(0);
             double energy = friend.getEnergy().getMAX_ENERGY();
             friend.getEnergy().setMAX_ENERGY(energy/2);
-            //7 roooz
+            currentPlayer.setEnergyHalved();
             return new Result(true, currentPlayer + "reject" + friend.getUser().getUsername() + "request for marriage");
         }
 
@@ -384,7 +422,6 @@ public class RelationshipController extends Controller {
 
             currentPlayer.getRelationService().marry(friend);
             currentPlayer.updateOfMarriage(friend);
-            //har rooz 50 energy
             return new Result(true, currentPlayer + "accept" + friend.getUser().getUsername() + "request for ring");
         }
         return null;
