@@ -422,7 +422,6 @@ public class RelationshipController extends Controller {
 
             currentPlayer.getRelationService().marry(friend);
             currentPlayer.updateOfMarriage(friend);
-            //har rooz 50 energy
             return new Result(true, currentPlayer + "accept" + friend.getUser().getUsername() + "request for ring");
         }
         return null;
