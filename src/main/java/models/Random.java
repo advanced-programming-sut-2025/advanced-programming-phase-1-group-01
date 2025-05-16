@@ -7,7 +7,7 @@ public class Random {
     }
 
     public static int rand(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+        return ThreadLocalRandom.current().nextInt(min, max);
     }
 
     public static double rand(double min, double max) {
@@ -15,6 +15,6 @@ public class Random {
     }
 
     public static long rand(long min, long max) {
-        return ThreadLocalRandom.current().nextLong(min, max + 1);
+        return ThreadLocalRandom.current().nextLong(min, max);
     }
 }

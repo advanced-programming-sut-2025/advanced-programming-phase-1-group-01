@@ -107,7 +107,9 @@ public class GameMenuController extends Controller {
             repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(players));
             repo.getCurrentUser().getPlayer().setPosition(Game.PLAYERS_STARTING_POSITION);
 
-            return new Result(true,"New game created successfully with users: " + String.join(", ", usernames));
+            return new Result(true,"New game created successfully with users: " + String.join(", ", usernames) + "\n" +
+                    "map #1: has more trees" + "\n" +
+                    "map #2: has more stones");
     }
 
     private int index = 0;
@@ -119,8 +121,8 @@ public class GameMenuController extends Controller {
 
         List<Player> players= repo.getCurrentGame().getPlayers();
         Player currentPlayer = players.get(index);
-        Farm farm1 = FarmInitializer.initializeFarm(2,3);
-        Farm farm2 = FarmInitializer.initializeFarm(3,4);
+        Farm farm1 = FarmInitializer.initializeFarm(0,0);
+        Farm farm2 = FarmInitializer.initializeFarm(3,3);
 
         if (mapNumber == 1) {
             currentPlayer.setFarm(farm1);

@@ -9,6 +9,7 @@ public enum LoginMenuCommands implements Command {
     LOGIN("login -u (.+?) -p (.+?)(?: -stay-logged-in)?"),
     FORGET_PASSWORD("forget password -u (.+?)"),
     ANSWER("answer -a (.+?)"),
+    LOAD_USER("load user"),
     ;
 
     private final String regex;

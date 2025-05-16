@@ -5,7 +5,12 @@ import models.character.player.Player;
 import models.enums.Gender;
 import models.enums.SecurityQuestion;
 
-public class User {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class User implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private Game game;
     private Player player;
     private String username;
@@ -19,6 +24,7 @@ public class User {
     private int highestEarnedBalance;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
+        player = new Player(this);
         this.username = username;
         this.password = password;
         this.nickname = nickname;
