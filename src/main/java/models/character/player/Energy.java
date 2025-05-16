@@ -59,4 +59,9 @@ public class Energy {
     public double getMAX_ENERGY() {
         return MAX_ENERGY;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(amount);
+    }
 }

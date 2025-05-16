@@ -8,6 +8,10 @@ import models.tool.enums.PickaxeType;
 public class Pickaxe extends Tool {
     private PickaxeType type;
 
+    public Pickaxe() {
+        name = "pickaxe";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return type.getEnergyCost();

@@ -21,8 +21,9 @@ public class Inventory {
         this.player = player;
         capacity = INVENTORY_CAPACITY;
         slots = new ArrayList<>();
+        slots.add(new Slot(this, "scythe", 1));
+        slots.add(new Slot(this, "trash can", 1));
     }
-
     public List<Slot> getSlots() {
         return slots;
     }
@@ -79,7 +80,7 @@ public class Inventory {
     }
 
     public static Item getNewItem(String itemName) {
-        return switch (itemName.toLowerCase()) {
+        return switch (itemName.trim().toLowerCase()) {
             case "axe" -> new Axe();
             case "backpack" -> new Backpack();
             case "fishing pole" -> new FishingPole();

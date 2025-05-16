@@ -19,12 +19,12 @@ public class User {
     private int highestEarnedBalance;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
-        player = new Player(this);
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
+        player = new Player(this);
     }
 
     public Player getPlayer() {

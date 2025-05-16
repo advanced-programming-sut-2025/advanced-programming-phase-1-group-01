@@ -8,6 +8,7 @@ public class TrashCan extends Tool {
 
     public TrashCan() {
         this.type = TrashCanType.PRIMARY;
+        name = "trash can";
     }
 
     @Override

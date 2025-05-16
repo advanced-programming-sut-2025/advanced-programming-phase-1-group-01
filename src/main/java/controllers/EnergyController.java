@@ -31,9 +31,9 @@ public class EnergyController extends Controller {
             case CHEAT_ENERGY:
                 return cheatEnergySet(command);
             case ENERGY_UNLIMITED:
-                cheatEnergyUnlimited();
+                return cheatEnergyUnlimited();
         }
-        return null;
+        return new Result(false, "invalid command");
     }
 
 
@@ -52,9 +52,9 @@ public class EnergyController extends Controller {
         return new Result(true, "Sets the energy to a specified value");
     }
 
-    private void cheatEnergyUnlimited() {
+    private Result cheatEnergyUnlimited() {
         Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
-        energy.setAmount(Double.MAX_VALUE);
-        new Result(true, "Sets the energy to a unlimited value");
+        energy.setAmount(Double.POSITIVE_INFINITY);
+        return new Result(true, "Sets the energy to a unlimited value");
     }
 }

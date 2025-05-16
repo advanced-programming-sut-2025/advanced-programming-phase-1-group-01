@@ -47,7 +47,8 @@ public class ReduceEnergy {
     }
 
     public static int  calculateEnergy(Player player, Position end) {
-        List<Position> path = PathFinding.findPath(player.getPosition(), end, player.getFarm().getTiles());
+         List<Position> path = PathFinding.findPath(player.getPosition(), end, player.getFarm().getTiles());
+         if (path.isEmpty()) return -1;
 
         int energy = 0;
 

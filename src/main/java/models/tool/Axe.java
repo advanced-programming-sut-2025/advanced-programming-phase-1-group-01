@@ -7,6 +7,10 @@ import models.tool.enums.AxeType;
 public class Axe extends Tool {
     private AxeType type;
 
+    public Axe() {
+        name = "axe";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return type.getEnergyCost();

@@ -1,7 +1,7 @@
 package models.enums.commands;
 
 public enum EnergyCommands implements Command {
-    ENERGY_SHOW("show energy"),
+    ENERGY_SHOW("energy show"),
     CHEAT_ENERGY("energy set -v (.+?)"),
     ENERGY_UNLIMITED("energy unlimited"),
     ;

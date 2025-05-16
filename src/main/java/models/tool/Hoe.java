@@ -10,6 +10,10 @@ import models.tool.enums.HoeType;
 public class Hoe extends Tool {
     HoeType type;
 
+    public Hoe() {
+        name = "hoe";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return type.getEnergyCost();
