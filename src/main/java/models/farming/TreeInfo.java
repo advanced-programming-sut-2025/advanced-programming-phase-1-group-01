@@ -2,25 +2,27 @@ package models.farming;
 
 import models.building.TileObject;
 import models.dateTime.Season;
+import models.enums.Emoji;
 import models.foraging.ForagingTreeInfo;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public enum TreeInfo implements TileObject, FarmingEnum {
-    APRICOT_TREE("Apricot Tree", null/*"Apricot Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APRICOT, 1, Season.SPRING, "🟡"),
-    CHERRY_TREE("Cherry Tree", null/*"Cherry Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.CHERRY, 1, Season.SPRING, "🍒"),
-    BANANA_TREE("Banana Tree", null/*"Banana Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.BANANA, 1, Season.SUMMER, "🍌"),
-    MANGO_TREE("Mango Tree", null/*"Mango Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MANGO, 1, Season.SUMMER, "🥭"),
-    ORANGE_TREE("Orange Tree", null/*"Orange Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.ORANGE, 1, Season.SUMMER, "🍊"),
-    PEACH_TREE("Peach Tree", null/*"Peach Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.PEACH, 1, Season.SUMMER, "🍑"),
-    APPLE_TREE("Apple Tree", null/*"Apple Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APPLE, 1, Season.FALL, "🍏"),
-    POMEGRANATE_TREE("Pomegranate Tree", null/*"Pomegranate Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.POMEGRANATE, 1, Season.FALL, "🍎"),
-    OAK_TREE("Oak Tree", ForagingTreeInfo.ACORNS, new int[]{7, 7, 7, 7}, 28, FruitInfo.OAK_RESIN, 7, Season.SPECIAL, "🌳"),
-    MAPLE_TREE("Maple Tree", ForagingTreeInfo.MAPLE_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.MAPLE_SYRUP, 9, Season.SPECIAL, "🍁"),
-    PINE_TREE("Pine Tree", ForagingTreeInfo.PINE_CONS, new int[]{7, 7, 7, 7}, 28, FruitInfo.PINE_TAR, 5, Season.SPECIAL, "🌲"),
-    MAHOGANY_TREE("Mahogany Tree", ForagingTreeInfo.MAHOGANY_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.SAP, 1, Season.SPECIAL, "🌴"),
-    MUSHROOM_TREE("Mushroom Tree", ForagingTreeInfo.MUSHROOMS_TREE_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.COMMON_MUSHROOM, 1, Season.SPECIAL, "🍄"),
-    MYSTIC_TREE("Mystic Tree", null/*"Mystic Tree Seeds"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MYSTIC_SYRUP, 7, Season.SPECIAL, "🎄"),
+    APRICOT_TREE("Apricot Tree", null/*"Apricot Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APRICOT, 1, Season.SPRING, Emoji.YELLOW_CIRCLE.getSymbol()),
+    CHERRY_TREE("Cherry Tree", null/*"Cherry Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.CHERRY, 1, Season.SPRING, Emoji.CHERRIES.getSymbol()),
+    BANANA_TREE("Banana Tree", null/*"Banana Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.BANANA, 1, Season.SUMMER, Emoji.BANANA.getSymbol()),
+    MANGO_TREE("Mango Tree", null/*"Mango Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MANGO, 1, Season.SUMMER, Emoji.MANGO.getSymbol()),
+    ORANGE_TREE("Orange Tree", null/*"Orange Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.ORANGE, 1, Season.SUMMER, Emoji.ORANGE.getSymbol()),
+    PEACH_TREE("Peach Tree", null/*"Peach Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.PEACH, 1, Season.SUMMER, Emoji.PEACH.getSymbol()),
+    APPLE_TREE("Apple Tree", null/*"Apple Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APPLE, 1, Season.FALL, Emoji.GREEN_APPLE.getSymbol()),
+    POMEGRANATE_TREE("Pomegranate Tree", null/*"Pomegranate Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.POMEGRANATE, 1, Season.FALL, Emoji.RED_APPLE.getSymbol()),
+    OAK_TREE("Oak Tree", ForagingTreeInfo.ACORNS, new int[]{7, 7, 7, 7}, 28, FruitInfo.OAK_RESIN, 7, Season.SPECIAL, Emoji.DECIDUOUS_TREE.getSymbol()),
+    MAPLE_TREE("Maple Tree", ForagingTreeInfo.MAPLE_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.MAPLE_SYRUP, 9, Season.SPECIAL, Emoji.MAPLE_LEAF.getSymbol()),
+    PINE_TREE("Pine Tree", ForagingTreeInfo.PINE_CONES, new int[]{7, 7, 7, 7}, 28, FruitInfo.PINE_TAR, 5, Season.SPECIAL, Emoji.TREE.getSymbol()),
+    MAHOGANY_TREE("Mahogany Tree", ForagingTreeInfo.MAHOGANY_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.SAP, 1, Season.SPECIAL, Emoji.PALM_TREE.getSymbol()),
+    MUSHROOM_TREE("Mushroom Tree", ForagingTreeInfo.MUSHROOMS_TREE_SEEDS, new int[]{7, 7, 7, 7}, 28, FruitInfo.COMMON_MUSHROOM, 1, Season.SPECIAL, Emoji.MUSHROOM.getSymbol()),
+    MYSTIC_TREE("Mystic Tree", null/*"Mystic Tree Seeds"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MYSTIC_SYRUP, 7, Season.SPECIAL, Emoji.CHRISTMAS_TREE.getSymbol()),
     ;
 
     private final String name;
@@ -112,6 +114,6 @@ public enum TreeInfo implements TileObject, FarmingEnum {
                 Fruit Base Sell Price: %d
                 Is Fruit Edible: %B
                 Fruit Energy: %d
-                Season: %s""".formatted(name, source, stages, totalHarvestTime, fruitInfo.getName(), fruitHarvestCycle, fruitInfo.getBaseSellPrice(), fruitInfo.isEdible(), fruitInfo.getEnergy(), season);
+                Season: %s""".formatted(name, source.getName(), Arrays.toString(stages), totalHarvestTime, fruitInfo.getName(), fruitHarvestCycle, fruitInfo.getBaseSellPrice(), fruitInfo.isEdible(), fruitInfo.getEnergy(), season);
     }
 }
