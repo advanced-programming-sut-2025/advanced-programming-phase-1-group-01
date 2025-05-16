@@ -54,19 +54,20 @@ public class LoginMenuController extends Controller {
     }
 
     private Result register(String command) {
-        String username = extractValue(command,"-u","-p");
-        String nickname = extractValue(command,"-n","-e");
-        String email = extractValue(command,"-e","-g");
-        String gender = extractValue(command,"-g",null);
+        String username = extractValue(command, "-u", "-p");
+        String nickname = extractValue(command, "-n", "-e");
+        String email = extractValue(command, "-e", "-g");
+        String gender = extractValue(command, "-g", null);
 
-        String passwordAndreEnterPassword = extractValue(command,"-p","-n");
+        String passwordAndreEnterPassword = extractValue(command, "-p", "-n");
         String[] passwordParts = passwordAndreEnterPassword.split(" ");
-        String password = passwordParts[0];
-        String reEnterPassword = passwordParts[1];
 
         if (passwordAndreEnterPassword.equals("random")) {
             return randomPassword(command);
         }
+
+        String password = passwordParts[0];
+        String reEnterPassword = passwordParts[1];
 
         if (repo.getUserByUsername(username) != null) {
             return handleUsernameTaken(username);
@@ -88,7 +89,7 @@ public class LoginMenuController extends Controller {
             return new Result(false, "Re-entered password is incorrect.");
         }
 
-        User user = new User(username,password,nickname,email,Gender.valueOf(gender));
+        User user = new User(username, password, nickname, email, Gender.valueOf(gender.toUpperCase()));
         repo.addUser(user);
         repo.setTempUser(user);
         return new Result(true, """
@@ -106,7 +107,7 @@ public class LoginMenuController extends Controller {
             newUsername = baseUsername + (int) (Math.random() * 1000);
         }
 
-        return new Result(false, "This username is already taken. How about this one: " + newUsername);
+        return new Result(false, "This username is already taken. How about this one : " + newUsername);
     }
 
     private Result randomPassword(String command) {
@@ -128,14 +129,14 @@ public class LoginMenuController extends Controller {
             password.append(all.charAt(random.nextInt(all.length())));
         }
 
-        return new Result(true,"You can use this random password :" + password);
+        return new Result(true, "You can use this random password : " + password);
     }
 
     private Result pickQuestion(String command) {
-        String questionNumberStr = extractValue(command,"-q","-a");
+        String questionNumberStr = extractValue(command, "-q", "-a");
         int questionNumber = Integer.parseInt(questionNumberStr);
-        String answer = extractValue(command,"-a","-c");
-        String answerConfirm = extractValue(command,"-c",null);
+        String answer = extractValue(command, "-a", "-c");
+        String answerConfirm = extractValue(command, "-c", null);
 
         if (questionNumber > 3) {
             return new Result(false, "Please select a number between 1 and 3");
@@ -160,13 +161,13 @@ public class LoginMenuController extends Controller {
         }
 
         user.setSecurityAnswer(answer);
-        return new Result(true,"Your security question and answer are saved.");
+        return new Result(true, "Your security question and answer are saved.");
     }
 
     private Result login(String command) {
-        String username = extractValue(command,"-u","-p");
-        String password = extractValue(command,"-p","-s");
-        String stayLoggedIn = extractValue(command,"-s",null);
+        String username = extractValue(command, "-u", "-p");
+        String password = extractValue(command, "-p", "-s");
+        String stayLoggedIn = extractValue(command, "-s", null);
 
         User user = repo.getUserByUsername(username);
 
@@ -184,34 +185,34 @@ public class LoginMenuController extends Controller {
         }
 
         repo.setCurrentUser(user);
-        return new Result(true,"You are logged in!");
+        return new Result(true, "You are logged in!");
     }
 
     private Result forgetPassword(String command) {
-        String username = extractValue(command,"-u",null);
+        String username = extractValue(command, "-u", null);
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "User not found!");
         }
 
-        User user = repo.getUserByUsername(username);
+        User user = repo.getTempUser();
 
-        return new Result(true,user.getSecurityQuestion().getQuestion());
+        return new Result(true, user.getSecurityQuestion().getQuestion());
     }
 
     private Result answer(String command) {
-        String answer = extractValue(command, "-a",null);
+        String answer = extractValue(command, "-a", null);
 
         if (answer == null) {
             return new Result(false, "Answer not found!");
         }
 
-        User user = repo.getCurrentUser();
+        User user = repo.getTempUser();
         if (!user.getSecurityAnswer().equals(answer)) {
             return new Result(false, "Wrong answer!");
         }
 
-        return new Result(true,"Your password is : " + user.getPassword());
+        return new Result(true, "Your password is : " + user.getPassword());
     }
 
     private boolean isUsernameValid(String username) {
@@ -257,9 +258,7 @@ public class LoginMenuController extends Controller {
 
         if (endFlag != null) {
             patternString = startFlag + " (.*?) " + endFlag;
-        }
-
-        else {
+        } else {
             patternString = startFlag + " (.*)";
         }
 

@@ -7,18 +7,16 @@ import models.weather.Weather;
 import java.util.List;
 
 public enum Season {
-    SPRING(List.of(Weather.SUNNY, Weather.RAINY, Weather.STORMY), List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP)),
-    SUMMER(List.of(Weather.SUNNY, Weather.RAINY, Weather.STORMY), List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE)),
-    FALL(List.of(Weather.SUNNY, Weather.RAINY, Weather.STORMY), List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE)),
-    WINTER(List.of(Weather.SNOWY, Weather.SUNNY), List.of(CropInfo.POWDERMELON)),
-    SPECIAL(List.of(), List.of());
+    SPRING(List.of(Weather.SUNNY, Weather.RAINY, Weather.STORMY)),
+    SUMMER(List.of(Weather.SUNNY, Weather.RAINY, Weather.STORMY)),
+    FALL(List.of(Weather.SUNNY, Weather.RAINY, Weather.STORMY)),
+    WINTER(List.of(Weather.SNOWY, Weather.SUNNY)),
+    SPECIAL(List.of());
 
     private final List<Weather> weathers;
-    private final List<CropInfo> mixedSeeds;
 
-    Season(List<Weather> weathers, List<CropInfo> mixedSeeds) {
+    Season(List<Weather> weathers) {
         this.weathers = weathers;
-        this.mixedSeeds = mixedSeeds;
     }
 
     public List<Weather> getWeathers() {
@@ -43,10 +41,16 @@ public enum Season {
     }
 
     public List<CropInfo> getMixedSeeds() {
-        return mixedSeeds;
+        return switch (this) {
+            case SPRING -> List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
+            case SUMMER -> List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
+            case FALL -> List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
+            case WINTER -> List.of(CropInfo.POWDERMELON);
+            case SPECIAL -> List.of();
+        };
     }
 
     public CropInfo getRandomMixedSeed() {
-        return mixedSeeds.get(Random.rand(0, mixedSeeds.size() - 1));
+        return getMixedSeeds().get(Random.rand(0, getMixedSeeds().size() - 1));
     }
 }
