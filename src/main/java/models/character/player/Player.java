@@ -8,15 +8,18 @@ import models.building.*;
 import models.building.Building;
 import models.building.Farm;
 import models.character.Character;
+import models.character.NPC.NPC;
 import models.cooking.CookingRecipe;
 import models.cooking.CookingRecipes;
 import models.crafting.CraftedProducts;
 import models.crafting.CraftingRecipe;
 import models.data.User;
+import models.dateTime.Season;
 import models.enums.Color;
 import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
+import models.weather.Weather;
 
 import java.util.*;
 
@@ -40,6 +43,7 @@ public class Player extends Character {
     private final List<Item> readyToHarvest = new ArrayList<>();
     private Maps currentMap;
     private boolean isEnergyHalved = false;
+    private int halvedEnergyCounter = 0;
     private final Set<CraftingRecipe> craftingRecipes;
     private final Set<CookingRecipe> cookingRecipes;
     private Farm partnerFarm ;
@@ -357,6 +361,18 @@ public class Player extends Character {
 
     public void setEnergyHalved() {
         isEnergyHalved = true;
+    }
+
+    public boolean isEnergyHalved() {
+        return isEnergyHalved;
+    }
+
+    public void increaseHalvedEnergy() {
+        halvedEnergyCounter++;
+        if (halvedEnergyCounter >= 7) {
+            setEnergyHalved();
+            halvedEnergyCounter = 0;
+        }
     }
 
     public void setPartner(User partner) {
