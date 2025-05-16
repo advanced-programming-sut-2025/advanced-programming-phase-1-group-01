@@ -18,7 +18,8 @@ public class WeatherManager {
 
     public WeatherManager(Game game) {
         this.game = game;
-        this.tomorrowWeather = Weather.SUNNY;
+        todayWeather = Weather.SUNNY;
+        tomorrowWeather = Weather.SUNNY;
     }
 
     public Weather getTodayWeather() {

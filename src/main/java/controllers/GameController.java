@@ -67,25 +67,25 @@ public class GameController extends Controller {
         }
 
         if (matchedCommand instanceof DateTimeCommands) {
-            dateTimeController.handleCommand(commandLine);
+            return dateTimeController.handleCommand(commandLine);
         } else if (matchedCommand instanceof EnergyCommands) {
-            energyController.handleCommand(commandLine);
+            return energyController.handleCommand(commandLine);
         } else if (matchedCommand instanceof FarmingCommands) {
-            farmingController.handleCommand(commandLine);
+            return farmingController.handleCommand(commandLine);
         } else if (matchedCommand instanceof GameMenuCommands) {
-            gameMenuController.handleCommand(commandLine);
+            return gameMenuController.handleCommand(commandLine);
         } else if (matchedCommand instanceof LoginMenuCommands) {
-            loginMenuController.handleCommand(commandLine);
+            return loginMenuController.handleCommand(commandLine);
         } else if (matchedCommand instanceof MainMenuCommands) {
-            mainMenuController.handleCommand(commandLine);
+            return mainMenuController.handleCommand(commandLine);
         } else if (matchedCommand instanceof ProfileMenuCommands) {
-            profileMenuController.handleCommand(commandLine);
+            return profileMenuController.handleCommand(commandLine);
         } else if (matchedCommand instanceof RelationshipCommands) {
-            relationshipController.handleCommand(commandLine);
+            return relationshipController.handleCommand(commandLine);
         } else if (matchedCommand instanceof ToolCommands) {
-            toolController.handleCommand(commandLine);
+            return toolController.handleCommand(commandLine);
         } else if (matchedCommand instanceof WeatherCommands) {
-            weatherController.handleCommand(commandLine);
+            return weatherController.handleCommand(commandLine);
         }
 
         return null;
