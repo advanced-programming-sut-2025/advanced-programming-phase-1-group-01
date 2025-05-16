@@ -2,14 +2,15 @@ package models.foraging;
 
 import models.building.TileObject;
 import models.dateTime.Season;
+import models.enums.Emoji;
 import models.farming.FarmingEnum;
 
 import java.util.Random;
 
 public enum ForagingTreeInfo implements TileObject, FarmingEnum {
-    ACORNS("Acorns", Season.SPECIAL, "🌳"),
+    ACORNS("Acorns", Season.SPECIAL, Emoji.DECIDUOUS_TREE.getSymbol()),
     MAPLE_SEEDS("Maple Seeds", Season.SPECIAL, "🍁"),
-    PINE_CONS("Pine Cons", Season.SPECIAL, "🌲"),
+    PINE_CONES("Pine Cones", Season.SPECIAL, "🌲"),
     MAHOGANY_SEEDS("Mahogany Seeds", Season.SPECIAL, "🌴"),
     MUSHROOMS_TREE_SEEDS("Mushroom Tree Seeds", Season.SPECIAL, "🍄"),;
 
@@ -49,7 +50,7 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
 
     public static ForagingTreeInfo fromString(String string) {
         for (ForagingTreeInfo foragingTreeInfo : values()) {
-            if (foragingTreeInfo.name.equals(string)) {
+            if (foragingTreeInfo.name.equalsIgnoreCase(string)) {
                 return foragingTreeInfo;
             }
         }
@@ -60,6 +61,6 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
     public String toString() {
         return """
                 Name: %s
-                Season: %s  """;
+                Season: %s""".formatted(name, season);
     }
 }

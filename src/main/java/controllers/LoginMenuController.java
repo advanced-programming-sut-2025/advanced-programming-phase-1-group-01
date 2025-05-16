@@ -60,10 +60,14 @@ public class LoginMenuController extends Controller {
         String gender = extractValue(command, "-g", null);
 
         String passwordAndreEnterPassword = extractValue(command, "-p", "-n");
-        String[] passwordParts = passwordAndreEnterPassword.split(" ");
+        String[] passwordParts = passwordAndreEnterPassword.split("\\s+");
 
         if (passwordAndreEnterPassword.equals("random")) {
             return randomPassword(command);
+        }
+
+        if (passwordParts.length != 2) {
+            return new Result(false, "invalid command");
         }
 
         String password = passwordParts[0];
