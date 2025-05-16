@@ -43,6 +43,8 @@ public class VillageInitializer {
             tiles.add(new ArrayList<>());
         }
 
+        initializeGround();
+
         roomMaker(VILLAGE_TP, VILLAGE_BR, TileType.GROUND, true);
         roomMaker(FIRST_ROOM_TP, FIRST_ROOM_BR, TileType.COTTAGE, true);
         roomMaker(SECOND_ROOM_TP, SECOND_ROOM_BR, TileType.COTTAGE, true);
@@ -96,6 +98,21 @@ public class VillageInitializer {
         wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_BR.x() + 1,
                 TileType.WALL, false, false);
 
+    }
+
+    public static void initializeGround() {
+        for (int i = 0; i < VILLAGE_BR.x(); i++) {
+            for (int j = 0; j < VILLAGE_BR.y(); j++) {
+                Tile tile = new Tile.Builder()
+                        .setPosition(new Position(i, j))
+                        .setType(TileType.GROUND)
+                        .setMovable(true)
+                        .setBuilding(null)
+                        .setObject(null)
+                        .build();
+                tiles.get(i).add(tile);
+            }
+        }
     }
 
 
@@ -189,16 +206,6 @@ public class VillageInitializer {
         }
     }
 
-//    private static void initializeQuests() {
-//        List<NPCQuestType> quests = Arrays.asList(NPCQuestType.values());
-//        int count = 1;
-//        for (NPC npc : List.of(sebastian, abigail, harvey, leah, robin)) {
-//            for (int i = count; i < count + 3; i++) {
-//                npc.addQuest(i % 3, quests.get(i));
-//            }
-//            count += 3;
-//        }
-//    }
 
     public static NPCVillage initializeVillage(List<Player> players) {
         initializeTiles();
