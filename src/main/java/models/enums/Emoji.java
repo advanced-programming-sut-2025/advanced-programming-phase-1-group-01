@@ -1,10 +1,9 @@
 package models.enums;
 
 
-import models.building.TileType;
-
 public enum Emoji {
 
+    GRINNING_FACE("😀", false),
     GRINNING_FACE_BIG_EYES("😃", false),
     SMILING_FACE_SMILING_EYES("😄", false),
     BEAMING_FACE_SMILING_EYES("😁", false),
@@ -82,7 +81,7 @@ public enum Emoji {
     BOAR("🐗", false),
     HORSE_FACE("🐴", true),
     UNICORN("🦄", false),
-    HONEYBEE("🐝", false),
+    BEE_HOUSE("🐝", true),
     BUG("🐛", false),
     BUTTERFLY("🦋", false),
     SNAIL("🐌", false),
@@ -123,6 +122,7 @@ public enum Emoji {
     HERB("🌿", true),
     SHAMROCK("☘️", false),
     FOUR_LEAF_CLOVER("🍀", false),
+    FURNACE("🎍", true),
     PINE_DECORATION("🎍", false),
     MAPLE_LEAF("🍁", true),
 
@@ -203,10 +203,10 @@ public enum Emoji {
     FISHING_POLE("🎣", false),
     DIVING_MASK("🤿", false),
     BOXING_GLOVE("🥊", false),
-    MARTIAL_ARTS_UNIFORM("🥋", false),
+    LOOM("🥋", true),
     RUNNING_SHIRT("🎽", false),
     SKATEBOARD("🛹", false),
-    ROLLER_SKATE("🛼", false),
+    MAYONNAISE_MACHINE("🛼", true),
     SLED("🛷", false),
     ICE_SKATE("⛸️", false),
     CURLING_STONE("🥌", false),
@@ -238,7 +238,7 @@ public enum Emoji {
     BICYCLE("🚲", false),
     SCOOTER("🛴", false),
     ONCOMING_POLICE_CAR("🚔", false),
-    ONCOMING_BUS("🚍", false),
+    CHARCOAL_kLIN("🚍", true),
     AIRPLANE("✈️", false),
     SMALL_AIRPLANE("🛩️", false),
     ROCKET("🚀", false),
@@ -385,7 +385,7 @@ public enum Emoji {
     BEACH("🏖️", false),
     ISLAND("🏝️", false),
     DESERT_ISLAND("🏜️", false),
-    FOGGY("🌫️", false), // (مه روی آب)
+    FISH_SMOKER("🌫️", true),
 
 
     //FISH("🐟"),
@@ -451,7 +451,6 @@ public enum Emoji {
 //    POTATO("🥔"),
 //    SWEET_POTATO("🍠"),
 
-    // غذاهای آماده
 //    CROISSANT("🥐"),
 //    BAGUETTE("🥖"),
 //    FLATBREAD("🫓"),
@@ -459,8 +458,8 @@ public enum Emoji {
 //    BAGEL("🥯"),
 //    PANCAKES("🥞"),
 //    WAFFLE("🧇"),
-    CHEESE("🧀", false),
-    //    MEAT_ON_BONE("🍖"),
+    CHEESE_PRESS("🧀", true),
+//    MEAT_ON_BONE("🍖"),
 //    POULTRY_LEG("🍗"),
 //    CUT_OF_MEAT("🥩"),
 //    BACON("🥓"),
@@ -470,7 +469,7 @@ public enum Emoji {
 //    HOT_DOG("🌭"),
 //    SANDWICH("🥪"),
 //    TACO("🌮"),
-    BURRITO("🌯", false),
+    DEHYDRATOR("🌯", true),
     TAMALE("🫔", false),
     //FALAFEL("🧆"),
     EGG("🥚", false),
@@ -480,12 +479,11 @@ public enum Emoji {
     FONDUE("🫕", false),
     BOWL_WITH_SPOON("🥣", false),
     GREEN_SALAD("🥗", false),
-    POPCORN("🍿", false),
+    OIL_MAKER("🍿", true),
     BUTTER("🧈", false),
     SALT("🧂", false),
     CANNED_FOOD("🥫", true),
 
-    // نوشیدنی‌ها
     BABY_BOTTLE("🍼", false),
     GLASS_OF_MILK("🥛", false),
     HOT_BEVERAGE("☕", false),
@@ -502,12 +500,10 @@ public enum Emoji {
     TUMBLER_GLASS("🥃", false),
     POURING_LIQUID("🫗", false),
     CUP_WITH_STRAW("🥤", false),
-    BUBBLE_TEA("🧋", false),
+    KEG("🧋", true),
     BEVERAGE_BOX("🧃", false),
     MATE("🧉", false),
-    //ICE("🧊"),
 
-    // دسرها
     SOFT_ICE_CREAM("🍦", false),
     SHAVED_ICE("🍧", false),
     ICE_CREAM("🍨", false),
@@ -528,7 +524,7 @@ public enum Emoji {
     FORK_KNIFE_PLATE("🍽️", false),
     SPOON("🥄", false),
     KITCHEN_KNIFE("🔪", false),
-    JAR("🫙", false),
+    PRESERVE_JAR("🫙", false),
     TRUE("✅", true),
     FALSE("❌", true),
 

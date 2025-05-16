@@ -1,7 +1,40 @@
 package models.crafting;
 
-public class CharcoalKlin extends CraftingSystem {
-    public CharcoalKlin(int amount) {
-        super(amount);
+import models.Item;
+import models.enums.Emoji;
+
+import java.util.List;
+
+public class CharcoalKlin extends CraftingDevice {
+
+    @Override
+    public String getName() {
+        return "Charcoal Klin";
+    }
+
+    @Override
+    public boolean canProcess(Item item) {
+        return false;
+    }
+
+    @Override
+    public void insertItem(List<Item> items) {
+
+    }
+
+    @Override
+    public Item collectProduct() {
+        return null;
+    }
+
+    @Override
+    public int getRequiredTurns() {
+        return 0;
+    }
+
+
+    @Override
+    public String getSymbol() {
+        return Emoji.CHARCOAL_kLIN.getSymbol();
     }
 }

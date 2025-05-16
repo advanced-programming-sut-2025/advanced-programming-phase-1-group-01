@@ -89,6 +89,11 @@ public class Tree extends Plant {
         return info.getName();
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public TreeSource getSource() {
         return source;
     }

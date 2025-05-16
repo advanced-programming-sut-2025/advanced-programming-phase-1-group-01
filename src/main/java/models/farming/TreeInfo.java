@@ -56,6 +56,11 @@ public enum TreeInfo implements TileObject, FarmingEnum {
         return name;
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public FarmingEnum getSource() {
         return source;
     }

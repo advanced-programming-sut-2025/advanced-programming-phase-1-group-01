@@ -6,15 +6,18 @@ import models.building.Building;
 import models.character.player.Inventory;
 import models.character.player.Slot;
 import models.character.player.Player;
-import models.crafting.CraftingRecipe;
+import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
 import models.enums.BanItem;
+import models.enums.Direction;
 import models.enums.commands.CraftingCommands;
 import models.data.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CraftingController extends Controller {
     CraftingController(Repository repo) {
@@ -69,8 +72,7 @@ public class CraftingController extends Controller {
     }
 
     private Result craft(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[2];
+        String itemName = extractValue(command, "craft", null);
 
         Set<CraftingRecipe> recipes = repo.getCurrentUser().getPlayer().getCraftingRecipes();
 
@@ -118,64 +120,23 @@ public class CraftingController extends Controller {
             repo.getCurrentGame().nextTurn();
         }
 
-            switch (itemName) {
-                case "Cherry Bomb":
-                    //return new CherryBomb();
-                case "Bomb":
-                    //return new Bomb();
-                case "Mega Bomb":
-                    //return new MegaBomb();
-                case "Sprinkler":
-                    //return new Sprinkler();
-                case "Quality Sprinkler":
-                    //return new QualitySprinkler();
-                case "Iridium Sprinkler":
-                    //return new IridiumSprinkler();
-                case "Charcoal Klin":
-                    //return new CharcoalKlin();
-                case "Furnace":
-                    //return new Furnace();
-                case "Scarecrow":
-                    //return new Scarecrow();
-                case "Deluxe Scarecrow":
-                    //return new DeluxeScarecrow();
-                case "Bee House":
-                    //return new BeeHouse();
-                case "Cheese Press":
-                    //return new CheesePress();
-                case "Keg":
-                    //return new Keg();
-                case "Loom":
-                    //return new Loom();
-                case "Mayonnaise Machine":
-                    //return new MayonnaiseMachine();
-                case "Oil Maker":
-                    //return new OilMaker();
-                case "Preserves Jar":
-                    //return new PreservesJar();
-                case "Dehydrator":
-                    //return new Dehydrator();
-                case "Grass Starter":
-                    //return new GrassStarter();
-                case "Fish Smoker":
-                    //return new FishSmoker();
-                case "Mystic Tree Seed":
-                    //return new MysticTreeSeed();
-            }
+        inventory.addItem(itemName,1);
+
+        //Hi amirhosein
+        //chetori
 
         return new Result(true, "Crafted " + targetRecipe.name() + " successfully!");
     }
 
     private Result cheatAddRecipe(String command) {
-        String[] tokens = command.split(" ");
-        String recipeName = tokens[4];
+        String recipeName = extractValue(command, "-r", null);
 
         Player player = repo.getCurrentUser().getPlayer();
 
         CraftingRecipes matched = null;
 
         for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
-            if (recipeEnum.name().equalsIgnoreCase(recipeName)) {
+            if (recipeEnum.getName().equalsIgnoreCase(recipeName)) {
                 matched = recipeEnum;
                 break;
             }
@@ -192,28 +153,56 @@ public class CraftingController extends Controller {
     }
 
     private Result placeItem(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[3];
-        String direction = tokens[5];
+        String itemName = extractValue(command, "-n", "-d");
+        String directionStr = extractValue(command, "-d", null);
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlot(itemName);
 
         if (slot == null) {
-            return new Result(false, "you don't have" + itemName);
+            return new Result(false, "You don't have \"" + itemName + "\" in your inventory.");
         }
 
-        if (direction.equals("up")) {
-            return new Result(true, "direction error");
+        Item item = slot.getItem();
+
+        if (!(item instanceof CraftingDevice device)) {
+            return new Result(false, item.getName() + " cannot be placed in farm.");
         }
-        return null;
+
+        int x = player.getPosition().x();
+        int y = player.getPosition().y();
+
+        Direction direction = Direction.fromString(directionStr);
+
+        if (direction == null) {
+            return new Result(false, "Invalid direction: " + directionStr);
+        }
+
+        switch (direction) {
+            case UP -> y--;
+            case DOWN -> y++;
+            case LEFT -> x--;
+            case RIGHT -> x++;
+            case UP_LEFT -> { x--; y--; }
+            case UP_RIGHT -> { x++; y--; }
+            case DOWN_LEFT -> { x--; y++; }
+            case DOWN_RIGHT -> { x++; y++; }
+        }
+
+        device.setPosition(x, y);
+        device.setWorking(false);
+
+        repo.getCurrentGame().getCurrentPlayer().getFarm().getTiles().get(x).get(y).setObject(device);
+
+        slot.removeQuantity(1);
+
+        return new Result(true, item.getName() + " placed successfully at (" + x + ", " + y + ").");
     }
 
     private Result cheatAddItem(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[4];
-        String itemCountStr = tokens[6];
+        String itemName = extractValue(command, "-n", "-c");
+        String itemCountStr = extractValue(command, "-c", null);
         int itemCount = Integer.parseInt(itemCountStr);
 
         Player player = repo.getCurrentUser().getPlayer();
@@ -234,5 +223,24 @@ public class CraftingController extends Controller {
 
         inventory.addItem(itemName, itemCount);
         return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+    }
+
+    private String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 }
