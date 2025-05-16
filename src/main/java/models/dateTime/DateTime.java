@@ -191,4 +191,16 @@ public class DateTime implements Cloneable {
             return new DateTime(this);
         }
     }
+
+    public void advanceHour(int hour) {
+        for(int i = 0; i < hour; i++) {
+            advanceHour();
+        }
+    }
+
+    public void advanceDay(int day) {
+        for (int i = 0; i < day * MAX_HOUR_OF_DAY; i++) {
+            advanceDay();
+        }
+    }
 }

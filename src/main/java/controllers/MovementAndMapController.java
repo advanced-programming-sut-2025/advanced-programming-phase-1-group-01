@@ -48,7 +48,7 @@ public class MovementAndMapController extends Controller {
     private Result walk(Position position) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         ReduceEnergy.movePlayer(player, position, repo.getCurrentGame());
-        return new Result(true, "-1");
+        return new Result(true, "");
     }
 
     private Result printMap(String commandLine) {
