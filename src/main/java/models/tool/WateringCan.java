@@ -17,6 +17,7 @@ public class WateringCan extends Tool {
 
     public WateringCan() {
         capacity = INITIAL_CAPACITY;
+        name = "watering can";
     }
 
     @Override

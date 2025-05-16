@@ -5,6 +5,10 @@ import models.enums.Direction;
 public class Shear extends Tool {
     private static final int INITIAL_SHEAR_USE_ENERGY = 4;
 
+    public Shear() {
+        name = "shear";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return INITIAL_SHEAR_USE_ENERGY;

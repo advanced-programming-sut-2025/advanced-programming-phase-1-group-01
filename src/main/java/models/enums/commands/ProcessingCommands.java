@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum ProcessingCommands {
+public enum ProcessingCommands implements Command {
     ARTISAN_USE("artisan use (?<artisanName>\\S+) (?<itemName>\\S+)"),
     ARTISAN_GET("artisan get (?<artisanName>\\S+)");
 

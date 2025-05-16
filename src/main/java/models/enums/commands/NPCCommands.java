@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum NPCCommands {
+public enum NPCCommands implements Command {
     MEET_NPC("meet NPC -n (?<name>\\S+) -m (?<message>\\S+)"),
     GIFT_NPC("gift NPC (?<name>\\S+) -i (?<item>\\S+)"),
     FRIENDSHIP_NPC_LIST("friendship NPC list"),

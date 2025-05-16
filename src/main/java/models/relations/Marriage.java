@@ -6,6 +6,8 @@ import models.enums.Gender;
 public class Marriage extends Relationship {
     private Player husband;
     private Player wife;
+    private int lastRelation;
+
 
     public Marriage(Player p1, Player p2) {
         if (p1.getGender() == p2.getGender()) return;
@@ -19,6 +21,7 @@ public class Marriage extends Relationship {
             husband = p2;
             wife = p1;
         }
+        this.lastRelation = 0;
     }
 
     public Player getHusband() {
@@ -38,5 +41,13 @@ public class Marriage extends Relationship {
             return wife;
         }
         return husband;
+    }
+
+    public int getLastRelation() {
+        return lastRelation;
+    }
+
+    public void setLastRelation(int lastRelation) {
+        this.lastRelation = lastRelation;
     }
 }

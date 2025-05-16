@@ -7,6 +7,10 @@ import models.tool.enums.FishingPoleInfo;
 public class FishingPole extends Tool {
     FishingPoleInfo info;
 
+    public FishingPole() {
+        name = "fishing pole";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return info.getEnergyCost();
