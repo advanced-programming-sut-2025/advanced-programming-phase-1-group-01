@@ -181,7 +181,10 @@ public class LoginMenuController extends Controller {
 
         if (stayLoggedIn.equals("yes")) {
             User tempUser = repo.getTempUser();
-            FileManager.saveToFile(tempUser.getUsername(), tempUser.getPassword(), tempUser.getNickname(), tempUser.getEmail(), tempUser.getGender().toString(), tempUser.getSecurityQuestion().toString(), tempUser.getSecurityAnswer());
+            FileManager.saveToFile(tempUser.getUsername(), tempUser.getPassword(), tempUser.getNickname(),
+                    tempUser.getEmail(), tempUser.getGender().toString(), tempUser.getSecurityQuestion().toString(), tempUser.getSecurityAnswer());
+            repo.setCurrentUser(user);
+            return new Result(true, "Your account is saved. You're now logged in");
         }
 
         repo.setCurrentUser(user);
