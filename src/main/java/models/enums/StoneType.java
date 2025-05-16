@@ -23,4 +23,14 @@ public enum StoneType implements TileObject {
     public String getSymbol() {
         return symbol;
     }
+
+    @Override
+    public String getName() {
+        return "";
+    }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

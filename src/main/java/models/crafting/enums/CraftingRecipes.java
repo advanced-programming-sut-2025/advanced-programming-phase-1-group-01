@@ -46,6 +46,10 @@ public enum CraftingRecipes {
         this.sellPrice = sellPrice;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public CraftingRecipe toRecipe() {
         return new CraftingRecipe(name, ingredients, ability, level, sellPrice);
     }

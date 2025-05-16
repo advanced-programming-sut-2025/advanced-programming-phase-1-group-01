@@ -1,6 +1,7 @@
 package models.crafting;
 
 import models.Item;
+import models.character.NPC.TradeItem;
 import models.enums.Emoji;
 
 import java.util.List;
