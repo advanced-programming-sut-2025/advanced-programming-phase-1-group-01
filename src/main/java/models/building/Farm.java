@@ -62,7 +62,9 @@ public class Farm extends Maps {
         this.quarry = quarry;
     }
 
-    public List<Animal> getAnimals() { return animals; }
+    public List<Animal> getAnimals() {
+        return animals;
+    }
 
     public void addAnimal(Animal animal) {
         animals.add(animal);
@@ -281,7 +283,7 @@ public class Farm extends Maps {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         int income = animal.calculateSellPrice();
-        player.increase(income);
+        player.addCoin(income);
         sellAnimal(animal);
         return "Animal is sold";
     }
@@ -297,6 +299,7 @@ public class Farm extends Maps {
         animal.advanceFriendshipLevel(amount);
         return "Friendship cheated";
     }
+
     public Map<Plant, Tile> getPlantsToTilesMap() {
         Map<Plant, Tile> map = new LinkedHashMap<>();
         for (List<Tile> row : tiles) {

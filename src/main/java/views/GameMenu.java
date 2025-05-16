@@ -13,7 +13,6 @@ public class GameMenu extends View {
 
     @Override
     public void handleInput() {
-
         while (controller.getRepo().getCurrentView().equals(models.enums.commands.View.GAME_MENU)){
             String input = appView.readLine();
             Result result = controller.handleCommand(input);

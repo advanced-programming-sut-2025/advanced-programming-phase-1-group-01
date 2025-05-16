@@ -47,6 +47,7 @@ public class Player extends Character {
     private final Set<CraftingRecipe> craftingRecipes;
     private final Set<CookingRecipe> cookingRecipes;
     private Farm partnerFarm ;
+
     //@ list unripe
     //@ list ripe and ready to get items
 
@@ -95,14 +96,14 @@ public class Player extends Character {
         this.numOfCoins = numOfCoins;
     }
 
-    public void consume(int amount) {
+    public void consumeCoin(int amount) {
         if (relationshipService.getMarriage() != null) {
-            relationshipService.getMarriage().getPartner(this).consume(amount);
+            relationshipService.getMarriage().getPartner(this).consumeCoin(amount);
         }
         numOfCoins -= amount;
     }
 
-    public void increase(int amount) {
+    public void addCoin(int amount) {
         numOfCoins += amount;
     }
 
@@ -351,5 +352,13 @@ public class Player extends Character {
             setEnergyHalved();
             halvedEnergyCounter = 0;
         }
+    }
+
+    public void setPartner(User partner) {
+        relationshipService.setPartner(partner);
+    }
+
+    public User getPartner() {
+        return relationshipService.getPartner();
     }
 }

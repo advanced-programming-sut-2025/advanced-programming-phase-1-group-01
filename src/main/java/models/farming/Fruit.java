@@ -13,4 +13,9 @@ public class Fruit implements Item {
     public String getName() {
         return info.getName();
     }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

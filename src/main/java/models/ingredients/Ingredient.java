@@ -22,4 +22,9 @@ public class Ingredient implements TradeItem {
     public String getName() {
         return Ingredient.class.getSimpleName();
     }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

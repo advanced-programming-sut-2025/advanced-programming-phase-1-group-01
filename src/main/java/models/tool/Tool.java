@@ -20,4 +20,9 @@ public abstract class Tool implements Item {
     public String getName() {
         return name;
     }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

@@ -21,4 +21,9 @@ public enum TradeItemType implements Item {
     public String getName() {
         return "CookingSystem";
     }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
 }

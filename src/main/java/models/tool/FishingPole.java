@@ -1,15 +1,19 @@
 package models.tool;
 
 import models.enums.Direction;
-import models.tool.enums.FishingPoleType;
+import models.tool.enums.FishingPoleInfo;
 
 // related to fishing
 public class FishingPole extends Tool {
-    FishingPoleType type;
+    FishingPoleInfo info;
 
     @Override
     public int getBaseEnergyCost() {
-        return type.getEnergyCost();
+        return info.getEnergyCost();
+    }
+
+    public FishingPoleInfo getInfo() {
+        return info;
     }
 
     @Override

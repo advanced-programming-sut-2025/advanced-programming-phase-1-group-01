@@ -33,6 +33,11 @@ public class Crop extends Plant implements Item, Cloneable {
     }
 
     @Override
+    public int getPrice() {
+        return 0;
+    }
+
+    @Override
     public CropInfo getInfo() {
         return info;
     }

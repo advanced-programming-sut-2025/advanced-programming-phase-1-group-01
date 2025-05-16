@@ -9,4 +9,9 @@ public record CraftingRecipe(String name, Map<String, Integer> ingredients, Stri
     public String getName() {
         return name;
     }
+
+    @Override
+    public int getPrice() {
+        return -1;
+    }
 }
