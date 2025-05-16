@@ -43,6 +43,7 @@ public class LoginMenuController extends Controller {
             case LOGIN -> login(command);
             case FORGET_PASSWORD -> forgetPassword(command);
             case ANSWER -> answer(command);
+            case LOAD_USER -> saveUser();
         };
     }
 
@@ -179,7 +180,8 @@ public class LoginMenuController extends Controller {
         }
 
         if (stayLoggedIn.equals("yes")) {
-            FileManager.saveLoginInfo(username, password);
+            User tempUser = repo.getTempUser();
+            FileManager.saveToFile(tempUser.getUsername(), tempUser.getPassword(), tempUser.getNickname(), tempUser.getEmail(), tempUser.getGender().toString(), tempUser.getSecurityQuestion().toString(), tempUser.getSecurityAnswer());
         }
 
         repo.setCurrentUser(user);
@@ -238,6 +240,17 @@ public class LoginMenuController extends Controller {
             return "Password must contain at least one special character.";
         }
         return null;
+    }
+
+    private Result saveUser() {
+        User user = FileManager.loadUserFromFile(repo);
+
+        if (user == null) {
+            return new Result(false, "you don't save your account!");
+        }
+
+        repo.setCurrentUser(user);
+        return new Result(true,"You are logged in!");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {

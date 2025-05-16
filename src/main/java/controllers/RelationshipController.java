@@ -344,6 +344,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "you don't have ring in your inventory");
         }
 
+        friendship.sendMessage(friend,"would you marry me?");
         friend.setPartner(repo.getCurrentUser());
         return new Result(true, "your request send to " + friend.getUser().getNickname());
     }
@@ -369,6 +370,7 @@ public class RelationshipController extends Controller {
 
         if (respond.equals("reject")) {
             friendship.setLevel(0);
+            friendship.setXp(0);
             double energy = friend.getEnergy().getMAX_ENERGY();
             friend.getEnergy().setMAX_ENERGY(energy/2);
             //7 roooz

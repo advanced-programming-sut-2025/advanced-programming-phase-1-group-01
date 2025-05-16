@@ -63,4 +63,8 @@ public abstract class Relationship {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
 }
