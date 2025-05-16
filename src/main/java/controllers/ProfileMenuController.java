@@ -142,7 +142,7 @@ public class ProfileMenuController extends Controller {
         User user = repo.getCurrentUser();
         String info = "username : " + user.getUsername() + "\n" +
                 "nickname : " + user.getNickname() + "\n" +
-                "highest amount of money" + user.getHighestEarnedBalance() + "\n" +
+                "highest amount of money : " + user.getHighestEarnedBalance() + "\n" +
                 "number of played games : " + user.getNumOfPlayedGames();
 
         return new Result(true,info);

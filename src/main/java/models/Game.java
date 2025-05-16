@@ -38,6 +38,9 @@ public class Game {
     public Game(List<Player> players) {
         this.players = players;
         currentPlayer = players.get(0);
+        for (Player player : players) {
+            player.setGame(this);
+        }
         currentMap = currentPlayer.getFarm();
         timeManager = new TimeManager(this);
         weatherManager = new WeatherManager(this);
