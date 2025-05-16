@@ -43,6 +43,7 @@ public class Player extends Character {
     private final List<Item> readyToHarvest = new ArrayList<>();
     private Maps currentMap;
     private boolean isEnergyHalved = false;
+    private int halvedEnergyCounter = 0;
     private final Set<CraftingRecipe> craftingRecipes;
     private final Set<CookingRecipe> cookingRecipes;
     private Farm partnerFarm ;
@@ -338,5 +339,17 @@ public class Player extends Character {
 
     public void setEnergyHalved() {
         isEnergyHalved = true;
+    }
+
+    public boolean isEnergyHalved() {
+        return isEnergyHalved;
+    }
+
+    public void increaseHalvedEnergy() {
+        halvedEnergyCounter++;
+        if (halvedEnergyCounter >= 7) {
+            setEnergyHalved();
+            halvedEnergyCounter = 0;
+        }
     }
 }

@@ -98,6 +98,7 @@ public class VillageInitializer {
 
     }
 
+
     public static void roomMaker(Position start, Position end, TileType type, boolean isMovable) {
         for (int i = start.x(); i < end.x(); i++) {
             for (int j = start.y(); j < end.y(); j++) {

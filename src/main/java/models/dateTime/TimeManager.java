@@ -87,19 +87,32 @@ public class TimeManager {
         game.getMarnieRanch().resetDailyStock();
         game.getTheStardropSaloon().resetDailyStock();
 
-        Player player = game.getCurrentPlayer();
-        if (player.getEnergy().hasPassedOut()) {
-            player.getEnergy().setHasPassedOut(false);
-            player.getEnergy().fillEnergyPassedOut();
-        }
-        else {
-            player.getEnergy().fillEnergy();
-        }
+//        Player player = game.getCurrentPlayer();
+//        if (player.getEnergy().hasPassedOut()) {
+//            player.getEnergy().setHasPassedOut(false);
+//            player.getEnergy().fillEnergyPassedOut();
+//        }
+//        else {
+//            player.getEnergy().fillEnergy();
+//        }
 
-        for (Player p : game.getPlayers()) {
-            for (Animal animal: p.getFarm().getAnimals()) {
+        for (Player player : game.getPlayers()) {
+            for (Animal animal: player.getFarm().getAnimals()) {
                 animal.DailyResetAndStart();
             }
+
+            if (player.getEnergy().hasPassedOut()) {
+                player.getEnergy().setHasPassedOut(false);
+                player.getEnergy().fillEnergyPassedOut();
+            } else {
+                player.getEnergy().fillEnergy();
+            }
+
+            if (player.isEnergyHalved()) {
+                player.getEnergy().setMAX_ENERGY(player.getEnergy().getMAX_ENERGY() / 2);
+            }
+
+            player.increaseHalvedEnergy();
         }
 
         for (NPC npc : game.getNPCVillage().getNPCs()) {
