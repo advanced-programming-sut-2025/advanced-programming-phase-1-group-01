@@ -1,6 +1,6 @@
 package models.enums.commands;
 
-public enum AnimalHusbandryCommands {
+public enum AnimalHusbandryCommands implements Command {
     BUILD("build -a (?<name>\\S+) -l <(?<X>\\S+),(?<Y>\\S+)>"),
     BUY_ANIMAL("buy animal -a (?<animal>\\S+) -n (?<name>\\S+)"),
     PET("pet -n (?<name>\\S+)"),

@@ -15,25 +15,37 @@ public class GameController extends Controller {
     private final EnergyController energyController;
     private final FarmingController farmingController;
     private final GameMenuController gameMenuController;
-    private final LoginMenuController loginMenuController;
-    private final MainMenuController mainMenuController;
-    private final ProfileMenuController profileMenuController;
     private final RelationshipController relationshipController;
     private final ToolController toolController;
     private final WeatherController weatherController;
+    private final MovementAndMapController movementAndMapController;
+    private final InventoryController inventoryController;
+    private final AnimalController animalController;
+    private final ArtisanController artisanController;
+    private final CookingController cookingController;
+    private final CraftingController craftingController;
+    private final HusbandryController husbandryController;
+    private final NPCController npcController;
+    private final SellController sellController;
 
     public GameController(Repository repo) {
         super(repo);
-        this.dateTimeController = new DateTimeController(repo);
-        this.energyController = new EnergyController(repo);
-        this.farmingController = new FarmingController(repo);
-        this.gameMenuController = new GameMenuController(repo);
-        this.loginMenuController = new LoginMenuController(repo);
-        this.mainMenuController = new MainMenuController(repo);
-        this.profileMenuController = new ProfileMenuController(repo);
-        this.relationshipController = new RelationshipController(repo);
-        this.toolController = new ToolController(repo);
-        this.weatherController = new WeatherController(repo);
+        dateTimeController = new DateTimeController(repo);
+        energyController = new EnergyController(repo);
+        farmingController = new FarmingController(repo);
+        gameMenuController = new GameMenuController(repo);
+        relationshipController = new RelationshipController(repo);
+        toolController = new ToolController(repo);
+        weatherController = new WeatherController(repo);
+        movementAndMapController = new MovementAndMapController(repo);
+        inventoryController = new InventoryController(repo);
+        animalController = new AnimalController(repo);
+        artisanController = new ArtisanController(repo);
+        cookingController = new CookingController(repo);
+        craftingController = new CraftingController(repo);
+        husbandryController = new HusbandryController(repo);
+        npcController = new NPCController(repo);
+        sellController = new SellController(repo);
         commands = new ArrayList<>();
         initCommands();
     }
@@ -43,12 +55,17 @@ public class GameController extends Controller {
         commands.addAll(Arrays.stream(EnergyCommands.values()).toList());
         commands.addAll(Arrays.stream(FarmingCommands.values()).toList());
         commands.addAll(Arrays.stream(GameMenuCommands.values()).toList());
-        commands.addAll(Arrays.stream(LoginMenuCommands.values()).toList());
-        commands.addAll(Arrays.stream(MainMenuCommands.values()).toList());
-        commands.addAll(Arrays.stream(ProfileMenuCommands.values()).toList());
         commands.addAll(Arrays.stream(RelationshipCommands.values()).toList());
         commands.addAll(Arrays.stream(ToolCommands.values()).toList());
         commands.addAll(Arrays.stream(WeatherCommands.values()).toList());
+        commands.addAll(Arrays.stream(MovementAndMapCommands.values()).toList());
+        commands.addAll(Arrays.stream(InventoryCommands.values()).toList());
+        commands.addAll(Arrays.stream(AnimalHusbandryCommands.values()).toList());
+        commands.addAll(Arrays.stream(NPCCommands.values()).toList());
+        commands.addAll(Arrays.stream(SellCommands.values()).toList());
+        commands.addAll(Arrays.stream(CookingCommands.values()).toList());
+        commands.addAll(Arrays.stream(CraftingCommands.values()).toList());
+        commands.addAll(Arrays.stream(ProcessingCommands.values()).toList());
     }
 
     @Override
@@ -74,18 +91,16 @@ public class GameController extends Controller {
             return farmingController.handleCommand(commandLine);
         } else if (matchedCommand instanceof GameMenuCommands) {
             return gameMenuController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof LoginMenuCommands) {
-            return loginMenuController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof MainMenuCommands) {
-            return mainMenuController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof ProfileMenuCommands) {
-            return profileMenuController.handleCommand(commandLine);
         } else if (matchedCommand instanceof RelationshipCommands) {
             return relationshipController.handleCommand(commandLine);
         } else if (matchedCommand instanceof ToolCommands) {
             return toolController.handleCommand(commandLine);
         } else if (matchedCommand instanceof WeatherCommands) {
             return weatherController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof MovementAndMapCommands) {
+            return movementAndMapController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof InventoryCommands) {
+            return inventoryController.handleCommand(commandLine);
         }
 
         return null;

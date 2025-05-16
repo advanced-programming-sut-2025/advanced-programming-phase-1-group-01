@@ -71,7 +71,7 @@ public class ToolController extends Controller {
             return new Result(false, "not a tool equipped");
         }
 
-        return new Result(true, equippedSlot.getItem().toString());
+        return new Result(true, equippedSlot.getItem().getName());
     }
 
     private Result showAvailableTools() {

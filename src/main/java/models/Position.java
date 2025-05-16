@@ -15,4 +15,9 @@ public record Position(int x, int y) {
             case DOWN_RIGHT -> new Position(x + 1, y + 1);
         };
     }
+
+    @Override
+    public String toString() {
+        return "<%d, %d>".formatted(x, y);
+    }
 }

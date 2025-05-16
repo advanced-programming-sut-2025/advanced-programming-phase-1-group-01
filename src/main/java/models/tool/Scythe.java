@@ -11,6 +11,10 @@ import models.farming.Plant;
 public class Scythe extends Tool {
     private static final int INITIAL_SCYTHE_USE_ENERGY = 2;
 
+    public Scythe() {
+        name = "scythe";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return INITIAL_SCYTHE_USE_ENERGY;

@@ -119,7 +119,7 @@ public class FarmInitializer {
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
-                    .build();;
+                    .build();
             tiles.get(i).set(COTTAGE_TP.y() - 1, tile);
         }
 
@@ -131,7 +131,7 @@ public class FarmInitializer {
                         .setMovable(false)
                         .setBuilding(null)
                         .setObject(null)
-                        .build();;
+                        .build();
                 tiles.get(i).set(COTTAGE_BR.y() + 1, tile);
             }
         }
@@ -143,7 +143,7 @@ public class FarmInitializer {
                     .setMovable(false)
                     .setBuilding(null)
                     .setObject(null)
-                    .build();;
+                    .build();
             tiles.get(COTTAGE_TP.x() - 1).set(i, tile);
         }
 
@@ -177,7 +177,7 @@ public class FarmInitializer {
                         .setMovable(false)
                         .setBuilding(null)
                         .setObject(null)
-                        .build();;
+                        .build();
                 tiles.get(i).set(GREENHOUSE_BR.y() + 1, tile);
             }
         }
@@ -208,7 +208,7 @@ public class FarmInitializer {
             for (int j = SHIPPING_BIN_1_TP.y(); j < SHIPPING_BIN_1_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
-//                        .setType(TileType.SALE_BUCKET) errorcheck
+                        .setType(TileType.SALE_BUCKET)
                         .setMovable(false)
                         .build();
                 tiles.get(i).set(j, tile);
@@ -219,7 +219,7 @@ public class FarmInitializer {
             for (int j = SHIPPING_BIN_2_TP.y(); j < SHIPPING_BIN_2_BR.y(); j++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
-//                        .setType(TileType.SALE_BUCKET) errorcheck
+                        .setType(TileType.SALE_BUCKET)
                         .setMovable(false)
                         .build();
                 tiles.get(i).set(j, tile);

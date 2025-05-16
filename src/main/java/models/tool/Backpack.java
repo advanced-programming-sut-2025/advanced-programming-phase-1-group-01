@@ -6,6 +6,10 @@ import models.tool.enums.BackpackType;
 public class Backpack extends Tool {
     private BackpackType type;
 
+    public Backpack() {
+        name = "backpack";
+    }
+
     @Override
     public int getBaseEnergyCost() {
         return 0;

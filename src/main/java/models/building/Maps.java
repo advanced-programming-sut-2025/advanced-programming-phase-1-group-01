@@ -68,6 +68,12 @@ public abstract class Maps {
 
         for (int i = x; i < x + size; i++) {
             for (int j = y; j < y + size; j++) {
+                chars.get(i-x).add("#");
+            }
+        }
+
+        for (int i = x; i < x + size; i++) {
+            for (int j = y; j < y + size; j++) {
                 if (game.isAnyoneHere(i, j)) {
                     chars.get(i-x).set(j-y, game.returnSymbol(i, j));
                 } else if (tiles.get(i).get(j).getObject() != null) {
