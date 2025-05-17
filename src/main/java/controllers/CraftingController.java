@@ -226,14 +226,14 @@ public class CraftingController extends Controller {
 
         if (item == null) {
             return new Result(false, "item not found");
-        
-
-        if (player.getInventory().hasCapacity()) {
-            return new Result(false, "inventory is full");
         }
 
-        inventory.addItem(itemName, itemCount);
-        return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+            if (player.getInventory().hasCapacity()) {
+                return new Result(false, "inventory is full");
+            }
+
+            inventory.addItem(itemName, itemCount);
+            return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {
@@ -241,7 +241,9 @@ public class CraftingController extends Controller {
 
         if (endFlag != null) {
             patternString = startFlag + " (.*?) " + endFlag;
-        } else {
+        }
+
+        else {
             patternString = startFlag + " (.*)";
         }
 

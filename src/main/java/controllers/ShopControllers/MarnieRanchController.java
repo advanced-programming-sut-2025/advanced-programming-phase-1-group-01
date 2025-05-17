@@ -26,7 +26,7 @@ public class MarnieRanchController extends ShopController {
         MarnieCommands matchedCommand = null;
 
         for (MarnieCommands cmd : MarnieCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }

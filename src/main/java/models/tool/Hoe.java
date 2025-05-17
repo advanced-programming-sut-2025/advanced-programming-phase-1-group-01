@@ -9,7 +9,7 @@ import models.tool.enums.HoeType;
 
 // related to farming.
 public class Hoe extends Tool {
-    private final HoeType type;
+    private HoeType type;
 
     public Hoe(Inventory inventory) {
         super(inventory);

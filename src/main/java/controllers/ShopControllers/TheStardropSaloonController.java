@@ -27,7 +27,7 @@ public class TheStardropSaloonController extends ShopController {
         StardropSallonCommands matchedCommand = null;
 
         for (StardropSallonCommands cmd : StardropSallonCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }
