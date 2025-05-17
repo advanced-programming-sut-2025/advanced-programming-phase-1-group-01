@@ -13,7 +13,7 @@ import models.tool.enums.PickaxeType;
 
 // related to mining.
 public class Pickaxe extends Tool {
-    private final PickaxeType type;
+    private PickaxeType type;
 
     public Pickaxe(Inventory inventory) {
         super(inventory);
