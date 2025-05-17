@@ -49,7 +49,6 @@ public enum SeedInfo implements TileObject, FarmingEnum {
     ANCIENT_SEEDS("Ancient Seeds", Season.SPECIAL, "🗿"),
     MIXED_SEEDS("Mixed Seeds", Season.SPECIAL, "🎲");
 
-
     private final String name;
     private final Season season;
     private final String symbol;
@@ -97,5 +96,9 @@ public enum SeedInfo implements TileObject, FarmingEnum {
     @Override
     public String getSymbol() {
         return symbol;
+    }
+
+    public Seed toItem() {
+        return new Seed(this);
     }
 }

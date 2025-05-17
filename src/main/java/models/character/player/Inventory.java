@@ -7,6 +7,8 @@ import models.cooking.Foods;
 import models.cooking.FoodsEnum;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
+import models.farming.*;
+import models.foraging.ForagingTreeInfo;
 import models.shop.CarpenterShopProductsItem;
 import models.shop.enums.*;
 import models.tool.*;
@@ -157,6 +159,24 @@ public class Inventory {
                 for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
                     if (product.getName().equalsIgnoreCase(itemName)) {
                         yield product.toItem();
+                    }
+                }
+
+                for (SeedInfo seedInfo : SeedInfo.values()) {
+                    if (seedInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield seedInfo.toItem();
+                    }
+                }
+
+                for (ForagingTreeInfo foragingTreeInfo : ForagingTreeInfo.values()) {
+                    if (foragingTreeInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield foragingTreeInfo.toItem();
+                    }
+                }
+
+                for (CropInfo cropInfo : CropInfo.values()) {
+                    if (cropInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield cropInfo.toItem();
                     }
                 }
 
