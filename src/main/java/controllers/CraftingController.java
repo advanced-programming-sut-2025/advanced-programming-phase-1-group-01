@@ -122,8 +122,7 @@ public class CraftingController extends Controller {
 
         inventory.addItem(itemName,1);
 
-        //Hi amirhosein
-        //chetori
+        //repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(itemName);
 
         return new Result(true, "Crafted " + targetRecipe.name() + " successfully!");
     }
@@ -194,6 +193,7 @@ public class CraftingController extends Controller {
         device.setWorking(false);
 
         repo.getCurrentGame().getCurrentPlayer().getFarm().getTiles().get(x).get(y).setObject(device);
+        repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(device);
 
         slot.removeQuantity(1);
 

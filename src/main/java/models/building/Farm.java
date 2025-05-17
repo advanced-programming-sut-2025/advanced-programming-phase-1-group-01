@@ -156,27 +156,27 @@ public class Farm extends Maps {
         return productsBuilder.toString();
     }
 
-    public List<AnimalProduct> collectProductsByType(AnimalProductType desiredType) {
-        Map<ProductQuality, AnimalProduct> productMap = new HashMap<>();
-
-        for (Animal animal : animals) {
-            if (animal.hasAnyProduct() && animal.getAnimalProductType() == desiredType) {
-                AnimalProductType type = animal.getAnimalProductType();
-                ProductQuality quality = animal.getAnimalProductQuality();
-
-                productMap.merge(
-                        quality,
-                        new AnimalProduct(type, quality, 1),
-                        (existingProduct, newProduct) -> {
-                            existingProduct.increaseAmount(1);
-                            return existingProduct;
-                        }
-                );
-            }
-        }
-
-        return new ArrayList<>(productMap.values());
-    }
+//    public List<AnimalProduct> collectProductsByType(AnimalProductType desiredType) {
+//        Map<ProductQuality, AnimalProduct> productMap = new HashMap<>();
+//
+//        for (Animal animal : animals) {
+//            if (animal.hasAnyProduct() && animal.getAnimalProductType() == desiredType) {
+//                AnimalProductType type = animal.getAnimalProductType();
+//                ProductQuality quality = animal.getAnimalProductQuality();
+//
+//                productMap.merge(
+//                        quality,
+//                        new AnimalProduct(type, quality),
+//                        (existingProduct, newProduct) -> {
+//                            existingProduct.increaseAmount(1);
+//                            return existingProduct;
+//                        }
+//                );
+//            }
+//        }
+//
+//        return new ArrayList<>(productMap.values());
+//    }
 
     public void addCollectedProductsToInventory(List<AnimalProduct> products) {
         for (AnimalProduct product : products) {
@@ -275,7 +275,7 @@ public class Farm extends Maps {
         } else if (animal.getAnimalInfo() == AnimalInfo.PIG) {
             if (season == Season.WINTER) return "Pigs don't produce in winter";
         }
-        animal.collectProduct();
+        player.getInventory().addItem(animal.collectProduct().toString(), 1);
         return "Product collected";
     }
 

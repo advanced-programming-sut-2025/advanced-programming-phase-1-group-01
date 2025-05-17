@@ -1,7 +1,7 @@
 package models.enums.commands;
 
 public enum ProcessingCommands implements Command {
-    ARTISAN_USE("artisan use (?<artisanName>\\S+) (?<itemName>\\S+)"),
+    ARTISAN_USE("artisan use (?<artisanName>\\S+) (?<itemName>\\S+(?: \\S+))"),
     ARTISAN_GET("artisan get (?<artisanName>\\S+)");
 
     private final String regex;

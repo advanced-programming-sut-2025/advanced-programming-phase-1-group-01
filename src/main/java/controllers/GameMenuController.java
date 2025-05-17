@@ -134,7 +134,7 @@ public class GameMenuController extends Controller {
         index++;
 
         if (index == players.size()) {
-            currentPlayer.getGame().setCurrentMap(currentPlayer.getFarm());
+            //currentPlayer.getGame().setCurrentMap(currentPlayer.getFarm());
             return new Result(true, "All players have selected their maps. Game starting...");
         }
 

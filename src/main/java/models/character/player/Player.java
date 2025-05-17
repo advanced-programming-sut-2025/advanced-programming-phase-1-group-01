@@ -11,8 +11,8 @@ import models.character.Character;
 import models.character.NPC.NPC;
 import models.cooking.CookingRecipe;
 import models.cooking.CookingRecipes;
-import models.crafting.CraftedProducts;
-import models.crafting.CraftingRecipe;
+import models.crafting.*;
+import models.crafting.enums.AllCraftedProductsType;
 import models.data.User;
 import models.dateTime.Season;
 import models.enums.Color;
@@ -47,6 +47,9 @@ public class Player extends Character {
     private final Set<CraftingRecipe> craftingRecipes;
     private final Set<CookingRecipe> cookingRecipes;
     private Farm partnerFarm ;
+    private final List<CraftingDevice> craftingDevices = new ArrayList<>();
+    private final List<UnripeProduct> unripeProducts = new ArrayList<>();
+
 
     //@ list unripe
     //@ list ripe and ready to get items
@@ -377,5 +380,328 @@ public class Player extends Character {
 
     public User getPartner() {
         return relationshipService.getPartner();
+    }
+
+    public boolean hasEnoughItem(String itemName, int quantity) {
+        return inventory.getSlot(itemName) == null && inventory.getSlot(itemName).getQuantity() >= quantity;
+
+    }
+
+    public String useArtisan(String artisanName, String itemName) {
+        String[] items = itemName.split(" ");
+        switch (artisanName) {
+            case "honey" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("-")) return "Invalid item name";
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.HONEY), 96));
+
+                } else return "Invalid artisan";
+
+            }
+            case "cheese" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (items[0].equals("milk")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CHEESE), 3));
+                    } else if (items[0].equals("large_milk")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CHEESE), 3));
+                    } else return "Invalid item";
+                } else return "Invalid artisan";
+            }
+            case "goat_cheese" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (items[0].equals("goat_milk")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE), 3));
+                    } else if (items[0].equals("large_Goat_milk")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE), 3));
+                    } else return "Invalid item";
+                } else return "Invalid artisan";
+            }
+            case "beer" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("wheat")) return "Invalid item name";
+                    if (hasEnoughItem("wheat", 1)) return "You don't have enough wheat";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.BEER), 24));
+                } else return "Invalid artisan";
+            }
+            case "vinegar" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("rice")) return "Invalid item name";
+                    if (hasEnoughItem("rice", 1)) return "You don't have enough rice";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.VINEGAR), 10));
+                } else return "Invalid artisan";
+            }
+            case "coffee" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("coffee_been")) return "Invalid item name";
+                    if (hasEnoughItem("coffee been", 5)) return "You don't have enough coffee";
+                    inventory.getSlot(items[0]).removeQuantity(5);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.COFFEE), 2));
+                } else return "Invalid artisan";
+            }
+            case "juice" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("potato")) return "Invalid item name";
+                    if (hasEnoughItem("potato", 1)) return "You don't have enough potato";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.JUICE), 96));
+                } else return "Invalid artisan";
+            }
+            case "mead" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("honey")) return "Invalid item name";
+                    if (hasEnoughItem("honey", 1)) return "You don't have enough honey";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MEAD), 10));
+                } else return "Invalid artisan";
+            }
+            case "pale_ale" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("hops")) return "Invalid item name";
+                    if (hasEnoughItem("hops", 1)) return "You don't have enough hops";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.PALE_ALE), 72));
+                } else return "Invalid artisan";
+            }
+            case "wine" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("apple")) return "Invalid item name";
+                    if (hasEnoughItem("apple", 5)) return "You don't have enough apple";
+                    inventory.getSlot(items[0]).removeQuantity(5);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.WINE), 168));
+                } else return "Invalid artisan";
+            }
+            case "dried_mushrooms" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("mushroom")) return "Invalid item name";
+                    if (hasEnoughItem("mushroom", 5)) return "You don't have enough mushrooms";
+                    inventory.getSlot(items[0]).removeQuantity(5);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DRIED_MASHROOMS), -1));
+                } else return "Invalid artisan";
+            }
+            case "dried_fruit" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("apple")) return "Invalid item name";
+                    if (hasEnoughItem("apple", 5)) return "You don't have enough apple";
+                    inventory.getSlot(items[0]).removeQuantity(5);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DRIED_FRUIT), -1));
+                } else return "Invalid artisan";
+            }
+            case "raisins" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("grapes")) return "Invalid item name";
+                    if (hasEnoughItem("grapes", 5)) return "You don't have enough grapes";
+                    inventory.getSlot(items[0]).removeQuantity(5);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.RAISINS), -1));
+                } else return "Invalid artisan";
+            }
+            case "coal" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("wood")) return "Invalid item name";
+                    if (hasEnoughItem("apple", 10)) return "You don't have enough woods";
+                    inventory.getSlot(items[0]).removeQuantity(10);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.COAL), 1));
+                } else return "Invalid artisan";
+            }
+            case "cloth" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("wool")) return "Invalid item name";
+                    if (hasEnoughItem("wool", 1)) return "You don't have enough wool";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CLOTH), 4));
+                } else return "Invalid artisan";
+            }
+            case "mayonnaise" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (items[0].equals("egg")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MAYONNAISE), 3));
+                    } else if (items[0].equals("large_egg")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MAYONNAISE), 3));
+                    } else return "Invalid item";
+                } else return "Invalid artisan";
+            }
+            case "duck_mayonnaise" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("duck_egg")) return "Invalid item name";
+                    if (hasEnoughItem("duck egg", 1)) return "You don't have enough duck egg";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DUCK_MAYONNAISE), 3));
+                } else return "Invalid artisan";
+            }
+            case "dinosaur_mayonnaise" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("dinosaur_egg")) return "Invalid item name";
+                    if (hasEnoughItem("dinosaur egg", 1)) return "You don't have enough dinosaur egg";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DINOSAUR_MAYONNAISE), 3));
+                } else return "Invalid artisan";
+            }
+            case "truffle_oil" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("truffle")) return "Invalid item name";
+                    if (hasEnoughItem("truffle", 1)) return "You don't have enough truffle";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.TRUFFLE_OIL), 6));
+                } else return "Invalid artisan";
+            }
+            case "oil" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (items[0].equals("corn")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 3));
+                    } else if (items[0].equals("sunflower_seeds")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 3));
+                    } else if (items[0].equals("sunflower")) {
+                        if (inventory.getSlot(items[0]) == null) return "Invalid item name";
+                        inventory.getSlot(items[0]).removeQuantity(1);
+                        isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 3));
+                    } else return "Invalid item";
+                } else return "Invalid artisan";
+            }
+            case "pickles" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("corn")) return "Invalid item name";
+                    if (hasEnoughItem("corn", 1)) return "You don't have enough vegetables";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.PICKLES), 6));
+                } else return "Invalid artisan";
+            }
+            case "jelly" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("apple")) return "Invalid item name";
+                    if (hasEnoughItem("apple", 1)) return "You don't have enough fruits";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.JELLY), 72));
+                } else return "Invalid artisan";
+            }
+            case "smoked_fish" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("salmon")) return "Invalid item name";
+                    if (items.length != 2) return "Invalid item name";
+                    if (!items[1].equals("coal")) return "Invalid item name";
+                    if (hasEnoughItem("salmon", 1)) return "You don't have enough fish";
+                    if (hasEnoughItem("coal", 1)) return "You don't have enough coal";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    inventory.getSlot(items[1]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.SMOKED_FISH), 1));
+                } else return "Invalid artisan";
+            }
+            case "iron_bar" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("iron_ore")) return "Invalid item name";
+                    if (items.length != 2) return "Invalid item name";
+                    if (!items[1].equals("coal")) return "Invalid item name";
+                    if (hasEnoughItem("iron ore", 1)) return "You don't have enough iron ore";
+                    if (hasEnoughItem("coal", 1)) return "You don't have enough coal";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    inventory.getSlot(items[1]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.IRON_BAR), 4));
+                } else return "Invalid artisan";
+            }
+            case "gold_bar" -> {
+                if (isThereSuitableCraftingDevice(artisanName) != null) {
+                    if (!items[0].equals("gold_ore")) return "Invalid item name";
+                    if (items.length != 2) return "Invalid item name";
+                    if (!items[1].equals("coal")) return "Invalid item name";
+                    if (hasEnoughItem("gold ore", 1)) return "You don't have enough gold ore";
+                    if (hasEnoughItem("coal", 1)) return "You don't have enough coal";
+                    inventory.getSlot(items[0]).removeQuantity(1);
+                    inventory.getSlot(items[1]).removeQuantity(1);
+                    isThereSuitableCraftingDevice(artisanName).setWorking(true);
+                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOLD_BAR), 4));
+                } else return "Invalid artisan";
+            }
+            default -> {
+                return "invalid command";
+            }
+        }
+        return "Invalid command";
+    }
+
+    public void addCraftingDevices(CraftingDevice craftingDevice) {
+        if (!craftingDevices.contains(craftingDevice)) craftingDevices.add(craftingDevice);
+    }
+
+    public CraftingDevice isThereSuitableCraftingDevice(String CraftingDeviceName) {
+        CraftingDevice craftingDevice = (CraftingDevice) inventory.getSlot(CraftingDeviceName).getItem();
+        if (craftingDevice == null || !craftingDevices.contains(craftingDevice) || isNearToDevice()) return craftingDevice;
+        else return null;
+    }
+
+    public boolean isNearToDevice() {
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        for (int[] direction : directions) {
+            if (position.x() + direction[0] < 0 ||
+                    position.x() + direction[0] > 74 ||
+                    position.y() + direction[1] < 0 ||
+                    position.y() + direction[1] > 74) continue;
+            if (farm.getTiles().get(position.x() + direction[0]).get(position.y() + direction[1]).getObject() instanceof CraftingDevice) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getArtisan(String artisanName) {
+        Item item = null;
+        for (UnripeProduct unripeProduct : unripeProducts) {
+            if (unripeProduct.getInventoryItem().getName().equals(artisanName)) {
+                if (!unripeProduct.isRipe()) return "item is not ripe";
+                item = unripeProduct.getInventoryItem();
+            };
+        }
+
+        if (item == null) return "there is no item with name: " + artisanName;
+        inventory.addItem(artisanName.toLowerCase().replace("_", " "), 1);
+        return "You got the item";
+    }
+
+    public List<UnripeProduct> getUnripeProducts() {
+        return unripeProducts;
     }
 }

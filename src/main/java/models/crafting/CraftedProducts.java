@@ -1,33 +1,23 @@
 package models.crafting;
 
 import models.Item;
+import models.crafting.enums.AllCraftedProductsType;
 import models.crafting.enums.CraftingDevices;
 
-public class CraftedProducts {
-    private String name;
-    private CraftingDevices device;
-    private int processingTime;
-    private int energy;
-    private int sellingPrice;
-    private Item inventoryItem;
-    private int dayCounterToRipe = 0;
-    private boolean isRipe = false;
+public class CraftedProducts implements Item {
+    private final AllCraftedProductsType type;
 
-    public CraftedProducts(CraftingDevices device, int processingTime, int energy, int sellingPrice) {
-        this.device = device;
-        this.processingTime = processingTime;
-        this.energy = energy;
-        this.sellingPrice = sellingPrice;
+    public CraftedProducts(AllCraftedProductsType type) {
+        this.type = type;
     }
 
-    public void incrementDayCounterToRipe() {
-        dayCounterToRipe++;
-        if (dayCounterToRipe == processingTime) {
-            isRipe = true;
-        }
+    @Override
+    public String getName() {
+        return type.toString().toLowerCase().replaceAll("_", " ");
     }
 
-    public Item getInventoryItem() {
-        return inventoryItem;
+    @Override
+    public int getPrice() {
+        return type.getPrice();
     }
 }

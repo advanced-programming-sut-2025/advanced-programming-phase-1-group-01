@@ -2,9 +2,16 @@ package models.character.player;
 
 import models.Item;
 
+import models.animal.AnimalProduct;
+import models.animal.AnimalProductType;
+import models.animal.ProductQuality;
 import models.cooking.CookingRecipes;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
+import models.ingredients.QuestItem;
+import models.ingredients.QuestItemType;
+import models.ingredients.RewardItem;
+import models.ingredients.RewardItemType;
 import models.tool.*;
 
 import java.util.ArrayList;
@@ -48,6 +55,7 @@ public class Inventory {
     }
 
     public boolean addItem(String itemName, int quantity) {
+        itemName = itemName.toLowerCase().replace("_", " ").trim();
         for (Slot slot : slots) {
             if (slot.getItem().getName().equals(itemName)) {
                 slot.addQuantity(quantity);
@@ -104,6 +112,35 @@ public class Inventory {
             case "preserves jar" -> new PreservesJar();
             case "fish smoker" -> new FishSmoker();
             case "furnace" -> new Furnace();
+            case "egg" -> new AnimalProduct(AnimalProductType.EGG, ProductQuality.getRandomProductQuality());
+            case "big egg" -> new AnimalProduct(AnimalProductType.BIG_EGG, ProductQuality.getRandomProductQuality());
+            case "duck egg" -> new AnimalProduct(AnimalProductType.DUCK_EGG, ProductQuality.getRandomProductQuality());
+            case "duck feather" -> new AnimalProduct(AnimalProductType.DUCK_FEATHER, ProductQuality.getRandomProductQuality());
+            case "rabbit wool" -> new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
+            case "rabbit leg" -> new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
+            case "dinosaur egg" -> new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
+            case "stone" -> new QuestItem(QuestItemType.STONE);
+            case "iron gold" -> new QuestItem(QuestItemType.IRON_GOLD);
+            case "pumpkin" -> new QuestItem(QuestItemType.PUMPKIN);
+            case "wheat" -> new QuestItem(QuestItemType.WHEAT);
+            case "corn" -> new QuestItem(QuestItemType.CORN);
+            case "hops" -> new QuestItem(QuestItemType.HOPS);
+            case "garlic" -> new QuestItem(QuestItemType.GARLIC);
+            case "carrot" -> new QuestItem(QuestItemType.CARROT);
+            case "milk" -> new QuestItem(QuestItemType.MILK);
+            case "big milk" -> new QuestItem(QuestItemType.BIG_MILK);
+            case "goat milk" -> new QuestItem(QuestItemType.GOAT_MILK);
+            case "big goat milk" -> new QuestItem(QuestItemType.BIG_GOAT_MILK);
+            case "sheep wool" -> new QuestItem(QuestItemType.SHEEP_WOOL);
+            case "truffle" -> new QuestItem(QuestItemType.TRUFFLE);
+            case "deluxe scarecrow" -> new RewardItem(RewardItemType.DELUXE_SCARECROW);
+            case "dinner salmon" -> new RewardItem(RewardItemType.DINNER_SALMON);
+            case "iridium sprinkler" -> new RewardItem(RewardItemType.IRIDIUM_SPRINKLER);
+            case "quartz" -> new RewardItem(RewardItemType.QUARTZ);
+            case "salad" -> new RewardItem(RewardItemType.SALAD);
+            case "diamond" -> new RewardItem(RewardItemType.DIAMOND);
+
+
 
             default -> {
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {

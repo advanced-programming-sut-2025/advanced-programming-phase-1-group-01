@@ -36,5 +36,6 @@ public abstract class CraftingDevice implements Item, TileObject {
     public abstract void insertItem(List<Item> items);
     public abstract Item collectProduct();
     public abstract int getRequiredTurns();
+
 }
 
