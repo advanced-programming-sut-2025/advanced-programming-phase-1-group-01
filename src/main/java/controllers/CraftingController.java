@@ -207,7 +207,7 @@ public class CraftingController extends Controller {
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
-        Item item = Inventory.getNewItem(itemName);
+        Item item = inventory.getNewItem(itemName);
 
         if (item == null) {
             return new Result(false, "item not found");

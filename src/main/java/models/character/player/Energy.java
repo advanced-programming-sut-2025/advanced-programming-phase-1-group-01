@@ -2,12 +2,14 @@ package models.character.player;
 
 public class Energy {
     private double amount;
-    private double MAX_ENERGY = 200;
-    private double INITIAL_ENERGY_AMOUNT = MAX_ENERGY;
+    private double maxEnergy;
+    public static final double MAX_ENERGY = 200;
+    public static final double INITIAL_ENERGY_AMOUNT = MAX_ENERGY;
     private boolean hasPassedOut = false;
 
     public Energy() {
         this.amount = INITIAL_ENERGY_AMOUNT;
+        maxEnergy = MAX_ENERGY;
     }
 
     public double getAmount() {
@@ -29,14 +31,17 @@ public class Energy {
 
     public void increase(double amount) {
         if (amount > 0) this.amount += amount;
+        if (this.amount >= MAX_ENERGY) {
+            this.amount = MAX_ENERGY;
+        }
     }
 
     public void fillEnergy() {
-        this.amount = INITIAL_ENERGY_AMOUNT;
+        this.amount = maxEnergy;
     }
 
     public void fillEnergyPassedOut() {
-        this.amount = INITIAL_ENERGY_AMOUNT * 0.75;
+        this.amount = maxEnergy * 0.75;
     }
 
     public void passOut() {
@@ -52,12 +57,12 @@ public class Energy {
         this.hasPassedOut = hasPassedOut;
     }
 
-    public void setMAX_ENERGY(double MAX_ENERGY) {
-        this.MAX_ENERGY = MAX_ENERGY;
+    public double getMaxEnergy() {
+        return maxEnergy;
     }
 
-    public double getMAX_ENERGY() {
-        return MAX_ENERGY;
+    public void setMaxEnergy(double maxEnergy) {
+        this.maxEnergy = maxEnergy;
     }
 
     @Override

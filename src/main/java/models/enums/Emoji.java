@@ -258,7 +258,6 @@ public enum Emoji {
     HOTEL("🏨", false),
     LOVE_HOTEL("🏩", false),
     CONVENIENCE_STORE("🏪", false),
-
     WATCH("⌚", false),
     MOBILE_PHONE("📱", false),
     LAPTOP("💻", false),
@@ -300,7 +299,6 @@ public enum Emoji {
     DOOR("🚪", false),
     BED("🛏️", false),
     TOILET("🚽", false),
-
     RED_HEART("❤️", false),
     ORANGE_HEART("🧡", false),
     YELLOW_HEART("💛", false),
@@ -342,7 +340,6 @@ public enum Emoji {
     AQUARIUS("♒", false),
     PISCES("♓", false),
     OPHIUCHUS("⛎", false),
-
     RED_SQUARE("🟥", false),
     BLUE_SQUARE("🟦", false),
     GREEN_SQUARE("🟩", false),
@@ -352,8 +349,6 @@ public enum Emoji {
     BROWN_SQUARE("🟫", false),
     BLACK_SQUARE("⬛", false),
     WHITE_SQUARE("⬜", false),
-
-    // دایره‌ها
     RED_CIRCLE("🔴", false),
     BLUE_CIRCLE("🔵", false),
     GREEN_CIRCLE("🟢", false),

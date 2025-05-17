@@ -8,7 +8,7 @@ import models.foraging.ForagingTreeInfo;
 import java.util.Arrays;
 import java.util.Random;
 
-public enum TreeInfo implements TileObject, FarmingEnum {
+public enum TreeInfo implements FarmingEnum {
     APRICOT_TREE("Apricot Tree", null/*"Apricot Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APRICOT, 1, Season.SPRING, Emoji.YELLOW_CIRCLE.getSymbol()),
     CHERRY_TREE("Cherry Tree", null/*"Cherry Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.CHERRY, 1, Season.SPRING, Emoji.CHERRIES.getSymbol()),
     BANANA_TREE("Banana Tree", null/*"Banana Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.BANANA, 1, Season.SUMMER, Emoji.BANANA.getSymbol()),
@@ -54,11 +54,6 @@ public enum TreeInfo implements TileObject, FarmingEnum {
 
     public String getName() {
         return name;
-    }
-
-    @Override
-    public int getPrice() {
-        return 0;
     }
 
     public FarmingEnum getSource() {

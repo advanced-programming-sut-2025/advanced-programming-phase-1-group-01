@@ -6,10 +6,8 @@ public class Ability {
     private int level;
     private int xp;
 
-    Ability(AbilityType abilityType, int level, int xp) {
+    Ability(AbilityType abilityType) {
         this.abilityType = abilityType;
-        this.level = level;
-        this.xp = xp;
     }
 
     public int getXp() {
@@ -37,7 +35,7 @@ public class Ability {
     }
 
     public boolean isFull() {
-        return true; // should be overwritten
+        return level >= 5;
     }
 
     public void increaseXp(int amount) {

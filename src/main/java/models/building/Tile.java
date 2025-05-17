@@ -38,8 +38,15 @@ public class Tile {
     }
 
     public boolean plow() {
-        if (type != TileType.RIVER && isEmpty()) isPlowed = true;
+        if (type != TileType.RIVER && isEmpty()) {
+            isPlowed = true;
+            return true;
+        }
         return false;
+    }
+
+    public void unPlow() {
+        isPlowed = false;
     }
 
     public void setMovable(boolean movable) {
@@ -124,10 +131,6 @@ public class Tile {
         public Builder setObject(TileObject object) {
             this.object = object;
             return this;
-        }
-
-        public boolean isEmpty() {
-            return object == null;
         }
     }
 }

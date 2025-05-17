@@ -75,6 +75,11 @@ public enum SeedInfo implements TileObject, FarmingEnum {
         return name;
     }
 
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
     public static SeedInfo fromString(String name) {
         for (SeedInfo seedInfo : SeedInfo.values()) {
             if (seedInfo.getName().equalsIgnoreCase(name)) {

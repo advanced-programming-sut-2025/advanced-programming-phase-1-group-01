@@ -10,7 +10,7 @@ import models.ingredients.*;
 public enum NPCQuestType {
     SEBASTIAN_1(1, NPCType.SEBASTIAN, new IronBar(50) /*50 Iron*/, new Diamond(50)),
     SEBASTIAN_2(2, NPCType.SEBASTIAN, new PumpkinPie(1) /*1 PumpkinPie*/, new Coin(5000)),
-    SEBASTIAN_3(3, NPCType.SEBASTIAN, new Stone(150) /*150 Stone*/, new Quartz(50)),
+    SEBASTIAN_3(3, NPCType.SEBASTIAN, null/*150 Stone*/, new Quartz(50)),
     ABIGAIL_1(4, NPCType.ABIGAIL, new GoldBar(1) /*1 GoldBar*/, new FriendshipLevel(1)),
     ABIGAIL_2(5, NPCType.ABIGAIL, new Pumpkin(1) /*1 Pumpkin*/, new Coin(500)),
     ABIGAIL_3(6, NPCType.ABIGAIL, new Wheat(50) /*50 Wheat*/, new IridiumSprinkler(1)),

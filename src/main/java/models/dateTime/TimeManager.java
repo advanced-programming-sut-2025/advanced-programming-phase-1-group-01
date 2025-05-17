@@ -25,6 +25,7 @@ public class TimeManager {
         this.eventTimes = new ArrayList<>();
         this.game = game;
         this.now = new DateTime.Builder()
+                .setTimeManager(this)
                 .setYear(START_YEAR)
                 .setSeason(START_SEASON)
                 .setWeekDay(START_WEEKDAY)
@@ -109,7 +110,7 @@ public class TimeManager {
             }
 
             if (player.isEnergyHalved()) {
-                player.getEnergy().setMAX_ENERGY(player.getEnergy().getMAX_ENERGY() / 2);
+                player.getEnergy().setMaxEnergy(player.getEnergy().getMaxEnergy() / 2);
             }
 
             player.increaseHalvedEnergy();

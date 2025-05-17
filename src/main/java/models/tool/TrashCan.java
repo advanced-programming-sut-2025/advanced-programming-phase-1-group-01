@@ -1,12 +1,15 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.enums.Direction;
+import models.ingredients.Ingredient;
 import models.tool.enums.TrashCanType;
 
 public class TrashCan extends Tool {
     private final TrashCanType type;
 
-    public TrashCan() {
+    public TrashCan(Inventory inventory) {
+        super(inventory);
         this.type = TrashCanType.PRIMARY;
         name = "trash can";
     }
