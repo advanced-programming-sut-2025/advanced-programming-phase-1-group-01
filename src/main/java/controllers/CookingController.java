@@ -6,6 +6,7 @@ import models.building.Building;
 import models.character.player.*;
 import models.cooking.*;
 import models.data.Repository;
+import models.enums.FridgeOnlyItem;
 import models.enums.commands.CookingCommands;
 
 import java.util.Map;
@@ -105,7 +106,7 @@ public class CookingController extends Controller {
             return new Result(false, "You do not have this " + itemStr + " in your inventory.");
         }
 
-        if (NotEatable.isNotEatable(itemStr)) {
+        if (!FridgeOnlyItem.isFridgeItem(itemStr)) {
             return new Result(false, "You cannot place non-food items in the fridge.");
         }
 

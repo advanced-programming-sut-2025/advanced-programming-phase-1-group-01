@@ -2,10 +2,12 @@ package controllers;
 
 import models.Item;
 import models.Result;
+import models.animal.ProductQuality;
 import models.character.player.Inventory;
 import models.character.player.Player;
 import models.character.player.Slot;
 import models.data.Repository;
+import models.enums.BanSellItem;
 import models.enums.commands.SellCommands;
 
 import java.util.regex.Matcher;
@@ -18,10 +20,6 @@ public class SellController extends Controller {
 
     @Override
     public Result handleCommand(String command) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
-
-
-
         SellCommands matchedCommand = null;
 
         for (SellCommands cmd : SellCommands.values()) {
@@ -59,7 +57,7 @@ public class SellController extends Controller {
         count = Integer.parseInt(countStr);
 
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        if (!player.isNearToSellBucket()) {
+        if (!player.isNearToSellBucket(player.getPosition().x(), player.getPosition().y())) {
             return new Result(false, "You are not near a Sell Bucket!");
         }
 
@@ -80,10 +78,16 @@ public class SellController extends Controller {
             return new Result(false, "You don't have enough " + productName + " in your inventory.");
         }
 
-        slot.removeQuantity(count);
-        //player.increaseCoins(item.getPrice());
+        if (BanSellItem.isBanned(item.getName())) {
+            return new Result(false, "You can't sell " + productName + " because it is already banned.");
+        }
 
-        return new Result(true, count + " of " + productName + " have been sold!");
+        slot.removeQuantity(count);
+        ProductQuality quality = ProductQuality.getRandomProductQuality();
+        double finalPrice = item.getPrice() * quality.getPriceCoefficient();
+        //player.increaseCoins((int)finalPrice);
+
+        return new Result(true, count + " x " + quality + " " + productName + " have been sold for " + finalPrice + " coins!");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {

@@ -212,22 +212,14 @@ public class Player extends Character {
         return Math.abs(this.position.x() - position.x()) <= 1 && Math.abs(this.position.y() - position.y()) <= 1;
     }
 
-
-    public boolean isNearToSellBucket() {
-        List<Position> neighbors = new ArrayList<>();
-        int[][] directions = {{0,1}, {1,0}, {0,-1}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
-
-        for (int[] dir : directions) {
-            int nx = position.x() + dir[0];
-            int ny = position.y() + dir[1];
-            Position neighbor = new Position(nx, ny);
-            neighbors.add(neighbor);
-        }
-
-        for (Position p : neighbors) {
-            if (farm.getTiles().get(p.x()).get(p.y()).getObject() == null) return true;
-        }
-        return false;
+    public boolean isNearToSellBucket(int playerX, int playerY) {
+        int dx = Math.abs(playerX - 50);
+        int dy = Math.abs(playerY - 8);
+        int dx2 = Math.abs(playerX - 70);
+        int dy2 = Math.abs(playerY - 68);
+        double distance1 = Math.sqrt(dx * dx + dy * dy);
+        double distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+        return distance1 <= 2 || distance2 <= 2;
     }
 
     public boolean isPlayerNearBuilding(Building building) {

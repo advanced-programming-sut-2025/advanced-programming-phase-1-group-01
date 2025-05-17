@@ -5,44 +5,12 @@ import models.Result;
 import models.data.Repository;
 import models.shop.enums.ShopCommands;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public abstract class ShopController extends Controller {
     public ShopController(Repository repo) {
         super(repo);
-    }
-
-    public Result handleCommand(String command) {
-
-        int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-
-        if (!isShopOpen(hour)) {
-            return new Result(false, "shop is closed");
-        }
-
-        ShopCommands matchedCommand = null;
-
-        for (ShopCommands cmd : ShopCommands.values()) {
-            if (cmd.name().equals(command)) {
-                matchedCommand = cmd;
-                break;
-            }
-        }
-
-        if (matchedCommand == null) {
-            return new Result(false, "invalid command");
-        }
-
-        switch (matchedCommand) {
-            case SHOW_ALL_PRODUCTS:
-                return showAllProducts();
-            case SHOW_ALL_AVAILABLE_PRODUCTS:
-                return showAllAvailableProducts();
-            case PURCHASE:
-                return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
-        }
-
-        return null;
     }
 
     protected Result cheatCoins(String command) {
@@ -50,6 +18,25 @@ public abstract class ShopController extends Controller {
         int count = Integer.parseInt(tokens[2]);
         repo.getCurrentGame().getCurrentPlayer().increaseCoins(count);
         return new Result(true, "coins have been added to your balance: " + count);
+    }
+
+    protected String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 
     protected abstract boolean isShopOpen(int hour);
