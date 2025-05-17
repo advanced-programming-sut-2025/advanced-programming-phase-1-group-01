@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // this enum contains all kinds of crops
-public enum CropInfo implements FarmingEnum, TileObject {
+public enum CropInfo implements FarmingEnum {
     BLUE_JAZZ("Blue Jazz", SeedInfo.JAZZ_SEEDS, new int[]{1, 2, 2, 2}, 7, true, -1, 50, true, 45, List.of(Season.SPRING), false, Emoji.BLUE_JAZZ.getSymbol()),
     CARROT("Carrot", SeedInfo.CARROT_SEEDS, new int[]{1, 1, 1}, 3, true, -1, 35, true, 75, List.of(Season.SPRING), false, Emoji.CARROT.getSymbol()),
     CAULIFLOWER("Cauliflower", SeedInfo.CAULIFLOWER_SEEDS, new int[]{1, 2, 4, 4, 1}, 12, true, -1, 175, true, 75, List.of(Season.SPRING), true, Emoji.CAULIFLOWER.getSymbol()),
@@ -172,7 +172,6 @@ public enum CropInfo implements FarmingEnum, TileObject {
                 canBecomeGiant);
     }
 
-    @Override
     public String getSymbol() {
         return symbol;
     }

@@ -83,7 +83,7 @@ public class MovementAndMapController extends Controller {
             int y = parseInt(matcher.group("Y"));
             int size = parseInt(matcher.group("size"));
             Player player = repo.getCurrentGame().getCurrentPlayer();
-            return new Result(true, repo.getCurrentGame().getCurrentMap().printMap(x, y, size, repo.getCurrentGame()));
+            return new Result(true, player.getCurrentMap().printMap(x, y, size, repo.getCurrentGame()));
         } else return new Result(false, "invalid command");
     }
 

@@ -90,9 +90,16 @@ public class Tree extends Plant {
     }
 
     @Override
+    public void growFull() {
+        for (int i = 0; i < info.getTotalHarvestTime(); i++) {
+            grow();
+        }
+    }
+
+    @Override
     public int getPrice() {
         return 0;
-    }
+    } // not sellable
 
     public TreeSource getSource() {
         return source;
@@ -108,5 +115,10 @@ public class Tree extends Plant {
 
     public void applyCrowAttack() {
         isAttackedByCrow = true;
+    }
+
+    @Override
+    public String getSymbol() {
+        return info.getSymbol();
     }
 }

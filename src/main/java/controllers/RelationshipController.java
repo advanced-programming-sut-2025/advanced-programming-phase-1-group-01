@@ -133,9 +133,9 @@ public class RelationshipController extends Controller {
             return new Result(false, "player not found");
         }
         Player receiver = repo.getUserByUsername(username).getPlayer();
-//        else if (!sender.isNearTo(receiver)) {
-//            return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
-//        }
+        if (!sender.isNearTo(receiver)) {
+            return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
+        }
 
         Friendship friendship = sender.getRelationService().getFriendship(receiver);
 
@@ -193,9 +193,9 @@ public class RelationshipController extends Controller {
 
         Player friend = repo.getUserByUsername(username).getPlayer();
 
-//        else if (!currentPlayer.isNearTo(friend)) {
-//            return new Result(false, "you should be near to " + friend.getUser().getNickname());
-//        }
+        if (!currentPlayer.isNearTo(friend)) {
+            return new Result(false, "you should be near to " + friend.getUser().getNickname());
+        }
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
 
@@ -232,9 +232,9 @@ public class RelationshipController extends Controller {
         Player receiver = repo.getUserByUsername(username).getPlayer();
         Friendship friendship = sender.getRelationService().getFriendship(receiver);
 
-//        if (!sender.isNearTo(receiver)) {
-//            return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
-//        }
+        if (!sender.isNearTo(receiver)) {
+            return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
+        }
 
         Slot slot = sender.getInventory().getSlot(itemName);
 
@@ -350,9 +350,9 @@ public class RelationshipController extends Controller {
         }
 
         Player friend = repo.getUserByUsername(username).getPlayer();
-//        if (!currentPlayer.isNearTo(friend)) {
-//            return new Result(false, "you should be near to " + friend.getUser().getNickname());
-//        }
+        if (!currentPlayer.isNearTo(friend)) {
+            return new Result(false, "you should be near to " + friend.getUser().getNickname());
+        }
 
         String flower = "flower";
 
@@ -425,8 +425,8 @@ public class RelationshipController extends Controller {
         if (respond.equals("reject")) {
             friendship.setLevel(0);
             friendship.setXp(0);
-            double energy = friend.getEnergy().getMAX_ENERGY();
-            friend.getEnergy().setMAX_ENERGY(energy / 2);
+            double energy = friend.getEnergy().getMaxEnergy();
+            friend.getEnergy().setMaxEnergy(energy/2);
             currentPlayer.setEnergyHalved();
             return new Result(true, currentPlayer + "reject" + friend.getUser().getUsername() + "request for marriage");
         } else if (respond.equals("accept")) {
@@ -472,7 +472,7 @@ public class RelationshipController extends Controller {
         }
         Player friend = repo.getUserByUsername(username).getPlayer();
 
-        Item item = Inventory.getNewItem(itemName);
+        Item item = currentPlayer.getInventory().getNewItem(itemName);
 
         if (item == null) {
             return new Result(false, "item not found");
@@ -520,8 +520,8 @@ public class RelationshipController extends Controller {
 
         Player friend = repo.getUserByUsername(username).getPlayer();
 
-        Item item = Inventory.getNewItem(itemName);
-        Item itemTarget = Inventory.getNewItem(targetName);
+        Item item = currentPlayer.getInventory().getNewItem(itemName);
+        Item itemTarget = currentPlayer.getInventory().getNewItem(targetName);
 
         if (item == null) {
             return new Result(false, "item not found");

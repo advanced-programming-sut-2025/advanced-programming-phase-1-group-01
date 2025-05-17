@@ -66,7 +66,8 @@ public class WeatherManager {
     Random random = new Random();
 
     public Weather getRandomTomorrowWeather() {
-        DateTime tomorrow = game.getTimeManager().getNow().clone().advanceDay();
+        DateTime tomorrow = game.getTimeManager().getNow().clone();
+        tomorrow.incrementDay();
         List<Weather> currSeasonWeathers = tomorrow.getSeason().getWeathers();
         int index = random.nextInt(currSeasonWeathers.size());
         return currSeasonWeathers.get(index);
@@ -79,7 +80,7 @@ public class WeatherManager {
 
     public double getToolEnergyCostMultiplier() {
         switch (todayWeather) {
-            case SUNNY, STORMY -> {
+            case RAINY, STORMY -> {
                 return 1.5;
             }
             case SNOWY -> {

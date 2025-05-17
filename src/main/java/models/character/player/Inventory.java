@@ -28,6 +28,8 @@ public class Inventory {
         slots = new ArrayList<>();
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "trash can", 1));
+        slots.add(new Slot(this, "hoe", 1));
+        slots.add(new Slot(this, "pickaxe", 1));
     }
     public List<Slot> getSlots() {
         return slots;
@@ -84,18 +86,18 @@ public class Inventory {
         this.capacity = capacity;
     }
 
-    public static Item getNewItem(String itemName) {
+    public Item getNewItem(String itemName) {
         return switch (itemName.trim().toLowerCase()) {
-            case "axe" -> new Axe();
-            case "backpack" -> new Backpack();
-            case "fishing pole" -> new FishingPole();
-            case "hoe" -> new Hoe();
-            case "milk pail" -> new MilkPail();
-            case "pickaxe" -> new Pickaxe();
-            case "scythe" -> new Scythe();
-            case "shear" -> new Shear();
-            case "trash can" -> new TrashCan();
-            case "watering can" -> new WateringCan();
+            case "axe" -> new Axe(this);
+            case "backpack" -> new Backpack(this);
+            case "fishing pole" -> new FishingPole(this);
+            case "hoe" -> new Hoe(this);
+            case "milk pail" -> new MilkPail(this);
+            case "pickaxe" -> new Pickaxe(this);
+            case "scythe" -> new Scythe(this);
+            case "shear" -> new Shear(this);
+            case "trash can" -> new TrashCan(this);
+            case "watering can" -> new WateringCan(this);
 
             case "bee house" -> new BeeHouse();
             case "cheese press" -> new CheesePress();

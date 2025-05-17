@@ -4,8 +4,8 @@ import models.building.TileObject;
 
 import java.util.Random;
 
-public enum StoneType implements TileObject {
-    FIRST("💎"), SECOND("🪨"), THIRD("🗿"), FOURTH("🌋");
+public enum StoneType {
+    FIRST("💎"), SECOND("🪨"), THIRD("00"), FOURTH("🌋");
 
 
     private final String symbol;
@@ -22,15 +22,5 @@ public enum StoneType implements TileObject {
 
     public String getSymbol() {
         return symbol;
-    }
-
-    @Override
-    public String getName() {
-        return "";
-    }
-
-    @Override
-    public int getPrice() {
-        return 0;
     }
 }
