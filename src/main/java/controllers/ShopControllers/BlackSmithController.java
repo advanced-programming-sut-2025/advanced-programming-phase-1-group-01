@@ -31,7 +31,7 @@ public class BlackSmithController extends ShopController {
         BlackSmithCommands matchedCommand = null;
 
         for (BlackSmithCommands cmd : BlackSmithCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }

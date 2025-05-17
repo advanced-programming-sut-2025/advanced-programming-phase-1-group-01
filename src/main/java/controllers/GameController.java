@@ -86,6 +86,7 @@ public class GameController extends Controller {
         commands.addAll(Arrays.stream(JojaMartCommands.values()).toList());
         commands.addAll(Arrays.stream(MarnieCommands.values()).toList());
         commands.addAll(Arrays.stream(StardropSallonCommands.values()).toList());
+        commands.addAll(Arrays.stream(PierreCommands.values()).toList());
     }
 
     @Override
@@ -145,9 +146,11 @@ public class GameController extends Controller {
         return marnieRanchController.handleCommand(commandLine);
         } else if (matchedCommand instanceof StardropSallonCommands) {
         return theStardropSaloonController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof PierreCommands) {
+            return pierreGeneralStoreController.handleCommand(commandLine);
         }
 
 
-        return new Result(false, "invalid command!");
+        return new Result(false, "invalid command!!!!");
     }
 }

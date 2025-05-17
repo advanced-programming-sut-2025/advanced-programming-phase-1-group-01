@@ -24,7 +24,7 @@ public class FishShopController extends ShopController {
         FishShopCommands matchedCommand = null;
 
         for (FishShopCommands cmd : FishShopCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }
