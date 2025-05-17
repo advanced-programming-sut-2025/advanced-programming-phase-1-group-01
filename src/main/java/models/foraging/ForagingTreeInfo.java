@@ -63,4 +63,8 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
                 Name: %s
                 Season: %s""".formatted(name, season);
     }
+
+    public ForagingTree toItem() {
+        return new ForagingTree(this);
+    }
 }

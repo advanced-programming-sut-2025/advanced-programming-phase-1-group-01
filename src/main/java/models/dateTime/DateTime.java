@@ -17,6 +17,7 @@ public class DateTime implements Cloneable {
     private static final int MAX_HOUR_OF_DAY = 23;
 
     public DateTime(Builder builder) {
+        this.timeManager = builder.getTimeManager();
         this.year = builder.getYear();
         this.season = builder.getSeason();
         this.weekDay = builder.getWeekDay();
@@ -37,15 +38,19 @@ public class DateTime implements Cloneable {
         }
     }
 
-    public DateTime advanceDay() {
+    private void advanceDay() {
         day++;
+        advanceWeekDay();
         timeManager.prepareForNewDay();
 
         if (day >= MAX_DAY_OF_SEASON) {
             day = 0;
             advanceSeason();
         }
-        return this;
+    }
+
+    public void incrementDay() {
+        day++;
     }
 
     private void advanceSeason() {
@@ -120,11 +125,10 @@ public class DateTime implements Cloneable {
     @Override
     public DateTime clone() {
         try {
-            DateTime cloned = (DateTime) super.clone();
+            return (DateTime) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     public TimeManager getTimeManager() {
@@ -141,6 +145,8 @@ public class DateTime implements Cloneable {
         private WeekDay weekDay;
         private int day;
         private int hour;
+
+        private TimeManager timeManager;
 
         public int getYear() {
             return year;
@@ -187,20 +193,29 @@ public class DateTime implements Cloneable {
             return this;
         }
 
+        public TimeManager getTimeManager() {
+            return timeManager;
+        }
+
+        public Builder setTimeManager(TimeManager timeManager) {
+            this.timeManager = timeManager;
+            return this;
+        }
+
         public DateTime build() {
             return new DateTime(this);
         }
     }
 
     public void advanceHour(int hour) {
-        for(int i = 0; i < hour; i++) {
+        for (int i = 0; i < hour; i++) {
             advanceHour();
         }
     }
 
-    public void advanceDay(int day) {
-        for (int i = 0; i < day * MAX_HOUR_OF_DAY; i++) {
-            advanceDay();
+    public void advanceDays(int day) {
+        for (int i = 0; i < day * 13; i++) {
+            advanceHour();
         }
     }
 }

@@ -1,11 +1,14 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.enums.Direction;
+import models.ingredients.Ingredient;
 
 public class Shear extends Tool {
     private static final int INITIAL_SHEAR_USE_ENERGY = 4;
 
-    public Shear() {
+    public Shear(Inventory inventory) {
+        super(inventory);
         name = "shear";
     }
 

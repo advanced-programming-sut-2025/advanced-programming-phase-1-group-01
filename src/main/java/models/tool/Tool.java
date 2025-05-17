@@ -8,6 +8,10 @@ public abstract class Tool implements Item {
     protected Inventory inventory;
     protected String name;
 
+    public Tool(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
     public double getEffectiveEnergyCost() {
         return inventory.getPlayer().getGame().getWeatherManager().getToolEnergyCostMultiplier() * getBaseEnergyCost();
     }

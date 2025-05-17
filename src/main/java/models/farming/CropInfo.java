@@ -175,4 +175,8 @@ public enum CropInfo implements FarmingEnum {
     public String getSymbol() {
         return symbol;
     }
+
+    public Crop toItem() {
+        return new Crop(source);
+    }
 }

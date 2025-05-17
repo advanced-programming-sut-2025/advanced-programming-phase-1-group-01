@@ -2,6 +2,7 @@ package models.tool;
 
 import models.Position;
 import models.building.Tile;
+import models.character.player.Inventory;
 import models.character.player.Player;
 import models.enums.Direction;
 import models.farming.Plant;
@@ -16,9 +17,11 @@ public class WateringCan extends Tool {
 
     private static final int INITIAL_CAPACITY = 100;
 
-    public WateringCan() {
+    public WateringCan(Inventory inventory) {
+        super(inventory);
         capacity = INITIAL_CAPACITY;
         name = "watering can";
+        type = WateringCanType.PRIMARY;
     }
 
     @Override

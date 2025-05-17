@@ -2,10 +2,11 @@ package models.foraging;
 
 import models.Item;
 import models.building.TileObject;
+import models.farming.FarmingEnum;
 
 import java.util.Random;
 
-public enum ForagingMineralInfo implements TileObject, Item {
+public enum ForagingMineralInfo implements FarmingEnum {
     QUARTZ("A clear crystal commonly found in caves and mines.", 25, "💎"),
     EARTH_CRISTAL("A resinous substance found near the surface.", 50, "🪨"),
     FROZEN_TEAR("A crystal fabled to be the frozen tears of a yeti.", 75, "🗿"),
@@ -43,11 +44,6 @@ public enum ForagingMineralInfo implements TileObject, Item {
 
     public String getSymbol() {
         return symbol;
-    }
-
-    @Override
-    public int getPrice() {
-        return sellPrice;
     }
 
     public int getSellPrice() {

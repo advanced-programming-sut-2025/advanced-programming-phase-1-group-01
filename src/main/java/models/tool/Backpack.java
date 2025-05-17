@@ -1,13 +1,17 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.enums.Direction;
 import models.tool.enums.BackpackType;
 
 public class Backpack extends Tool {
     private BackpackType type;
 
-    public Backpack() {
+    public Backpack(Inventory inventory) {
+        super(inventory);
         name = "backpack";
+        type = BackpackType.SMALL;
+        inventory.setCapacity(type.getCapacity());
     }
 
     @Override

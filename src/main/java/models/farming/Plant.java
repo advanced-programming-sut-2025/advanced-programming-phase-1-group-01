@@ -63,8 +63,5 @@ public abstract class Plant implements TileObject {
 
     public abstract String getName();
 
-    @Override
-    public String getSymbol() {
-        return "P";
-    }
+    public abstract void growFull();
 }

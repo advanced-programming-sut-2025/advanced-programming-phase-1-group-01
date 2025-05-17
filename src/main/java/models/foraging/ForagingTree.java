@@ -2,6 +2,7 @@ package models.foraging;
 
 import models.Item;
 import models.building.TileObject;
+import models.farming.Tree;
 import models.farming.TreeSource;
 
 public class ForagingTree extends Foraging implements Item, TreeSource {

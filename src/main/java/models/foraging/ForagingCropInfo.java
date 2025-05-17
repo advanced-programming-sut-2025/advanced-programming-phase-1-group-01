@@ -6,7 +6,7 @@ import models.farming.FarmingEnum;
 
 import java.util.Random;
 
-public enum ForagingCropInfo implements TileObject, FarmingEnum {
+public enum ForagingCropInfo implements FarmingEnum {
     COMMON_MUSHROOM("Common Mushroom", Season.SPECIAL, 40, 38, "🍄"),
     DAFFODIL("Daffodil", Season.SPRING, 30, 0, "🌼"),
     DANDELION("Dandelion", Season.SPRING, 40, 25, "🌼"),
@@ -36,11 +36,6 @@ public enum ForagingCropInfo implements TileObject, FarmingEnum {
     private final int baseSellPrice;
     private final double energy;
     private final String symbol;
-
-    @Override
-    public int getPrice() {
-        return baseSellPrice;
-    }
 
     ForagingCropInfo(String name, Season season, int baseSellPrice, double energy, String symbol) {
         this.name = name;

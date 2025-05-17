@@ -61,7 +61,7 @@ public class SellController extends Controller {
             return new Result(false, "You are not near a Sell Bucket!");
         }
 
-        Item item = Inventory.getNewItem(productName);
+        Item item = player.getInventory().getNewItem(productName);
 
         if (item == null) {
             return new Result(false, "product does not exist");

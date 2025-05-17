@@ -1,5 +1,6 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.enums.Direction;
 import models.tool.enums.FishingPoleInfo;
 
@@ -7,8 +8,10 @@ import models.tool.enums.FishingPoleInfo;
 public class FishingPole extends Tool {
     FishingPoleInfo info;
 
-    public FishingPole() {
+    public FishingPole(Inventory inventory) {
+        super(inventory);
         name = "fishing pole";
+        info = FishingPoleInfo.TRAINING;
     }
 
     @Override

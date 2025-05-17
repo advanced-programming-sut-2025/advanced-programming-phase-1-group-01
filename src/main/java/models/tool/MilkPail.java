@@ -1,11 +1,13 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.enums.Direction;
 
 public class MilkPail extends Tool {
     private static final int INITIAL_MILK_PAIL_USE_ENERGY = 4;
 
-    public MilkPail() {
+    public MilkPail(Inventory inventory) {
+        super(inventory);
         name = "milk pail";
     }
 

@@ -125,7 +125,7 @@ public class CookingController extends Controller {
 
         Player player = repo.getCurrentUser().getPlayer();
         Refrigerator refrigerator = player.getRefrigerator();
-        Item item = Inventory.getNewItem(itemStr);
+        Item item = player.getInventory().getNewItem(itemStr);
 
         if (refrigerator.containsItem(item)) {
             return new Result(false, "You do not have this " + itemStr + " in your refrigerator.");

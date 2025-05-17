@@ -57,7 +57,7 @@ public class GameMenuController extends Controller {
                 int mapNumber = Integer.parseInt(mapNumberStr);
                 return chooseGameMap(mapNumber);
             case NEXT_TURN:
-                handleNextTurn();
+                return handleNextTurn();
         }
         return null;
     }
@@ -126,19 +126,19 @@ public class GameMenuController extends Controller {
 
         if (mapNumber == 1) {
             currentPlayer.setFarm(farm1);
+            currentPlayer.setCurrentMap(farm1);
         }
 
         if (mapNumber == 2) {
             currentPlayer.setFarm(farm2);
+            currentPlayer.setCurrentMap(farm2);
         }
         index++;
 
         if (index == players.size()) {
-            currentPlayer.getGame().setCurrentMap(currentPlayer.getFarm());
+//            currentPlayer.getGame().setCurrentMap(currentPlayer.getFarm());
             return new Result(true, "All players have selected their maps. Game starting...");
-        }
-
-        else {
+        } else {
             Player nextPlayer = players.get(index);
             return new Result(true, "Map " + mapNumber + " selected for player " + currentPlayer.getUser().getUsername() +
                     ". Next player: " + nextPlayer.getUser().getUsername() + ", please select your map.");
@@ -158,7 +158,8 @@ public class GameMenuController extends Controller {
     }
 
     private Result handleNextTurn() {
-        return null;
+        repo.getCurrentGame().nextTurn();
+        return new Result(true,"next turn done");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {

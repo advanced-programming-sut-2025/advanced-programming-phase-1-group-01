@@ -24,7 +24,7 @@ public class Game {
     private final FarmingManager farmingManager;
     private final ForagingManager foragingManager;
     private NPCVillage npcVillage;
-    private Maps currentMap;
+//    private Maps currentMap;
     private int currentIndex = 1;
 
     private final Blacksmith blacksmith = new Blacksmith();
@@ -41,7 +41,7 @@ public class Game {
         for (Player player : players) {
             player.setGame(this);
         }
-        currentMap = currentPlayer.getFarm();
+//        currentMap = currentPlayer.getFarm();
         timeManager = new TimeManager(this);
         weatherManager = new WeatherManager(this);
         farmingManager = new FarmingManager(this);
@@ -117,13 +117,13 @@ public class Game {
         this.npcVillage = npcVillage;
     }
 
-    public Maps getCurrentMap() {
-        return currentMap;
-    }
+//    public Maps getCurrentMap() {
+//        return currentMap;
+//    }
 
-    public void setCurrentMap(Maps currentMap) {
-        this.currentMap = currentMap;
-    }
+//    public void setCurrentMap(Maps currentMap) {
+//        this.currentMap = currentMap;
+//    }
 
     private void initializeGame(List<Player> players) {
         for (Player player : players) {
@@ -146,7 +146,7 @@ public class Game {
     public String enterOthersRoom(int id) {
         Maps map = getMapById(id);
         if (map != null) {
-            setCurrentMap(getMapById(id));
+//            setCurrentMap(getMapById(id));
             currentPlayer.setCurrentMap(getMapById(id));
             currentPlayer.setPosition(new Position(PLAYERS_STARTING_POSITION.x() + 1, PLAYERS_STARTING_POSITION.y()));
             return "You are now there";
@@ -194,5 +194,11 @@ public class Game {
     public void nextTurn() {
         currentPlayer = players.get(currentIndex);
         currentIndex = (currentIndex + 1) % players.size();
+        if (currentPlayer.getEnergy().hasPassedOut()) {
+            nextTurn();
+        }
+        if (currentIndex == 0) {
+            timeManager.getNow().advanceHour();
+        }
     }
 }
