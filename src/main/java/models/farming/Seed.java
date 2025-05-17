@@ -1,6 +1,7 @@
 package models.farming;
 
 import models.Item;
+import models.farming.SeedInfo;
 
 public class Seed implements Item {
     private final SeedInfo info;

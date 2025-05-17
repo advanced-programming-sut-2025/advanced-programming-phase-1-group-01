@@ -1,5 +1,6 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.Item;
 import models.Position;
 import models.building.Tile;
