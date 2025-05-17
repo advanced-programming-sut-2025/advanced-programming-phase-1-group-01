@@ -8,18 +8,15 @@ import models.building.*;
 import models.building.Building;
 import models.building.Farm;
 import models.character.Character;
-import models.character.NPC.NPC;
 import models.cooking.CookingRecipe;
 import models.cooking.CookingRecipes;
 import models.crafting.CraftedProducts;
 import models.crafting.CraftingRecipe;
 import models.data.User;
-import models.dateTime.Season;
 import models.enums.Color;
 import models.enums.Direction;
 import models.enums.Gender;
 import models.relations.RelationshipService;
-import models.weather.Weather;
 
 import java.util.*;
 
@@ -106,22 +103,29 @@ public class Player extends Character {
         return numOfCoins;
     }
 
+    private boolean syncingCoins = false;
+
     public void setNumOfCoins(int numOfCoins) {
-        if (relationshipService.getMarriage() != null) {
-            relationshipService.getMarriage().getPartner(this).setNumOfCoins(numOfCoins);
+        if (!syncingCoins && relationshipService.getMarriage() != null) {
+            Player partner = relationshipService.getMarriage().getPartner(this);
+            syncingCoins = true;
+            partner.setNumOfCoins(numOfCoins);
+            syncingCoins = false;
         }
+
         this.numOfCoins = numOfCoins;
     }
 
-    public void consumeCoin(int amount) {
-        if (relationshipService.getMarriage() != null) {
-            relationshipService.getMarriage().getPartner(this).consumeCoin(amount);
-        }
-        numOfCoins -= amount;
+    public void increaseCoins(int amount) {
+        setNumOfCoins(this.numOfCoins + amount);
     }
 
-    public void addCoin(int amount) {
-        numOfCoins += amount;
+    public boolean consumeCoins(int amount) {
+        if (this.numOfCoins < amount)
+            return false;
+
+        setNumOfCoins(this.numOfCoins - amount);
+        return true;
     }
 
     public Inventory getInventory() {
@@ -377,5 +381,20 @@ public class Player extends Character {
 
     public User getPartner() {
         return relationshipService.getPartner();
+    }
+
+    //@
+    public void energyBuff(int hour) {
+
+    }
+
+    public void abilityBuff(AbilityType abilityType) {
+        switch (abilityType) {
+            case FARMING -> abilityService.getFarming().increaseXp(10);
+            case FORAGING -> abilityService.getForaging().increaseXp(10);
+            case FISHING -> abilityService.getFishing().increaseXp(10);
+            case MINING -> abilityService.getMining().increaseXp(10);
+            case HIKING -> abilityService.getHiking().increaseXp(10);
+        }
     }
 }

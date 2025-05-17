@@ -3,6 +3,8 @@ package models.character.player;
 import models.Item;
 
 import models.cooking.CookingRecipes;
+import models.cooking.Foods;
+import models.cooking.FoodsEnum;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
 import models.tool.*;
@@ -107,14 +109,20 @@ public class Inventory {
 
             default -> {
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
-                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                    if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
                     }
                 }
 
                 for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
-                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                    if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
+                    }
+                }
+
+                for (FoodsEnum foodEnum : FoodsEnum.values()) {
+                    if (foodEnum.getName().equalsIgnoreCase(itemName)) {
+                        yield foodEnum.toFood();
                     }
                 }
 

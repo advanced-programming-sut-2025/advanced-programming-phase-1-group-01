@@ -65,6 +65,10 @@ public enum CookingRecipes {
         this.source = source;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public CookingRecipe toRecipe() {
         return new CookingRecipe(name, ingredients, buff, energy, sellPrice, source);
     }
