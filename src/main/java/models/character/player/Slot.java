@@ -9,7 +9,7 @@ public class Slot {
 
     public Slot(Inventory inventory, String itemName, int quantity) {
         this.inventory = inventory;
-        this.item = Inventory.getNewItem(itemName);
+        this.item = inventory.getNewItem(itemName);
         this.quantity = quantity;
     }
 

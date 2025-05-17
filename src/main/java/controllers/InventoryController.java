@@ -79,7 +79,7 @@ public class InventoryController extends Controller {
 
         TrashCan trashCan = (TrashCan) inventory.getSlot("trash can").getItem();
         for (int i = 0; i < quantity; i++) {
-            player.addCoin(trashCan.getReturnValue(slot.getItem().getPrice()));
+            player.increaseCoins(trashCan.getReturnValue(slot.getItem().getPrice()));
         }
 
         if (inventory.getSlots().contains(slot)) {
@@ -100,11 +100,13 @@ public class InventoryController extends Controller {
 
         inventory.removeSlot(slot);
 
-        TrashCan trashCan = (TrashCan) inventory.getSlot("trash can").getItem();
-        for (int i = 0; i < slot.getQuantity(); i++) {
-            player.addCoin(trashCan.getReturnValue(slot.getItem().getPrice()));
+        Slot trashCanSlot = inventory.getSlot("trash can");
+        if (trashCanSlot != null) {
+            TrashCan trashCan = (TrashCan) inventory.getSlot("trash can").getItem();
+            for (int i = 0; i < slot.getQuantity(); i++) {
+                player.increaseCoins(trashCan.getReturnValue(slot.getItem().getPrice()));
+            }
         }
-
         return new Result(true, "%s has been trashed successfully".formatted(itemName));
     }
 }

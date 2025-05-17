@@ -3,21 +3,21 @@ package models.initializer;
 import models.Position;
 import models.Random;
 import models.building.*;
+import models.farming.Tree;
 import models.farming.TreeInfo;
 import models.enums.StoneType;
-import models.foraging.ForagingCropInfo;
-import models.foraging.ForagingMineralInfo;
-import models.foraging.ForagingTreeInfo;
+import models.foraging.*;
+import models.ingredients.Stone;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FarmInitializer {
-    private final static int NUMBER_OF_TREES = 70;
-    private final static int NUMBER_OF_STONES = 120;
-    private final static int NUMBER_OF_FORAGING_CROPS = 80;
-    private final static int NUMBER_OF_FORAGING_MINERALS = 60;
-    private final static int NUMBER_OF_FORAGING_TREES = 50;
+    private final static int NUMBER_OF_TREES = 20; // 70
+    private final static int NUMBER_OF_STONES = 7; // 120
+    private final static int NUMBER_OF_FORAGING_CROPS = 20; // 80
+    private final static int NUMBER_OF_FORAGING_MINERALS = 6; // 60
+    private final static int NUMBER_OF_FORAGING_TREES = 15; // 50
     private final static Position FARM_TP = new Position(0, 0);
     private final static Position FARM_BR = new Position(75, 75);
     private final static Position GROUND_TP = new Position(0, 0);
@@ -30,8 +30,8 @@ public class FarmInitializer {
     private final static Position GREENHOUSE_BR = new Position(26, 7);
     private final static Position COTTAGE_TP = new Position(65, 4);
     private final static Position COTTAGE_BR = new Position(69, 9);
-    private final static Position SHIPPING_BIN_1_TP = new Position(4, 5);
-    private final static Position SHIPPING_BIN_1_BR = new Position(5, 6);
+    private final static Position SHIPPING_BIN_1_TP = new Position(50,8 );
+    private final static Position SHIPPING_BIN_1_BR = new Position(51, 9);
     private final static Position SHIPPING_BIN_2_TP = new Position(70, 68);
     private final static Position SHIPPING_BIN_2_BR = new Position(71, 69);
 
@@ -42,6 +42,7 @@ public class FarmInitializer {
     private static Quarry quarry;
 
     private static void initializeTiles(int additionalX, int additionalY) {
+//        System.out.println("11"); //error check
 
         for (int i = FARM_TP.x(); i < FARM_BR.x(); i++) {
             tiles.add(new ArrayList<>());
@@ -68,7 +69,8 @@ public class FarmInitializer {
                         .setMovable(true)
                         .setBuilding(null)
                         .setObject(null)
-                        .build();;
+                        .build();
+                ;
                 tiles.get(i).set(j, tile);
             }
         }
@@ -81,7 +83,8 @@ public class FarmInitializer {
                         .setMovable(false)
                         .setBuilding(null)
                         .setObject(null)
-                        .build();;
+                        .build();
+                ;
                 tiles.get(i).set(j, tile);
             }
         }
@@ -94,7 +97,8 @@ public class FarmInitializer {
                         .setMovable(false)
                         .setBuilding(null)
                         .setObject(null)
-                        .build();;
+                        .build();
+                ;
                 tiles.get(i).set(j, tile);
             }
         }
@@ -107,7 +111,8 @@ public class FarmInitializer {
                         .setMovable(true)
                         .setBuilding(null)
                         .setObject(null)
-                        .build();;
+                        .build();
+                ;
                 tiles.get(i).set(j, tile);
             }
         }
@@ -227,7 +232,8 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_TREES - additionalX * 10; i++) {
-            TreeInfo tree = TreeInfo.randomTree();
+            Tree tree = new Tree(new ForagingTree(ForagingTreeInfo.randomForagingTree()));
+            tree.growFull();
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
@@ -237,7 +243,7 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_STONES + additionalY * 10; i++) {
-            StoneType stone = StoneType.randomStone();
+            Stone stone = new Stone(StoneType.randomStone());
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
@@ -247,31 +253,31 @@ public class FarmInitializer {
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_CROPS; i++) {
-            ForagingCropInfo foragingCropInfo = ForagingCropInfo.randomForagingCrop();
+            ForagingCrop foragingCrop = new ForagingCrop(ForagingCropInfo.randomForagingCrop());
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.x()).get(position.y()).setObject(foragingCropInfo);
+                tiles.get(position.x()).get(position.y()).setObject(foragingCrop);
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_MINERALS; i++) {
-            ForagingMineralInfo foragingMineralInfo = ForagingMineralInfo.randomForagingMineral();
-            Position position = randomPosition();
+            ForagingMineral foragingMineral = new ForagingMineral(ForagingMineralInfo.randomForagingMineral());
+            Position position = randomMinePosition();
 
-            if (canBePlanted(position)) {
-                tiles.get(position.x()).get(position.y()).setObject(foragingMineralInfo);
-                tiles.get(position.x()).get(position.y()).setMovable(false);
-            } else i--;
+//            if (canBePlanted(position)) {
+            tiles.get(position.x()).get(position.y()).setObject(foragingMineral);
+            tiles.get(position.x()).get(position.y()).setMovable(false);
+//            } else i--;
         }
 
         for (int i = 0; i < NUMBER_OF_FORAGING_TREES; i++) {
-            ForagingTreeInfo foragingTreeInfo = ForagingTreeInfo.randomForagingTree();
+            ForagingTree foragingTree = new ForagingTree(ForagingTreeInfo.randomForagingTree());
             Position position = randomPosition();
 
             if (canBePlanted(position)) {
-                tiles.get(position.x()).get(position.y()).setObject(foragingTreeInfo);
+                tiles.get(position.x()).get(position.y()).setObject(foragingTree);
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
@@ -293,6 +299,10 @@ public class FarmInitializer {
 
     private static Position randomPosition() {
         return new Position(Random.rand(GROUND_TP.x(), GROUND_BR.x()), Random.rand(GROUND_TP.y(), GROUND_BR.y()));
+    }
+
+    private static Position randomMinePosition() {
+        return new Position(Random.rand(MINE_TP.x(), MINE_BR.x()), Random.rand(MINE_TP.y(), MINE_BR.y()));
     }
 
     public static Farm initializeFarm(int x, int y) {

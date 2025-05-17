@@ -60,7 +60,7 @@ public class FarmingController extends Controller {
             case HOW_MUCH_WATER:
                 return howMuchWater();
         }
-        return new Result(false, "invalid command");
+        return new Result(false, "invalid command 88");
     }
 
     private Result craftInfo(String name) {
@@ -177,7 +177,12 @@ public class FarmingController extends Controller {
 
     private Result howMuchWater() {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        WateringCan wateringCan = (WateringCan) player.getInventory().getSlot("watering can").getItem();
+        Slot slot = player.getInventory().getSlot("watering can");
+
+        if (slot == null) {
+            return new Result(false, "you don't have watering can");
+        }
+        WateringCan wateringCan = (WateringCan) slot.getItem();
 
         if (wateringCan == null) {
             return new Result(false, "you have no watering can");

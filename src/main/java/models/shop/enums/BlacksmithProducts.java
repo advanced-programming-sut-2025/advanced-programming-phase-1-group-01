@@ -1,5 +1,7 @@
 package models.shop.enums;
 
+import models.shop.BlackSmithItem;
+
 public enum BlacksmithProducts {
     COPPER_ORE("Copper Ore", 75, -1),
     IRON_ORE("Iron Ore", 150, -1),
@@ -26,5 +28,9 @@ public enum BlacksmithProducts {
 
     public int getDailyLimit() {
         return dailyLimit;
+    }
+
+    public BlackSmithItem toItem() {
+        return new BlackSmithItem(name,price);
     }
 }

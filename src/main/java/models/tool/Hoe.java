@@ -2,16 +2,19 @@ package models.tool;
 
 import models.Position;
 import models.building.Tile;
+import models.character.player.Inventory;
 import models.character.player.Player;
 import models.enums.Direction;
 import models.tool.enums.HoeType;
 
 // related to farming.
 public class Hoe extends Tool {
-    HoeType type;
+    private final HoeType type;
 
-    public Hoe() {
+    public Hoe(Inventory inventory) {
+        super(inventory);
         name = "hoe";
+        type = HoeType.PRIMARY;
     }
 
     @Override
@@ -21,7 +24,6 @@ public class Hoe extends Tool {
 
     @Override
     public void use(Direction direction) {
-        // what tool does
         Player player = inventory.getPlayer();
         Position position = player.getPosition();
         Position dirAppliedPosition = position.applyDirection(direction);

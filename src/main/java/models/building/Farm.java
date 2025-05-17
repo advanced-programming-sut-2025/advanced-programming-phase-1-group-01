@@ -283,7 +283,7 @@ public class Farm extends Maps {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         int income = animal.calculateSellPrice();
-        player.addCoin(income);
+        player.increaseCoins(income);
         sellAnimal(animal);
         return "Animal is sold";
     }

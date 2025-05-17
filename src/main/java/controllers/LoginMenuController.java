@@ -60,10 +60,14 @@ public class LoginMenuController extends Controller {
         String gender = extractValue(command, "-g", null);
 
         String passwordAndreEnterPassword = extractValue(command, "-p", "-n");
-        String[] passwordParts = passwordAndreEnterPassword.split(" ");
+        String[] passwordParts = passwordAndreEnterPassword.split("\\s+");
 
         if (passwordAndreEnterPassword.equals("random")) {
             return randomPassword(command);
+        }
+
+        if (passwordParts.length != 2) {
+            return new Result(false, "invalid command");
         }
 
         String password = passwordParts[0];
@@ -198,7 +202,7 @@ public class LoginMenuController extends Controller {
             return new Result(false, "User not found!");
         }
 
-        User user = repo.getTempUser();
+        User user = repo.getUserByUsername(username);
 
         return new Result(true, user.getSecurityQuestion().getQuestion());
     }
@@ -253,6 +257,7 @@ public class LoginMenuController extends Controller {
         }
 
         repo.setCurrentUser(user);
+        FileManager.clearFile();
         return new Result(true,"You are logged in!");
     }
 

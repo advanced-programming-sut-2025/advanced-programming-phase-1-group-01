@@ -6,12 +6,16 @@ import models.animal.AnimalProduct;
 import models.animal.AnimalProductType;
 import models.animal.ProductQuality;
 import models.cooking.CookingRecipes;
+import models.cooking.Foods;
+import models.cooking.FoodsEnum;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
 import models.ingredients.QuestItem;
 import models.ingredients.QuestItemType;
 import models.ingredients.RewardItem;
 import models.ingredients.RewardItemType;
+import models.shop.CarpenterShopProductsItem;
+import models.shop.enums.*;
 import models.tool.*;
 
 import java.util.ArrayList;
@@ -31,6 +35,8 @@ public class Inventory {
         slots = new ArrayList<>();
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "trash can", 1));
+        slots.add(new Slot(this, "hoe", 1));
+        slots.add(new Slot(this, "pickaxe", 1));
     }
     public List<Slot> getSlots() {
         return slots;
@@ -88,18 +94,18 @@ public class Inventory {
         this.capacity = capacity;
     }
 
-    public static Item getNewItem(String itemName) {
+    public Item getNewItem(String itemName) {
         return switch (itemName.trim().toLowerCase()) {
-            case "axe" -> new Axe();
-            case "backpack" -> new Backpack();
-            case "fishing pole" -> new FishingPole();
-            case "hoe" -> new Hoe();
-            case "milk pail" -> new MilkPail();
-            case "pickaxe" -> new Pickaxe();
-            case "scythe" -> new Scythe();
-            case "shear" -> new Shear();
-            case "trash can" -> new TrashCan();
-            case "watering can" -> new WateringCan();
+            case "axe" -> new Axe(this);
+            case "backpack" -> new Backpack(this);
+            case "fishing pole" -> new FishingPole(this);
+            case "hoe" -> new Hoe(this);
+            case "milk pail" -> new MilkPail(this);
+            case "pickaxe" -> new Pickaxe(this);
+            case "scythe" -> new Scythe(this);
+            case "shear" -> new Shear(this);
+            case "trash can" -> new TrashCan(this);
+            case "watering can" -> new WateringCan(this);
 
             case "bee house" -> new BeeHouse();
             case "cheese press" -> new CheesePress();
@@ -144,14 +150,50 @@ public class Inventory {
 
             default -> {
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
-                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                    if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
                     }
                 }
 
                 for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
-                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                    if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
+                    }
+                }
+
+                for (FoodsEnum foodEnum : FoodsEnum.values()) {
+                    if (foodEnum.getName().equalsIgnoreCase(itemName)) {
+                        yield foodEnum.toFood();
+                    }
+                }
+
+                for (BlacksmithProducts products : BlacksmithProducts.values()) {
+                    if (products.getName().equalsIgnoreCase(itemName)) {
+                        yield products.toItem();
+                    }
+                }
+
+                for (MarnieRanchProducts products : MarnieRanchProducts.values()) {
+                    if (products.getName().equalsIgnoreCase(itemName)) {
+                        yield products.toItem();
+                    }
+                }
+
+                for (TheStardropSaloonProducts products : TheStardropSaloonProducts.values()) {
+                    if (products.getName().equalsIgnoreCase(itemName)) {
+                        yield products.toItem();
+                    }
+                }
+
+                for (CarpenterShopBuildings buildings : CarpenterShopBuildings.values()) {
+                    if (buildings.getName().equalsIgnoreCase(itemName)) {
+                        yield buildings.toItem();
+                    }
+                }
+
+                for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
+                    if (product.getName().equalsIgnoreCase(itemName)) {
+                        yield product.toItem();
                     }
                 }
 

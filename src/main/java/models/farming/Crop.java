@@ -1,6 +1,5 @@
 package models.farming;
 
-
 import models.enums.Emoji;
 import models.Item;
 import models.dateTime.Season;
@@ -33,8 +32,15 @@ public class Crop extends Plant implements Item, Cloneable {
     }
 
     @Override
+    public void growFull() {
+        for (int i = 0; i < info.getTotalHarvestTime(); i++) {
+            grow();
+        }
+    }
+
+    @Override
     public int getPrice() {
-        return 0;
+        return info.getBaseSellPrice();
     }
 
     @Override

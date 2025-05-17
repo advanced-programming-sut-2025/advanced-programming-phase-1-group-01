@@ -9,21 +9,20 @@ import models.cooking.CookingRecipes;
 import models.crafting.enums.CraftingRecipes;
 
 public class AbilityService {
+    private final Player player;
     private final Ability farming;
     private final Ability mining;
     private final Ability hiking;
     private final Ability fishing;
     private final Ability foraging;
-    private final Player player;
-
 
     public AbilityService(Player player) {
         this.player = player;
-        this.farming = new Ability(AbilityType.FARMING, 0, 0);
-        this.mining = new Ability(AbilityType.MINING, 0, 0);
-        this.hiking = new Ability(AbilityType.HIKING, 0, 0);
-        this.fishing = new Ability(AbilityType.FISHING, 0, 0);
-        this.foraging = new Ability(AbilityType.FORAGING, 0, 0);
+        this.farming = new Ability(AbilityType.FARMING);
+        this.mining = new Ability(AbilityType.MINING);
+        this.hiking = new Ability(AbilityType.HIKING);
+        this.fishing = new Ability(AbilityType.FISHING);
+        this.foraging = new Ability(AbilityType.FORAGING);
     }
 
     public Ability getFarming() {

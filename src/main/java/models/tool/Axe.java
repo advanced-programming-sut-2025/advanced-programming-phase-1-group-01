@@ -1,5 +1,6 @@
 package models.tool;
 
+import models.character.player.Inventory;
 import models.enums.Direction;
 import models.tool.enums.AxeType;
 
@@ -7,8 +8,10 @@ import models.tool.enums.AxeType;
 public class Axe extends Tool {
     private AxeType type;
 
-    public Axe() {
+    public Axe(Inventory inventory) {
+        super(inventory);
         name = "axe";
+        type = AxeType.PRIMARY;
     }
 
     @Override

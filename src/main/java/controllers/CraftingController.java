@@ -8,7 +8,7 @@ import models.character.player.Slot;
 import models.character.player.Player;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
-import models.enums.BanItem;
+//import models.enums.BanItem;
 import models.enums.Direction;
 import models.enums.commands.CraftingCommands;
 import models.data.Repository;
@@ -79,7 +79,7 @@ public class CraftingController extends Controller {
         CraftingRecipe targetRecipe = null;
 
         for (CraftingRecipe recipe : recipes) {
-            if (recipe.name().equalsIgnoreCase(itemName)) {
+            if (recipe.getName().equalsIgnoreCase(itemName)) {
                 targetRecipe = recipe;
                 break;
             }
@@ -99,6 +99,9 @@ public class CraftingController extends Controller {
             int requiredAmount = entry.getValue();
 
             Slot inventorySlot = inventory.getSlot(materialName);
+            if (inventorySlot == null) {
+                return new Result(false, "Slot not found.");
+            }
             int itemCount = inventorySlot.getQuantity();
 
             if (itemCount < requiredAmount) {
@@ -207,7 +210,7 @@ public class CraftingController extends Controller {
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
-        Item item = Inventory.getNewItem(itemName);
+        Item item = inventory.getNewItem(itemName);
 
         if (item == null) {
             return new Result(false, "item not found");

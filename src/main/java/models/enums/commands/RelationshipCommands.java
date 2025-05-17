@@ -10,7 +10,7 @@ public enum RelationshipCommands implements Command {
     GIFT_RATE("gift rate -i (.+?) -r (.+?)"),
     GIFT_HISTORY("gift history -u (.+?)"),
     FLOWER("flower -u (.+?)"),
-    ASK_MARRIAGE(" ask marriage -u (.+?) -r (.+?)"),
+    ASK_MARRIAGE("ask marriage -u (.+?) -r (.+?)"),
     RESPOND_MARRIAGE("respond (.+?) -u (.+?)"),
     START_TRADE("start trade"),
     TRADE_REQUEST("trade -u (.+?) -t request -i (.+?) -a (.+?) -p (.+?)"),

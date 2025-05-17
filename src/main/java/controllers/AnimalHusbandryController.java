@@ -212,6 +212,8 @@ public class AnimalHusbandryController extends Controller {
 
         FishInfo fishType = FishInfo.getRandomFish(currSeason, player.getAbilityService().getFishing().isFull());
         inventory.addItem(fishType.getName(), numOfFishes);
+        player.getAbilityService().getFishing().increaseXp(numOfFishes * 5);
+
         Slot slot = inventory.getSlot(fishType.getName());
         Fish fish = (Fish) slot.getItem();
         fish.setQuality(quality);
