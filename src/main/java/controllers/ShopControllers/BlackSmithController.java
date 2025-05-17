@@ -1,5 +1,6 @@
 package controllers.ShopControllers;
 
+import models.Item;
 import models.Result;
 import models.character.player.Inventory;
 import models.character.player.Player;
@@ -10,7 +11,8 @@ import models.shop.enums.BlackSmithCommands;
 import models.shop.enums.BlacksmithProducts;
 import models.shop.enums.BlacksmithUpgrade;
 import models.shop.enums.ShopCommands;
-import models.tool.Tool;
+import models.tool.*;
+import models.tool.enums.*;
 
 public class BlackSmithController extends ShopController {
 
@@ -46,6 +48,8 @@ public class BlackSmithController extends ShopController {
                 return showAllAvailableProducts();
             case BLACKSMITH:
                 return purchase(command);
+            case TOOLS_UPGRADE:
+                return toolUpgrade(command);
             case CHEAT_COINS:
                 return cheatCoins(command);
         }
@@ -154,109 +158,267 @@ public class BlackSmithController extends ShopController {
                 return new Result(true, "purchased " + count + " x " + product.getName());
             }
         }
+        return new Result(false, "product not found");
+    }
 
-        for (BlacksmithUpgrade upgrade : BlacksmithUpgrade.values()) {
-            if (upgrade.getName().equalsIgnoreCase(itemName)) {
-                int cost = upgrade.getPrice();
-                int stock = shop.getUpgradeStock(upgrade);
+    private Result toolUpgrade(String command) {
+        String itemName = extractValue(command, "upgrade", null);
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
-                if (upgrade.getDailyLimit() != -1 && stock <= 0) {
-                    return new Result(false, "upgrade not available today");
-                }
+        Slot slot = player.getInventory().getSlot(itemName);
 
-                if (player.getNumOfCoins() < cost) {
-                    return new Result(false, "not enough coins");
-                }
+        if (slot == null) {
+            return new Result(false, "item not found in inventory");
+        }
 
-                player.setNumOfCoins(player.getNumOfCoins() - cost);
-                if (upgrade.getDailyLimit() != -1) {
-                    shop.updateUpgradePurchase(upgrade);
-                }
+        Item item = slot.getItem();
 
-                Slot slot = player.getInventory().getSlot(upgrade.getRequiredItem());
-                if (slot == null || slot.getQuantity() < upgrade.getRequiredAmount()) {
-                    return new Result(false, "not enough \" + " + upgrade.getRequiredItem());
-                }
-
-                if (upgrade.getName().toLowerCase().contains("trash")) {
-                    switch (itemName) {
-                        case "Copper Trash Can" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Steel Trash Can", 1);
-                        }
-                        case "Steel Trash Can" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Gold Trash Can", 1);
-                        }
-                        case "Gold Trash Can" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Iridium Trash Can", 1);
-                        }
-                        default -> {
-                            return new Result(false, "Invalid trash can upgrade.");
-                        }
+        if (item instanceof Tool tool) {
+            if (tool instanceof Axe axe) {
+                if (axe.getType() == AxeType.PRIMARY) {
+                    Slot requiredSlot = player.getInventory().getSlot("Copper Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Copper Bar");
                     }
+                    axe.upgrade();
+                    return new Result(true, "Upgraded axe to " + axe.getType());
+                } else if (axe.getType() == AxeType.COPPER) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iron Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iron Bar");
+                    }
+                    axe.upgrade();
+                    return new Result(true, "Upgraded axe to " + axe.getType());
+                } else if (axe.getType() == AxeType.IRON) {
+                    Slot requiredSlot = player.getInventory().getSlot("Gold Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Gold Bar");
+                    }
+                    axe.upgrade();
+                    return new Result(true, "Upgraded axe to " + axe.getType());
+                } else if (axe.getType() == AxeType.GOLD) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iridium Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iridium Bar");
+                    }
+                    axe.upgrade();
+                    return new Result(true, "Upgraded axe to " + axe.getType());
+                }
+            }
+
+            if (tool instanceof Hoe hoe) {
+                if (hoe.getType() == HoeType.PRIMARY) {
+                    Slot requiredSlot = player.getInventory().getSlot("Copper Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Copper Bar");
+                    }
+
+                    if (player.getNumOfCoins() < 2000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(2000);
+                    hoe.upgrade();
+                    return new Result(true, "Upgraded hoe to " + hoe.getType());
+                } else if (hoe.getType() == HoeType.COPPER) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iron Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iron Bar");
+                    }
+                    if (player.getNumOfCoins() < 5000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(5000);
+                    hoe.upgrade();
+                    return new Result(true, "Upgraded hoe to " + hoe.getType());
+                } else if (hoe.getType() == HoeType.IRON) {
+                    Slot requiredSlot = player.getInventory().getSlot("Gold Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Gold Bar");
+                    }
+                    if (player.getNumOfCoins() < 10000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(10000);
+                    hoe.upgrade();
+                    return new Result(true, "Upgraded hoe to " + hoe.getType());
+                } else if (hoe.getType() == HoeType.GOLD) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iridium Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iridium Bar");
+                    }
+                    if (player.getNumOfCoins() < 25000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(25000);
+                    hoe.upgrade();
+                    return new Result(true, "Upgraded hoe to " + hoe.getType());
+                }
+            }
+
+            if (tool instanceof Pickaxe pickaxe) {
+                if (pickaxe.getType() == PickaxeType.PRIMARY) {
+                    Slot requiredSlot = player.getInventory().getSlot("Copper Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Copper Bar");
+                    }
+                    if (player.getNumOfCoins() < 2000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(2000);
+                    pickaxe.upgrade();
+                    return new Result(true, "Upgraded pickaxe to " + pickaxe.getType());
+                } else if (pickaxe.getType() == PickaxeType.COPPER) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iron Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iron Bar");
+                    }
+                    if (player.getNumOfCoins() < 5000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(5000);
+                    pickaxe.upgrade();
+                    return new Result(true, "Upgraded pickaxe to " + pickaxe.getType());
+                } else if (pickaxe.getType() == PickaxeType.IRON) {
+                    Slot requiredSlot = player.getInventory().getSlot("Gold Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Gold Bar");
+                    }
+                    if (player.getNumOfCoins() < 10000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    pickaxe.upgrade();
+                    return new Result(true, "Upgraded pickaxe to " + pickaxe.getType());
+                } else if (pickaxe.getType() == PickaxeType.GOLD) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iridium Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iridium Bar");
+                    }
+                    if (player.getNumOfCoins() < 25000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(25000);
+                    pickaxe.upgrade();
+                    return new Result(true, "Upgraded pickaxe to " + pickaxe.getType());
+                }
+            }
+
+            if (tool instanceof WateringCan wateringCan) {
+                if (wateringCan.getType() == WateringCanType.PRIMARY) {
+                    Slot requiredSlot = player.getInventory().getSlot("Copper Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Copper Bar");
+                    }
+                    if (player.getNumOfCoins() < 2000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(2000);
+                    wateringCan.upgrade();
+                    return new Result(true, "Upgraded watering can to " + wateringCan.getType());
+                } else if (wateringCan.getType() == WateringCanType.COPPER) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iron Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iron Bar");
+                    }
+
+                    if (player.getNumOfCoins() < 5000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(5000);
+                    wateringCan.upgrade();
+                    return new Result(true, "Upgraded watering can to " + wateringCan.getType());
+                } else if (wateringCan.getType() == WateringCanType.IRON) {
+                    Slot requiredSlot = player.getInventory().getSlot("Gold Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Gold Bar");
+                    }
+                    if (player.getNumOfCoins() < 10000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(10000);
+                    wateringCan.upgrade();
+                    return new Result(true, "Upgraded watering can to " + wateringCan.getType());
+                } else if (wateringCan.getType() == WateringCanType.GOLD) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iridium Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iridium Bar");
+                    }
+                    if (player.getNumOfCoins() < 25000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(25000);
+                    wateringCan.upgrade();
+                    return new Result(true, "Upgraded watering can to " + wateringCan.getType());
+                }
+            }
+
+            if (tool instanceof TrashCan trashCan) {
+                if (trashCan.getType() == TrashCanType.PRIMARY) {
+                    Slot requiredSlot = player.getInventory().getSlot("Copper Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Copper Bar");
+                    }
+
+                    if (player.getNumOfCoins() < 2000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(2000);
+                    trashCan.upgrade();
+                    return new Result(true, "Upgraded trash can to " + trashCan.getType());
+                } else if (trashCan.getType() == TrashCanType.COPPER) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iron Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iron Bar");
+                    }
+                    if (player.getNumOfCoins() < 5000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(5000);
+                    trashCan.upgrade();
+                    return new Result(true, "Upgraded trash can to " + trashCan.getType());
+                } else if (trashCan.getType() == TrashCanType.IRON) {
+                    Slot requiredSlot = player.getInventory().getSlot("Gold Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Gold Bar");
+                    }
+                    if (player.getNumOfCoins() < 10000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(10000);
+                    trashCan.upgrade();
+                    return new Result(true, "Upgraded trash can to " + trashCan.getType());
+                } else if (trashCan.getType() == TrashCanType.GOLD) {
+                    Slot requiredSlot = player.getInventory().getSlot("Iridium Bar");
+                    if (requiredSlot == null || requiredSlot.getQuantity() < 5) {
+                        return new Result(false, "Not enough Iridium Bar");
+                    }
+                    if (player.getNumOfCoins() < 25000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(25000);
+                    trashCan.upgrade();
+                    return new Result(true, "Upgraded trash can to " + trashCan.getType());
+                }
+            }
+
+            if (tool instanceof Backpack backpack) {
+                if (backpack.getType() == BackpackType.SMALL) {
+                    if (player.getNumOfCoins() < 2000) {
+                        return new Result(false, "Not enough Coins");
+                    }
+                    player.consumeCoins(2000);
+                    backpack.upgrade();
                 }
 
-                else {
-
-                    switch (itemName) {
-                        case "Copper Pickaxe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Steel Pickaxe", 1);
-                        }
-                        case "Steel Pickaxe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Gold Pickaxe", 1);
-                        }
-                        case "Gold Pickaxe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Iridium Pickaxe", 1);
-                        }
-                        case "Copper Axe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Steel Axe", 1);
-                        }
-                        case "Steel Axe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Gold Axe", 1);
-                        }
-                        case "Gold Axe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Iridium Axe", 1);
-                        }
-                        case "Copper Hoe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Steel Hoe", 1);
-                        }
-                        case "Steel Hoe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Gold Hoe", 1);
-                        }
-                        case "Gold Hoe" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Iridium Hoe", 1);
-                        }
-                        case "Copper Watering Can" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Steel Watering Can", 1);
-                        }
-                        case "Steel Watering Can" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Gold Watering Can", 1);
-                        }
-                        case "Gold Watering Can" -> {
-                            player.getInventory().getSlot(itemName).removeQuantity(1);
-                            player.getInventory().addItem("Iridium Watering Can", 1);
-                        }
-                        default -> {
-                            return new Result(false, "Invalid tool upgrade.");
-                        }
+                else if (backpack.getType() == BackpackType.BIG) {
+                    if (player.getNumOfCoins() < 10000) {
+                        return new Result(false, "Not enough Coins");
                     }
-                    return new Result(true, "upgraded: " + upgrade.getName());
+                    player.consumeCoins(10000);
+                    backpack.upgrade();
                 }
             }
         }
+
         return new Result(false, "product not found");
     }
 

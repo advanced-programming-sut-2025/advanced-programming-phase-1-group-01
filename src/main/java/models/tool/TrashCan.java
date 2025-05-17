@@ -6,7 +6,7 @@ import models.ingredients.Ingredient;
 import models.tool.enums.TrashCanType;
 
 public class TrashCan extends Tool {
-    private final TrashCanType type;
+    private TrashCanType type;
 
     public TrashCan(Inventory inventory) {
         super(inventory);
@@ -22,6 +22,16 @@ public class TrashCan extends Tool {
     @Override
     public void use(Direction direction) {
         // this method is not used for trash can
+    }
+
+    @Override
+    public void upgrade() {
+        switch (type) {
+            case PRIMARY -> type = TrashCanType.COPPER;
+            case COPPER -> type = TrashCanType.IRON;
+            case IRON -> type = TrashCanType.GOLD;
+            case GOLD -> type = TrashCanType.IRIDIUM;
+        }
     }
 
     public TrashCanType getType() {

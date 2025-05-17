@@ -1,8 +1,11 @@
 package controllers.ShopControllers;
 
 import models.Result;
+import models.character.player.Inventory;
 import models.character.player.Player;
+import models.character.player.Slot;
 import models.data.Repository;
+import models.shop.Blacksmith;
 import models.shop.TheStardropSaloon;
 import models.shop.enums.StardropSallonCommands;
 import models.shop.enums.TheStardropSaloonProducts;
@@ -85,21 +88,26 @@ public class TheStardropSaloonController extends ShopController {
     }
 
     protected Result purchase(String command) {
-        String[] tokens = command.split(" ");
-        String productName = tokens[1];
+        String itemName;
+        String countStr;
         int count;
 
-        try {
-            count = Integer.parseInt(tokens[3]);
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            count = 1;
+        if (command.contains("-n")) {
+            itemName = extractValue(command, "purchase", "-n");
+            countStr = extractValue(command, "-n", null);
         }
+
+        else {
+            itemName = extractValue(command, "purchase", null);
+            countStr = "1";
+        }
+        count = Integer.parseInt(countStr);
 
         TheStardropSaloon shop = repo.getCurrentGame().getTheStardropSaloon();
         Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (TheStardropSaloonProducts product : TheStardropSaloonProducts.values()) {
-            if (product.getName().equalsIgnoreCase(productName)) {
+            if (product.getName().equalsIgnoreCase(itemName)) {
                 int totalCost = product.getPrice() * count;
                 int stock = shop.getProductStock(product);
 
@@ -110,6 +118,9 @@ public class TheStardropSaloonController extends ShopController {
                 if (player.getNumOfCoins() < totalCost) {
                     return new Result(false, "not enough coins");
                 }
+
+                Inventory inventory = player.getInventory();
+                inventory.addItem(itemName, count);
 
                 player.setNumOfCoins(player.getNumOfCoins() - totalCost);
                 if (product.getDailyLimit() != -1) {

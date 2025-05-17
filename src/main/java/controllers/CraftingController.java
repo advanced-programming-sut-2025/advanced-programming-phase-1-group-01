@@ -226,11 +226,7 @@ public class CraftingController extends Controller {
 
         if (item == null) {
             return new Result(false, "item not found");
-        }
-
-//        if (BanSellItem.isBanItem(itemName)) {
-//        return new Result(false, "You can't add a ban item to your inventory");
-//        }
+        
 
         if (player.getInventory().hasCapacity()) {
             return new Result(false, "inventory is full");

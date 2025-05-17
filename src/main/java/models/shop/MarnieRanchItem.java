@@ -20,4 +20,5 @@ public class MarnieRanchItem implements Item {
     public int getPrice() {
         return price;
     }
+
 }

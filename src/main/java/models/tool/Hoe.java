@@ -34,4 +34,18 @@ public class Hoe extends Tool {
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
     }
+
+    @Override
+    public void upgrade() {
+        switch (type) {
+            case PRIMARY -> type = HoeType.COPPER;
+            case COPPER -> type = HoeType.IRON;
+            case IRON -> type = HoeType.GOLD;
+            case GOLD -> type = HoeType.IRIDIUM;
+        }
+    }
+
+    public HoeType getType() {
+        return type;
+    }
 }

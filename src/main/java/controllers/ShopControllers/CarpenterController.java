@@ -1,6 +1,7 @@
 package controllers.ShopControllers;
 
 import models.Result;
+import models.character.player.Inventory;
 import models.character.player.Player;
 import models.data.Repository;
 import models.shop.CarpenterShop;
@@ -65,22 +66,6 @@ public class CarpenterController extends ShopController {
                     .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
                     .append(")\n");
         }
-
-        for (CarpenterShopBuildings building : shop.getAllBuildings()) {
-            int stock = shop.getBuildingProduct(building);
-            info.append(building.getName())
-                    .append(": ")
-                    .append(building.getCost())
-                    .append("g")
-                    .append(building.getStoneRequired())
-                    .append("stone")
-                    .append(building.getWoodRequired())
-                    .append("wood")
-                    .append(" (")
-                    .append(building.getDailyLimit() == -1 ? "unlimited" : stock + " left")
-                    .append(")")
-                    .append("\n");
-        }
         return new Result(true, info.toString());
     }
 
@@ -100,45 +85,31 @@ public class CarpenterController extends ShopController {
                         .append(")\n");
             }
         }
-
-        for (CarpenterShopBuildings building : shop.getAllBuildings()) {
-            int stock = shop.getBuildingProduct(building);
-            if (building.getDailyLimit() == -1 || stock > 0) {
-                info.append(building.getName())
-                        .append(": ")
-                        .append(building.getCost())
-                        .append("g")
-                        .append(building.getStoneRequired())
-                        .append("stone")
-                        .append(building.getWoodRequired())
-                        .append("wood")
-                        .append(" (")
-                        .append(building.getDailyLimit() == -1 ? "unlimited" : stock + " left")
-                        .append(")")
-                        .append("\n");
-            }
-        }
-
         return new Result(true, info.toString());
     }
 
     protected Result purchase(String command) {
-        String[] tokens = command.split(" ");
-
-        String productName = tokens[1];
+        String itemName;
+        String countStr;
         int count;
 
-        try {
-            count = Integer.parseInt(tokens[3]);
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            count = 1;
+        if (command.contains("-n")) {
+            itemName = extractValue(command, "purchase", "-n");
+            countStr = extractValue(command, "-n", null);
         }
+
+        else {
+            itemName = extractValue(command, "purchase", null);
+            countStr = "1";
+        }
+        count = Integer.parseInt(countStr);
+
 
         CarpenterShop shop = repo.getCurrentGame().getCarpenterShop();
         Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
-            if (product.getName().equalsIgnoreCase(productName)) {
+            if (product.getName().equalsIgnoreCase(itemName)) {
                 int totalCost = product.getPrice() * count;
                 int stock = shop.getProductAmount(product);
 
@@ -154,40 +125,9 @@ public class CarpenterController extends ShopController {
                 if (product.getDailyLimit() != -1) {
                     shop.updateProductPurchase(product, count);
                 }
-                // inventory
+                Inventory inventory = player.getInventory();
+                inventory.addItem(itemName, count);
                 return new Result(true, "purchased " + count + " x " + product.getName());
-            }
-        }
-
-        for (CarpenterShopBuildings building : CarpenterShopBuildings.values()) {
-            if (building.getName().equalsIgnoreCase(productName)) {
-                int cost = building.getCost();
-                int stock = shop.getBuildingProduct(building);
-                int stone = building.getStoneRequired();
-                int wood = building.getWoodRequired();
-
-//                if (wood < ) {
-//                    return new Result(false, "not enough wood for this building");
-//                }
-//
-//                if (stone < ) {
-//                    return new Result(false, "not enough stone for this building");
-//                }
-
-                if (building.getDailyLimit() != -1 && stock <= 0) {
-                    return new Result(false, "building not available today");
-                }
-
-                if (player.getNumOfCoins() < cost) {
-                    return new Result(false, "not enough coins");
-                }
-
-                player.setNumOfCoins(player.getNumOfCoins() - cost);
-                if (building.getDailyLimit() != -1) {
-                    shop.updateBuildingPurchase(building);
-                }
-                // build building
-                return new Result(true, "built: " + building.getName());
             }
         }
 
