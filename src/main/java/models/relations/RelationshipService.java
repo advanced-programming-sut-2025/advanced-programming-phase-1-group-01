@@ -12,6 +12,7 @@ public class RelationshipService {
     private final Map<Character, Friendship> friendships;
     private Marriage marriage;
     private final Map<Character, Relationship> relationships;
+    private final Map<Character, Trading> tradingships;
     private User partner;
 
 
@@ -20,6 +21,7 @@ public class RelationshipService {
         this.character = character;
         this.friendships = new LinkedHashMap<>();
         this.relationships = new LinkedHashMap<>();
+        this.tradingships = new LinkedHashMap<>();
     }
 
     public Map<Character, Relationship> getRelationships() {
@@ -52,7 +54,7 @@ public class RelationshipService {
 
     public void addFriend(Character friend) {
         friendships.putIfAbsent(friend, new Friendship((Player) character, (Player) friend));
-        if (!friend.getRelationService().hasRelationshipWith(character)) {
+        if (!friend.getRelationService().isFriendWith(character)) {
             friend.getRelationService().addFriend(character);
         }
     }
@@ -61,6 +63,27 @@ public class RelationshipService {
         if (friendships.containsKey(friend)) return friendships.get(friend);
         addFriend(friend);
         return friendships.get(friend);
+    }
+
+    public void addTrader(Character friend) {
+        tradingships.putIfAbsent(friend, new Trading((Player) character, (Player) friend));
+        if (!friend.getRelationService().haveTradeWith(character)) {
+            friend.getRelationService().addTrader(character);
+        }
+    }
+
+    public Trading getTrading(Character friend) {
+        if (tradingships.containsKey(friend)) return tradingships.get(friend);
+        addTrader(friend);
+        return tradingships.get(friend);
+    }
+
+    public boolean haveTradeWith(Character trader) {
+        return friendships.containsKey(trader) && tradingships.containsKey(trader);
+    }
+
+    public Map<Character, Trading> getTradingships() {
+        return tradingships;
     }
 
     public Map<Character, Friendship> getFriendships() {
