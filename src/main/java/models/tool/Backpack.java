@@ -22,4 +22,16 @@ public class Backpack extends Tool {
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
     }
+
+    @Override
+    public void upgrade() {
+        switch (type) {
+            case SMALL -> inventory.setCapacity(BackpackType.BIG.getCapacity());
+            case BIG -> inventory.setCapacity(BackpackType.DELUXE.getCapacity());
+        }
+    }
+
+    public BackpackType getType() {
+        return type;
+    }
 }

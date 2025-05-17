@@ -1,6 +1,7 @@
 package models.shop.enums;
 
 import models.dateTime.Season;
+import models.shop.JojaMartItem;
 
 public enum JojaMartProducts {
         // Permanent Stock
@@ -83,5 +84,9 @@ public enum JojaMartProducts {
 
         public Season getSeason() {
             return season;
+        }
+
+        public JojaMartItem toItem() {
+                return new JojaMartItem(name, price, season);
         }
 }

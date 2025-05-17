@@ -16,15 +16,13 @@ import java.util.List;
 
 public class Inventory {
     private final Player player;
-    private int capacity;
+    private double capacity;
     private final List<Slot> slots;
     private Slot equippedSlot;
 
-    private static final int INVENTORY_CAPACITY = 50;
-
     public Inventory(Player player) {
         this.player = player;
-        capacity = INVENTORY_CAPACITY;
+        capacity = 12;
         slots = new ArrayList<>();
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "trash can", 1));
@@ -72,15 +70,15 @@ public class Inventory {
         return player;
     }
 
-    public int getCapacity() {
-        return slots.size();
+    public double getCapacity() {
+        return capacity;
     }
 
     public boolean hasCapacity() {
-        return slots.size() <= INVENTORY_CAPACITY;
+        return slots.size() <= capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(double capacity) {
         this.capacity = capacity;
     }
 
@@ -146,13 +144,19 @@ public class Inventory {
                     }
                 }
 
-                for (CarpenterShopBuildings buildings : CarpenterShopBuildings.values()) {
-                    if (buildings.getName().equalsIgnoreCase(itemName)) {
-                        yield buildings.toItem();
+                for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
+                    if (product.getName().equalsIgnoreCase(itemName)) {
+                        yield product.toItem();
                     }
                 }
 
-                for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
+                for (JojaMartProducts product : JojaMartProducts.values()) {
+                    if (product.getName().equalsIgnoreCase(itemName)) {
+                        yield product.toItem();
+                    }
+                }
+
+                for (PierreGeneralStoreProducts product : PierreGeneralStoreProducts.values()) {
                     if (product.getName().equalsIgnoreCase(itemName)) {
                         yield product.toItem();
                     }

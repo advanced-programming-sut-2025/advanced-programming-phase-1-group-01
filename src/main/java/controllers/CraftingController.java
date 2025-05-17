@@ -8,7 +8,7 @@ import models.character.player.Slot;
 import models.character.player.Player;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
-import models.enums.BanItem;
+import models.enums.BanSellItem;
 import models.enums.Direction;
 import models.enums.commands.CraftingCommands;
 import models.data.Repository;
@@ -216,9 +216,9 @@ public class CraftingController extends Controller {
             return new Result(false, "item not found");
         }
 
-        if (BanItem.isBanItem(itemName)) {
-            return new Result(false, "You can't add a ban item to your inventory");
-        }
+//        if (BanSellItem.isBanItem(itemName)) {
+//            return new Result(false, "You can't add a ban item to your inventory");
+//        }
 
         if (player.getInventory().hasCapacity()) {
             return new Result(false, "inventory is full");

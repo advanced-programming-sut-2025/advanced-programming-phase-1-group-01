@@ -1,5 +1,6 @@
 package models.shop;
 
+import models.building.TileObject;
 import models.shop.enums.BlacksmithProducts;
 import models.shop.enums.BlacksmithUpgrade;
 

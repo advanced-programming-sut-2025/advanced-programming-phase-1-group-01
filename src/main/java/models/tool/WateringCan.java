@@ -5,6 +5,7 @@ import models.building.Tile;
 import models.character.player.Player;
 import models.enums.Direction;
 import models.farming.Plant;
+import models.tool.enums.TrashCanType;
 import models.tool.enums.WateringCanType;
 
 // related to farming.
@@ -63,6 +64,16 @@ public class WateringCan extends Tool {
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
+    }
+
+    @Override
+    public void upgrade() {
+        switch (type) {
+            case PRIMARY -> type = WateringCanType.COPPER;
+            case COPPER -> type = WateringCanType.IRON;
+            case IRON -> type = WateringCanType.GOLD;
+            case GOLD -> type = WateringCanType.IRIDIUM;
+        }
     }
 
     public boolean isEmpty() {

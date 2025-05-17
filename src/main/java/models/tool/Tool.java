@@ -16,6 +16,8 @@ public abstract class Tool implements Item {
 
     public abstract void use(Direction direction);
 
+    public abstract void upgrade();
+
     @Override
     public String getName() {
         return name;

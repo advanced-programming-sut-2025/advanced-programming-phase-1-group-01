@@ -27,4 +27,9 @@ public class FishingPole extends Tool {
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
     }
+
+    @Override
+    public void upgrade() {
+
+    }
 }

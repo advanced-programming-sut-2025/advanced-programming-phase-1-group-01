@@ -1,6 +1,7 @@
 package controllers.ShopControllers;
 
 import models.Result;
+import models.character.player.Inventory;
 import models.character.player.Player;
 import models.data.Repository;
 import models.dateTime.Season;
@@ -126,22 +127,28 @@ public class JojaMartController extends ShopController {
     }
 
     protected Result purchase(String command) {
-        String[] tokens = command.split(" ");
-        String productName = tokens[1];
+        String itemName;
+        String countStr;
         int count;
 
-        try {
-            count = Integer.parseInt(tokens[3]);
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            count = 1;
+        if (command.contains("-n")) {
+            itemName = extractValue(command, "purchase", "-n");
+            countStr = extractValue(command, "-n", null);
         }
+
+        else {
+            itemName = extractValue(command, "purchase", null);
+            countStr = "1";
+        }
+        count = Integer.parseInt(countStr);
+
 
         JojaMart shop = repo.getCurrentGame().getJojaMart();
         Player player = repo.getCurrentGame().getCurrentPlayer();
         String currentSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason().toString();
 
         for (JojaMartProducts product : JojaMartProducts.values()) {
-            if (product.getName().equalsIgnoreCase(productName)) {
+            if (product.getName().equalsIgnoreCase(itemName)) {
                 int totalCost = product.getPrice() * count;
                 int stock = shop.getProductStock(product);
 
@@ -161,7 +168,8 @@ public class JojaMartController extends ShopController {
                 if (product.getDailyLimit() != -1) {
                     shop.updateProductPurchase(product, count);
                 }
-                //inventory
+                Inventory inventory = player.getInventory();
+                inventory.addItem(itemName, count);
                 return new Result(true, "purchased " + count + " x " + product.getName());
             }
         }
