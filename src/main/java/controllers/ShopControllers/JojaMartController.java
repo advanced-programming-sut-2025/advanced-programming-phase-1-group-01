@@ -26,7 +26,7 @@ public class JojaMartController extends ShopController {
         JojaMartCommands matchedCommand = null;
 
         for (JojaMartCommands cmd : JojaMartCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }

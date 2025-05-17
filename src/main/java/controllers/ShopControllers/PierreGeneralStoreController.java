@@ -25,7 +25,7 @@ public class PierreGeneralStoreController extends ShopController {
         PierreCommands matchedCommand = null;
 
         for (PierreCommands cmd : PierreCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }
