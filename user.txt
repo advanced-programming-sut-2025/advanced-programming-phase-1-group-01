@@ -1,0 +1,7 @@
+Username: KiaValliant
+Password: Amirkiaghm#1385
+Nickname: Amirkia
+Email: akghasemim@gmail.com
+Gender: MALE
+securityQuestion: QUESTION2
+securityAnswer: kir

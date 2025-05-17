@@ -8,7 +8,7 @@ public enum FarmingCommands implements Command {
     HOW_MUCH_WATER("howmuch water"),
     ;
 
-    private String regex;
+    private final String regex;
 
     FarmingCommands(String regex) {
         this.regex = regex;
