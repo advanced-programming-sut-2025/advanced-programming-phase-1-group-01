@@ -34,6 +34,7 @@ public class GameController extends Controller {
     private final JojaMartController jojaMartController;
     private final MarnieRanchController marnieRanchController;
     private final TheStardropSaloonController theStardropSaloonController;
+    private final PierreGeneralStoreController pierreGeneralStoreController;
 
     public GameController(Repository repo) {
         super(repo);
@@ -58,6 +59,7 @@ public class GameController extends Controller {
         jojaMartController = new JojaMartController(repo);
         marnieRanchController = new MarnieRanchController(repo);
         theStardropSaloonController = new TheStardropSaloonController(repo);
+        pierreGeneralStoreController = new PierreGeneralStoreController(repo);
         commands = new ArrayList<>();
         initCommands();
     }

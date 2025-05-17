@@ -223,17 +223,17 @@ public class CraftingController extends Controller {
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
         Item item = inventory.getNewItem(itemName);
+        return null;
 
-        if (item == null) {
-            return new Result(false, "item not found");
-        
-
-        if (player.getInventory().hasCapacity()) {
-            return new Result(false, "inventory is full");
-        }
-
-        inventory.addItem(itemName, itemCount);
-        return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+//        if (item != null) {
+//            return new Result(false, "item not found");
+//            if (player.getInventory().hasCapacity()) {
+//                return new Result(false, "inventory is full");
+//            } else {
+//                inventory.addItem(itemName, itemCount);
+//            }
+//            return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+//        } else return null;
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {
@@ -255,3 +255,4 @@ public class CraftingController extends Controller {
         return null;
     }
 }
+
