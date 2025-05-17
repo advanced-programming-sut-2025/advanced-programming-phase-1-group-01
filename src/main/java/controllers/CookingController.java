@@ -3,20 +3,16 @@ package controllers;
 import models.Item;
 import models.Result;
 import models.building.Building;
-import models.character.player.Inventory;
-import models.character.player.Player;
-import models.character.player.Refrigerator;
-import models.character.player.Slot;
-import models.cooking.CookingRecipes;
-import models.cooking.CookingRecipe;
-import models.cooking.NotEatable;
-import models.crafting.enums.CraftingRecipes;
+import models.character.player.*;
+import models.cooking.*;
 import models.data.Repository;
+import models.enums.FridgeOnlyItem;
 import models.enums.commands.CookingCommands;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CookingController extends Controller {
     CookingController(Repository repo) {
@@ -49,15 +45,15 @@ public class CookingController extends Controller {
             case SHOW_RECIPE:
                 return showRecipe();
             case CHEAT_ADD_RECIPE:
-                cheatAddRecipe(command);
+                return cheatAddRecipe(command);
             case PUT_REFRIGERATOR:
-                putRefrigerator(command);
+                return putRefrigerator(command);
             case PICK_REFRIGERATOR:
-                pickRefrigerator(command);
+                return pickRefrigerator(command);
             case COOKING_PREPARE:
-                cookingPrepare(command);
+                return cookingPrepare(command);
             case EAT:
-                eat(command);
+                return eat(command);
         }
         return null;
     }
@@ -99,8 +95,8 @@ public class CookingController extends Controller {
 
     private Result putRefrigerator(String command) {
         String[] tokens = command.split(" ");
-        String itemStr = tokens[3];
-        String itemCountStr = tokens[4];
+        String itemStr = extractValue(command,"put","-a");
+        String itemCountStr = extractValue(command,"-a",null);
         int itemCount = Integer.parseInt(itemCountStr);
 
         Player player = repo.getCurrentUser().getPlayer();
@@ -110,7 +106,7 @@ public class CookingController extends Controller {
             return new Result(false, "You do not have this " + itemStr + " in your inventory.");
         }
 
-        if (NotEatable.isNotEatable(itemStr)) {
+        if (!FridgeOnlyItem.isFridgeItem(itemStr)) {
             return new Result(false, "You cannot place non-food items in the fridge.");
         }
 
@@ -123,15 +119,13 @@ public class CookingController extends Controller {
     }
 
     private Result pickRefrigerator(String command) {
-        String[] tokens = command.split(" ");
-        String itemStr = tokens[3];
-        String itemCountStr = tokens[4];
+        String itemStr = extractValue(command,"pick","-a");
+        String itemCountStr = extractValue(command,"-a",null);
         int itemCount = Integer.parseInt(itemCountStr);
 
         Player player = repo.getCurrentUser().getPlayer();
         Refrigerator refrigerator = player.getRefrigerator();
-        Inventory inventory = player.getInventory();
-        Item item = inventory.getSlot(itemStr).getItem();
+        Item item = Inventory.getNewItem(itemStr);
 
         if (refrigerator.containsItem(item)) {
             return new Result(false, "You do not have this " + itemStr + " in your refrigerator.");
@@ -141,15 +135,15 @@ public class CookingController extends Controller {
             return new Result(false, "You do not have enough of this " + itemStr + " in your refrigerator.");
         }
 
-        Slot slot = inventory.getSlot(itemStr);
-        slot.addQuantity(itemCount);
+        Inventory inventory = player.getInventory();
+
+        inventory.addItem(itemStr,itemCount);
         refrigerator.removeItem(item,itemCount);
         return new Result(true, "Item added to inventory");
     }
 
     private Result cookingPrepare(String command) {
-        String[] tokens = command.split(" ");
-        String itemName = tokens[2];
+        String itemName = extractValue(command,"prepare",null);
 
         Set<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
         CookingRecipe targetRecipe = null;
@@ -221,8 +215,7 @@ public class CookingController extends Controller {
     }
 
     private Result eat(String command) {
-        String[] tokens = command.split(" ");
-        String foodName = tokens[1];
+        String foodName = extractValue(command,"eat",null);
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
@@ -234,22 +227,59 @@ public class CookingController extends Controller {
             return new Result(false, foodName + " not found.");
         }
 
+        if (slot == null) {
+            return new Result(false, foodName + " not found.");
+        }
+
         if (slot.getQuantity() == 0) {
             return new Result(false, "You do not have" + foodName + " in your inventory.");
         }
 
-        CookingRecipes matched = null;
+        FoodsEnum matched = null;
 
-        for (CookingRecipes recipeEnum : CookingRecipes.values()) {
-            if (recipeEnum.name().equalsIgnoreCase(foodName)) {
+        for (FoodsEnum recipeEnum : FoodsEnum.values()) {
+            if (recipeEnum.getName().equalsIgnoreCase(foodName)) {
                 matched = recipeEnum;
                 break;
             }
         }
 
         slot.removeQuantity(1);
-        player.getEnergy().increase(matched.toRecipe().energy());
+        player.getEnergy().increase(matched.toFood().getEnergy());
+
+        String buff = matched.toFood().getBuff();
+        if (buff != null) {
+
+            if (buff.equalsIgnoreCase("Max Energy")) {
+                player.energyBuff(matched.toFood().buffTime());
+            }
+
+            else {
+                AbilityType abilityType = AbilityType.valueOf(buff.toUpperCase());
+                player.abilityBuff(abilityType);
+            }
+        }
+
 
         return new Result(true, "This " + foodName + " has been eaten.");
+    }
+
+    private String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 }

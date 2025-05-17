@@ -79,7 +79,7 @@ public class CraftingController extends Controller {
         CraftingRecipe targetRecipe = null;
 
         for (CraftingRecipe recipe : recipes) {
-            if (recipe.name().equalsIgnoreCase(itemName)) {
+            if (recipe.getName().equalsIgnoreCase(itemName)) {
                 targetRecipe = recipe;
                 break;
             }
@@ -99,6 +99,9 @@ public class CraftingController extends Controller {
             int requiredAmount = entry.getValue();
 
             Slot inventorySlot = inventory.getSlot(materialName);
+            if (inventorySlot == null) {
+                return new Result(false, "Slot not found.");
+            }
             int itemCount = inventorySlot.getQuantity();
 
             if (itemCount < requiredAmount) {

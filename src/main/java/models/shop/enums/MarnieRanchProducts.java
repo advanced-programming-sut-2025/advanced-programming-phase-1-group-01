@@ -1,5 +1,7 @@
 package models.shop.enums;
 
+import models.shop.MarnieRanchItem;
+
 public enum MarnieRanchProducts {
     CHICKEN("Chicken", 800, "Coop", 2),
     COW("Cow", 1500, "Barn", 2),
@@ -36,6 +38,10 @@ public enum MarnieRanchProducts {
 
     public int getDailyLimit() {
         return dailyLimit;
+    }
+
+    public MarnieRanchItem toItem() {
+        return new MarnieRanchItem(name,price);
     }
 }
 

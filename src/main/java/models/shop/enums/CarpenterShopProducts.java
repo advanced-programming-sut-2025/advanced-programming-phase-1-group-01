@@ -1,8 +1,10 @@
 package models.shop.enums;
 
+import models.shop.CarpenterShopProductsItem;
+
 public enum CarpenterShopProducts {
-    WOOD("Wood", 10, Integer.MAX_VALUE),
-    STONE("Stone", 20, Integer.MAX_VALUE);
+    WOOD("Wood", 10, -1),
+    STONE("Stone", 20, -1);
 
     private final String name;
     private final int price;
@@ -24,5 +26,9 @@ public enum CarpenterShopProducts {
 
     public int getDailyLimit() {
         return dailyLimit;
+    }
+
+    public CarpenterShopProductsItem toItem() {
+        return new CarpenterShopProductsItem(name,price,dailyLimit);
     }
 }

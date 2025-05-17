@@ -202,7 +202,7 @@ public class LoginMenuController extends Controller {
             return new Result(false, "User not found!");
         }
 
-        User user = repo.getTempUser();
+        User user = repo.getUserByUsername(username);
 
         return new Result(true, user.getSecurityQuestion().getQuestion());
     }
@@ -257,6 +257,7 @@ public class LoginMenuController extends Controller {
         }
 
         repo.setCurrentUser(user);
+        FileManager.clearFile();
         return new Result(true,"You are logged in!");
     }
 

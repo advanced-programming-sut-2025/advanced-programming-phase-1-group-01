@@ -5,12 +5,48 @@ import models.character.player.Player;
 import models.data.Repository;
 import models.dateTime.Season;
 import models.shop.JojaMart;
+import models.shop.enums.JojaMartCommands;
 import models.shop.enums.JojaMartProducts;
 
 public class JojaMartController extends ShopController {
 
     public JojaMartController(Repository repo) {
         super(repo);
+    }
+
+    @Override
+    public Result handleCommand(String command) {
+        int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+
+        if (!isShopOpen(hour)) {
+            return new Result(false, "shop is closed");
+        }
+
+        JojaMartCommands matchedCommand = null;
+
+        for (JojaMartCommands cmd : JojaMartCommands.values()) {
+            if (cmd.name().equals(command)) {
+                matchedCommand = cmd;
+                break;
+            }
+        }
+
+        if (matchedCommand == null) {
+            return new Result(false, "invalid command");
+        }
+
+        switch (matchedCommand) {
+            case SHOW_ALL_PRODUCTS:
+                return showAllProducts();
+            case SHOW_ALL_AVAILABLE_PRODUCTS:
+                return showAllAvailableProducts();
+            case JOJA_MART:
+                return purchase(command);
+            case CHEAT_COINS:
+                return cheatCoins(command);
+        }
+
+        return null;
     }
 
     protected Result showAllProducts() {

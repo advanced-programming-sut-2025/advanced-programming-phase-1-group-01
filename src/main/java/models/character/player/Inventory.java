@@ -3,8 +3,12 @@ package models.character.player;
 import models.Item;
 
 import models.cooking.CookingRecipes;
+import models.cooking.Foods;
+import models.cooking.FoodsEnum;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
+import models.shop.CarpenterShopProductsItem;
+import models.shop.enums.*;
 import models.tool.*;
 
 import java.util.ArrayList;
@@ -109,14 +113,50 @@ public class Inventory {
 
             default -> {
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
-                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                    if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
                     }
                 }
 
                 for (CraftingRecipes recipeEnum : CraftingRecipes.values()) {
-                    if (recipeEnum.name().equalsIgnoreCase(itemName)) {
+                    if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
+                    }
+                }
+
+                for (FoodsEnum foodEnum : FoodsEnum.values()) {
+                    if (foodEnum.getName().equalsIgnoreCase(itemName)) {
+                        yield foodEnum.toFood();
+                    }
+                }
+
+                for (BlacksmithProducts products : BlacksmithProducts.values()) {
+                    if (products.getName().equalsIgnoreCase(itemName)) {
+                        yield products.toItem();
+                    }
+                }
+
+                for (MarnieRanchProducts products : MarnieRanchProducts.values()) {
+                    if (products.getName().equalsIgnoreCase(itemName)) {
+                        yield products.toItem();
+                    }
+                }
+
+                for (TheStardropSaloonProducts products : TheStardropSaloonProducts.values()) {
+                    if (products.getName().equalsIgnoreCase(itemName)) {
+                        yield products.toItem();
+                    }
+                }
+
+                for (CarpenterShopBuildings buildings : CarpenterShopBuildings.values()) {
+                    if (buildings.getName().equalsIgnoreCase(itemName)) {
+                        yield buildings.toItem();
+                    }
+                }
+
+                for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
+                    if (product.getName().equalsIgnoreCase(itemName)) {
+                        yield product.toItem();
                     }
                 }
 

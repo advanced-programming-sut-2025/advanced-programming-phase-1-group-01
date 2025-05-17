@@ -30,8 +30,8 @@ public class FarmInitializer {
     private final static Position GREENHOUSE_BR = new Position(26, 7);
     private final static Position COTTAGE_TP = new Position(65, 4);
     private final static Position COTTAGE_BR = new Position(69, 9);
-    private final static Position SHIPPING_BIN_1_TP = new Position(4, 5);
-    private final static Position SHIPPING_BIN_1_BR = new Position(5, 6);
+    private final static Position SHIPPING_BIN_1_TP = new Position(50,8 );
+    private final static Position SHIPPING_BIN_1_BR = new Position(51, 9);
     private final static Position SHIPPING_BIN_2_TP = new Position(70, 68);
     private final static Position SHIPPING_BIN_2_BR = new Position(71, 69);
 
