@@ -5,7 +5,7 @@ import models.dateTime.Season;
 
 import java.util.Random;
 
-public enum SeedInfo implements TileObject, FarmingEnum {
+public enum SeedInfo implements FarmingEnum {
     JAZZ_SEEDS("Jazz Seeds", Season.SPRING, "🎷"),
     CARROT_SEEDS("Carrot Seeds", Season.SPRING, "🥕"),
     CAULIFLOWER_SEEDS("Cauliflower Seeds", Season.SPRING, "🥦"),
@@ -49,7 +49,6 @@ public enum SeedInfo implements TileObject, FarmingEnum {
     ANCIENT_SEEDS("Ancient Seeds", Season.SPECIAL, "🗿"),
     MIXED_SEEDS("Mixed Seeds", Season.SPECIAL, "🎲");
 
-
     private final String name;
     private final Season season;
     private final String symbol;
@@ -75,11 +74,6 @@ public enum SeedInfo implements TileObject, FarmingEnum {
         return name;
     }
 
-    @Override
-    public int getPrice() {
-        return 0;
-    }
-
     public static SeedInfo fromString(String name) {
         for (SeedInfo seedInfo : SeedInfo.values()) {
             if (seedInfo.getName().equalsIgnoreCase(name)) {
@@ -94,8 +88,7 @@ public enum SeedInfo implements TileObject, FarmingEnum {
         return name;
     }
 
-    @Override
-    public String getSymbol() {
-        return symbol;
+    public Seed toItem() {
+        return new Seed(this);
     }
 }

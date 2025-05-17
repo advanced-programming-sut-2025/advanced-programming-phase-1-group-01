@@ -18,6 +18,14 @@ public class Crop extends Plant implements Item, Cloneable {
         fertilizer = null;
     }
 
+    public Crop(SeedInfo seedInfo) {
+        this.seed = seedInfo.toItem();
+        info = CropInfo.fromSeed(seed);
+        state = CropState.HEALTHY;
+        becameGiant = false;
+        fertilizer = null;
+    }
+
     public Crop(Seed seed, Season season) {
         this.seed = seed;
         info = season.getRandomMixedSeed();

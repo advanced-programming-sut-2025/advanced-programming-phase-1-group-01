@@ -29,12 +29,22 @@ public class ArtisanController extends Controller {
             String itemName = matcher.group("itemName");
 
             Player player = repo.getCurrentGame().getCurrentPlayer();
-            return null;
-        } return null;
+            return new Result(true, player.useArtisan(artisanName, itemName));
+
+        } return new Result(false, "Invalid command");
     }
 
     private Result handleGet(String commandLine) {
-        return null;
+        Pattern pattern = Pattern.compile(ProcessingCommands.ARTISAN_GET.getRegex());
+        Matcher matcher = pattern.matcher(commandLine);
+
+        if (matcher.matches()) {
+            String artisanName = matcher.group("artisanName");
+
+            Player player = repo.getCurrentGame().getCurrentPlayer();
+            return new Result(true, player.getArtisan(artisanName));
+
+        } else return new Result(false, "Invalid command");
     }
 
 

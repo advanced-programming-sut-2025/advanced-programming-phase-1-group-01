@@ -89,7 +89,7 @@ public class ToolController extends Controller {
     }
 
     private Result upgradeTool(String toolName) {
-        // player is in Blacksmith ? ok : nok
+
 
         return null;
     }

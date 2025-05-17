@@ -4,6 +4,7 @@ import models.Game;
 import models.animal.Animal;
 import models.character.NPC.NPC;
 import models.character.player.Player;
+import models.crafting.UnripeProduct;
 
 import java.util.*;
 
@@ -88,14 +89,6 @@ public class TimeManager {
         game.getMarnieRanch().resetDailyStock();
         game.getTheStardropSaloon().resetDailyStock();
 
-//        Player player = game.getCurrentPlayer();
-//        if (player.getEnergy().hasPassedOut()) {
-//            player.getEnergy().setHasPassedOut(false);
-//            player.getEnergy().fillEnergyPassedOut();
-//        }
-//        else {
-//            player.getEnergy().fillEnergy();
-//        }
 
         for (Player player : game.getPlayers()) {
             for (Animal animal: player.getFarm().getAnimals()) {
@@ -114,6 +107,9 @@ public class TimeManager {
             }
 
             player.increaseHalvedEnergy();
+            for (UnripeProduct unripeProduct: player.getUnripeProducts()) {
+                unripeProduct.advanceHourCounter();
+            }
         }
 
         for (NPC npc : game.getNPCVillage().getNPCs()) {

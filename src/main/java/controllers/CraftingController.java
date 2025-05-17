@@ -8,7 +8,7 @@ import models.character.player.Slot;
 import models.character.player.Player;
 import models.crafting.*;
 import models.crafting.enums.CraftingRecipes;
-import models.enums.BanItem;
+import models.enums.BanSellItem;
 import models.enums.Direction;
 import models.enums.commands.CraftingCommands;
 import models.data.Repository;
@@ -29,7 +29,7 @@ public class CraftingController extends Controller {
 
         Player player = repo.getCurrentUser().getPlayer();
         Building cottage = player.getFarm().getCottage();
-            if (!player.isPlayerNearBuilding(cottage)) {
+        if (!player.isPlayerNearBuilding(cottage)) {
             return new Result(false, "You are not near Cottage");
         }
 
@@ -42,7 +42,7 @@ public class CraftingController extends Controller {
             }
         }
 
-        if(matchedCommand == null) {
+        if (matchedCommand == null) {
             return new Result(false, "invalid command");
         }
 
@@ -68,7 +68,7 @@ public class CraftingController extends Controller {
             info.append("- ").append(recipe.name()).append("\n");
         }
 
-        return new Result(true,info.toString());
+        return new Result(true, info.toString());
     }
 
     private Result craft(String command) {
@@ -123,10 +123,9 @@ public class CraftingController extends Controller {
             repo.getCurrentGame().nextTurn();
         }
 
-        inventory.addItem(itemName,1);
+        inventory.addItem(itemName, 1);
 
-        //Hi amirhosein
-        //chetori
+        //repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(itemName);
 
         return new Result(true, "Crafted " + targetRecipe.name() + " successfully!");
     }
@@ -187,16 +186,29 @@ public class CraftingController extends Controller {
             case DOWN -> y++;
             case LEFT -> x--;
             case RIGHT -> x++;
-            case UP_LEFT -> { x--; y--; }
-            case UP_RIGHT -> { x++; y--; }
-            case DOWN_LEFT -> { x--; y++; }
-            case DOWN_RIGHT -> { x++; y++; }
+            case UP_LEFT -> {
+                x--;
+                y--;
+            }
+            case UP_RIGHT -> {
+                x++;
+                y--;
+            }
+            case DOWN_LEFT -> {
+                x--;
+                y++;
+            }
+            case DOWN_RIGHT -> {
+                x++;
+                y++;
+            }
         }
 
         device.setPosition(x, y);
         device.setWorking(false);
 
         repo.getCurrentGame().getCurrentPlayer().getFarm().getTiles().get(x).get(y).setObject(device);
+        repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(device);
 
         slot.removeQuantity(1);
 
@@ -216,9 +228,9 @@ public class CraftingController extends Controller {
             return new Result(false, "item not found");
         }
 
-        if (BanItem.isBanItem(itemName)) {
-            return new Result(false, "You can't add a ban item to your inventory");
-        }
+//        if (BanSellItem.isBanItem(itemName)) {
+//        return new Result(false, "You can't add a ban item to your inventory");
+//        }
 
         if (player.getInventory().hasCapacity()) {
             return new Result(false, "inventory is full");

@@ -35,9 +35,10 @@ public class Pickaxe extends Tool {
         Tile tile = player.getCurrentMap().getTile(appliedPosition);
         tile.unPlow();
         Item item = tile.getObject();
-        if (item instanceof Stone || item instanceof ForagingMineral) {
-            tile.removeObject();
-        }
+//        if (item instanceof Stone || item instanceof ForagingMineral) {
+        tile.removeObject();
+        player.getAbilityService().getMining().increaseXp(10);
+//        }
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);

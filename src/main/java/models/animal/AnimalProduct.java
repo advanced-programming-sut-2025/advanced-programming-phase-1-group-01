@@ -1,13 +1,13 @@
 package models.animal;
 
+import models.Item;
 import models.ingredients.Ingredient;
 
-public class AnimalProduct extends Ingredient {
+public class AnimalProduct implements Item {
     private final AnimalProductType animalProductType;
     private final ProductQuality productQuality;
 
-    public AnimalProduct(AnimalProductType animalProductType, ProductQuality productQuality, int amount) {
-        super(amount);
+    public AnimalProduct(AnimalProductType animalProductType, ProductQuality productQuality) {
         this.animalProductType = animalProductType;
         this.productQuality = productQuality;
     }
@@ -20,7 +20,14 @@ public class AnimalProduct extends Ingredient {
         return productQuality;
     }
 
-    public void increaseAmount(int increment) {
-        amount += increment;
+
+    @Override
+    public String getName() {
+        return animalProductType.toString();
+    }
+
+    @Override
+    public int getPrice() {
+        return animalProductType.getBasePrice();
     }
 }
