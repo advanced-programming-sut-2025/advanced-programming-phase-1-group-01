@@ -1,5 +1,7 @@
 package models.shop.enums;
 
+import models.shop.CarpenterShopBuildingsItem;
+
 public enum CarpenterShopBuildings {
     BARN("Barn", 6000, 350, 150, 7, 4, 1),
     BIG_BARN("Big Barn", 12000, 450, 200, 7, 4, 1),
@@ -55,5 +57,9 @@ public enum CarpenterShopBuildings {
 
     public int getDailyLimit() {
         return dailyLimit;
+    }
+
+    public CarpenterShopBuildingsItem toItem() {
+        return new CarpenterShopBuildingsItem(name, cost, woodRequired, stoneRequired, width, height, dailyLimit);
     }
 }

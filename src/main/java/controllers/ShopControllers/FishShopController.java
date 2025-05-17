@@ -4,12 +4,48 @@ import models.Result;
 import models.character.player.Player;
 import models.data.Repository;
 import models.shop.FishShop;
+import models.shop.enums.FishShopCommands;
 import models.shop.enums.FishShopProducts;
 
 public class FishShopController extends ShopController {
 
     public FishShopController(Repository repo) {
         super(repo);
+    }
+
+    @Override
+    public Result handleCommand(String command) {
+        int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+
+        if (!isShopOpen(hour)) {
+            return new Result(false, "shop is closed");
+        }
+
+        FishShopCommands matchedCommand = null;
+
+        for (FishShopCommands cmd : FishShopCommands.values()) {
+            if (cmd.name().equals(command)) {
+                matchedCommand = cmd;
+                break;
+            }
+        }
+
+        if (matchedCommand == null) {
+            return new Result(false, "invalid command");
+        }
+
+        switch (matchedCommand) {
+            case SHOW_ALL_PRODUCTS:
+                return showAllProducts();
+            case SHOW_ALL_AVAILABLE_PRODUCTS:
+                return showAllAvailableProducts();
+            case FISH_SHOP:
+                return purchase(command);
+            case CHEAT_COINS:
+                return cheatCoins(command);
+        }
+
+        return null;
     }
 
     protected Result showAllProducts() {

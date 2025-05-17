@@ -1,8 +1,10 @@
 package controllers;
 
+import controllers.ShopControllers.*;
 import models.Result;
 import models.data.Repository;
 import models.enums.commands.*;
+import models.shop.enums.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,12 @@ public class GameController extends Controller {
     private final AnimalHusbandryController animalHusbandryController;
     private final NPCController npcController;
     private final SellController sellController;
+    private final BlackSmithController blackSmithController;
+    private final CarpenterController carpenterController;
+    private final FishShopController fishShopController;
+    private final JojaMartController jojaMartController;
+    private final MarnieRanchController marnieRanchController;
+    private final TheStardropSaloonController theStardropSaloonController;
 
     public GameController(Repository repo) {
         super(repo);
@@ -44,6 +52,12 @@ public class GameController extends Controller {
         animalHusbandryController = new AnimalHusbandryController(repo);
         npcController = new NPCController(repo);
         sellController = new SellController(repo);
+        blackSmithController = new BlackSmithController(repo);
+        carpenterController = new CarpenterController(repo);
+        fishShopController = new FishShopController(repo);
+        jojaMartController = new JojaMartController(repo);
+        marnieRanchController = new MarnieRanchController(repo);
+        theStardropSaloonController = new TheStardropSaloonController(repo);
         commands = new ArrayList<>();
         initCommands();
     }
@@ -64,6 +78,12 @@ public class GameController extends Controller {
         commands.addAll(Arrays.stream(CookingCommands.values()).toList());
         commands.addAll(Arrays.stream(CraftingCommands.values()).toList());
         commands.addAll(Arrays.stream(ProcessingCommands.values()).toList());
+        commands.addAll(Arrays.stream(BlackSmithCommands.values()).toList());
+        commands.addAll(Arrays.stream(CarpenterCommands.values()).toList());
+        commands.addAll(Arrays.stream(FishShopCommands.values()).toList());
+        commands.addAll(Arrays.stream(JojaMartCommands.values()).toList());
+        commands.addAll(Arrays.stream(MarnieCommands.values()).toList());
+        commands.addAll(Arrays.stream(StardropSallonCommands.values()).toList());
     }
 
     @Override
@@ -111,7 +131,20 @@ public class GameController extends Controller {
             return craftingController.handleCommand(commandLine);
         } else if (matchedCommand instanceof ProcessingCommands) {
             return artisanController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof BlackSmithCommands) {
+        return blackSmithController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof CarpenterCommands) {
+        return carpenterController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof FishShopCommands) {
+        return fishShopController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof JojaMartCommands) {
+        return jojaMartController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof MarnieCommands) {
+        return marnieRanchController.handleCommand(commandLine);
+        } else if (matchedCommand instanceof StardropSallonCommands) {
+        return theStardropSaloonController.handleCommand(commandLine);
         }
+
 
         return new Result(false, "invalid command!");
     }
