@@ -8,7 +8,8 @@ import java.util.Set;
 public class JojaMart extends Shop {
     private final Map<JojaMartProducts, Integer> jojaMartProducts = new HashMap<>();
 
-    public JojaMart() {
+    public JojaMart(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.MORRIS;
         resetDailyStock();
     }

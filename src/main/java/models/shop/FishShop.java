@@ -9,7 +9,8 @@ import java.util.Set;
 public class FishShop extends Shop {
     private final Map<FishShopProducts, Integer> fishShopProducts = new HashMap<>();
 
-    public FishShop() {
+    public FishShop(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.WILLY;
         resetDailyStock();
     }

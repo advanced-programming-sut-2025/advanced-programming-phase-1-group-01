@@ -11,7 +11,8 @@ public class CarpenterShop extends Shop {
     private final Map<CarpenterShopProducts, Integer> carpenterShopProducts = new HashMap<>();
     private final Map<CarpenterShopBuildings, Integer> carpenterShopBuildings = new HashMap<>();
 
-    public CarpenterShop() {
+    public CarpenterShop(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.ROBIN;
         resetDailyStock();
     }

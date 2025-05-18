@@ -5,8 +5,8 @@ import models.building.TileObject;
 import java.util.Random;
 
 public enum StoneType {
-    //    FIRST("💎"), SECOND("🪨"), THIRD("00"), FOURTH("🌋");
-    FIRST("S1"), SECOND("S2"), THIRD("S3"), FOURTH("S4");
+        FIRST("💎"), SECOND("🪨"), THIRD("🥌"), FOURTH("🌋");
+//    FIRST("S1"), SECOND("S2"), THIRD("S3"), FOURTH("S4");
 
 
     private final String symbol;

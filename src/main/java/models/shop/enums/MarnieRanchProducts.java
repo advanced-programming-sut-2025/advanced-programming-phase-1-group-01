@@ -3,9 +3,9 @@ package models.shop.enums;
 import models.shop.MarnieRanchItem;
 
 public enum MarnieRanchProducts {
-    HAY("Hay", 50, -1),
-    MILK_PAIL("Milk Pail", 1000, 1),
-    SHEARS("Shears", 1000, 1);
+    HAY("hay", 50, -1),
+    MILK_PAIL("milk pail", 1000, 1),
+    SHEARS("shears", 1000, 1);
 
     private final String name;
     private final int price;

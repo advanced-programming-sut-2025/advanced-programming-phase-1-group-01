@@ -27,13 +27,13 @@ public class Game {
 //    private Maps currentMap;
     private int currentIndex = 1;
 
-    private final Blacksmith blacksmith = new Blacksmith();
-    private final JojaMart jojaMart = new JojaMart();
-    private final PierreGeneralStore pierreGeneralStore = new PierreGeneralStore();
-    private final CarpenterShop carpenterShop = new CarpenterShop();
-    private final FishShop fishShop = new FishShop();
-    private final MarnieRanch marnieRanch = new MarnieRanch();
-    private final TheStardropSaloon theStarDropSaloon = new TheStardropSaloon();
+    private final Blacksmith blacksmith = new Blacksmith(72,2);
+    private final JojaMart jojaMart = new JojaMart(72,4);
+    private final PierreGeneralStore pierreGeneralStore = new PierreGeneralStore(72,6);
+    private final CarpenterShop carpenterShop = new CarpenterShop(72,8);
+    private final FishShop fishShop = new FishShop(72,10);
+    private final MarnieRanch marnieRanch = new MarnieRanch(72,12);
+    private final TheStardropSaloon theStarDropSaloon = new TheStardropSaloon(72,14);
 
     public Game(List<Player> players) {
         this.players = players;
@@ -194,7 +194,7 @@ public class Game {
         currentPlayer = players.get(currentIndex);
         currentIndex = (currentIndex + 1) % players.size();
         if (currentPlayer.getEnergy().hasPassedOut()) {
-            nextTurn();
+            System.out.println("You passed out from exhaustion! It's the next player's turn now.");
         }
         if (currentIndex == 0) {
             timeManager.getNow().advanceHour();

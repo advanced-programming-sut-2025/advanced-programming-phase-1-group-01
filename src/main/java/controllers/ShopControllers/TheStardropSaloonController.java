@@ -93,12 +93,12 @@ public class TheStardropSaloonController extends ShopController {
         int count;
 
         if (command.contains("-n")) {
-            itemName = extractValue(command, "purchase", "-n");
+            itemName = extractValue(command, "stardrop", "-n");
             countStr = extractValue(command, "-n", null);
         }
 
         else {
-            itemName = extractValue(command, "purchase", null);
+            itemName = extractValue(command, "stardrop", null);
             countStr = "1";
         }
         count = Integer.parseInt(countStr);
@@ -127,7 +127,7 @@ public class TheStardropSaloonController extends ShopController {
                     shop.updateProductPurchase(product, count);
                 }
 
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
         return new Result(false, "product not found");

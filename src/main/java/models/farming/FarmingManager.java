@@ -40,9 +40,9 @@ public class FarmingManager {
         }
     }
 
-    public void plant(Item source, Tile tile) {
+    public Plant plant(Item source, Tile tile) {
         if (tile == null || !tile.isEmpty()) {
-            return;
+            return null;
         }
 
         Plant plant;
@@ -54,11 +54,11 @@ public class FarmingManager {
             } else if (source instanceof TreeSource) {
                 plant = new Tree((TreeSource) source);
             } else {
-                return;
+                return null;
             }
         }
 
-        tile.setObject(plant);
+        return plant;
     }
 
     public void growAllPlants() {

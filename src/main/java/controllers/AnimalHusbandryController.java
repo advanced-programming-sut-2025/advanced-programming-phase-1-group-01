@@ -4,6 +4,7 @@ import models.Item;
 import models.Position;
 import models.Result;
 import models.animal.Animal;
+import models.animal.AnimalHouseType;
 import models.animal.ProductQuality;
 import models.building.Farm;
 import models.character.player.Inventory;
@@ -53,6 +54,7 @@ public class AnimalHusbandryController extends Controller {
         Pattern pattern = Pattern.compile(AnimalHusbandryCommands.BUILD.getRegex());
         Matcher matcher = pattern.matcher(commandLine);
 
+
         if (matcher.matches()) {
             String animalName = matcher.group("name");
             int x = Integer.parseInt(matcher.group("X"));
@@ -60,7 +62,9 @@ public class AnimalHusbandryController extends Controller {
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
             return new Result(true, farm.buildShelter(new Position(x, y), animalName));
-        } return new Result(false, "Invalid command");
+        }
+
+        return new Result(false, "Invalid command");
     }
 
     private Result handleBuyAnimal(String commandLine) {

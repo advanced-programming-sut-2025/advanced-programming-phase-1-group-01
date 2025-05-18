@@ -3,21 +3,26 @@ package models.initializer;
 import models.Position;
 import models.Random;
 import models.building.*;
+import models.farming.Seed;
+import models.farming.SeedInfo;
 import models.farming.Tree;
 import models.farming.TreeInfo;
 import models.enums.StoneType;
 import models.foraging.*;
 import models.ingredients.Stone;
+import models.shop.Blacksmith;
+import models.shop.ShopSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FarmInitializer {
     private final static int NUMBER_OF_TREES = 20; // 70
-    private final static int NUMBER_OF_STONES = 7; // 120
+    private final static int NUMBER_OF_STONES = 40; // 120
     private final static int NUMBER_OF_FORAGING_CROPS = 20; // 80
     private final static int NUMBER_OF_FORAGING_MINERALS = 6; // 60
     private final static int NUMBER_OF_FORAGING_TREES = 15; // 50
+    private final static int NUMBER_OF_FORAGING_SEEDS = 20;
     private final static Position FARM_TP = new Position(0, 0);
     private final static Position FARM_BR = new Position(75, 75);
     private final static Position GROUND_TP = new Position(0, 0);
@@ -42,8 +47,6 @@ public class FarmInitializer {
     private static Quarry quarry;
 
     private static void initializeTiles(int additionalX, int additionalY) {
-//        System.out.println("11"); //error check
-
         for (int i = FARM_TP.x(); i < FARM_BR.x(); i++) {
             tiles.add(new ArrayList<>());
         }
@@ -242,6 +245,16 @@ public class FarmInitializer {
             } else i--;
         }
 
+        for (int i = 0; i < NUMBER_OF_FORAGING_SEEDS; i++) {
+            Seed seed = new Seed(SeedInfo.randomForagingSeed());
+            Position position = randomPosition();
+
+            if (canBePlanted(position)) {
+                tiles.get(position.x()).get(position.y()).setObject(seed);
+                tiles.get(position.x()).get(position.y()).setMovable(false);
+            } else i--;
+        }
+
         for (int i = 0; i < NUMBER_OF_STONES + additionalY * 10; i++) {
             Stone stone = new Stone(StoneType.randomStone());
             Position position = randomPosition();
@@ -281,6 +294,14 @@ public class FarmInitializer {
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
+
+        tiles.get(72).get(1).setObject(ShopSymbol.BLACKSMITH);
+        tiles.get(72).get(3).setObject(ShopSymbol.JOJA_MART);
+        tiles.get(72).get(5).setObject(ShopSymbol.PIERRE_GENERAL_STORE);
+        tiles.get(72).get(7).setObject(ShopSymbol.CARPENTER_SHOP);
+        tiles.get(72).get(9).setObject(ShopSymbol.FISH_SHOP);
+        tiles.get(72).get(11).setObject(ShopSymbol.MARNIE_RANCH);
+        tiles.get(72).get(13).setObject(ShopSymbol.STARDROP_SALOON);
     }
 
 

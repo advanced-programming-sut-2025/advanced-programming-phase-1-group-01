@@ -12,7 +12,7 @@ public class QuestItem implements Item {
 
     @Override
     public String getName() {
-        return type.toString();
+        return type.getName();
     }
 
     @Override

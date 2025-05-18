@@ -6,6 +6,7 @@ import models.building.Tile;
 import models.building.TileObject;
 import models.character.player.Inventory;
 import models.character.player.Player;
+import models.crafting.CraftingDevice;
 import models.enums.Direction;
 import models.foraging.ForagingMineral;
 import models.ingredients.Stone;
@@ -35,10 +36,10 @@ public class Pickaxe extends Tool {
         Tile tile = player.getCurrentMap().getTile(appliedPosition);
         tile.unPlow();
         Item item = tile.getObject();
-//        if (item instanceof Stone || item instanceof ForagingMineral) {
+       if (item instanceof Stone || item instanceof ForagingMineral || item instanceof CraftingDevice) {
         tile.removeObject();
         player.getAbilityService().getMining().increaseXp(10);
-//        }
+        }
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);

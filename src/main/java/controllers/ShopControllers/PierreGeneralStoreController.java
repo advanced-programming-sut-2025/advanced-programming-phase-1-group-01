@@ -93,12 +93,12 @@ public class PierreGeneralStoreController extends ShopController {
         int count;
 
         if (command.contains("-n")) {
-            itemName = extractValue(command, "purchase", "-n");
+            itemName = extractValue(command, "pierre", "-n");
             countStr = extractValue(command, "-n", null);
         }
 
         else {
-            itemName = extractValue(command, "purchase", null);
+            itemName = extractValue(command, "pierre", null);
             countStr = "1";
         }
         count = Integer.parseInt(countStr);
@@ -128,7 +128,7 @@ public class PierreGeneralStoreController extends ShopController {
                 Inventory inventory = player.getInventory();
                 inventory.addItem(itemName,count);
 
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
         return new Result(false, "product not found");

@@ -9,7 +9,8 @@ import java.util.Set;
 public class PierreGeneralStore extends Shop {
     private final Map<PierreGeneralStoreProducts, Integer> pierreGeneralStoreProducts = new HashMap<>();
 
-    public PierreGeneralStore() {
+    public PierreGeneralStore(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.PIERRE;
         resetDailyStock();
     }

@@ -56,6 +56,8 @@ public class CarpenterController extends ShopController {
 
         CarpenterShop shop = repo.getCurrentGame().getCarpenterShop();
 
+        info.append("all products\n");
+
         for (CarpenterShopProducts product : shop.getAllProducts()) {
             int stock = shop.getProductAmount(product);
             info.append(product.getName())
@@ -63,7 +65,6 @@ public class CarpenterController extends ShopController {
                     .append(product.getPrice())
                     .append("g")
                     .append(" (")
-                    .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
                     .append(")\n");
         }
         return new Result(true, info.toString());
@@ -72,6 +73,8 @@ public class CarpenterController extends ShopController {
     protected Result showAllAvailableProducts() {
         CarpenterShop shop = repo.getCurrentGame().getCarpenterShop();
         StringBuilder info = new StringBuilder();
+
+        info.append("available products\n");
 
         for (CarpenterShopProducts product : shop.getAllProducts()) {
             int stock = shop.getProductAmount(product);
@@ -94,12 +97,12 @@ public class CarpenterController extends ShopController {
         int count;
 
         if (command.contains("-n")) {
-            itemName = extractValue(command, "purchase", "-n");
+            itemName = extractValue(command, "carpenter", "-n");
             countStr = extractValue(command, "-n", null);
         }
 
         else {
-            itemName = extractValue(command, "purchase", null);
+            itemName = extractValue(command, "carpenter", null);
             countStr = "1";
         }
         count = Integer.parseInt(countStr);
@@ -127,7 +130,7 @@ public class CarpenterController extends ShopController {
                 }
                 Inventory inventory = player.getInventory();
                 inventory.addItem(itemName, count);
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
 
