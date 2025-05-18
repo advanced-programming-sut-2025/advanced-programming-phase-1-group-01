@@ -6,6 +6,7 @@ import models.character.player.Player;
 import models.data.Repository;
 import models.dateTime.Season;
 import models.shop.JojaMart;
+import models.shop.Shop;
 import models.shop.enums.JojaMartCommands;
 import models.shop.enums.JojaMartProducts;
 
@@ -18,6 +19,12 @@ public class JojaMartController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getFishShop();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -43,8 +50,6 @@ public class JojaMartController extends ShopController {
                 return showAllAvailableProducts();
             case JOJA_MART:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

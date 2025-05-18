@@ -17,7 +17,8 @@ public enum RelationshipCommands implements Command {
     TRADE_OFFER("trade -u (.+?) -t offer -i (.+?) -a (.+?) -ti (.+?) -ta (.+?)"),
     TRADE_LIST("trade list"),
     TRADE_RESPONSE("trade response (.+?) -i (.+?)"),
-    TRADE_HISTORY("trade history"),;
+    TRADE_HISTORY("trade history"),
+    TRADE_TALK_HISTORY("trade talk history -u (.+?)"),;
 
     RelationshipCommands(String regex) {
         this.regex = regex;

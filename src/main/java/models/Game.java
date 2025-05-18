@@ -26,6 +26,7 @@ public class Game {
     private NPCVillage npcVillage;
 //    private Maps currentMap;
     private int currentIndex = 1;
+    private DelayedPaymentSystem delayedPaymentSystem = new DelayedPaymentSystem();
 
     private final Blacksmith blacksmith = new Blacksmith(72,2);
     private final JojaMart jojaMart = new JojaMart(72,4);
@@ -199,5 +200,9 @@ public class Game {
         if (currentIndex == 0) {
             timeManager.getNow().advanceHour();
         }
+    }
+
+    public DelayedPaymentSystem getDelayedPaymentSystem() {
+        return delayedPaymentSystem;
     }
 }

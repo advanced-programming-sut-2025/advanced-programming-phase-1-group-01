@@ -6,6 +6,7 @@ import models.character.player.Player;
 import models.character.player.Slot;
 import models.data.Repository;
 import models.shop.Blacksmith;
+import models.shop.Shop;
 import models.shop.TheStardropSaloon;
 import models.shop.enums.StardropSallonCommands;
 import models.shop.enums.TheStardropSaloonProducts;
@@ -19,6 +20,12 @@ public class TheStardropSaloonController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getTheStardropSaloon();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -44,8 +51,6 @@ public class TheStardropSaloonController extends ShopController {
                 return showAllAvailableProducts();
             case STAR_DROP_SALOON:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

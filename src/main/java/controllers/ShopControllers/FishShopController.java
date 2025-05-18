@@ -4,6 +4,7 @@ import models.Result;
 import models.character.player.Player;
 import models.data.Repository;
 import models.shop.FishShop;
+import models.shop.Shop;
 import models.shop.enums.FishShopCommands;
 import models.shop.enums.FishShopProducts;
 
@@ -16,7 +17,12 @@ public class FishShopController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getFishShop();
 
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
         }
@@ -41,8 +47,6 @@ public class FishShopController extends ShopController {
                 return showAllAvailableProducts();
             case FISH_SHOP:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

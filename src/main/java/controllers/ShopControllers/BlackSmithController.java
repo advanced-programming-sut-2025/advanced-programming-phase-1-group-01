@@ -7,10 +7,10 @@ import models.character.player.Player;
 import models.character.player.Slot;
 import models.data.Repository;
 import models.shop.Blacksmith;
+import models.shop.Shop;
 import models.shop.enums.BlackSmithCommands;
 import models.shop.enums.BlacksmithProducts;
 import models.shop.enums.BlacksmithUpgrade;
-import models.shop.enums.ShopCommands;
 import models.tool.*;
 import models.tool.enums.*;
 
@@ -23,6 +23,12 @@ public class BlackSmithController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getBlacksmith();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -50,8 +56,6 @@ public class BlackSmithController extends ShopController {
                 return purchase(command);
             case TOOLS_UPGRADE:
                 return toolUpgrade(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

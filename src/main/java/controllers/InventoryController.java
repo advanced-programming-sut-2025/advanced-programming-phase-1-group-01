@@ -1,13 +1,20 @@
 package controllers;
 
+import models.Item;
+import models.Position;
 import models.Result;
 import models.character.player.Inventory;
 import models.character.player.Player;
 import models.character.player.Slot;
+import models.crafting.CraftingDevice;
 import models.data.Repository;
+import models.enums.Direction;
 import models.enums.commands.InventoryCommands;
 import models.tool.TrashCan;
 import models.weather.Weather;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InventoryController extends Controller {
     InventoryController(Repository repo) {
@@ -45,6 +52,13 @@ public class InventoryController extends Controller {
             case INVENTORY_TRASH_2:
                 itemName = commandLine.substring(commandLine.indexOf("-i") + 2).trim();
                 return inventoryTrash(itemName);
+            case CHEAT_ADD_ITEM:
+                return cheatAddItem(commandLine);
+            case CHEAT_COINS:
+                return cheatCoins(commandLine);
+            case SHOW_COINS:
+                return showCoin();
+
         }
         return new Result(false, "invalid command");
     }
@@ -108,5 +122,57 @@ public class InventoryController extends Controller {
             }
         }
         return new Result(true, "%s has been trashed successfully".formatted(itemName));
+    }
+
+    private Result cheatCoins(String command) {
+        String countStr = extractValue(command,"add","dollars");
+        int count = Integer.parseInt(countStr);
+        repo.getCurrentGame().getCurrentPlayer().increaseCoins(count);
+        return new Result(true, "coins have been added to your balance: " + count);
+    }
+
+    private Result cheatAddItem(String command) {
+        String itemName = extractValue(command, "-n", "-c");
+        String itemCountStr = extractValue(command, "-c", null);
+        int itemCount = Integer.parseInt(itemCountStr);
+
+        Player player = repo.getCurrentUser().getPlayer();
+        Inventory inventory = player.getInventory();
+        Item item = inventory.getNewItem(itemName);
+
+        if (item == null) {
+            return new Result(false, "item not found");
+        }
+
+        if (!player.getInventory().hasCapacity()) {
+            return new Result(false, "inventory is full");
+        }
+
+        inventory.addItem(itemName, itemCount);
+        return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+    }
+
+    private Result showCoin() {
+        int coins = repo.getCurrentGame().getCurrentPlayer().getNumOfCoins();
+        return new Result(true, "You have " + coins + " coins.");
+    }
+
+    private String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 }

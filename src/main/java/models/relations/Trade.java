@@ -8,14 +8,15 @@ public abstract class Trade {
     private final Player receiver;
     private final Item item;
     private final int amount;
-    private int id = 1;
+    private int index = 1;
+    private int id;
 
     public Trade(Player sender, Player receiver, Item item, int amount) {
         this.sender = sender;
         this.receiver = receiver;
         this.item = item;
         this.amount = amount;
-        this.id = ++id;
+        this.id = index++;
     }
 
     public int getAmount() {
