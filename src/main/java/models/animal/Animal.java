@@ -39,9 +39,9 @@ public class Animal extends Character {
     }
 
     public void setProduct(AnimalProductType product) {
-//        if ((getRelationshipLevel(owner) + 150 * random.rand(0.0, 1.0)) / 1500 >= 1) {
-//            this.animalProductType = animalType.getWealthyProduct();
-//        } else this.animalProductType = product;
+        if ((getFriendshipLevel() + 150 * Random.rand(0.0, 1.0)) / 1500 >= 1) {
+            this.animalProductType = animalInfo.getWealthyProduct();
+        } else this.animalProductType = product;
     }
 
     private Position findAPlace(AnimalHouse shelter) {
@@ -50,8 +50,8 @@ public class Animal extends Character {
         while (position == null && counter < 1000) {
             int randomX = Random.rand(shelter.getTopLeftCorner().x(), shelter.getBottomRightCorner().x());
             int randomY = Random.rand(shelter.getTopLeftCorner().y(), shelter.getBottomRightCorner().y());
-            if (shelter.isThatTileEmpty(new Position(randomX, randomY))) {
-                position = new Position(randomX, randomY);
+            if (shelter.isThatTileEmpty(new Position(randomY, randomX))) {
+                position = new Position(randomY, randomX);
             }
             counter++;
         }
@@ -107,6 +107,7 @@ public class Animal extends Character {
 
     public AnimalProductType collectProduct() {
         hasProduct = false;
+        setProduct(animalInfo.getProducts().getFirst());
         return getAnimalProductType();
     }
 

@@ -8,7 +8,7 @@ public enum DateTimeCommands implements Command {
     SEASON("season"),
     CHEAT_ADVANCE_TIME("cheat advance time (?<hour>\\S+) h"),
     CHEAT_ADVANCE_DATE("cheat advance date (?<day>\\S+) d"),
-    ;
+    COIN("coin");
 
     private final String regex;
 

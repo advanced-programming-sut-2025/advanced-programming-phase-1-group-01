@@ -307,7 +307,8 @@ public class Player extends Character {
         if (shelter == null) return "No empty shelter";
         if (numOfCoins < animalInfo.getPrice()) return "Insufficient funds";
         farm.addAnimalToShelter(new Animal(animalInfo, animalName, this, shelter));
-        return "Successfully built the shelter";
+        farm.addAnimal(new Animal(animalInfo, animalName, this, shelter));
+        return "Animal added successfully";
     }
 
     public String petAnimal(String animalName) {
@@ -408,7 +409,7 @@ public class Player extends Character {
     }
 
     public boolean hasEnoughItem(String itemName, int quantity) {
-        return inventory.getSlot(itemName) == null && inventory.getSlot(itemName).getQuantity() >= quantity;
+        return inventory.getSlot(itemName) != null && inventory.getSlot(itemName).getQuantity() >= quantity;
 
     }
 
@@ -728,5 +729,9 @@ public class Player extends Character {
 
     public List<UnripeProduct> getUnripeProducts() {
         return unripeProducts;
+    }
+
+    public int getNumOfCoin() {
+        return numOfCoins;
     }
 }

@@ -12,7 +12,7 @@ import models.foraging.ForagingMineral;
 import models.ingredients.Stone;
 import models.tool.enums.PickaxeType;
 
-// related to mining.
+
 public class Pickaxe extends Tool {
     private PickaxeType type;
 
