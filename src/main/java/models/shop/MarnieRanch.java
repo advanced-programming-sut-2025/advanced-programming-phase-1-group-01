@@ -9,7 +9,8 @@ import java.util.Set;
 public class MarnieRanch extends Shop {
     private final Map<MarnieRanchProducts, Integer> marnieRanchShopProducts = new HashMap<>();
 
-    public MarnieRanch() {
+    public MarnieRanch(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.MARNIE;
         resetDailyStock();
     }

@@ -54,13 +54,14 @@ public class MarnieRanchController extends ShopController {
         MarnieRanch shop = repo.getCurrentGame().getMarnieRanch();
         StringBuilder info = new StringBuilder();
 
+        info.append("show all products\n");
+
         for (MarnieRanchProducts product : shop.getAllProducts()) {
             int stock = shop.getProductStock(product);
             info.append(product.getName())
                     .append(": ")
                     .append(product.getPrice())
                     .append("g (")
-                    .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
                     .append(")")
                     .append("\n");
         }
@@ -71,6 +72,8 @@ public class MarnieRanchController extends ShopController {
     protected Result showAllAvailableProducts() {
         MarnieRanch shop = repo.getCurrentGame().getMarnieRanch();
         StringBuilder info = new StringBuilder();
+
+        info.append("Available products:\n");
 
         for (MarnieRanchProducts product : shop.getAllProducts()) {
             int stock = shop.getProductStock(product);
@@ -93,12 +96,12 @@ public class MarnieRanchController extends ShopController {
         int count;
 
         if (command.contains("-n")) {
-            itemName = extractValue(command, "purchase", "-n");
+            itemName = extractValue(command, "marnie", "-n");
             countStr = extractValue(command, "-n", null);
         }
 
         else {
-            itemName = extractValue(command, "purchase", null);
+            itemName = extractValue(command, "marnie", null);
             countStr = "1";
         }
         count = Integer.parseInt(countStr);
@@ -128,7 +131,7 @@ public class MarnieRanchController extends ShopController {
                     shop.updateProductPurchase(product, count);
                 }
 
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
         return new Result(false, "product not found");

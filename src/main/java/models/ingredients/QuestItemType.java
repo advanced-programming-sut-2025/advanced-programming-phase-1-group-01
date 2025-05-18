@@ -1,54 +1,52 @@
 package models.ingredients;
 
 public enum QuestItemType {
-    IRON_BAR(100),
-    PUMPKIN_PIE(50),
-    STONE(80),
-    IRON_GOLD(70),
-    PUMPKIN(60),
-    WHEAT(20),
-    CORN(60),
-    HOPS(50),
-    GARLIC(40),
-    CARROT(70),
-    MILK(30),
-    BIG_MILK(50),
-    GOAT_MILK(60),
-    BIG_GOAT_MILK(80),
-    SHEEP_WOOL(100),
-    TRUFFLE(300);
+    IRON_BAR("iron bar", 100),
+    COPPER_BAR("copper bar", 200),
+    GOLD_BAR("gold bar", 300),
+    SILVER_BAR("silver bar", 400),
+    IRIDIUM_BAR("iridium bar", 500),
+    COPPER_OAR("copper oar", 50),
+    GOLD_OAR("gold oar", 60),
+    SILVER_OAR("silver oar", 70),
+    IRON_OAR("iron oar", 80),
+    IRIDIUM_OAR("iridium oar", 90),
+    PUMPKIN_PIE("pumpkin pie", 50),
+    STONE("stone", 80),
+    IRON_GOLD("iron gold", 70),
+    PUMPKIN("pumpkin", 60),
+    WHEAT("wheat", 20),
+    CORN("corn", 60),
+    HOPS("hops", 50),
+    GARLIC("garlic", 40),
+    CARROT("carrot", 70),
+    MILK("milk", 30),
+    BIG_MILK("big milk", 50),
+    GOAT_MILK("goat milk", 60),
+    BIG_GOAT_MILK("big goat milk", 80),
+    SHEEP_WOOL("sheep wool", 100),
+    TRUFFLE("truffle", 300),
+    FIBER("fiber",500),
+    ACORN("acorn", 60),
+    MAPLE_SEED("maple seed", 50),
+    PINE_CONE("pine cone", 150),
+    MAHOGANY("mahogany", 200);
 
+
+    private final String name;
     private final int price;
 
-    QuestItemType(int price) {
+    QuestItemType(String name, int price) {
+        this.name = name;
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return switch (this) {
-            case IRON_BAR -> "Iron Bar";
-            case PUMPKIN_PIE -> "Pumpkin Pie";
-            case STONE -> "Stone";
-            case IRON_GOLD -> "Iron Gold";
-            case PUMPKIN -> "Pumpkin";
-            case WHEAT -> "Wheat";
-            case CORN -> "Corn";
-            case HOPS -> "Hops";
-            case GARLIC -> "Garlic";
-            case CARROT -> "Carrot";
-            case MILK -> "Milk";
-            case BIG_MILK -> "Big Milk";
-            case GOAT_MILK -> "Goat Milk";
-            case BIG_GOAT_MILK -> "Big Goat Milk";
-            case SHEEP_WOOL -> "Sheep Wool";
-            case TRUFFLE -> "Truffle";
-        };
+    public QuestItem toItem() {
+        return new QuestItem(this);
     }
 
-
     public String getName() {
-        return toString();
+        return name;
     }
 
     public int getPrice() {

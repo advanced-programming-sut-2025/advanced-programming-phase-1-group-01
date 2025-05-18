@@ -5,7 +5,7 @@ public enum CraftingCommands implements Command {
     CRAFT("crafting craft (.+?)"),
     CHEAT_ADD_ITEM("cheat add item -n (.+?) -c (.+?)"),
     CHEAT_ADD_RECIPE("cheat add crafting recipe -r (.+?)"),
-    PLACE_ITEM("place item -n (.+?) - d (.+?)"),
+    PLACE_ITEM("place item -n (.+?) -d (.+?)"),
     ;
 
     private final String regex;

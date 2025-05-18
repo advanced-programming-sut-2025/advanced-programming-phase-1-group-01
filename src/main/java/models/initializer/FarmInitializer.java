@@ -8,6 +8,8 @@ import models.farming.TreeInfo;
 import models.enums.StoneType;
 import models.foraging.*;
 import models.ingredients.Stone;
+import models.shop.Blacksmith;
+import models.shop.ShopSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -281,6 +283,14 @@ public class FarmInitializer {
                 tiles.get(position.x()).get(position.y()).setMovable(false);
             } else i--;
         }
+
+        tiles.get(72).get(1).setObject(ShopSymbol.BLACKSMITH);
+        tiles.get(72).get(3).setObject(ShopSymbol.JOJA_MART);
+        tiles.get(72).get(5).setObject(ShopSymbol.PIERRE_GENERAL_STORE);
+        tiles.get(72).get(7).setObject(ShopSymbol.CARPENTER_SHOP);
+        tiles.get(72).get(9).setObject(ShopSymbol.FISH_SHOP);
+        tiles.get(72).get(11).setObject(ShopSymbol.MARNIE_RANCH);
+        tiles.get(72).get(13).setObject(ShopSymbol.STARDROP_SALOON);
     }
 
 

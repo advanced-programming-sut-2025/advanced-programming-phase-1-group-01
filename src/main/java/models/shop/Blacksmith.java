@@ -1,6 +1,7 @@
 package models.shop;
 
 import models.building.TileObject;
+import models.enums.Emoji;
 import models.shop.enums.BlacksmithProducts;
 import models.shop.enums.BlacksmithUpgrade;
 
@@ -12,7 +13,8 @@ public class Blacksmith extends Shop {
     private final Map<BlacksmithProducts, Integer> blacksmithProducts = new HashMap<>();
     private final Map<BlacksmithUpgrade, Integer> blacksmithUpgrades = new HashMap<>();
 
-    public Blacksmith() {
+    public Blacksmith(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.CLINT;
         resetDailyStock();
     }

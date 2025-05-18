@@ -4,6 +4,7 @@ import models.Item;
 import models.Position;
 import models.Result;
 import models.animal.Animal;
+import models.animal.AnimalHouseType;
 import models.animal.ProductQuality;
 import models.building.Farm;
 import models.character.player.Inventory;
@@ -60,7 +61,9 @@ public class AnimalHusbandryController extends Controller {
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
             return new Result(true, farm.buildShelter(new Position(x, y), animalName));
-        } return new Result(false, "Invalid command");
+        }
+
+        return new Result(false, "Invalid command");
     }
 
     private Result handleBuyAnimal(String commandLine) {

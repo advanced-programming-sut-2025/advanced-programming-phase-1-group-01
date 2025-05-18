@@ -3,8 +3,8 @@ package models.shop.enums;
 import models.shop.CarpenterShopProductsItem;
 
 public enum CarpenterShopProducts {
-    WOOD("Wood", 10, -1),
-    STONE("Stone", 20, -1);
+    WOOD("wood", 10, -1),
+    STONE("stone", 20, -1);
 
     private final String name;
     private final int price;
