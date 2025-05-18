@@ -113,14 +113,12 @@ public class RelationshipController extends Controller {
         StringBuilder resultMsg = new StringBuilder();
 
         for (Player gamePlayer : game.getPlayers()) {
-            if (gamePlayer == player) {
-                continue;
-            }
-            if (player.getRelationService().isFriendWith(gamePlayer)) {
-                resultMsg.append("%s level : %d\n".formatted(gamePlayer.getUser().getUsername(), player.getRelationService().getFriendship(gamePlayer).getLevel()));
-                resultMsg.append("%s xp : %d\n".formatted(gamePlayer.getUser().getUsername(), player.getRelationService().getFriendship(gamePlayer).getXp()));
-            } else {
-                resultMsg.append("not friend with %s !\n".formatted(gamePlayer.getUser().getUsername()));
+            if (player != gamePlayer) {
+                if (player.getRelationService().isFriendWith(gamePlayer)) {
+                    resultMsg.append("%s:\nlevel: %d, xp: %d\n".formatted(gamePlayer.getUser().getUsername(), player.getRelationService().getFriendship(gamePlayer).getLevel(), player.getRelationService().getFriendship(gamePlayer).getXp()));
+                } else {
+                    resultMsg.append("not friend with %s!\n".formatted(gamePlayer.getUser().getUsername()));
+                }
             }
         }
 
@@ -238,7 +236,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "item not found");
         }
         Item item = slot.getItem();
-        if (slot.getQuantity() <= amount) {
+        if (slot.getQuantity() >= amount) {
             slot.removeQuantity(amount);
             receiver.getInventory().addItem(itemName, amount);
         } else {
@@ -248,8 +246,6 @@ public class RelationshipController extends Controller {
         DateTime now = repo.getCurrentGame().getTimeManager().getNow();
         friendship.addGift(sender, receiver, item, amount, now);
         receiver.addNotification(sender, "%s sent you a gift! %d number of %s".formatted(sender.getUser().getUsername(), amount, itemName));
-
-        friendship.setLastGiftDay(now.getDay());
 
         if (sender.getRelationService().getMarriage() != null) {
             if (sender.getRelationService().getMarriage().getPartner(receiver) != null) {
@@ -277,18 +273,21 @@ public class RelationshipController extends Controller {
             return new Result(false, "your are not receiver of this gift");
         }
 
-        if (gift.setRate(rate)) {
+        boolean result = gift.setRate(rate);
+        if (result) {
             Player sender = gift.sender();
             Friendship friendship = currentPlayer.getRelationService().getFriendship(sender);
 
             DateTime now = repo.getCurrentGame().getTimeManager().getNow();
 
+
             if (sender.getRelationService().getFriendship(gift.receiver()).getLastGiftDay() != now.getDay()) {
                 if (gift.getGiftXp() >= 0) {
                     friendship.increaseXp(gift.getGiftXp());
                 } else {
-                    friendship.decreaseXp(gift.getGiftXp());
+                    friendship.decreaseXp(-gift.getGiftXp());
                 }
+                friendship.setLastGiftDay(now.getDay());
             }
 
             return new Result(true, "gift rated successfully");
@@ -318,6 +317,9 @@ public class RelationshipController extends Controller {
     }
 
     private Result giftHistory(String username) {
+        if (repo.getUserByUsername(username) == null) {
+            return new Result(false, "user not found");
+        }
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Player otherPlayer = repo.getUserByUsername(username).getPlayer();
         if (otherPlayer == null) {
