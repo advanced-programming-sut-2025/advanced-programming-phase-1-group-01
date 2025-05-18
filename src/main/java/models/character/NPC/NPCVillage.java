@@ -101,7 +101,12 @@ public class NPCVillage extends Maps {
         }
         if (quest == null) return "quest not found";
         if (!quest.isActive()) return "The Quest is not active";
-        if (!quest.getOwner().equals(player)) return "You are not the owner of this quest";
+        if (quest.getOwner() == null) {
+            if (quest.getQuestType().getMissionNumber() % 3 != 1) {
+                return "You are not the owner of this quest";
+            }
+        }
+//        if (!quest.getOwner().equals(player)) return "You are not the owner of this quest";
         if (!player.isNearTo(npc.getPosition())) return "You are not near the npc";
         NPCQuestType questType = quest.getQuestType();
         switch (questType) {

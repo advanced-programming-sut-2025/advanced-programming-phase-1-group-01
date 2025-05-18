@@ -269,7 +269,7 @@ public class Farm extends Maps {
         if (animal == null) return "Invalid animal name";
         if (!animal.hasAnyProduct()) return "No produce for this animal";
         if (animal.getAnimalInfo() == AnimalInfo.COW || animal.getAnimalInfo() == AnimalInfo.GOAT) {
-            if (player.getInventory().getSlot("milkPail") == null) return "You have no milk pail";
+            if (player.getInventory().getSlot("milk pail") == null) return "You have no milk pail";
         } else if (animal.getAnimalInfo() == AnimalInfo.SHEEP) {
             if (player.getInventory().getSlot("scissors") == null) return "You have no scissors";
         } else if (animal.getAnimalInfo() == AnimalInfo.PIG) {

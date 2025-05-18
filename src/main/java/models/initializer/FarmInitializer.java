@@ -89,8 +89,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = GREENHOUSE_TP.y(); j < GREENHOUSE_BR.y(); j++) {
-            for (int i = GREENHOUSE_TP.x(); i < GREENHOUSE_BR.x(); i++) {
+        for (int j = GREENHOUSE_TP.y(); j <= GREENHOUSE_BR.y(); j++) {
+            for (int i = GREENHOUSE_TP.x(); i <= GREENHOUSE_BR.x(); i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.GREENHOUSE)
@@ -103,8 +103,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int j = COTTAGE_TP.y(); j < COTTAGE_BR.y(); j++) {
-            for (int i = COTTAGE_TP.x(); i < COTTAGE_BR.x(); i++) {
+        for (int j = COTTAGE_TP.y(); j <= COTTAGE_BR.y(); j++) {
+            for (int i = COTTAGE_TP.x(); i <= COTTAGE_BR.x(); i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.COTTAGE)
@@ -117,7 +117,7 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = COTTAGE_TP.x() - 1; i < COTTAGE_BR.x() + 1; i++) {
+        for (int i = COTTAGE_TP.x() - 1; i <= COTTAGE_BR.x() + 1; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, COTTAGE_TP.y() - 1))
                     .setType(TileType.WALL)
@@ -128,7 +128,7 @@ public class FarmInitializer {
             tiles.get(i).set(COTTAGE_TP.y() - 1, tile);
         }
 
-        for (int i = COTTAGE_TP.x() - 1; i < COTTAGE_BR.x() + 1; i++) {
+        for (int i = COTTAGE_TP.x() - 1; i <= COTTAGE_BR.x() + 1; i++) {
             if (i != (COTTAGE_BR.x() + COTTAGE_TP.x()) / 2) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, COTTAGE_BR.y() + 1))
@@ -141,7 +141,7 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = COTTAGE_TP.y() - 1; i < COTTAGE_BR.y() + 1; i++) {
+        for (int i = COTTAGE_TP.y() - 1; i <= COTTAGE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, COTTAGE_TP.x() - 1))
                     .setType(TileType.WALL)
@@ -152,7 +152,7 @@ public class FarmInitializer {
             tiles.get(COTTAGE_TP.x() - 1).set(i, tile);
         }
 
-        for (int i = COTTAGE_TP.y() - 1; i < COTTAGE_BR.y() + 1; i++) {
+        for (int i = COTTAGE_TP.y() - 1; i <= COTTAGE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, COTTAGE_BR.x() + 1))
                     .setType(TileType.WALL)
@@ -163,7 +163,7 @@ public class FarmInitializer {
             tiles.get(COTTAGE_BR.x() + 1).set(i, tile);
         }
 
-        for (int i = GREENHOUSE_TP.x() - 1; i < GREENHOUSE_BR.x() + 1; i++) {
+        for (int i = GREENHOUSE_TP.x() - 1; i <= GREENHOUSE_BR.x() + 1; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, COTTAGE_TP.y() - 1))
                     .setType(TileType.WALL)
@@ -174,7 +174,7 @@ public class FarmInitializer {
             tiles.get(i).set(GREENHOUSE_TP.y() - 1, tile);
         }
 
-        for (int i = GREENHOUSE_TP.x() - 1; i < GREENHOUSE_BR.x() + 1; i++) {
+        for (int i = GREENHOUSE_TP.x() - 1; i <= GREENHOUSE_BR.x() + 1; i++) {
             if (i != (GREENHOUSE_BR.x() + GREENHOUSE_TP.x()) / 2) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, GREENHOUSE_BR.y() + 1))
@@ -187,7 +187,7 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = GREENHOUSE_TP.y() - 1; i < GREENHOUSE_BR.y() + 1; i++) {
+        for (int i = GREENHOUSE_TP.y() - 1; i <= GREENHOUSE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, GREENHOUSE_TP.x() - 1))
                     .setType(TileType.WALL)
@@ -198,7 +198,7 @@ public class FarmInitializer {
             tiles.get(GREENHOUSE_TP.x() - 1).set(i, tile);
         }
 
-        for (int i = GREENHOUSE_TP.y() - 1; i < GREENHOUSE_BR.y() + 1; i++) {
+        for (int i = GREENHOUSE_TP.y() - 1; i <= GREENHOUSE_BR.y() + 1; i++) {
             Tile tile = new Tile.Builder()
                     .setPosition(new Position(i, GREENHOUSE_BR.x() + 1))
                     .setType(TileType.WALL)

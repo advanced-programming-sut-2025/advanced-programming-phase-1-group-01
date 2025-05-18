@@ -228,7 +228,7 @@ public class CraftingController extends Controller {
             return new Result(false, "item not found");
         }
 
-            if (player.getInventory().hasCapacity()) {
+            if (!player.getInventory().hasCapacity()) {
                 return new Result(false, "inventory is full");
             }
 

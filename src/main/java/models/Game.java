@@ -146,7 +146,6 @@ public class Game {
     public String enterOthersRoom(int id) {
         Maps map = getMapById(id);
         if (map != null) {
-//            setCurrentMap(getMapById(id));
             currentPlayer.setCurrentMap(getMapById(id));
             currentPlayer.setPosition(new Position(PLAYERS_STARTING_POSITION.x() + 1, PLAYERS_STARTING_POSITION.y()));
             return "You are now there";
@@ -156,12 +155,12 @@ public class Game {
     public boolean isAnyoneHere(int x, int y) {
         for (Player player : players) {
             if (player.getPosition().x() == x && player.getPosition().y() == y) {
-                for (Animal animal : player.getFarm().getAnimals()) {
-                    if (animal.getPosition().x() == x && animal.getPosition().y() == y) {
-                        return true;
-                    }
-                }
                 return true;
+            }
+            for (Animal animal : player.getFarm().getAnimals()) {
+                if (animal.getPosition().x() == x && animal.getPosition().y() == y) {
+                    return true;
+                }
             }
         }
         for (NPC npc : npcVillage.getNPCs()) {
@@ -174,12 +173,12 @@ public class Game {
 
     public String returnSymbol(int x, int y) {
         for (Player player : players) {
-            if (player.getPosition().x() == x && player.getPosition().y() == y) {
-                for (Animal animal : player.getFarm().getAnimals()) {
-                    if (animal.getPosition().x() == x && animal.getPosition().y() == y) {
-                        return animal.getAnimalInfo().getSymbol();
-                    }
+            for (Animal animal : player.getFarm().getAnimals()) {
+                if (animal.getPosition().x() == x && animal.getPosition().y() == y) {
+                    return animal.getAnimalInfo().getSymbol();
                 }
+            }
+            if (player.getPosition().x() == x && player.getPosition().y() == y) {
                 return player.getGender().getSymbol();
             }
         }

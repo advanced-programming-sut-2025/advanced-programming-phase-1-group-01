@@ -91,3 +91,4 @@ public enum Color {
         return code + text + RESET.code;
     }
 }
+

@@ -17,12 +17,12 @@ public class VillageInitializer {
     private final static Position FIRST_ROOM_BR = new Position(42, 22);
     private final static Position SECOND_ROOM_TP = new Position(12, 47);
     private final static Position SECOND_ROOM_BR = new Position(15, 52);
-    private final static Position THIRD_ROOM_TP = new Position(24, 68);
-    private final static Position THIRD_ROOM_BR = new Position(29, 73);
-    private final static Position FOURTH_ROOM_TP = new Position(49, 68);
-    private final static Position FOURTH_ROOM_BR = new Position(55, 73);
-    private final static Position FIFTH_ROOM_TP = new Position(61, 68);
-    private final static Position FIFTH_ROOM_BR = new Position(66, 73);
+    private final static Position THIRD_ROOM_TP = new Position(20, 64);
+    private final static Position THIRD_ROOM_BR = new Position(25, 69);
+    private final static Position FOURTH_ROOM_TP = new Position(46, 65);
+    private final static Position FOURTH_ROOM_BR = new Position(52, 70);
+    private final static Position FIFTH_ROOM_TP = new Position(59, 66);
+    private final static Position FIFTH_ROOM_BR = new Position(64, 71);
 
     private static Room1 room1;
     private static Room2 room2;
@@ -46,57 +46,91 @@ public class VillageInitializer {
         initializeGround();
 
         roomMaker(VILLAGE_TP, VILLAGE_BR, TileType.GROUND, true);
-        roomMaker(FIRST_ROOM_TP, FIRST_ROOM_BR, TileType.COTTAGE, true);
-        roomMaker(SECOND_ROOM_TP, SECOND_ROOM_BR, TileType.COTTAGE, true);
-        roomMaker(THIRD_ROOM_TP, THIRD_ROOM_BR, TileType.COTTAGE, true);
-        roomMaker(FOURTH_ROOM_TP, FOURTH_ROOM_BR, TileType.COTTAGE, true);
-        roomMaker(FIFTH_ROOM_TP, FIFTH_ROOM_BR, TileType.COTTAGE, true);
+        roomMaker1(FIRST_ROOM_TP, FIRST_ROOM_BR, TileType.COTTAGE, true);
+        roomMaker1(SECOND_ROOM_TP, SECOND_ROOM_BR, TileType.COTTAGE, true);
+        roomMaker1(THIRD_ROOM_TP, THIRD_ROOM_BR, TileType.COTTAGE, true);
+        roomMaker1(FOURTH_ROOM_TP, FOURTH_ROOM_BR, TileType.COTTAGE, true);
+        roomMaker1(FIFTH_ROOM_TP, FIFTH_ROOM_BR, TileType.COTTAGE, true);
+
+        wallMakerX(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_TP.y() - 1, TileType.WALL, false);
+        wallMakerX(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_BR.y() + 1, TileType.WALL, true);
+
+        wallMakerY(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_TP.x() - 1, TileType.WALL, false);
+        wallMakerY(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_BR.x() + 1, TileType.WALL, false);
 
 
-        wallMaker(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_TP.y() - 1,
-                TileType.WALL, false, false);
-        wallMaker(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_BR.y() + 1,
-                TileType.WALL, false, true);
-        wallMaker(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_TP.x() - 1,
-                TileType.WALL, false, false);
-        wallMaker(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_BR.x() + 1,
-                TileType.WALL, false, false);
+        wallMakerX(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_TP.y() - 1, TileType.WALL, false);
+        wallMakerX(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_BR.y() + 1, TileType.WALL, true);
 
-        wallMaker(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_TP.y() - 1,
-                TileType.WALL, false, false);
-        wallMaker(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_BR.y() + 1,
-                TileType.WALL, false, true);
-        wallMaker(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_TP.x() - 1,
-                TileType.WALL, false, false);
-        wallMaker(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_BR.x() + 1,
-                TileType.WALL, false, false);
+        wallMakerY(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_TP.x() - 1, TileType.WALL, false);
+        wallMakerY(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_BR.x() + 1, TileType.WALL, false);
 
-        wallMaker(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_TP.y() - 1,
-                TileType.WALL, false, false);
-        wallMaker(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_BR.y() + 1,
-                TileType.WALL, false, true);
-        wallMaker(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_TP.x() - 1,
-                TileType.WALL, false, false);
-        wallMaker(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_BR.x() + 1,
-                TileType.WALL, false, false);
 
-        wallMaker(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_TP.y() - 1,
-                TileType.WALL, false, false);
-        wallMaker(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_BR.y() + 1,
-                TileType.WALL, false, true);
-        wallMaker(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_TP.x() - 1,
-                TileType.WALL, false, false);
-        wallMaker(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_BR.x() + 1,
-                TileType.WALL, false, false);
+        wallMakerX(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_TP.y() - 1, TileType.WALL, false);
+        wallMakerX(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_BR.y() + 1, TileType.WALL, true);
 
-        wallMaker(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_TP.y() - 1,
-                TileType.WALL, false, false);
-        wallMaker(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_BR.y() + 1,
-                TileType.WALL, false, true);
-        wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_TP.x() - 1,
-                TileType.WALL, false, false);
-        wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_BR.x() + 1,
-                TileType.WALL, false, false);
+        wallMakerY(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_TP.x() - 1, TileType.WALL, false);
+        wallMakerY(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_BR.x() + 1, TileType.WALL, false);
+
+
+        wallMakerX(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_TP.y() - 1, TileType.WALL, false);
+        wallMakerX(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_BR.y() + 1, TileType.WALL, true);
+
+        wallMakerY(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_TP.x() - 1, TileType.WALL, false);
+        wallMakerY(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_BR.x() + 1, TileType.WALL, false);
+
+
+        wallMakerX(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_TP.y() - 1, TileType.WALL, false);
+        wallMakerX(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_BR.y() + 1, TileType.WALL, true);
+
+        wallMakerY(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_TP.x() - 1, TileType.WALL, false);
+        wallMakerY(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_BR.x() + 1, TileType.WALL, false);
+
+
+//        wallMaker(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_TP.y() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(FIRST_ROOM_TP.x() - 1, FIRST_ROOM_BR.x() + 1, FIRST_ROOM_BR.y() + 1,
+//                TileType.WALL, false, true);
+//        wallMaker(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_TP.x() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(FIRST_ROOM_TP.y() - 1, FIRST_ROOM_BR.y() + 1, FIRST_ROOM_BR.x() + 1,
+//                TileType.WALL, false, false);
+//
+//        wallMaker(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_TP.y() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(SECOND_ROOM_TP.x() - 1, SECOND_ROOM_BR.x() + 1, SECOND_ROOM_BR.y() + 1,
+//                TileType.WALL, false, true);
+//        wallMaker(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_TP.x() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(SECOND_ROOM_TP.y() - 1, SECOND_ROOM_BR.y() + 1, SECOND_ROOM_BR.x() + 1,
+//                TileType.WALL, false, false);
+//
+//        wallMaker(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_TP.y() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(THIRD_ROOM_TP.x() - 1, THIRD_ROOM_BR.x() + 1, THIRD_ROOM_BR.y() + 1,
+//                TileType.WALL, false, true);
+//        wallMaker(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_TP.x() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(THIRD_ROOM_TP.y() - 1, THIRD_ROOM_BR.y() + 1, THIRD_ROOM_BR.x() + 1,
+//                TileType.WALL, false, false);
+//
+//        wallMaker(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_TP.y() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(FOURTH_ROOM_TP.x() - 1, FOURTH_ROOM_BR.x() + 1, FOURTH_ROOM_BR.y() + 1,
+//                TileType.WALL, false, true);
+//        wallMaker(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_TP.x() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(FOURTH_ROOM_TP.y() - 1, FOURTH_ROOM_BR.y() + 1, FOURTH_ROOM_BR.x() + 1,
+//                TileType.WALL, false, false);
+//
+//        wallMaker(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_TP.y() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(FIFTH_ROOM_TP.x() - 1, FIFTH_ROOM_BR.x() + 1, FIFTH_ROOM_BR.y() + 1,
+//                TileType.WALL, false, true);
+//        wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_TP.x() - 1,
+//                TileType.WALL, false, false);
+//        wallMaker(FIFTH_ROOM_TP.y() - 1, FIFTH_ROOM_BR.y() + 1, FIFTH_ROOM_BR.x() + 1,
+//                TileType.WALL, false, false);
 
     }
 
@@ -131,18 +165,59 @@ public class VillageInitializer {
         }
     }
 
-    public static void wallMaker(int start, int end, int constantVar, TileType type, boolean isMovable, boolean hasDoor) {
-        for (int i = start; i < end; i++) {
-            Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, constantVar))
-                    .setType(type)
-                    .setMovable(isMovable)
-                    .setBuilding(null)
-                    .setObject(null)
-                    .build();
-            if (!hasDoor || (i != (start + end) / 2)) tiles.get(i).set(constantVar, tile);
+    public static void roomMaker1(Position start, Position end, TileType type, boolean isMovable) {
+        for (int i = start.x(); i <= end.x(); i++) {
+            for (int j = start.y(); j <= end.y(); j++) {
+                Tile tile = new Tile.Builder()
+                        .setPosition(new Position(i, j))
+                        .setType(type)
+                        .setMovable(isMovable)
+                        .setBuilding(null)
+                        .setObject(null)
+                        .build();
+                tiles.get(i).set(j, tile);
+            }
         }
     }
+
+    private static void wallMakerX(int startX, int endX, int yConst, TileType type, boolean hasDoor) {
+        for (int i = startX; i <= endX; i++) {
+            if (!hasDoor || i != (startX + endX) / 2) {
+                Tile tile = new Tile.Builder()
+                        .setPosition(new Position(i, yConst))
+                        .setType(type)
+                        .setMovable(false)
+                        .build();
+                tiles.get(i).set(yConst, tile);
+            }
+        }
+    }
+
+    private static void wallMakerY(int startY, int endY, int xConst, TileType type, boolean hasDoor) {
+        for (int i = startY; i <= endY; i++) {
+            Tile tile = new Tile.Builder()
+                    .setPosition(new Position(xConst, i))
+                    .setType(type)
+                    .setMovable(false)
+                    .build();
+            tiles.get(xConst).set(i, tile);
+
+        }
+    }
+
+
+//    public static void wallMaker(int start, int end, int constantVar, TileType type, boolean isMovable, boolean hasDoor) {
+//        for (int i = start; i < end; i++) {
+//            Tile tile = new Tile.Builder()
+//                    .setPosition(new Position(i, constantVar))
+//                    .setType(type)
+//                    .setMovable(isMovable)
+//                    .setBuilding(null)
+//                    .setObject(null)
+//                    .build();
+//            if (!hasDoor || (i != (start + end) / 2)) tiles.get(i).set(constantVar, tile);
+//        }
+//    }
 
     private static void InitializeBuilding() {
         room1 = new Room1(new Position(FIRST_ROOM_TP.x(), FIRST_ROOM_BR.y()));
