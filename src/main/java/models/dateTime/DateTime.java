@@ -27,6 +27,7 @@ public class DateTime implements Cloneable {
 
     public void advanceHour() {
         hour++;
+        timeManager.prepareForNewHour();
 
         if (hour == TimeManager.DAY_END_HOUR) {
             timeManager.skipToMorning();

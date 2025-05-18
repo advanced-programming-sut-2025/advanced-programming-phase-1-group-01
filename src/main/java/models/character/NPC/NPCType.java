@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum NPCType {
-    SEBASTIAN("Sebastian", List.of(TradeItemType.WOOL, TradeItemType.PUMPKIN_PIE, TradeItemType.PIZZA), Emoji.DISGUISED_FACE.getSymbol()),
-    ABIGAIL("Abigail", List.of(TradeItemType.STONE, TradeItemType.IRON_ORE, TradeItemType.COFFEE), Emoji.SMILING_SUNGLASSES.getSymbol()),
-    HARVEY("Harvey", List.of(TradeItemType.COFFEE, TradeItemType.PICKLE, TradeItemType.WINE), Emoji.WORRIED_FACE.getSymbol()),
-    LEAH("Leah", List.of(TradeItemType.SALAD, TradeItemType.GRAPE, TradeItemType.WINE), Emoji.ANGRY_FACE.getSymbol()),
-    ROBIN("Robin", List.of(TradeItemType.SPAGHETTI, TradeItemType.WOOD, TradeItemType.IRON_BAR), Emoji.MONOCLE_FACE.getSymbol()),;
+    SEBASTIAN("Sebastian", List.of(TradeItemType.WOOL, TradeItemType.PUMPKIN_PIE, TradeItemType.PIZZA), Emoji.SEBASTIAN.getSymbol()),
+    ABIGAIL("Abigail", List.of(TradeItemType.STONE, TradeItemType.IRON_ORE, TradeItemType.COFFEE), Emoji.ABIGAIL.getSymbol()),
+    HARVEY("Harvey", List.of(TradeItemType.COFFEE, TradeItemType.PICKLE, TradeItemType.WINE), Emoji.HARVEY.getSymbol()),
+    LEAH("Leah", List.of(TradeItemType.SALAD, TradeItemType.GRAPE, TradeItemType.WINE), Emoji.LEAH.getSymbol()),
+    ROBIN("Robin", List.of(TradeItemType.SPAGHETTI, TradeItemType.WOOD, TradeItemType.IRON_BAR), Emoji.ROBIN.getSymbol()),;
 
     private final String name;
     private List<Item> favoriteItems = new ArrayList<>();

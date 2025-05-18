@@ -49,10 +49,10 @@ public class Player extends Character {
     private Farm partnerFarm ;
     private final List<CraftingDevice> craftingDevices = new ArrayList<>();
     private final List<UnripeProduct> unripeProducts = new ArrayList<>();
+    private int buffDaysCounter = 0;
+    private boolean hasEnergyBuff = false;
+    private final List<Integer> tommorrowMoney = new ArrayList<>();
 
-
-    //@ list unripe
-    //@ list ripe and ready to get items
 
     public Player(User user) {
         this.user = user;
@@ -307,7 +307,8 @@ public class Player extends Character {
         if (shelter == null) return "No empty shelter";
         if (numOfCoins < animalInfo.getPrice()) return "Insufficient funds";
         farm.addAnimalToShelter(new Animal(animalInfo, animalName, this, shelter));
-        return "Successfully built the shelter";
+        farm.addAnimal(new Animal(animalInfo, animalName, this, shelter));
+        return "Animal added successfully";
     }
 
     public String petAnimal(String animalName) {
@@ -389,13 +390,19 @@ public class Player extends Character {
         return relationshipService.getPartner();
     }
 
-    //@
+
     public void energyBuff(int hour) {
 
     }
 
-    //@
-    //pool farda biad toye hesab
+    public void getTomorrowMoney() {
+        if (game.getTimeManager().getNow().getHour() == 9) {
+            for (int money : tommorrowMoney) {
+                increaseCoins(money);
+                tommorrowMoney.remove(money);
+            }
+        }
+    }
 
     public void abilityBuff(AbilityType abilityType) {
         switch (abilityType) {
@@ -408,7 +415,7 @@ public class Player extends Character {
     }
 
     public boolean hasEnoughItem(String itemName, int quantity) {
-        return inventory.getSlot(itemName) == null && inventory.getSlot(itemName).getQuantity() >= quantity;
+        return inventory.getSlot(itemName) != null && inventory.getSlot(itemName).getQuantity() >= quantity;
 
     }
 
@@ -419,7 +426,9 @@ public class Player extends Character {
                 if (isThereSuitableCraftingDevice(artisanName) != null) {
                     if (!items[0].equals("-")) return "Invalid item name";
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.HONEY), 96));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.HONEY), 96);
+                    unripeProduct.setHarvestHours(game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
 
                 } else return "Invalid artisan";
 
@@ -430,12 +439,16 @@ public class Player extends Character {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CHEESE), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CHEESE), 3);
+                        unripeProduct.setHarvestHours(game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else if (items[0].equals("large_milk")) {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CHEESE), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CHEESE), 3);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else return "Invalid item";
                 } else return "Invalid artisan";
             }
@@ -445,12 +458,16 @@ public class Player extends Character {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE), 3);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else if (items[0].equals("large_Goat_milk")) {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE), 3);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else return "Invalid item";
                 } else return "Invalid artisan";
             }
@@ -460,7 +477,9 @@ public class Player extends Character {
                     if (hasEnoughItem("wheat", 1)) return "You don't have enough wheat";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.BEER), 24));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.BEER), 24);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "vinegar" -> {
@@ -469,7 +488,9 @@ public class Player extends Character {
                     if (hasEnoughItem("rice", 1)) return "You don't have enough rice";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.VINEGAR), 10));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.VINEGAR), 10);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "coffee" -> {
@@ -478,7 +499,9 @@ public class Player extends Character {
                     if (hasEnoughItem("coffee been", 5)) return "You don't have enough coffee";
                     inventory.getSlot(items[0]).removeQuantity(5);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.COFFEE), 2));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.COFFEE), 2);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "juice" -> {
@@ -487,7 +510,9 @@ public class Player extends Character {
                     if (hasEnoughItem("potato", 1)) return "You don't have enough potato";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.JUICE), 96));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.JUICE), 96);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "mead" -> {
@@ -496,7 +521,9 @@ public class Player extends Character {
                     if (hasEnoughItem("honey", 1)) return "You don't have enough honey";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MEAD), 10));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MEAD), 10);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "pale_ale" -> {
@@ -505,7 +532,9 @@ public class Player extends Character {
                     if (hasEnoughItem("hops", 1)) return "You don't have enough hops";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.PALE_ALE), 72));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.PALE_ALE), 72);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "wine" -> {
@@ -514,7 +543,9 @@ public class Player extends Character {
                     if (hasEnoughItem("apple", 5)) return "You don't have enough apple";
                     inventory.getSlot(items[0]).removeQuantity(5);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.WINE), 168));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.WINE), 168);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "dried_mushrooms" -> {
@@ -523,7 +554,9 @@ public class Player extends Character {
                     if (hasEnoughItem("mushroom", 5)) return "You don't have enough mushrooms";
                     inventory.getSlot(items[0]).removeQuantity(5);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DRIED_MASHROOMS), -1));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DRIED_MASHROOMS), -1);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "dried_fruit" -> {
@@ -532,7 +565,9 @@ public class Player extends Character {
                     if (hasEnoughItem("apple", 5)) return "You don't have enough apple";
                     inventory.getSlot(items[0]).removeQuantity(5);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DRIED_FRUIT), -1));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.WINE), 168);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "raisins" -> {
@@ -541,7 +576,10 @@ public class Player extends Character {
                     if (hasEnoughItem("grapes", 5)) return "You don't have enough grapes";
                     inventory.getSlot(items[0]).removeQuantity(5);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.RAISINS), -1));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.RAISINS), -1);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
+
                 } else return "Invalid artisan";
             }
             case "coal" -> {
@@ -550,7 +588,9 @@ public class Player extends Character {
                     if (hasEnoughItem("apple", 10)) return "You don't have enough woods";
                     inventory.getSlot(items[0]).removeQuantity(10);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.COAL), 1));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.COAL), 1);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "cloth" -> {
@@ -559,7 +599,9 @@ public class Player extends Character {
                     if (hasEnoughItem("wool", 1)) return "You don't have enough wool";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CLOTH), 4));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.CLOTH), 4);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "mayonnaise" -> {
@@ -573,7 +615,9 @@ public class Player extends Character {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MAYONNAISE), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.MAYONNAISE), 3);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else return "Invalid item";
                 } else return "Invalid artisan";
             }
@@ -583,7 +627,9 @@ public class Player extends Character {
                     if (hasEnoughItem("duck egg", 1)) return "You don't have enough duck egg";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DUCK_MAYONNAISE), 3));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DUCK_MAYONNAISE), 3);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "dinosaur_mayonnaise" -> {
@@ -592,7 +638,9 @@ public class Player extends Character {
                     if (hasEnoughItem("dinosaur egg", 1)) return "You don't have enough dinosaur egg";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DINOSAUR_MAYONNAISE), 3));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.DINOSAUR_MAYONNAISE), 3);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "truffle_oil" -> {
@@ -601,7 +649,9 @@ public class Player extends Character {
                     if (hasEnoughItem("truffle", 1)) return "You don't have enough truffle";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.TRUFFLE_OIL), 6));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.TRUFFLE_OIL), 6);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "oil" -> {
@@ -610,17 +660,23 @@ public class Player extends Character {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 6);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else if (items[0].equals("sunflower_seeds")) {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 48);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else if (items[0].equals("sunflower")) {
                         if (inventory.getSlot(items[0]) == null) return "Invalid item name";
                         inventory.getSlot(items[0]).removeQuantity(1);
                         isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                        unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 3));
+                        UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.OIL), 1);
+                        unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                        unripeProducts.add(unripeProduct);
                     } else return "Invalid item";
                 } else return "Invalid artisan";
             }
@@ -630,7 +686,9 @@ public class Player extends Character {
                     if (hasEnoughItem("corn", 1)) return "You don't have enough vegetables";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.PICKLES), 6));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.PICKLES), 6);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "jelly" -> {
@@ -639,7 +697,9 @@ public class Player extends Character {
                     if (hasEnoughItem("apple", 1)) return "You don't have enough fruits";
                     inventory.getSlot(items[0]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.JELLY), 72));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.JELLY), 72);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "smoked_fish" -> {
@@ -652,7 +712,9 @@ public class Player extends Character {
                     inventory.getSlot(items[0]).removeQuantity(1);
                     inventory.getSlot(items[1]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.SMOKED_FISH), 1));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.SMOKED_FISH), 1);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "iron_bar" -> {
@@ -665,7 +727,9 @@ public class Player extends Character {
                     inventory.getSlot(items[0]).removeQuantity(1);
                     inventory.getSlot(items[1]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.IRON_BAR), 4));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.IRON_BAR), 4);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             case "gold_bar" -> {
@@ -678,7 +742,9 @@ public class Player extends Character {
                     inventory.getSlot(items[0]).removeQuantity(1);
                     inventory.getSlot(items[1]).removeQuantity(1);
                     isThereSuitableCraftingDevice(artisanName).setWorking(true);
-                    unripeProducts.add(new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOLD_BAR), 4));
+                    UnripeProduct unripeProduct = new UnripeProduct(new CraftedProducts(AllCraftedProductsType.GOLD_BAR), 4);
+                    unripeProduct.setHarvestHours(this.game.getTimeManager().getNow().getHour(), unripeProduct.getHarvestTime());
+                    unripeProducts.add(unripeProduct);
                 } else return "Invalid artisan";
             }
             default -> {
@@ -728,5 +794,27 @@ public class Player extends Character {
 
     public List<UnripeProduct> getUnripeProducts() {
         return unripeProducts;
+    }
+
+    public int getNumOfCoin() {
+        return numOfCoins;
+    }
+
+    public void addBuffDaysCounter() {
+        buffDaysCounter++;
+        if (buffDaysCounter >= 5) {
+            hasEnergyBuff = false;
+            energy.changeShoudBeFull(false);
+            buffDaysCounter = 0;
+        }
+    }
+
+    public void isBuffActivated() {
+        hasEnergyBuff = true;
+        energy.changeShoudBeFull(true);
+    }
+
+    public boolean hasEnergyBuff() {
+        return hasEnergyBuff;
     }
 }

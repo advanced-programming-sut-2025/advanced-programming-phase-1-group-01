@@ -58,4 +58,11 @@ public class AnimalHouse extends Building {
     public void setAnimalType(AnimalInfo animalInfo) {
         this.animalInfo = animalInfo;
     }
+
+    public boolean isThatTileEmpty(Position position) {
+        for (Animal animal : animals) {
+            if (animal.getPosition().equals(position)) return false;
+        }
+        return true;
+    }
 }

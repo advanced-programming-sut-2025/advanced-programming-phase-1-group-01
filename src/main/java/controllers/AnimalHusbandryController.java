@@ -56,9 +56,9 @@ public class AnimalHusbandryController extends Controller {
 
 
         if (matcher.matches()) {
-            String animalName = matcher.group("animal");
-            int x = Integer.parseInt(matcher.group("x"));
-            int y = Integer.parseInt(matcher.group("y"));
+            String animalName = matcher.group("name");
+            int x = Integer.parseInt(matcher.group("X"));
+            int y = Integer.parseInt(matcher.group("Y"));
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
             return new Result(true, farm.buildShelter(new Position(x, y), animalName));
@@ -107,8 +107,8 @@ public class AnimalHusbandryController extends Controller {
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
-            int x = Integer.parseInt(matcher.group("x"));
-            int y = Integer.parseInt(matcher.group("y"));
+            int x = Integer.parseInt(matcher.group("X"));
+            int y = Integer.parseInt(matcher.group("Y"));
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
             return new Result(true, farm.moveAnimal(animalName, new Position(x, y)));

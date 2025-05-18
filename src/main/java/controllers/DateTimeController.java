@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Result;
+import models.character.player.Player;
 import models.data.Repository;
 import models.enums.commands.DateTimeCommands;
 
@@ -26,6 +27,8 @@ public class DateTimeController extends Controller {
             return handleCheatTime(commandLine);
         } else if(commandLine.matches(DateTimeCommands.CHEAT_ADVANCE_DATE.getRegex())) {
             return handleCheatDate(commandLine);
+        } else if (commandLine.matches(DateTimeCommands.COIN.getRegex())) {
+            return handlePrintMoney(commandLine);
         } else return new Result(false , "invalid command");
     }
 
@@ -106,5 +109,15 @@ public class DateTimeController extends Controller {
             return new Result(true , "cheat done");
         } return new Result(false , "invalid command");
 
+    }
+
+    private Result handlePrintMoney(String commandLine) {
+        Pattern pattern = Pattern.compile(DateTimeCommands.COIN.getRegex());
+        Matcher matcher = pattern.matcher(commandLine);
+
+        if(matcher.matches()) {
+            Player player = repo.getCurrentGame().getCurrentPlayer();
+            return new Result(true, String.valueOf(player.getNumOfCoins()));
+        } else return new Result(false , "invalid command");
     }
 }
