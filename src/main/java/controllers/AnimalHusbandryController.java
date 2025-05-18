@@ -53,7 +53,7 @@ public class AnimalHusbandryController extends Controller {
     private Result handleBuildShelter(String commandLine) {
         Pattern pattern = Pattern.compile(AnimalHusbandryCommands.BUILD.getRegex());
         Matcher matcher = pattern.matcher(commandLine);
-
+        Player player = repo.getTempUser().getPlayer();
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
@@ -61,7 +61,7 @@ public class AnimalHusbandryController extends Controller {
             int y = Integer.parseInt(matcher.group("Y"));
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
-            return new Result(true, farm.buildShelter(new Position(x, y), animalName));
+            return new Result(true, farm.buildShelter(player,new Position(x, y), animalName));
         }
 
         return new Result(false, "Invalid command");

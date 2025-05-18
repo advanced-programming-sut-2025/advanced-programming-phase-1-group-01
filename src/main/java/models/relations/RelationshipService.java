@@ -73,6 +73,7 @@ public class RelationshipService {
         }
     }
 
+
     public Trading getTrading(Character friend) {
         if (tradingships.containsKey(friend)) return tradingships.get(friend);
         addTrader(friend);
@@ -80,7 +81,7 @@ public class RelationshipService {
     }
 
     public boolean haveTradeWith(Character trader) {
-        return friendships.containsKey(trader) && tradingships.containsKey(trader);
+        return tradingships.containsKey(trader);
     }
 
     public Map<Character, Trading> getTradingships() {

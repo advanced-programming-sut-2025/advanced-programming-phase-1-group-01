@@ -2,8 +2,9 @@ package controllers.ShopControllers;
 
 import controllers.Controller;
 import models.Result;
+import models.character.player.Player;
 import models.data.Repository;
-import models.shop.enums.ShopCommands;
+import models.shop.Shop;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,13 +12,6 @@ import java.util.regex.Pattern;
 public abstract class ShopController extends Controller {
     public ShopController(Repository repo) {
         super(repo);
-    }
-
-    protected Result cheatCoins(String command) {
-        String[] tokens = command.split(" ");
-        int count = Integer.parseInt(tokens[2]);
-        repo.getCurrentGame().getCurrentPlayer().increaseCoins(count);
-        return new Result(true, "coins have been added to your balance: " + count);
     }
 
     protected String extractValue(String command, String startFlag, String endFlag) {
@@ -39,6 +33,13 @@ public abstract class ShopController extends Controller {
         return null;
     }
 
+    protected boolean isNear(Player player, Shop shop) {
+            int dx = Math.abs(player.getPosition().x() - shop.getX());
+            int dy = Math.abs(player.getPosition().y() - shop.getY());
+            double distance = Math.sqrt(dx * dx + dy * dy);
+            return distance <= 1;
+    }
+
     protected abstract boolean isShopOpen(int hour);
 
     protected abstract Result purchase(String command);
@@ -48,3 +49,4 @@ public abstract class ShopController extends Controller {
     protected abstract Result showAllProducts();
 
 }
+

@@ -5,6 +5,7 @@ import models.character.player.Inventory;
 import models.character.player.Player;
 import models.data.Repository;
 import models.shop.CarpenterShop;
+import models.shop.Shop;
 import models.shop.enums.BlackSmithCommands;
 import models.shop.enums.CarpenterCommands;
 import models.shop.enums.CarpenterShopProducts;
@@ -19,6 +20,12 @@ public class CarpenterController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getBlacksmith();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -44,8 +51,6 @@ public class CarpenterController extends ShopController {
                 return showAllAvailableProducts();
             case CARPENTER:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

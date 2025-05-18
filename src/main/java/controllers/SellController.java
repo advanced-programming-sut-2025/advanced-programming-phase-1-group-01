@@ -64,7 +64,7 @@ public class SellController extends Controller {
         Item item = player.getInventory().getNewItem(productName);
 
         if (item == null) {
-            return new Result(false, "product does not exist");
+            return new Result(false, productName + "does not exist");
         }
 
         Inventory inventory = player.getInventory();
@@ -78,16 +78,17 @@ public class SellController extends Controller {
             return new Result(false, "You don't have enough " + productName + " in your inventory.");
         }
 
-        if (BanSellItem.isBanned(item.getName())) {
+        if (BanSellItem.isBanned(item.getName().toLowerCase())) {
             return new Result(false, "You can't sell " + productName + " because it is already banned.");
         }
 
         slot.removeQuantity(count);
         ProductQuality quality = ProductQuality.getRandomProductQuality();
-        double finalPrice = item.getPrice() * quality.getPriceCoefficient();
-        //player.increaseCoins((int)finalPrice);
+        double finalPrice = item.getPrice() * quality.getPriceCoefficient() * count;
+        int totalPrice = (int) finalPrice;
+        repo.getCurrentGame().getDelayedPaymentSystem().addPendingSale(player, productName, count, totalPrice);
 
-        return new Result(true, count + " x " + quality + " " + productName + " have been sold for " + finalPrice + " coins!");
+        return new Result(true, count + "x " + quality + " " + productName + " have been sold for " + totalPrice + " coins!");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {

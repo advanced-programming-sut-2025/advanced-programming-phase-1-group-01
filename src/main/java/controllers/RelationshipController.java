@@ -102,6 +102,8 @@ public class RelationshipController extends Controller {
                 return tradeInWait();
             case TRADE_HISTORY:
                 return tradeAll();
+            case TRADE_TALK_HISTORY:
+                return tradeTalkHistory(commandLine);
         }
         return new Result(true, "");
     }
@@ -461,6 +463,11 @@ public class RelationshipController extends Controller {
         String itemName = extractValue(command, "-i", "-a");
         String amountStr = extractValue(command, "-a", "-p");
         String priceStr = extractValue(command, "-p", null);
+        String type = extractValue(command, "-t", "-i");
+
+        if (type.equals("offer")) {
+            return new Result(false, "invalid trade");
+        }
 
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         int amount;
@@ -508,6 +515,12 @@ public class RelationshipController extends Controller {
         String amountStr = extractValue(command, "-a", "-ti");
         String targetName = extractValue(command, "-ti", "-ta");
         String targetAmountStr = extractValue(command, "-ta", null);
+        String type = extractValue(command, "-t", "-i");
+
+        if (type.equals("request")) {
+            return new Result(false, "invalid trade");
+        }
+
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         int amount;
         int targetAmount;
@@ -576,12 +589,13 @@ public class RelationshipController extends Controller {
         return new Result(true, "your message send to " + receiver.getUser().getNickname());
     }
 
-    private Result tradeTalkHistory(String username) {
-        Player friend = repo.getUserByUsername(username).getPlayer();
-
+    private Result tradeTalkHistory(String command) {
+        String username = extractValue(command,"-u", null);
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
+
+        Player friend = repo.getUserByUsername(username).getPlayer();
 
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
@@ -678,10 +692,12 @@ public class RelationshipController extends Controller {
     private Result tradeResponse(String command) {
         boolean isAccept = command.contains("-accept");
         String idStr = extractValue(command, "-i", null);
+        System.out.println(idStr);
 
         if (!idStr.matches("\\d+")) {
             return new Result(false, "invalid id");
         }
+
         int id = Integer.parseInt(idStr);
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Trade foundTrade = null;

@@ -2,7 +2,9 @@ package models.building;
 
 import models.Position;
 import models.animal.*;
+import models.character.player.Inventory;
 import models.character.player.Player;
+import models.character.player.Slot;
 import models.dateTime.Season;
 import models.initializer.CreateShelter;
 import models.weather.Weather;
@@ -217,7 +219,7 @@ public class Farm extends Maps {
         };
     }
 
-    public String buildShelter(Position position, String houseType) {
+    public String buildShelter(Player player,Position position, String houseType) {
         AnimalHouseType animalHouseType = stringToAnimalHouseType(houseType);
 
         if (animalHouseType == null) return "Invalid animal house";
@@ -225,9 +227,72 @@ public class Farm extends Maps {
             return "Invalid shelter position";
         }
 
-        shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+        if (player.getNumOfCoins() < animalHouseType.getPrice()) {
+            return "You don't have enough coins to build shelter";
+        }
 
-        return "Shelter created";
+        Inventory inventory = player.getInventory();
+        Slot woodSlot = inventory.getSlot("wood");
+        Slot stoneSlot = inventory.getSlot("stone");
+
+        if (woodSlot == null || stoneSlot == null) {
+            return "Required resource slot not found";
+        }
+
+        if (woodSlot.getQuantity() < animalHouseType.getWoodCount()) {
+            return "You don't have enough wood to build shelter";
+        }
+
+        if (stoneSlot.getQuantity() < animalHouseType.getStoneCount()) {
+            return "You don't have enough stone to build shelter";
+        }
+
+        switch (animalHouseType) {
+            case COOP:
+                player.consumeCoins(animalHouseType.getPrice());
+                woodSlot.removeQuantity(animalHouseType.getWoodCount());
+                stoneSlot.removeQuantity(animalHouseType.getStoneCount());
+                shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+                return "Coop was successfully built!";
+
+            case BIG_COOP:
+                player.consumeCoins(animalHouseType.getPrice());
+                woodSlot.removeQuantity(animalHouseType.getWoodCount());
+                stoneSlot.removeQuantity(animalHouseType.getStoneCount());
+                shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+                return "Big Coop was successfully built!";
+
+            case DELUXE_COOP:
+                player.consumeCoins(animalHouseType.getPrice());
+                woodSlot.removeQuantity(animalHouseType.getWoodCount());
+                stoneSlot.removeQuantity(animalHouseType.getStoneCount());
+                shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+                return "Deluxe Coop was successfully built!";
+
+            case BARN:
+                player.consumeCoins(animalHouseType.getPrice());
+                woodSlot.removeQuantity(animalHouseType.getWoodCount());
+                stoneSlot.removeQuantity(animalHouseType.getStoneCount());
+                shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+                return "Barn was successfully built!";
+
+            case BIG_BARN:
+                player.consumeCoins(animalHouseType.getPrice());
+                woodSlot.removeQuantity(animalHouseType.getWoodCount());
+                stoneSlot.removeQuantity(animalHouseType.getStoneCount());
+                shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+                return "Big Barn was successfully built!";
+
+            case DELUXE_BARN:
+                player.consumeCoins(animalHouseType.getPrice());
+                woodSlot.removeQuantity(animalHouseType.getWoodCount());
+                stoneSlot.removeQuantity(animalHouseType.getStoneCount());
+                shelters.add(CreateShelter.createShelter(position, this, animalHouseType));
+                return "Deluxe Barn was successfully built!";
+
+            default:
+                return "Invalid animal house type!";
+        }
     }
 
     public boolean isAnimalNameUnique(String animalName) {

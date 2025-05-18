@@ -87,6 +87,11 @@ public class TimeManager {
     }
 
     public void prepareForNewDay() {
+
+        for (Player player : game.getPlayers()) {
+            game.getDelayedPaymentSystem().processSalesForPlayer(player);
+        }
+
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
         game.getForagingManager().prepareNewDayForaging();
