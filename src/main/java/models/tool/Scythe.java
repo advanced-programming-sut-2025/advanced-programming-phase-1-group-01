@@ -53,4 +53,9 @@ public class Scythe extends Tool {
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
     }
+
+    @Override
+    public void upgrade() {
+
+    }
 }

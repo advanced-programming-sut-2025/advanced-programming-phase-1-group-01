@@ -42,4 +42,18 @@ public class Axe extends Tool {
             }
         }
     }
+
+    @Override
+    public void upgrade() {
+        switch (type) {
+            case PRIMARY -> type = AxeType.COPPER;
+            case COPPER -> type = AxeType.IRON;
+            case IRON -> type = AxeType.GOLD;
+            case GOLD -> type = AxeType.IRIDIUM;
+        }
+    }
+
+    public AxeType getType() {
+        return type;
+    }
 }

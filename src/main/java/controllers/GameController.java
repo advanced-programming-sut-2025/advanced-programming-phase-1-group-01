@@ -34,6 +34,7 @@ public class GameController extends Controller {
     private final JojaMartController jojaMartController;
     private final MarnieRanchController marnieRanchController;
     private final TheStardropSaloonController theStardropSaloonController;
+    private final PierreGeneralStoreController pierreGeneralStoreController;
 
     public GameController(Repository repo) {
         super(repo);
@@ -58,6 +59,7 @@ public class GameController extends Controller {
         jojaMartController = new JojaMartController(repo);
         marnieRanchController = new MarnieRanchController(repo);
         theStardropSaloonController = new TheStardropSaloonController(repo);
+        pierreGeneralStoreController = new PierreGeneralStoreController(repo);
         commands = new ArrayList<>();
         initCommands();
     }
@@ -84,6 +86,7 @@ public class GameController extends Controller {
         commands.addAll(Arrays.stream(JojaMartCommands.values()).toList());
         commands.addAll(Arrays.stream(MarnieCommands.values()).toList());
         commands.addAll(Arrays.stream(StardropSallonCommands.values()).toList());
+        commands.addAll(Arrays.stream(PierreCommands.values()).toList());
     }
 
     @Override
@@ -97,55 +100,35 @@ public class GameController extends Controller {
             }
         }
 
-        if (matchedCommand == null) {
-            return new Result(false, "invalid command");
-        }
-
-        if (matchedCommand instanceof DateTimeCommands) {
-            return dateTimeController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof EnergyCommands) {
-            return energyController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof FarmingCommands) {
-            return farmingController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof GameMenuCommands) {
-            return gameMenuController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof RelationshipCommands) {
-            return relationshipController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof ToolCommands) {
-            return toolController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof WeatherCommands) {
-            return weatherController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof MovementAndMapCommands) {
-            return movementAndMapController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof InventoryCommands) {
-            return inventoryController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof AnimalHusbandryCommands) {
-            return animalHusbandryController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof NPCCommands) {
-            return npcController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof SellCommands) {
-            return sellController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof CookingCommands) {
-            return cookingController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof CraftingCommands) {
-            return craftingController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof ProcessingCommands) {
-            return artisanController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof BlackSmithCommands) {
-        return blackSmithController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof CarpenterCommands) {
-        return carpenterController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof FishShopCommands) {
-        return fishShopController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof JojaMartCommands) {
-        return jojaMartController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof MarnieCommands) {
-        return marnieRanchController.handleCommand(commandLine);
-        } else if (matchedCommand instanceof StardropSallonCommands) {
-        return theStardropSaloonController.handleCommand(commandLine);
-        }
+        return switch (matchedCommand) {
+            case null -> new Result(false, "invalid command");
+            case DateTimeCommands dateTimeCommands -> dateTimeController.handleCommand(commandLine);
+            case EnergyCommands energyCommands -> energyController.handleCommand(commandLine);
+            case FarmingCommands farmingCommands -> farmingController.handleCommand(commandLine);
+            case GameMenuCommands gameMenuCommands -> gameMenuController.handleCommand(commandLine);
+            case RelationshipCommands relationshipCommands -> relationshipController.handleCommand(commandLine);
+            case ToolCommands toolCommands -> toolController.handleCommand(commandLine);
+            case WeatherCommands weatherCommands -> weatherController.handleCommand(commandLine);
+            case MovementAndMapCommands movementAndMapCommands -> movementAndMapController.handleCommand(commandLine);
+            case InventoryCommands inventoryCommands -> inventoryController.handleCommand(commandLine);
+            case AnimalHusbandryCommands animalHusbandryCommands ->
+                    animalHusbandryController.handleCommand(commandLine);
+            case NPCCommands npcCommands -> npcController.handleCommand(commandLine);
+            case SellCommands sellCommands -> sellController.handleCommand(commandLine);
+            case CookingCommands cookingCommands -> cookingController.handleCommand(commandLine);
+            case CraftingCommands craftingCommands -> craftingController.handleCommand(commandLine);
+            case ProcessingCommands processingCommands -> artisanController.handleCommand(commandLine);
+            case BlackSmithCommands blackSmithCommands -> blackSmithController.handleCommand(commandLine);
+            case CarpenterCommands carpenterCommands -> carpenterController.handleCommand(commandLine);
+            case FishShopCommands fishShopCommands -> fishShopController.handleCommand(commandLine);
+            case JojaMartCommands jojaMartCommands -> jojaMartController.handleCommand(commandLine);
+            case MarnieCommands marnieCommands -> marnieRanchController.handleCommand(commandLine);
+            case StardropSallonCommands stardropSallonCommands ->
+                    theStardropSaloonController.handleCommand(commandLine);
+            case PierreCommands pierreCommands -> pierreGeneralStoreController.handleCommand(commandLine);
+            default -> new Result(false, "invalid command!!!!");
+        };
 
 
-        return new Result(false, "invalid command!");
     }
 }

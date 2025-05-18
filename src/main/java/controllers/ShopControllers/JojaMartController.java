@@ -1,6 +1,7 @@
 package controllers.ShopControllers;
 
 import models.Result;
+import models.character.player.Inventory;
 import models.character.player.Player;
 import models.data.Repository;
 import models.dateTime.Season;
@@ -25,7 +26,7 @@ public class JojaMartController extends ShopController {
         JojaMartCommands matchedCommand = null;
 
         for (JojaMartCommands cmd : JojaMartCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }
@@ -61,7 +62,6 @@ public class JojaMartController extends ShopController {
                         .append(": ")
                         .append(product.getPrice())
                         .append("g (")
-                        .append(product.getDailyLimit() == -1 ? "unlimited" : product.getDailyLimit() + " per day")
                         .append(")\n");
             }
         }
@@ -70,7 +70,7 @@ public class JojaMartController extends ShopController {
         for (Season season : Season.values()) {
             if (season == Season.SPECIAL) continue;
 
-            info.append("\n").append(season.name()).append(" Stock:\n");
+            info.append("\n").append(season.name().toLowerCase()).append(" Stock:\n");
 
             for (JojaMartProducts product : shop.getAllProducts()) {
                 if (product.getSeason() == season) {
@@ -126,22 +126,28 @@ public class JojaMartController extends ShopController {
     }
 
     protected Result purchase(String command) {
-        String[] tokens = command.split(" ");
-        String productName = tokens[1];
+        String itemName;
+        String countStr;
         int count;
 
-        try {
-            count = Integer.parseInt(tokens[3]);
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            count = 1;
+        if (command.contains("-n")) {
+            itemName = extractValue(command, "jojamart", "-n");
+            countStr = extractValue(command, "-n", null);
         }
+
+        else {
+            itemName = extractValue(command, "jojamart", null);
+            countStr = "1";
+        }
+        count = Integer.parseInt(countStr);
+
 
         JojaMart shop = repo.getCurrentGame().getJojaMart();
         Player player = repo.getCurrentGame().getCurrentPlayer();
         String currentSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason().toString();
 
         for (JojaMartProducts product : JojaMartProducts.values()) {
-            if (product.getName().equalsIgnoreCase(productName)) {
+            if (product.getName().equalsIgnoreCase(itemName)) {
                 int totalCost = product.getPrice() * count;
                 int stock = shop.getProductStock(product);
 
@@ -161,8 +167,9 @@ public class JojaMartController extends ShopController {
                 if (product.getDailyLimit() != -1) {
                     shop.updateProductPurchase(product, count);
                 }
-                //inventory
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                Inventory inventory = player.getInventory();
+                inventory.addItem(itemName, count);
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
         return new Result(false, "product not found");

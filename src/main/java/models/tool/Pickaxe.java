@@ -6,6 +6,7 @@ import models.building.Tile;
 import models.building.TileObject;
 import models.character.player.Inventory;
 import models.character.player.Player;
+import models.crafting.CraftingDevice;
 import models.enums.Direction;
 import models.foraging.ForagingMineral;
 import models.ingredients.Stone;
@@ -13,7 +14,7 @@ import models.tool.enums.PickaxeType;
 
 // related to mining.
 public class Pickaxe extends Tool {
-    private final PickaxeType type;
+    private PickaxeType type;
 
     public Pickaxe(Inventory inventory) {
         super(inventory);
@@ -35,12 +36,26 @@ public class Pickaxe extends Tool {
         Tile tile = player.getCurrentMap().getTile(appliedPosition);
         tile.unPlow();
         Item item = tile.getObject();
-//        if (item instanceof Stone || item instanceof ForagingMineral) {
+       if (item instanceof Stone || item instanceof ForagingMineral || item instanceof CraftingDevice) {
         tile.removeObject();
         player.getAbilityService().getMining().increaseXp(10);
-//        }
+        }
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
+    }
+
+    @Override
+    public void upgrade() {
+        switch (type) {
+            case PRIMARY -> type = PickaxeType.COPPER;
+            case COPPER -> type = PickaxeType.IRON;
+            case IRON -> type = PickaxeType.GOLD;
+            case GOLD -> type = PickaxeType.IRIDIUM;
+        }
+    }
+
+    public PickaxeType getType() {
+        return type;
     }
 }

@@ -1,9 +1,11 @@
 package models.shop.enums;
 
-public enum PierreCommands {
-    SHOW_ALL_PRODUCTS("show all products"),
-    SHOW_ALL_AVAILABLE_PRODUCTS("show all available products"),
-    PIERRE_STORE("purchase pierre (.+?) -n (.+?)"),
+import models.enums.commands.Command;
+
+public enum PierreCommands implements Command {
+    SHOW_ALL_PRODUCTS("show all products of pierre"),
+    SHOW_ALL_AVAILABLE_PRODUCTS("show all available products of pierre"),
+    PIERRE_STORE("purchase pierre (.+?)"),
     CHEAT_COINS("cheat add (.+?) dollars"),
     ;
 

@@ -42,4 +42,8 @@ public class Refrigerator {
     public int getQuantity(String item) {
         return items.getOrDefault(item, 0);
     }
+
+    public boolean refrigerateHasCapacity() {
+        return items.size() < 10;
+    }
 }

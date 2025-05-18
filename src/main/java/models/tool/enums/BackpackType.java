@@ -1,17 +1,20 @@
 package models.tool.enums;
 
 public enum BackpackType {
-    SMALL(12), BIG(24), DELUXE(BackpackType.INFINITE_CAPACITY);
+    SMALL(12), BIG(24), DELUXE(Double.POSITIVE_INFINITY);
 
-    private final int capacity;
+
+    private double capacity;
+
 
     public static final int INFINITE_CAPACITY = -1;
 
-    BackpackType(int capacity) {
+    BackpackType(double capacity) {
         this.capacity = capacity;
     }
 
-    public int getCapacity() {
+    public double getCapacity() {
+
         return capacity;
     }
 }

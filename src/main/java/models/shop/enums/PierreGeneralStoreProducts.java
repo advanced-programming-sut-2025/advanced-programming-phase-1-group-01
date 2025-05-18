@@ -1,6 +1,7 @@
 package models.shop.enums;
 
 import models.dateTime.Season;
+import models.shop.PierreItem;
 
 public enum PierreGeneralStoreProducts {
     RICE("Rice", -1, Season.SPECIAL, 200, 200),
@@ -80,9 +81,15 @@ public enum PierreGeneralStoreProducts {
     public String getName() { return name; }
     public int getDailyLimit() { return dailyLimit; }
     public Season getSeason() { return season; }
-    public int getPrice(boolean isInSeason) {
-        return isInSeason ? inSeasonPrice : offSeasonPrice;
+    public int getPrice(Season season) {
+        if (this.season == season) {
+            return inSeasonPrice;
+        }
+        return offSeasonPrice;
     }
 
+    public PierreItem toItem() {
+        return new PierreItem(name, season, inSeasonPrice, offSeasonPrice);
+    }
 }
 

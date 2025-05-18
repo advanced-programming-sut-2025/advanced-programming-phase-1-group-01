@@ -27,15 +27,13 @@ import java.util.List;
 
 public class Inventory {
     private final Player player;
-    private int capacity;
+    private double capacity;
     private final List<Slot> slots;
     private Slot equippedSlot;
 
-    private static final int INVENTORY_CAPACITY = 50;
-
     public Inventory(Player player) {
         this.player = player;
-        capacity = INVENTORY_CAPACITY;
+        capacity = 12;
         slots = new ArrayList<>();
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "trash can", 1));
@@ -47,8 +45,10 @@ public class Inventory {
     }
 
     public Slot getSlot(String itemName) {
+        itemName = itemName.toLowerCase().trim();
+
         for (Slot slot : slots) {
-            if (slot.getItem().getName().equalsIgnoreCase(itemName)) {
+            if (slot.getItem().getName().toLowerCase().trim().equals(itemName)) {
                 if (slot.getQuantity() > 0) {
                     return slot;
                 } else {
@@ -56,8 +56,10 @@ public class Inventory {
                 }
             }
         }
+
         return null;
     }
+
 
 
     public void removeSlot(Slot slot) {
@@ -65,9 +67,10 @@ public class Inventory {
     }
 
     public boolean addItem(String itemName, int quantity) {
-        itemName = itemName.toLowerCase().replace("_", " ").trim();
+        itemName = itemName.toLowerCase().trim();
+
         for (Slot slot : slots) {
-            if (slot.getItem().getName().equals(itemName)) {
+            if (slot.getItem().getName().toLowerCase().trim().equals(itemName)) {
                 slot.addQuantity(quantity);
                 return true;
             }
@@ -81,20 +84,19 @@ public class Inventory {
         return false;
     }
 
-
     public Player getPlayer() {
         return player;
     }
 
-    public int getCapacity() {
-        return slots.size();
+    public double getCapacity() {
+        return capacity;
     }
 
     public boolean hasCapacity() {
-        return slots.size() <= INVENTORY_CAPACITY;
+        return slots.size() <= capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(double capacity) {
         this.capacity = capacity;
     }
 
@@ -129,30 +131,15 @@ public class Inventory {
             case "rabbit wool" -> new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
             case "rabbit leg" -> new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
             case "dinosaur egg" -> new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
-            case "stone" -> new QuestItem(QuestItemType.STONE);
-            case "iron gold" -> new QuestItem(QuestItemType.IRON_GOLD);
-            case "pumpkin" -> new QuestItem(QuestItemType.PUMPKIN);
-            case "wheat" -> new QuestItem(QuestItemType.WHEAT);
-            case "corn" -> new QuestItem(QuestItemType.CORN);
-            case "hops" -> new QuestItem(QuestItemType.HOPS);
-            case "garlic" -> new QuestItem(QuestItemType.GARLIC);
-            case "carrot" -> new QuestItem(QuestItemType.CARROT);
-            case "milk" -> new QuestItem(QuestItemType.MILK);
-            case "big milk" -> new QuestItem(QuestItemType.BIG_MILK);
-            case "goat milk" -> new QuestItem(QuestItemType.GOAT_MILK);
-            case "big goat milk" -> new QuestItem(QuestItemType.BIG_GOAT_MILK);
-            case "sheep wool" -> new QuestItem(QuestItemType.SHEEP_WOOL);
-            case "truffle" -> new QuestItem(QuestItemType.TRUFFLE);
-            case "deluxe scarecrow" -> new RewardItem(RewardItemType.DELUXE_SCARECROW);
-            case "dinner salmon" -> new RewardItem(RewardItemType.DINNER_SALMON);
-            case "iridium sprinkler" -> new RewardItem(RewardItemType.IRIDIUM_SPRINKLER);
-            case "quartz" -> new RewardItem(RewardItemType.QUARTZ);
-            case "salad" -> new RewardItem(RewardItemType.SALAD);
-            case "diamond" -> new RewardItem(RewardItemType.DIAMOND);
-
-
 
             default -> {
+
+                for (QuestItemType QuestItem : QuestItemType.values()) {
+                    if (QuestItem.getName().equalsIgnoreCase(itemName)) {
+                        yield QuestItem.toItem();
+                    }
+                }
+
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
                     if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
@@ -189,13 +176,19 @@ public class Inventory {
                     }
                 }
 
-                for (CarpenterShopBuildings buildings : CarpenterShopBuildings.values()) {
-                    if (buildings.getName().equalsIgnoreCase(itemName)) {
-                        yield buildings.toItem();
+                for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
+                    if (product.getName().equalsIgnoreCase(itemName)) {
+                        yield product.toItem();
                     }
                 }
 
-                for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
+                for (JojaMartProducts product : JojaMartProducts.values()) {
+                    if (product.getName().equalsIgnoreCase(itemName)) {
+                        yield product.toItem();
+                    }
+                }
+
+                for (PierreGeneralStoreProducts product : PierreGeneralStoreProducts.values()) {
                     if (product.getName().equalsIgnoreCase(itemName)) {
                         yield product.toItem();
                     }

@@ -24,7 +24,7 @@ public class FishShopController extends ShopController {
         FishShopCommands matchedCommand = null;
 
         for (FishShopCommands cmd : FishShopCommands.values()) {
-            if (cmd.name().equals(command)) {
+            if (command.matches(cmd.getRegex())) {
                 matchedCommand = cmd;
                 break;
             }
@@ -60,7 +60,6 @@ public class FishShopController extends ShopController {
                     .append(product.getPrice())
                     .append("g")
                     .append(" (")
-                    .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
                     .append(")\n");
         }
 
@@ -128,7 +127,7 @@ public class FishShopController extends ShopController {
                     shop.updateProductPurchase(product);
                 }
                 // inventory
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
 
