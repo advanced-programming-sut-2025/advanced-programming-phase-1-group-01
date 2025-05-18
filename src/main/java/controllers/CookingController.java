@@ -268,7 +268,7 @@ public class CookingController extends Controller {
         if (buff != null) {
 
             if (buff.equalsIgnoreCase("Max Energy")) {
-                player.energyBuff(matched.toFood().buffTime());
+                player.isBuffActivated();
             }
 
             else {

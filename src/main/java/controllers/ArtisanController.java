@@ -25,8 +25,8 @@ public class ArtisanController extends Controller {
         Matcher matcher = pattern.matcher(commandLine);
 
         if (matcher.matches()) {
-            String artisanName = matcher.group("artisanName");
-            String itemName = matcher.group("itemName");
+            String artisanName = matcher.group("artisanName").toLowerCase();
+            String itemName = matcher.group("itemName").toLowerCase();
 
             Player player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.useArtisan(artisanName, itemName));
