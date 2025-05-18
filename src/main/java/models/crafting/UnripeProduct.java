@@ -4,7 +4,7 @@ import models.Item;
 
 public class UnripeProduct {
     private final Item item;
-    private final int harvestTime;
+    private int harvestTime;
 
     public UnripeProduct(Item item, int harvestTime) {
         this.item = item;
@@ -25,5 +25,13 @@ public class UnripeProduct {
 
     public Item getInventoryItem() {
         return item;
+    }
+
+    public void setHarvestHours(int hour, int harvestTime) {
+        if (harvestTime == -1) this.harvestTime = 33 - hour;
+    }
+
+    public int getHarvestTime() {
+        return harvestTime;
     }
 }
