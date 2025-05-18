@@ -91,4 +91,8 @@ public enum SeedInfo implements FarmingEnum {
     public Seed toItem() {
         return new Seed(this);
     }
+
+    public String getSymbol() {
+        return symbol;
+    }
 }

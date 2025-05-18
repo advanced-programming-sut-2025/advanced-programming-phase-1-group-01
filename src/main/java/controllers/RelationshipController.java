@@ -143,12 +143,10 @@ public class RelationshipController extends Controller {
         receiver.addNotification(sender, "You have a new message from " + sender.getUser().getUsername());
 
         DateTime currentTime = repo.getCurrentGame().getTimeManager().getNow();
-        if (sender.getRelationService().getFriendship(receiver).getLastTalkDay() == currentTime.getDay()) {
-            return new Result(false, "You can only talk once per day.");
+        if (sender.getRelationService().getFriendship(receiver).getLastTalkDay() != currentTime.getDay()) {
+            friendship.setLastTalkDay(currentTime.getDay());
+            friendship.increaseXp(Friendship.TALK_XP);
         }
-
-        friendship.setLastTalkDay(currentTime.getDay());
-        friendship.increaseXp(Friendship.TALK_XP);
 
         if (sender.getRelationService().getMarriage() != null) {
             if (sender.getRelationService().getMarriage().getPartner(receiver) != null) {
@@ -172,8 +170,8 @@ public class RelationshipController extends Controller {
         StringBuilder resultMsg = new StringBuilder();
 
         List<MessageEntry> keys = new ArrayList<>(messages.keySet());
-        for (MessageEntry messageEntry : messages.keySet()) {
-            resultMsg.append("%s : \"%s\"".formatted(messageEntry.sender().getUser().getNickname(), messageEntry.message()));
+        for (MessageEntry messageEntry : keys) {
+            resultMsg.append(messageEntry);
             if (messageEntry.sender() == friend) {
                 messages.put(messageEntry, true);
             }
@@ -205,12 +203,10 @@ public class RelationshipController extends Controller {
 
         DateTime currentTime = repo.getCurrentGame().getTimeManager().getNow();
 
-        if (currentPlayer.getRelationService().getFriendship(friend).getLastHugDay() == currentTime.getDay()) {
-            return new Result(false, "You can only hug once per day.");
+        if (currentPlayer.getRelationService().getFriendship(friend).getLastHugDay() != currentTime.getDay()) {
+            currentPlayer.getRelationService().getFriendship(friend).setLastHugDay(currentTime.getDay());
+            friendship.increaseXp(Friendship.HUG_XP);
         }
-
-        currentPlayer.getRelationService().getFriendship(friend).setLastHugDay(currentTime.getDay());
-        friendship.increaseXp(Friendship.HUG_XP);
 
         if (currentPlayer.getRelationService().getMarriage() != null) {
             if (currentPlayer.getRelationService().getMarriage().getPartner(friend) != null) {
@@ -221,7 +217,7 @@ public class RelationshipController extends Controller {
                 }
             }
         }
-        return new Result(true, "you hugged each other! jooon");
+        return new Result(true, "you hugged each other!");
     }
 
     private Result gift(String username, String itemName, int amount) {
@@ -252,10 +248,6 @@ public class RelationshipController extends Controller {
         DateTime now = repo.getCurrentGame().getTimeManager().getNow();
         friendship.addGift(sender, receiver, item, amount, now);
         receiver.addNotification(sender, "%s sent you a gift! %d number of %s".formatted(sender.getUser().getUsername(), amount, itemName));
-
-        if (sender.getRelationService().getFriendship(receiver).getLastGiftDay() == now.getDay()) {
-            return new Result(false, "You can only send gift once per day.");
-        }
 
         friendship.setLastGiftDay(now.getDay());
 
@@ -289,10 +281,14 @@ public class RelationshipController extends Controller {
             Player sender = gift.sender();
             Friendship friendship = currentPlayer.getRelationService().getFriendship(sender);
 
-            if (gift.getGiftXp() >= 0) {
-                friendship.increaseXp(gift.getGiftXp());
-            } else {
-                friendship.decreaseXp(gift.getGiftXp());
+            DateTime now = repo.getCurrentGame().getTimeManager().getNow();
+
+            if (sender.getRelationService().getFriendship(gift.receiver()).getLastGiftDay() != now.getDay()) {
+                if (gift.getGiftXp() >= 0) {
+                    friendship.increaseXp(gift.getGiftXp());
+                } else {
+                    friendship.decreaseXp(gift.getGiftXp());
+                }
             }
 
             return new Result(true, "gift rated successfully");
@@ -370,7 +366,7 @@ public class RelationshipController extends Controller {
         friend.getInventory().getSlot(flower).addQuantity(1);
 
         friendship.flower();
-        return new Result(true, "you hugged each other! jooon");
+        return new Result(true, "you hugged each other!");
     }
 
     private Result askMarriage(String username, String ring) {
@@ -426,7 +422,7 @@ public class RelationshipController extends Controller {
             friendship.setLevel(0);
             friendship.setXp(0);
             double energy = friend.getEnergy().getMaxEnergy();
-            friend.getEnergy().setMaxEnergy(energy/2);
+            friend.getEnergy().setMaxEnergy(energy / 2);
             currentPlayer.setEnergyHalved();
             return new Result(true, currentPlayer + "reject" + friend.getUser().getUsername() + "request for marriage");
         } else if (respond.equals("accept")) {
@@ -533,9 +529,7 @@ public class RelationshipController extends Controller {
 
         if (!amountStr.matches("^\\d+$") || !targetAmountStr.matches("^\\d+$")) {
             return new Result(false, "invalid amount ");
-        }
-
-        else {
+        } else {
             amount = Integer.parseInt(amountStr);
             targetAmount = Integer.parseInt(targetAmountStr);
         }
@@ -679,7 +673,6 @@ public class RelationshipController extends Controller {
     }
 
 
-
     private Result tradeResponse(String command) {
         boolean isAccept = command.contains("-accept");
         String idStr = extractValue(command, "-i", null);
@@ -726,9 +719,7 @@ public class RelationshipController extends Controller {
 
                 sender.consumeCoins(reqTrade.getPrice());
                 receiver.increaseCoins(reqTrade.getPrice());
-            }
-
-            else if (foundTrade instanceof OfferTrade offerTrade) {
+            } else if (foundTrade instanceof OfferTrade offerTrade) {
 
                 Slot senderSlot = senderInventory.getSlot(offerTrade.getItem().getName());
                 Slot receiverSlot = receiverInventory.getSlot(offerTrade.getSuggestionitem().getName());
@@ -751,9 +742,7 @@ public class RelationshipController extends Controller {
             senderTrading.sendMessage(receiver, "Your trade has been accepted.");
             sender.addNotification(receiver, "Trade accepted by " + receiver.getUser().getNickname());
             friendship.increaseXp(Friendship.DEAL_SUCCESS_XP);
-        }
-
-        else {
+        } else {
             senderTrading.sendMessage(receiver, "Your trade has been rejected.");
             sender.addNotification(receiver, "Trade rejected by " + receiver.getUser().getNickname());
             friendship.decreaseXp(Friendship.DEAL_FAILURE_XP);

@@ -91,7 +91,7 @@ public class Crop extends Plant implements Item, Cloneable {
         int totalGrownDays = 0;
         int[] growthStages = info.getStages();
 
-        for (int i = 0; i < growthLevel; i++) {
+        for (int i = 0; i < (growthLevel - 1); i++) {
             totalGrownDays += growthStages[i];
         }
 
