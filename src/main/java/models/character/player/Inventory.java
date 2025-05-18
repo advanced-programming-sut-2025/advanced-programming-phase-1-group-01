@@ -45,8 +45,10 @@ public class Inventory {
     }
 
     public Slot getSlot(String itemName) {
+        itemName = itemName.toLowerCase().trim();
+
         for (Slot slot : slots) {
-            if (slot.getItem().getName().equalsIgnoreCase(itemName)) {
+            if (slot.getItem().getName().toLowerCase().trim().equals(itemName)) {
                 if (slot.getQuantity() > 0) {
                     return slot;
                 } else {
@@ -54,8 +56,10 @@ public class Inventory {
                 }
             }
         }
+
         return null;
     }
+
 
 
     public void removeSlot(Slot slot) {
@@ -63,9 +67,10 @@ public class Inventory {
     }
 
     public boolean addItem(String itemName, int quantity) {
-        itemName = itemName.toLowerCase().replace("_", " ").trim();
+        itemName = itemName.toLowerCase().trim();
+
         for (Slot slot : slots) {
-            if (slot.getItem().getName().equals(itemName)) {
+            if (slot.getItem().getName().toLowerCase().trim().equals(itemName)) {
                 slot.addQuantity(quantity);
                 return true;
             }
@@ -78,7 +83,6 @@ public class Inventory {
 
         return false;
     }
-
 
     public Player getPlayer() {
         return player;
@@ -127,30 +131,15 @@ public class Inventory {
             case "rabbit wool" -> new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
             case "rabbit leg" -> new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
             case "dinosaur egg" -> new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
-            case "stone" -> new QuestItem(QuestItemType.STONE);
-            case "iron gold" -> new QuestItem(QuestItemType.IRON_GOLD);
-            case "pumpkin" -> new QuestItem(QuestItemType.PUMPKIN);
-            case "wheat" -> new QuestItem(QuestItemType.WHEAT);
-            case "corn" -> new QuestItem(QuestItemType.CORN);
-            case "hops" -> new QuestItem(QuestItemType.HOPS);
-            case "garlic" -> new QuestItem(QuestItemType.GARLIC);
-            case "carrot" -> new QuestItem(QuestItemType.CARROT);
-            case "milk" -> new QuestItem(QuestItemType.MILK);
-            case "big milk" -> new QuestItem(QuestItemType.BIG_MILK);
-            case "goat milk" -> new QuestItem(QuestItemType.GOAT_MILK);
-            case "big goat milk" -> new QuestItem(QuestItemType.BIG_GOAT_MILK);
-            case "sheep wool" -> new QuestItem(QuestItemType.SHEEP_WOOL);
-            case "truffle" -> new QuestItem(QuestItemType.TRUFFLE);
-            case "deluxe scarecrow" -> new RewardItem(RewardItemType.DELUXE_SCARECROW);
-            case "dinner salmon" -> new RewardItem(RewardItemType.DINNER_SALMON);
-            case "iridium sprinkler" -> new RewardItem(RewardItemType.IRIDIUM_SPRINKLER);
-            case "quartz" -> new RewardItem(RewardItemType.QUARTZ);
-            case "salad" -> new RewardItem(RewardItemType.SALAD);
-            case "diamond" -> new RewardItem(RewardItemType.DIAMOND);
-
-
 
             default -> {
+
+                for (QuestItemType QuestItem : QuestItemType.values()) {
+                    if (QuestItem.getName().equalsIgnoreCase(itemName)) {
+                        yield QuestItem.toItem();
+                    }
+                }
+
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
                     if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();

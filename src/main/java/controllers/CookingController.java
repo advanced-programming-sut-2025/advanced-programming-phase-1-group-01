@@ -69,8 +69,7 @@ public class CookingController extends Controller {
     }
 
     private Result cheatAddRecipe(String command) {
-        String[] tokens = command.split(" ");
-        String recipeName = tokens[4];
+        String recipeName = extractValue(command, "-r", null);
 
         Player player = repo.getCurrentUser().getPlayer();
 
@@ -87,14 +86,20 @@ public class CookingController extends Controller {
             return new Result(false, "Recipe \"" + recipeName + "\" does not exist.");
         }
 
+
         CookingRecipe recipeToLearn = matched.toRecipe();
+
+        if (player.haveCookingRecipe(recipeToLearn)) {
+            return new Result(false, "Recipe \"" + recipeName + "\" already exists.");
+        }
+
         player.addCookingRecipe(recipeToLearn);
+
 
         return new Result(true, "Recipe added");
     }
 
     private Result putRefrigerator(String command) {
-        String[] tokens = command.split(" ");
         String itemStr = extractValue(command,"put","-a");
         String itemCountStr = extractValue(command,"-a",null);
         int itemCount = Integer.parseInt(itemCountStr);
@@ -108,6 +113,10 @@ public class CookingController extends Controller {
 
         if (!FridgeOnlyItem.isFridgeItem(itemStr)) {
             return new Result(false, "You cannot place non-food items in the fridge.");
+        }
+
+        if (!player.getRefrigerator().refrigerateHasCapacity()) {
+            return new Result(false, "You do not have refrigerate capacity.");
         }
 
         Item item = inventory.getSlot(itemStr).getItem();
@@ -136,6 +145,9 @@ public class CookingController extends Controller {
         }
 
         Inventory inventory = player.getInventory();
+        if (!inventory.hasCapacity()) {
+            return new Result(false, "You do not have inventory capacity.");
+        }
 
         inventory.addItem(itemStr,itemCount);
         refrigerator.removeItem(item,itemCount);
@@ -176,6 +188,11 @@ public class CookingController extends Controller {
 
             int fridgeAmount = refrigerator.getQuantity(itemName);
             Slot slot = inventory.getSlot(materialName);
+
+            if (slot == null) {
+                return new Result(false, "Slot not found.");
+            }
+
             int inventoryAmount = slot.getQuantity();
 
             if (fridgeAmount + inventoryAmount < requiredAmount) {
@@ -211,7 +228,7 @@ public class CookingController extends Controller {
             repo.getCurrentGame().nextTurn();
         }
 
-        return new Result(true, "Item added to your inventory");
+        return new Result(true, itemName + " added to your inventory");
     }
 
     private Result eat(String command) {
@@ -228,7 +245,7 @@ public class CookingController extends Controller {
         }
 
         if (slot == null) {
-            return new Result(false, foodName + " not found.");
+            return new Result(false, "you don't have this " + foodName + " in your inventory.");
         }
 
         if (slot.getQuantity() == 0) {

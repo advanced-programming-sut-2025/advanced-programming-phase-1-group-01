@@ -9,7 +9,8 @@ import java.util.Set;
 public class TheStardropSaloon extends Shop {
     private final Map<TheStardropSaloonProducts, Integer> theStardropSaloonProducts = new HashMap<>();
 
-    public TheStardropSaloon() {
+    public TheStardropSaloon(int x, int y) {
+        super(x,y);
         this.shopkeeperName = ShopkeeperName.GUS;
         resetDailyStock();
     }

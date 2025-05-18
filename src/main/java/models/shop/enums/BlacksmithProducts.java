@@ -3,10 +3,10 @@ package models.shop.enums;
 import models.shop.BlackSmithItem;
 
 public enum BlacksmithProducts {
-    COPPER_ORE("Copper Ore", 75, -1),
-    IRON_ORE("Iron Ore", 150, -1),
-    COAL("Coal", 150, -1),
-    GOLD_ORE("Gold Ore", 400, -1);
+    COPPER_ORE("copper ore", 75, -1),
+    IRON_ORE("iron ore", 150, -1),
+    COAL("coal", 150, -1),
+    GOLD_ORE("gold ore", 400, -1);
 
     private final String name;
     private final int price;

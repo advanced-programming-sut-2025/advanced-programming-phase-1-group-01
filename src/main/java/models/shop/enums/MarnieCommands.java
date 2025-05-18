@@ -5,7 +5,7 @@ import models.enums.commands.Command;
 public enum MarnieCommands implements Command {
     SHOW_ALL_PRODUCTS("show all products of marnie"),
     SHOW_ALL_AVAILABLE_PRODUCTS("show all available products of marnie"),
-    MARNIE_RANCH("purchase marnie ranch (.+?) -n (.+?)"),
+    MARNIE_RANCH("purchase marnie (.+?)"),
     CHEAT_COINS("cheat add (.+?) dollars"),
     ;
 

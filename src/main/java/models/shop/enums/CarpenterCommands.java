@@ -5,7 +5,7 @@ import models.enums.commands.Command;
 public enum CarpenterCommands implements Command {
     SHOW_ALL_PRODUCTS("show all products of carpenter"),
     SHOW_ALL_AVAILABLE_PRODUCTS("show all available products of carpenter"),
-    CARPENTER("purchase pierre (.+?) -n (.+?)"),
+    CARPENTER("purchase carpenter (.+?)"),
     CHEAT_COINS("cheat add (.+?) dollars"),
     ;
 

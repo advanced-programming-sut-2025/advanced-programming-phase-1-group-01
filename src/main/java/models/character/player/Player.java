@@ -249,6 +249,14 @@ public class Player extends Character {
         craftingRecipes.add(recipe);
     }
 
+    public boolean haveCraftingRecipes(CraftingRecipe recipe) {
+        return craftingRecipes.contains(recipe);
+    }
+
+    public boolean haveCookingRecipe(CookingRecipe recipe) {
+        return cookingRecipes.contains(recipe);
+    }
+
     public Set<CookingRecipe> getCookingRecipes() {
         return cookingRecipes;
     }
@@ -385,6 +393,9 @@ public class Player extends Character {
     public void energyBuff(int hour) {
 
     }
+
+    //@
+    //pool farda biad toye hesab
 
     public void abilityBuff(AbilityType abilityType) {
         switch (abilityType) {

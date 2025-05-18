@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Item;
+import models.Position;
 import models.Result;
 import models.building.Building;
 import models.character.player.Inventory;
@@ -94,13 +95,17 @@ public class CraftingController extends Controller {
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
 
+        if (!inventory.hasCapacity()) {
+            return new Result(false, "Inventory is full.");
+        }
+
         for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
             String materialName = entry.getKey();
             int requiredAmount = entry.getValue();
 
             Slot inventorySlot = inventory.getSlot(materialName);
             if (inventorySlot == null) {
-                return new Result(false, "Slot not found.");
+                return new Result(false, materialName + "Slot not found.");
             }
             int itemCount = inventorySlot.getQuantity();
 
@@ -149,6 +154,11 @@ public class CraftingController extends Controller {
         }
 
         CraftingRecipe recipeToLearn = matched.toRecipe();
+
+        if (player.haveCraftingRecipes(recipeToLearn)) {
+            return new Result(false, "Recipe \"" + recipeToLearn.getName() + "\" is already learning.");
+        }
+
         player.addCraftingRecipe(recipeToLearn);
 
         return new Result(true, "Recipe added");
@@ -160,59 +170,37 @@ public class CraftingController extends Controller {
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
+
+        Item item = inventory.getNewItem(itemName);
+
+        if (!(item instanceof CraftingDevice device)) {
+            return new Result(false, item.getName() + " cannot be placed in farm.");
+        }
+
         Slot slot = inventory.getSlot(itemName);
 
         if (slot == null) {
             return new Result(false, "You don't have \"" + itemName + "\" in your inventory.");
         }
 
-        Item item = slot.getItem();
-
-        if (!(item instanceof CraftingDevice device)) {
-            return new Result(false, item.getName() + " cannot be placed in farm.");
-        }
-
-        int x = player.getPosition().x();
-        int y = player.getPosition().y();
-
         Direction direction = Direction.fromString(directionStr);
 
         if (direction == null) {
-            return new Result(false, "Invalid direction: " + directionStr);
+            return new Result(false, "invalid direction: " + directionStr);
         }
 
-        switch (direction) {
-            case UP -> y--;
-            case DOWN -> y++;
-            case LEFT -> x--;
-            case RIGHT -> x++;
-            case UP_LEFT -> {
-                x--;
-                y--;
-            }
-            case UP_RIGHT -> {
-                x++;
-                y--;
-            }
-            case DOWN_LEFT -> {
-                x--;
-                y++;
-            }
-            case DOWN_RIGHT -> {
-                x++;
-                y++;
-            }
-        }
+        Position position = player.getPosition();
+        Position directionPosition = position.applyDirection(direction);
 
-        device.setPosition(x, y);
+        device.setPosition(directionPosition.x(),directionPosition.y());
         device.setWorking(false);
 
-        repo.getCurrentGame().getCurrentPlayer().getFarm().getTiles().get(x).get(y).setObject(device);
+        repo.getCurrentGame().getCurrentPlayer().getFarm().getTiles().get(directionPosition.x()).get(directionPosition.y()).setObject(device);
         repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(device);
 
         slot.removeQuantity(1);
 
-        return new Result(true, item.getName() + " placed successfully at (" + x + ", " + y + ").");
+        return new Result(true, item.getName() + " placed successfully at (" + directionPosition.x() + ", " + directionPosition.y() + ").");
     }
 
     private Result cheatAddItem(String command) {
@@ -228,12 +216,12 @@ public class CraftingController extends Controller {
             return new Result(false, "item not found");
         }
 
-            if (player.getInventory().hasCapacity()) {
-                return new Result(false, "inventory is full");
-            }
+        if (!player.getInventory().hasCapacity()) {
+            return new Result(false, "inventory is full");
+        }
 
-            inventory.addItem(itemName, itemCount);
-            return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+        inventory.addItem(itemName, itemCount);
+        return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {

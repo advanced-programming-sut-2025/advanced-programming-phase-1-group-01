@@ -5,7 +5,7 @@ import models.enums.commands.Command;
 public enum JojaMartCommands implements Command {
     SHOW_ALL_PRODUCTS("show all products of jojamart"),
     SHOW_ALL_AVAILABLE_PRODUCTS("show all available products of jojamart"),
-    JOJA_MART("purchase jojamart (.+?) -n (.+?)"),
+    JOJA_MART("purchase jojamart (.+?)"),
     CHEAT_COINS("cheat add (.+?) dollars"),
     ;
 

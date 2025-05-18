@@ -64,12 +64,16 @@ public class BlackSmithController extends ShopController {
 
         Blacksmith shop = repo.getCurrentGame().getBlacksmith();
 
+        info.append("products : \n");
+
         for (BlacksmithProducts product : shop.getAllProducts()) {
             info.append(product.getName())
                     .append(": ")
                     .append(product.getPrice())
                     .append("g\n");
         }
+
+        info.append("----------------").append("\n").append("upgrade : \n");
 
         for (BlacksmithUpgrade upgrade : shop.getAllUpgrades()) {
             info.append(upgrade.getName())
@@ -86,6 +90,8 @@ public class BlackSmithController extends ShopController {
             Blacksmith shop = repo.getCurrentGame().getBlacksmith();
             StringBuilder info = new StringBuilder();
 
+            info.append("products : \n");
+
             for (BlacksmithProducts product : shop.getAllProducts()) {
                 int stock = shop.getProductStock(product);
                 if (product.getDailyLimit() == -1 || stock > 0) {
@@ -98,6 +104,8 @@ public class BlackSmithController extends ShopController {
                             .append(")\n");
                 }
             }
+
+            info.append("----------------").append("\n").append("upgrade : \n");
 
             for (BlacksmithUpgrade upgrade : shop.getAllUpgrades()) {
                 int stock = shop.getUpgradeStock(upgrade);
@@ -121,12 +129,12 @@ public class BlackSmithController extends ShopController {
         int count;
 
         if (command.contains("-n")) {
-            itemName = extractValue(command, "purchase", "-n");
+            itemName = extractValue(command, "blacksmith", "-n");
             countStr = extractValue(command, "-n", null);
         }
 
         else {
-            itemName = extractValue(command, "purchase", null);
+            itemName = extractValue(command, "blacksmith", null);
             countStr = "1";
         }
         count = Integer.parseInt(countStr);
@@ -155,7 +163,7 @@ public class BlackSmithController extends ShopController {
                 Inventory inventory = player.getInventory();
                 inventory.addItem(itemName,count);
 
-                return new Result(true, "purchased " + count + " x " + product.getName());
+                return new Result(true, "purchased " + count + "x " + product.getName());
             }
         }
         return new Result(false, "product not found");
