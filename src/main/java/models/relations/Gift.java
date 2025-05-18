@@ -68,10 +68,6 @@ public class Gift {
     }
 
     public int getGiftXp() {
-        if (rate == 0) {
-            return 0;
-        }
-
         return (rate - 3) * 30 + 15;
     }
 }

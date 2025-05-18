@@ -1,0 +1,36 @@
+register -u KiaValliant -p Amirkiaghm#1385 Amirkiaghm#1385 -n Amirkia -e akghasemim@gmail.com -g MALE
+register -u Amirreza -p Amirreza#1384 Amirreza#1384 -n Amirreza -e amirreza@gmil.com -g MALE
+login -u Amirreza -p Amirreza#1384 -s no
+menu exit
+login -u KiaValliant -p Amirkiaghm#1385 -s no
+menu enter game menu
+game new -u Amirreza
+game map 1
+game map 2
+print map -l 0 0 -s 74
+tools equip hoe
+friendships
+talk -u Amirreza -m "salam"
+walk -l 0 1
+answer -a yes
+print map -l 0 0 -s 10
+talk -u Amirreza -m "salam"
+friendships
+next turn
+talk -u KiaValliant -m "Aleyk"
+talk history -u KiaValliant
+friendships
+gift -u KiaValliant -i pickaxe -a 2
+gift -u KiaValliant -i pickaxe -a 1
+next turn
+gift list
+gift rate -i 1 -r 4
+gift rate -i 2 -r 4
+friendships
+cheat advance date 1 d
+gift -u Amirreza -i hoe -a 1
+next turn
+gift rate -i 1 -r 0
+gift rate -i 2 -r 1
+friendships
+gift history -u Amirreza

@@ -74,6 +74,18 @@ public class TimeManager {
     public void updateEvents() {
     }
 
+    public void prepareForNewHour() {
+        for (Player player : game.getPlayers()) {
+            player.getTomorrowMoney();
+            for (UnripeProduct unripeProduct : player.getUnripeProducts()) {
+                unripeProduct.advanceHourCounter();
+            }
+            if (player.hasEnergyBuff()) {
+                player.addBuffDaysCounter();
+            }
+        }
+    }
+
     public void prepareForNewDay() {
 
         for (Player player : game.getPlayers()) {

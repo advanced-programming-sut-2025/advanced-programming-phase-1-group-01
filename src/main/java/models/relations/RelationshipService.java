@@ -53,9 +53,10 @@ public class RelationshipService {
     }
 
     public void addFriend(Character friend) {
-        friendships.putIfAbsent(friend, new Friendship((Player) character, (Player) friend));
+        Friendship friendship = new Friendship(character, friend);
+        friendships.putIfAbsent(friend, friendship);
         if (!friend.getRelationService().isFriendWith(character)) {
-            friend.getRelationService().addFriend(character);
+            friend.getRelationService().getFriendships().putIfAbsent(character, friendship);
         }
     }
 

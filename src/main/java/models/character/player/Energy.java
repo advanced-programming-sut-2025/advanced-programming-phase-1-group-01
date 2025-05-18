@@ -6,6 +6,7 @@ public class Energy {
     public static final double MAX_ENERGY = 200;
     public static final double INITIAL_ENERGY_AMOUNT = MAX_ENERGY;
     private boolean hasPassedOut = false;
+    private boolean shoudBeFull = false;
 
     public Energy() {
         this.amount = INITIAL_ENERGY_AMOUNT;
@@ -21,7 +22,7 @@ public class Energy {
     }
 
     public void consume(double amount) {
-
+        if (shoudBeFull) return;
         if (amount > 0) this.amount -= amount;
 
         if (this.amount <= 0) {
@@ -68,5 +69,9 @@ public class Energy {
     @Override
     public String toString() {
         return String.valueOf(amount);
+    }
+
+    public void changeShoudBeFull(boolean shoudBeFull) {
+        this.shoudBeFull = shoudBeFull;
     }
 }

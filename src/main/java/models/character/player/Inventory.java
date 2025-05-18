@@ -9,6 +9,7 @@ import models.cooking.CookingRecipes;
 import models.cooking.Foods;
 import models.cooking.FoodsEnum;
 import models.crafting.*;
+import models.crafting.enums.AllCraftedProductsType;
 import models.crafting.enums.CraftingRecipes;
 import models.farming.*;
 import models.foraging.ForagingTreeInfo;
@@ -131,6 +132,35 @@ public class Inventory {
             case "rabbit wool" -> new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
             case "rabbit leg" -> new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
             case "dinosaur egg" -> new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
+            case "honey" -> new CraftedProducts(AllCraftedProductsType.HONEY);
+            case "cheese" -> new CraftedProducts(AllCraftedProductsType.CHEESE);
+            case "goat cheese" -> new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE);
+            case "beer" -> new CraftedProducts(AllCraftedProductsType.BEER);
+            case "vinegar" -> new CraftedProducts(AllCraftedProductsType.VINEGAR);
+            case "coffee" -> new CraftedProducts(AllCraftedProductsType.COFFEE);
+            case "juice" -> new CraftedProducts(AllCraftedProductsType.JUICE);
+            case "mead" -> new CraftedProducts(AllCraftedProductsType.MEAD);
+            case "pale ale" -> new CraftedProducts(AllCraftedProductsType.PALE_ALE);
+            case "wine" -> new CraftedProducts(AllCraftedProductsType.WINE);
+            case "dried mushrooms" -> new CraftedProducts(AllCraftedProductsType.DRIED_MASHROOMS);
+            case "dried fruit" -> new CraftedProducts(AllCraftedProductsType.DRIED_FRUIT);
+            case "raisins" -> new CraftedProducts(AllCraftedProductsType.RAISINS);
+            case "coal" -> new CraftedProducts(AllCraftedProductsType.COAL);
+            case "gold bar" -> new CraftedProducts(AllCraftedProductsType.GOLD_BAR);
+            case "iron bar" -> new CraftedProducts(AllCraftedProductsType.IRON_BAR);
+            case "copper bar" -> new CraftedProducts(AllCraftedProductsType.COPPER_BAR);
+            case "smoked fish" -> new CraftedProducts(AllCraftedProductsType.SMOKED_FISH);
+            case "jelly" -> new CraftedProducts(AllCraftedProductsType.JELLY);
+            case "pickles" -> new CraftedProducts(AllCraftedProductsType.PICKLES);
+            case "oil" -> new CraftedProducts(AllCraftedProductsType.OIL);
+            case "truffle oil" -> new CraftedProducts(AllCraftedProductsType.TRUFFLE_OIL);
+            case "dinosaur mayonnaise" -> new CraftedProducts(AllCraftedProductsType.DINOSAUR_MAYONNAISE);
+            case "duck mayonnaise" -> new CraftedProducts(AllCraftedProductsType.DUCK_MAYONNAISE);
+            case "mayonnaise" -> new CraftedProducts(AllCraftedProductsType.MAYONNAISE);
+            case "cloth" -> new CraftedProducts(AllCraftedProductsType.CLOTH);
+
+
+
 
             default -> {
 
