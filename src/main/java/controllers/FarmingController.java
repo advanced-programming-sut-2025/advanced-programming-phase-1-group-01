@@ -41,7 +41,7 @@ public class FarmingController extends Controller {
                 String name = commandLine.substring(commandLine.indexOf("-n") + 2).trim();
                 return craftInfo(name);
             case PLANT:
-                String seedName = commandLine.split("\\s+")[2];
+                String seedName = commandLine.substring(commandLine.indexOf("-s") + 2, commandLine.indexOf("-d") - 1).trim();
                 direction = Direction.fromString(commandLine.substring(commandLine.indexOf("-d") + 2).trim());
                 return plant(seedName, direction);
             case SHOW_PLANT:
@@ -83,7 +83,7 @@ public class FarmingController extends Controller {
 
     private Result plant(String sourceName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        Slot slot = repo.getCurrentGame().getCurrentPlayer().getInventory().getSlot(sourceName);
+        Slot slot = player.getInventory().getSlot(sourceName);
         Position appliedPosition = player.getPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
         Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
@@ -112,10 +112,14 @@ public class FarmingController extends Controller {
         Item source = slot.getItem();
         slot.removeQuantity(1);
 
-        repo.getCurrentGame().getFarmingManager().plant(source, tile);
-        Plant plant = (Plant) tile.getObject();
 
-        return new Result(true, "%s planted in <%d, %d> successfully".formatted(plant.getName(), appliedPosition.x(), appliedPosition.y()));
+
+        Plant plant = repo.getCurrentGame().getFarmingManager().plant(source, tile);
+        if (plant != null) {
+            tile.setObject(plant);
+            return new Result(true, "%s planted in <%d, %d> successfully".formatted(plant.getName(), appliedPosition.x(), appliedPosition.y()));
+        }
+        return new Result(false, "plant failed");
     }
 
     private Result showPlantInfo(Position position) {

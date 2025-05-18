@@ -229,9 +229,7 @@ public class CraftingController extends Controller {
 
         if (endFlag != null) {
             patternString = startFlag + " (.*?) " + endFlag;
-        }
-
-        else {
+        } else {
             patternString = startFlag + " (.*)";
         }
 

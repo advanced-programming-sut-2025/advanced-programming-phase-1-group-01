@@ -15,6 +15,7 @@ public class Tile {
         this.type = builder.getType();
         this.isMovable = builder.isMovable();
         this.building = builder.getBuilding();
+        this.object = builder.getObject();
     }
 
     public Position getPosition() {
@@ -71,6 +72,7 @@ public class Tile {
 
     public void removeObject() {
         this.object = null;
+        isMovable = true;
     }
 
     public boolean isEmpty() {
