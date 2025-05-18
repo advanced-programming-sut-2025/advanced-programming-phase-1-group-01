@@ -54,6 +54,7 @@ public class AnimalHusbandryController extends Controller {
         Pattern pattern = Pattern.compile(AnimalHusbandryCommands.BUILD.getRegex());
         Matcher matcher = pattern.matcher(commandLine);
 
+
         if (matcher.matches()) {
             String animalName = matcher.group("animal");
             int x = Integer.parseInt(matcher.group("x"));
