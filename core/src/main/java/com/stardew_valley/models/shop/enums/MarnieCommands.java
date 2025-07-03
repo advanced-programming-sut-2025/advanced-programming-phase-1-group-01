@@ -1,0 +1,22 @@
+package com.stardew_valley.models.shop.enums;
+
+import com.stardew_valley.models.enums.commands.Command;
+
+public enum MarnieCommands implements Command {
+    SHOW_ALL_PRODUCTS("show all products of marnie"),
+    SHOW_ALL_AVAILABLE_PRODUCTS("show all available products of marnie"),
+    MARNIE_RANCH("purchase marnie (.+?)"),
+    CHEAT_COINS("cheat add (.+?) dollars"),
+    ;
+
+    private final String regex;
+
+    MarnieCommands(String regex) {
+        this.regex = regex;
+    }
+
+    @Override
+    public String getRegex() {
+        return regex;
+    }
+}
