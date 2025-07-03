@@ -7,6 +7,8 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.shop.PierreGeneralStore;
 import com.stardew_valley.models.shop.enums.*;
+import com.stardew_valley.models.shop.Blacksmith;
+import com.stardew_valley.models.shop.Shop;
 
 public class PierreGeneralStoreController extends ShopController {
     public PierreGeneralStoreController(Repository repo) {
@@ -16,6 +18,12 @@ public class PierreGeneralStoreController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getPierreGeneralStore();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -41,8 +49,6 @@ public class PierreGeneralStoreController extends ShopController {
                 return showAllAvailableProducts();
             case PIERRE_STORE:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

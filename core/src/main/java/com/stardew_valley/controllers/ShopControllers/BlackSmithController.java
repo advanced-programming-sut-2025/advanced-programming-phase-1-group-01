@@ -12,6 +12,7 @@ import com.stardew_valley.models.shop.enums.BlacksmithProducts;
 import com.stardew_valley.models.shop.enums.BlacksmithUpgrade;
 import com.stardew_valley.models.tool.*;
 import com.stardew_valley.models.tool.enums.*;
+import com.stardew_valley.models.shop.Shop;
 
 public class BlackSmithController extends ShopController {
 
@@ -22,6 +23,12 @@ public class BlackSmithController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getBlacksmith();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -49,8 +56,6 @@ public class BlackSmithController extends ShopController {
                 return purchase(command);
             case TOOLS_UPGRADE:
                 return toolUpgrade(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

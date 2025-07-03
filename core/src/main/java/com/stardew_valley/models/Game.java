@@ -14,6 +14,7 @@ import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.initializer.VillageInitializer;
 import com.stardew_valley.models.shop.*;
 import com.stardew_valley.models.weather.WeatherManager;
+import com.stardew_valley.models.shop.DelayedPaymentSystem;
 
 public class Game {
     public final static Position PLAYERS_STARTING_POSITION = new Position(67, 6);
@@ -26,6 +27,7 @@ public class Game {
     private NPCVillage npcVillage;
 //    private Maps currentMap;
     private int currentIndex = 1;
+    private DelayedPaymentSystem delayedPaymentSystem = new DelayedPaymentSystem();
 
     private final Blacksmith blacksmith = new Blacksmith(72,2);
     private final JojaMart jojaMart = new JojaMart(72,4);
@@ -199,5 +201,9 @@ public class Game {
         if (currentIndex == 0) {
             timeManager.getNow().advanceHour();
         }
+    }
+
+    public DelayedPaymentSystem getDelayedPaymentSystem() {
+        return delayedPaymentSystem;
     }
 }

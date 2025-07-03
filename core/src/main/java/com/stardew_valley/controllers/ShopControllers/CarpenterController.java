@@ -7,6 +7,9 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.CarpenterShop;
 import com.stardew_valley.models.shop.enums.CarpenterCommands;
 import com.stardew_valley.models.shop.enums.CarpenterShopProducts;
+import com.stardew_valley.models.shop.Shop;
+import com.stardew_valley.models.shop.enums.BlackSmithCommands;
+import com.stardew_valley.models.shop.enums.CarpenterShopBuildings;
 
 public class CarpenterController extends ShopController {
 
@@ -17,6 +20,12 @@ public class CarpenterController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getBlacksmith();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -42,8 +51,6 @@ public class CarpenterController extends ShopController {
                 return showAllAvailableProducts();
             case CARPENTER:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;

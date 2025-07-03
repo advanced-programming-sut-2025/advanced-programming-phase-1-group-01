@@ -6,6 +6,9 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.initializer.CreateShelter;
 import com.stardew_valley.models.farming.Plant;
+import com.stardew_valley.models.character.player.Inventory;
+import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.weather.Weather;
 
 
 import java.util.*;

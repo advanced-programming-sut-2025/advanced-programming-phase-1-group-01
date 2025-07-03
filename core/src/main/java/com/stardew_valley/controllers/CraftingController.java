@@ -54,8 +54,6 @@ public class CraftingController extends Controller {
                 return cheatAddRecipe(command);
             case PLACE_ITEM:
                 return placeItem(command);
-            case CHEAT_ADD_ITEM:
-                return cheatAddItem(command);
         }
         return null;
     }
@@ -199,27 +197,6 @@ public class CraftingController extends Controller {
         slot.removeQuantity(1);
 
         return new Result(true, item.getName() + " placed successfully at (" + directionPosition.x() + ", " + directionPosition.y() + ").");
-    }
-
-    private Result cheatAddItem(String command) {
-        String itemName = extractValue(command, "-n", "-c");
-        String itemCountStr = extractValue(command, "-c", null);
-        int itemCount = Integer.parseInt(itemCountStr);
-
-        Player player = repo.getCurrentUser().getPlayer();
-        Inventory inventory = player.getInventory();
-        Item item = inventory.getNewItem(itemName);
-
-        if (item == null) {
-            return new Result(false, "item not found");
-        }
-
-        if (!player.getInventory().hasCapacity()) {
-            return new Result(false, "inventory is full");
-        }
-
-        inventory.addItem(itemName, itemCount);
-        return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {

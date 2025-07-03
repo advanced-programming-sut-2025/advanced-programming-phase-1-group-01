@@ -7,6 +7,8 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.MarnieRanch;
 import com.stardew_valley.models.shop.enums.MarnieCommands;
 import com.stardew_valley.models.shop.enums.MarnieRanchProducts;
+import com.stardew_valley.models.shop.Shop;
+import com.stardew_valley.models.shop.Blacksmith;
 
 public class MarnieRanchController extends ShopController {
 
@@ -17,6 +19,12 @@ public class MarnieRanchController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Shop shop = repo.getCurrentGame().getMarnieRanch();
+
+        if (!isNear(player, shop)) {
+            return new Result(false, "you are not near the shop");
+        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
@@ -42,8 +50,6 @@ public class MarnieRanchController extends ShopController {
                 return showAllAvailableProducts();
             case MARNIE_RANCH:
                 return purchase(command);
-            case CHEAT_COINS:
-                return cheatCoins(command);
         }
 
         return null;
