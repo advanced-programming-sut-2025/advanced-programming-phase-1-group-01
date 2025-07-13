@@ -1,12 +1,12 @@
 package com.stardew_valley.models;
 
-public class AssetManager {
-    private static AssetManager assetManager;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-    public static AssetManager getAssetManager() {
-        if (assetManager == null) {
-            assetManager = new AssetManager();
-        }
-        return assetManager;
+public class AssetManager {
+    private final static Skin skin = new Skin(Gdx.files.internal("craftacular-skin.json"));
+
+    public static Skin getSkin() {
+        return skin;
     }
 }

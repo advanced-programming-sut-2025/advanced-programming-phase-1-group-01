@@ -11,13 +11,17 @@ import com.badlogic.gdx.utils.ScreenUtils;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     private static Main main;
-    private SpriteBatch batch;
+    private static SpriteBatch batch;
 
     public static Main getMain() {
         if (main == null) {
             main = new Main();
         }
         return main;
+    }
+
+    public static SpriteBatch getBatch() {
+        return batch;
     }
 
     @Override

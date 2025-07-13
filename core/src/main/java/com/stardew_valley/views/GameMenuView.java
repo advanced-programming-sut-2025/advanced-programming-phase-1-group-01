@@ -1,14 +1,25 @@
 package com.stardew_valley.views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.models.Result;
 
-public class GameMenu extends View {
+public class GameMenuView extends View {
+    private Stage stage;
+
     private final GameMenuController controller;
 
-    public GameMenu(GameMenuController controller, AppView appView) {
+    public GameMenuView(GameMenuController controller, AppView appView) {
         this.controller = controller;
         this.appView = appView;
+    }
+
+    @Override
+    public void show() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -27,5 +38,10 @@ public class GameMenu extends View {
                 }
             }
         }
+    }
+
+    @Override
+    public Stage getStage() {
+        return stage;
     }
 }
