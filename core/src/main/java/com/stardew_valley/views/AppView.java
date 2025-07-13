@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class AppView {
-
     private final Map<com.stardew_valley.models.enums.commands.View, View> views;
     private final Repository repo;
 
@@ -42,10 +41,10 @@ public class AppView {
     }
 
     private void initViews() {
-        views.put(com.stardew_valley.models.enums.commands.View.LOGIN_MENU, new LoginMenu(new LoginMenuController(repo), this));
-        views.put(com.stardew_valley.models.enums.commands.View.MAIN_MENU, new MainMenu(new MainMenuController(repo), this));
-        views.put(com.stardew_valley.models.enums.commands.View.PROFILE_MENU, new ProfileMenu(new ProfileMenuController(repo), this));
-        views.put(com.stardew_valley.models.enums.commands.View.GAME_MENU, new GameMenu(new GameMenuController(repo), this));
+        views.put(com.stardew_valley.models.enums.commands.View.LOGIN_MENU, new LoginMenuView(new LoginMenuController(repo), this));
+        views.put(com.stardew_valley.models.enums.commands.View.MAIN_MENU, new MainMenuView(new MainMenuController(repo), this));
+        views.put(com.stardew_valley.models.enums.commands.View.PROFILE_MENU, new ProfileMenuView(new ProfileMenuController(repo), this));
+        views.put(com.stardew_valley.models.enums.commands.View.GAME_MENU, new GameMenuView(new GameMenuController(repo), this));
         views.put(com.stardew_valley.models.enums.commands.View.GAME, new GameView(new GameController(repo), this));
     }
 }
