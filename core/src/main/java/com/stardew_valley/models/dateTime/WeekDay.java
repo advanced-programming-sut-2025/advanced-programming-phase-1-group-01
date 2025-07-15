@@ -1,0 +1,5 @@
+package com.stardew_valley.models.dateTime;
+
+public enum WeekDay {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
+}

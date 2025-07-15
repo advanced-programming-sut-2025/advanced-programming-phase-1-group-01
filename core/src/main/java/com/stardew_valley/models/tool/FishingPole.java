@@ -1,0 +1,38 @@
+package com.stardew_valley.models.tool;
+
+import com.stardew_valley.models.character.player.Inventory;
+import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.tool.enums.FishingPoleInfo;
+
+// related to fishing
+public class FishingPole extends Tool {
+    FishingPoleInfo info;
+
+    public FishingPole(Inventory inventory) {
+        super(inventory);
+        name = "fishing pole";
+        info = FishingPoleInfo.TRAINING;
+    }
+
+    @Override
+    public int getBaseEnergyCost() {
+        return info.getEnergyCost();
+    }
+
+    public FishingPoleInfo getInfo() {
+        return info;
+    }
+
+    @Override
+    public void use(Direction direction) {
+        // what tool does
+
+        double energyCost = getEffectiveEnergyCost();
+        inventory.getPlayer().getEnergy().consume(energyCost);
+    }
+
+    @Override
+    public void upgrade() {
+
+    }
+}

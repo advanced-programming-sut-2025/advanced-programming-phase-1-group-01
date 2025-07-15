@@ -1,0 +1,6 @@
+package com.stardew_valley.models.foraging;
+
+import com.stardew_valley.models.building.TileObject;
+
+public abstract class Foraging implements TileObject {
+}
