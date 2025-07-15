@@ -22,9 +22,9 @@ public class JojaMartController extends ShopController {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getFishShop();
 
-        if (!isNear(player, shop)) {
-            return new Result(false, "you are not near the shop");
-        }
+//        if (!isNear(player, shop)) {
+//            return new Result(false, "you are not near the shop");
+//        }
 
         if (!isShopOpen(hour)) {
             return new Result(false, "shop is closed");
