@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FarmInitializer {
+    private final static Position FARM_TP = new Position(0, 0);
+    private final static Position FARM_BR = new Position(225, 225);
     private final static int NUMBER_OF_TREES = 20; // 70
     private final static int NUMBER_OF_STONES = 40; // 120
     private final static int NUMBER_OF_FORAGING_CROPS = 20; // 80
     private final static int NUMBER_OF_FORAGING_MINERALS = 6; // 60
     private final static int NUMBER_OF_FORAGING_TREES = 15; // 50
     private final static int NUMBER_OF_FORAGING_SEEDS = 20;
-    private final static Position FARM_TP = new Position(0, 0);
-    private final static Position FARM_BR = new Position(75, 75);
     private final static Position GROUND_TP = new Position(0, 0);
     private final static Position GROUND_BR = new Position(75, 75);
     private final static Position RIVER_TP = new Position(29, 62);
@@ -44,23 +44,9 @@ public class FarmInitializer {
     private static Lake lake;
     private static Quarry quarry;
 
-    private static void initializeTiles(int additionalX, int additionalY) {
-        for (int i = FARM_TP.x(); i < FARM_BR.x(); i++) {
-            tiles.add(new ArrayList<>());
-        }
-
-        for (int i = GROUND_TP.x(); i < GROUND_BR.x(); i++) {
-            for (int j = GROUND_TP.y(); j < GROUND_BR.y(); j++) {
-                Tile tile = new Tile.Builder()
-                        .setPosition(new Position(i, j))
-                        .setType(TileType.GROUND)
-                        .setMovable(true)
-                        .setBuilding(null)
-                        .setObject(null)
-                        .build();
-                tiles.get(i).add(tile);
-            }
-        }
+    private static void initializeTiles() {
+        firstInitializer();
+        surroundWithFence();
 
         for (int j = MINE_TP.y(); j < MINE_BR.y() + additionalX; j++) {
             for (int i = MINE_TP.x(); i < MINE_BR.x() + additionalY; i++) {
@@ -302,6 +288,55 @@ public class FarmInitializer {
         tiles.get(72).get(13).setObject(ShopSymbol.STARDROP_SALOON);
     }
 
+    private static void firstInitializer() {
+        for (int i = FARM_TP.x(); i < FARM_BR.x(); i++) {
+            List<Tile> row = new ArrayList<>();
+            for (int j = FARM_TP.y(); j < FARM_BR.y(); j++) {
+                Tile tile = new Tile.Builder()
+                    .setPosition(new Position(i, j))
+                    .setType(TileType.GROUND)
+                    .setMovable(true)
+                    .build();
+                row.add(tile);
+            }
+            tiles.add(row);
+        }
+    }
+
+    private static void surroundWithFence() {
+        int height = tiles.size();
+        int width = tiles.get(0).size();
+
+        for (int x = 0; x < width; x++) {
+            tiles.get(0).set(x, new Tile.Builder()
+                .setPosition(new Position(0, x))
+                .setType(TileType.FENCE)
+                .setMovable(false)
+                .build());
+
+            tiles.get(height - 1).set(x, new Tile.Builder()
+                .setPosition(new Position(height - 1, x))
+                .setType(TileType.FENCE)
+                .setMovable(false)
+                .build());
+        }
+
+        for (int y = 0; y < height; y++) {
+            tiles.get(y).set(0, new Tile.Builder()
+                .setPosition(new Position(y, 0))
+                .setType(TileType.FENCE)
+                .setMovable(false)
+                .build());
+
+            tiles.get(y).set(width - 1, new Tile.Builder()
+                .setPosition(new Position(y, width - 1))
+                .setType(TileType.FENCE)
+                .setMovable(false)
+                .build());
+        }
+    }
+
+
 
     private static void initializeBuildings() {
         cottage = new Cottage(new Position(COTTAGE_TP.x(), COTTAGE_TP.y()));
@@ -324,8 +359,8 @@ public class FarmInitializer {
         return new Position(Random.rand(MINE_TP.x(), MINE_BR.x()), Random.rand(MINE_TP.y(), MINE_BR.y()));
     }
 
-    public static Farm initializeFarm(int x, int y) {
-        initializeTiles(x, y);
+    public static Farm initializeFarm() {
+        initializeTiles();
         initializeBuildings();
 
         return new Farm(tiles, lake, cottage, quarry, greenhouse);
