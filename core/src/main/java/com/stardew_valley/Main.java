@@ -1,16 +1,15 @@
 package com.stardew_valley;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.stardew_valley.controllers.LoginMenuController;
+import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.views.LoginMenuView;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     private static Main main;
+    private Repository repo;
     private static SpriteBatch batch;
 
     public static Main getMain() {
@@ -27,6 +26,9 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        repo = new Repository();
+        setScreen(new LoginMenuView(new LoginMenuController(repo)));
+
     }
 
     @Override
