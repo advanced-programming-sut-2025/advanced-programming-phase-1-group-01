@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetManager {
+
+    private final static Skin skin = new Skin(Gdx.files.internal("skin1/flat-earth-ui.json"));
+    //private final static Skin skin = new Skin(Gdx.files.internal("skin2/craftacular-ui.json"));
+
     private static AssetManager assetManager;
     public static final float SCALE = 4f;
 
@@ -113,9 +117,6 @@ public class AssetManager {
         }
         return assetManager;
     }
-
-
-    private final static Skin skin = new Skin(Gdx.files.internal("craftacular-skin.json"));
 
     public static Skin getSkin() {
         return skin;

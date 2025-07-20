@@ -793,10 +793,6 @@ public class Player extends Character {
         return unripeProducts;
     }
 
-    public int getNumOfCoin() {
-        return numOfCoins;
-    }
-
     public void addBuffDaysCounter() {
         buffDaysCounter++;
         if (buffDaysCounter >= 5) {
