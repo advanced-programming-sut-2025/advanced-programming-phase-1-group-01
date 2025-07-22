@@ -3,13 +3,15 @@ package com.stardew_valley.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetManager {
 
-    private final static Skin skin = new Skin(Gdx.files.internal("skin1/flat-earth-ui.json"));
-    //private final static Skin skin = new Skin(Gdx.files.internal("skin2/craftacular-ui.json"));
+    private final Skin skin = new Skin(Gdx.files.internal("skin/NzSkin.json"));
+//    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/pixthulhu-ui.json"));
+//    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/terra-mother-ui.json"));
 
     private static AssetManager assetManager;
     public static final float SCALE = 4f;
@@ -118,7 +120,7 @@ public class AssetManager {
         return assetManager;
     }
 
-    public static Skin getSkin() {
+    public Skin getSkin() {
         return skin;
     }
 }

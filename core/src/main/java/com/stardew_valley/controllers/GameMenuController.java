@@ -121,17 +121,17 @@ public class GameMenuController extends Controller {
 
         List<Player> players= repo.getCurrentGame().getPlayers();
         Player currentPlayer = players.get(index);
-        Farm farm1 = FarmInitializer.initializeFarm(0,0);
-        Farm farm2 = FarmInitializer.initializeFarm(3,3);
+//        Farm farm1 = FarmInitializer.initializeFarm(0,0); FIXME : phony
+//        Farm farm2 = FarmInitializer.initializeFarm(3,3); FIXME : phony
 
         if (mapNumber == 1) {
-            currentPlayer.setFarm(farm1);
-            currentPlayer.setCurrentMap(farm1);
+//            currentPlayer.setFarm(farm1); FIXME : phony
+//            currentPlayer.setCurrentMap(farm1); FIXME : phony
         }
 
         if (mapNumber == 2) {
-            currentPlayer.setFarm(farm2);
-            currentPlayer.setCurrentMap(farm2);
+//            currentPlayer.setFarm(farm2); FIXME : phony
+//            currentPlayer.setCurrentMap(farm2); FIXME : phony
         }
         index++;
 

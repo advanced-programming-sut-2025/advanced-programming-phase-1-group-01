@@ -48,8 +48,8 @@ public class FarmInitializer {
         firstInitializer();
         surroundWithFence();
 
-        for (int j = MINE_TP.y(); j < MINE_BR.y() + additionalX; j++) {
-            for (int i = MINE_TP.x(); i < MINE_BR.x() + additionalY; i++) {
+        for (int j = MINE_TP.y(); j < MINE_BR.y() /*+ additionalX FIXME : phony*/; j++) {
+            for (int i = MINE_TP.x(); i < MINE_BR.x() /*+ additionalY FIXME : phony*/; i++) {
                 Tile tile = new Tile.Builder()
                         .setPosition(new Position(i, j))
                         .setType(TileType.MINE)
@@ -218,7 +218,7 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = 0; i < NUMBER_OF_TREES - additionalX * 10; i++) {
+        for (int i = 0; i < NUMBER_OF_TREES /*- additionalX * 10 FIXME : phony*/; i++) {
             Tree tree = new Tree(new ForagingTree(ForagingTreeInfo.randomForagingTree()));
             tree.growFull();
             Position position = randomPosition();
@@ -239,7 +239,7 @@ public class FarmInitializer {
             } else i--;
         }
 
-        for (int i = 0; i < NUMBER_OF_STONES + additionalY * 10; i++) {
+        for (int i = 0; i < NUMBER_OF_STONES /*+ additionalY * 10 FIXME : phony*/; i++) {
             Stone stone = new Stone(StoneType.randomStone());
             Position position = randomPosition();
 
