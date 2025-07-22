@@ -129,7 +129,7 @@ public class Game {
 
     private void initializeGame(List<Player> players) {
         for (Player player : players) {
-            player.setFarm(FarmInitializer.initializeFarm(3, 5));
+//            player.setFarm(FarmInitializer.initializeFarm(3, 5)); FIXME : Phony
             player.setPosition(PLAYERS_STARTING_POSITION);
         }
         setNpcVillage(VillageInitializer.initializeVillage(players));

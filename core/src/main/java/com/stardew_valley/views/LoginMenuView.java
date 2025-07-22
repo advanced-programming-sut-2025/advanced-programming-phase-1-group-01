@@ -34,7 +34,7 @@ public class LoginMenuView extends View {
 
     public LoginMenuView(LoginMenuController controller) {
         this.controller = controller;
-        this.skin = AssetManager.getSkin();
+        this.skin = AssetManager.getAssetManager().getSkin();
 
         username = new TextField("", skin);
         password = new TextField("", skin);
