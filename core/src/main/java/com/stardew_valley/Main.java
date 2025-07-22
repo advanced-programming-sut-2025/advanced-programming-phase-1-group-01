@@ -33,7 +33,7 @@ public class Main extends Game {
         repo = new Repository();
         setScreen(new LoginMenuView(new LoginMenuController(repo)));
         //getMain().setScreen(new GameView(new GameController(new Repository())));
-
+        setScreen(new GameView(new GameController(repo)));
     }
 
     @Override
