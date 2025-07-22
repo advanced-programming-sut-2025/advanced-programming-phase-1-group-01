@@ -3,6 +3,7 @@ package com.stardew_valley.models;
 import java.util.List;
 
 import com.stardew_valley.models.animal.Animal;
+import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.building.Maps;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCVillage;
@@ -28,6 +29,7 @@ public class Game {
 //    private Maps currentMap;
     private int currentIndex = 1;
     private DelayedPaymentSystem delayedPaymentSystem = new DelayedPaymentSystem();
+    private final Farm farm;
 
     private final Blacksmith blacksmith = new Blacksmith(72,2);
     private final JojaMart jojaMart = new JojaMart(72,4);
@@ -48,6 +50,7 @@ public class Game {
         weatherManager = new WeatherManager(this);
         farmingManager = new FarmingManager(this);
         foragingManager = new ForagingManager(this);
+        farm = FarmInitializer.initializeFarm();
     }
 
 
@@ -205,5 +208,9 @@ public class Game {
 
     public DelayedPaymentSystem getDelayedPaymentSystem() {
         return delayedPaymentSystem;
+    }
+
+    public Farm getFarm() {
+        return farm;
     }
 }

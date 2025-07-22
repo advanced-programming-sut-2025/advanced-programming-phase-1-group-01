@@ -12,11 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
+import com.stardew_valley.controllers.FarmingController;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Result;
+import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.IncompleteMovement;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.initializer.FarmInitializer;
+
+import java.util.List;
 
 
 public class GameView extends ScreenAdapter implements InputProcessor {
@@ -26,6 +33,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Player player;
     private final Batch batch;
     private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
+    private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
+    private final TextureRegion house = AssetManager.getAssetManager().getHouse();
+    private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
+    private final TextureRegion lake = AssetManager.getAssetManager().getLake();
+    private final TextureRegion mine = AssetManager.getAssetManager().getMine();
+
     private final static int TILE_SIZE = 16;
 
 
@@ -59,6 +72,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        drawWorld();
         batch.begin();
 
     }
@@ -118,13 +132,53 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         return false;
     }
 
+    private void drawWorld() {
+        drawSpringBackgroundTile();
+
+        drawBuilding();
+
+        drawPlayer();
+
+        drawFence();
+    }
+
+    private void drawPlayer() {
+        batch.draw(player.getCurrentFrame(), player.getPosition().x(), player.getPosition().y());
+    }
+
+    private void drawBuilding () {
+        for (int i = 0; i < 4; i++) {
+            batch.draw(mine, getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            batch.draw(mine, getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            batch.draw(mine, getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            batch.draw(mine, getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
+        }
+    }
+
+    private void drawFence() {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        for (List<Tile> tileList : tiles) {
+            for (Tile tile : tileList) {
+                if (tile.getType() == TileType.FENCE) {
+                    int tileX = getTilePixel(tiles.indexOf(tileList));
+                    int tileY = getTilePixel(tileList.indexOf(tile));
+                    batch.draw(woodFence, tileX, tileY);
+                }
+            }
+        }
+    }
+
+    private int getTilePixel(int tileCol) {
+        return tileCol * TILE_SIZE;
+    }
+
 
     private void drawSpringBackgroundTile() {
         batch.draw(background, 0, 0);
     }
 
     public void updateGame(float delta) {
-
+        controller.getRepo().getCurrentGame().getCurrentPlayer().updateStateTime(delta);
     }
 
     public void handleMovement(float delta) {
@@ -139,12 +193,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             incompleteMovement = new IncompleteMovement(player.getPosition(), 1, 0);
+            player.setDirection(Direction.RIGHT);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             incompleteMovement = new IncompleteMovement(player.getPosition(), -1, 0);
+            player.setDirection(Direction.LEFT);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             incompleteMovement = new IncompleteMovement(player.getPosition(), 0, -1);
+            player.setDirection(Direction.UP);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             incompleteMovement = new IncompleteMovement(player.getPosition(), 0, 1);
+            player.setDirection(Direction.DOWN);
         }
     }
 }

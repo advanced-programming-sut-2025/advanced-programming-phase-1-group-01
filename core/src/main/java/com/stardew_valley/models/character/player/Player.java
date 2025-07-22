@@ -1,5 +1,6 @@
 package com.stardew_valley.models.character.player;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.stardew_valley.models.*;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalHouse;
@@ -49,6 +50,7 @@ public class Player extends Character {
     private int buffDaysCounter = 0;
     private boolean hasEnergyBuff = false;
     private final List<Integer> tommorrowMoney = new ArrayList<>();
+    private float stateTime = 0f;
 
 
     public Player(User user) {
@@ -294,6 +296,19 @@ public class Player extends Character {
             case "sheep" -> AnimalInfo.SHEEP;
             default -> null;
         };
+    }
+
+    public TextureRegion getCurrentFrame() {
+        switch (direction) {
+            case UP:
+                return AssetManager.getAssetManager().get_Alex_0_walking_up_animation().getKeyFrame(stateTime, true);
+            case DOWN:
+                return AssetManager.getAssetManager().get_Alex_0_walking_down_animation().getKeyFrame(stateTime, true);
+            case LEFT:
+                return AssetManager.getAssetManager().get_Alex_0_walking_left_animation().getKeyFrame(stateTime, true);
+            default:
+                return AssetManager.getAssetManager().get_Alex_0_walking_right_animation().getKeyFrame(stateTime, true);
+        }
     }
 
     public String buyAnimal(String animalType, String animalName) {
@@ -813,5 +828,9 @@ public class Player extends Character {
 
     public boolean hasEnergyBuff() {
         return hasEnergyBuff;
+    }
+
+    public void updateStateTime(float delta) {
+        stateTime += delta;
     }
 }
