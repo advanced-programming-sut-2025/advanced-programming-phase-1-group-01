@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class FileManager {
 
-    public static void saveToFile(String username, String password, String nickname, String email, String gender,String securityQuestion, String securityAnswer) {
+    public static void saveToFile(String username, String password, String nickname, String email, String gender,String securityQuestion, String securityAnswer, String avatarPath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("user.txt"))) {
             writer.write("Username: " + username + "\n");
             writer.write("Password: " + password + "\n");
@@ -20,6 +20,7 @@ public class FileManager {
             writer.write("Gender: " + gender + "\n");
             writer.write("securityQuestion: " + securityQuestion + "\n");
             writer.write("securityAnswer: " + securityAnswer + "\n");
+            writer.write("avatarPath: " + avatarPath + "\n");
         } catch (IOException e) {
             System.err.println("error " + e.getMessage());
         }
@@ -34,10 +35,9 @@ public class FileManager {
             String gender = reader.readLine().split(": ", 2)[1];
             String securityQuestion = reader.readLine().split(": ", 2)[1];
             String securityAnswer = reader.readLine().split(": ", 2)[1];
+            String path = reader.readLine().split(": ", 2)[1];
 
-            User user = new User(username, password, nickname, email, Gender.valueOf(gender));
-            user.setSecurityQuestion(SecurityQuestion.valueOf(securityQuestion));
-            user.setSecurityAnswer(securityAnswer);
+            User user = new User(username, password, nickname, email, Gender.MALE, SecurityQuestion.QUESTION1, securityAnswer, path);
             return user;
         } catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException e) {
             System.err.println("error" + e.getMessage());

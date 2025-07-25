@@ -1,13 +1,18 @@
 package com.stardew_valley.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.controllers.LoginMenuController;
+import com.stardew_valley.controllers.SignUpMenuController;
 import com.stardew_valley.models.AssetManager;
-import com.stardew_valley.models.enums.Gender;
-import com.stardew_valley.models.enums.SecurityQuestion;
+
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class LoginMenuView extends View {
     private Stage stage;
@@ -16,21 +21,14 @@ public class LoginMenuView extends View {
 
     private TextField username;
     private TextField password;
-    private TextField confirmPassword;
-    private TextField nickname;
-    private TextField email;
-    private SelectBox<Gender> gender;
-    private SelectBox<SecurityQuestion> securityQuestion;
-    private TextField answer;
-    private TextButton signupButton;
-    private TextButton loginButton;
-    private TextButton exitButton;
-    private TextButton randomPasswordButton;
-    private Label titleLabel;
-    private Label randomPasswordLabel;
+    private SelectBox<String> stayLogin;
+    private TextButton login;
+    private TextButton back;
+    private TextButton loadGame;
+    private TextButton forgetPassword;
     private Label messageLabel;
 
-    private final LoginMenuController controller;
+    private LoginMenuController controller;
 
     public LoginMenuView(LoginMenuController controller) {
         this.controller = controller;
@@ -38,22 +36,14 @@ public class LoginMenuView extends View {
 
         username = new TextField("", skin);
         password = new TextField("", skin);
+        password.setPasswordMode(true);
         password.setPasswordCharacter('*');
-        confirmPassword = new TextField("", skin);
-        confirmPassword.setPasswordCharacter('*');
-        nickname = new TextField("", skin);
-        email = new TextField("", skin);
-        gender = new SelectBox<>(skin);
-        gender.setItems(Gender.values());
-        securityQuestion = new SelectBox<>(skin);
-        securityQuestion.setItems(SecurityQuestion.values());
-        answer = new TextField("", skin);
-        signupButton = new TextButton("Sign Up", skin);
-        loginButton = new TextButton("Login", skin);
-        exitButton = new TextButton("Exit", skin);
-        randomPasswordButton = new TextButton("Random Password", skin);
-        titleLabel = new Label("Sign Up Menu", skin, "title");
-        randomPasswordLabel = new Label("", skin);
+        stayLogin = new SelectBox<>(skin);
+        stayLogin.setItems("Yes","No");
+        login = new TextButton("Login", skin);
+        back = new TextButton("Back", skin);
+        loadGame = new TextButton("Load Game", skin);
+        forgetPassword = new TextButton("Forget Password", skin);
         messageLabel = new Label("", skin);
     }
 
@@ -66,32 +56,17 @@ public class LoginMenuView extends View {
         table.setFillParent(true);
         table.center();
 
-        table.add(titleLabel).colspan(2).padBottom(50).row();
-
-        table.add("username: ").pad(10);
-        table.add(username).width(250).pad(15).row();
-        table.add("password: ").pad(10);
-        table.add(password).width(250).pad(15);
-        table.add(randomPasswordLabel).pad(15).row();
-        table.add("confirmPassword: ").pad(10);
-        table.add(confirmPassword).width(250).pad(15).row();
-        table.add("nickname: ").pad(10);
-        table.add(nickname).width(250).pad(15).row();
-        table.add("email: ").pad(10);
-        table.add(email).width(250).pad(15).row();
-        table.add("gender: ").pad(10);
-        table.add(gender).width(250).pad(15).row();
-        table.add("securityQuestion: ").pad(10);
-        table.add(securityQuestion).width(250).pad(15).row();
-        table.add("answer: ").pad(10);
-        table.add(answer).width(250).pad(15).row();
-
-        table.add(signupButton).width(230).pad(15);
-        table.add(loginButton).width(230).pad(15).row();
-        table.add(randomPasswordButton).width(230).pad(15);
-        table.add(exitButton).width(230).pad(15).row();
-        table.add(messageLabel).colspan(2).pad(15);
-
+        table.add("Username").pad(10);
+        table.add(username).width(250).pad(10).row();
+        table.add("Password").pad(10);
+        table.add(password).width(250).pad(10).row();
+        table.add("stayLogin").pad(10);
+        table.add(stayLogin).width(250).pad(10).row();
+        table.add(login).width(250).pad(10);
+        table.add(loadGame).width(250).pad(10).row();
+        table.add(forgetPassword).width(250).pad(10);
+        table.add(back).width(250).pad(10).row();
+        table.add(messageLabel).colspan(2).pad(10);
         stage.addActor(table);
 
         handleInput();
@@ -99,11 +74,42 @@ public class LoginMenuView extends View {
 
     @Override
     public void handleInput() {
+        login.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                List<String> data = new ArrayList();
+                data.add(username.getText());
+                data.add(password.getText());
+                data.add(stayLogin.getSelected());
+                controller.login(data,messageLabel);
+            }
+        });
 
+        forgetPassword.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //controller.forgetPassword(messageLabel);
+            }
+        });
+
+        back.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.back(messageLabel);
+            }
+        });
+
+        loadGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.loadGame(messageLabel);
+            }
+        });
     }
 
     @Override
     public Stage getStage() {
         return stage;
     }
+
 }
