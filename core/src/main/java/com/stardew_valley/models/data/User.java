@@ -20,15 +20,19 @@ public class User implements Serializable {
     private Gender gender;
     private SecurityQuestion securityQuestion;
     private String securityAnswer;
+    private String avatarPath;
     private int numOfPlayedGames;
     private int highestEarnedBalance;
 
-    public User(String username, String password, String nickname, String email, Gender gender) {
+    public User(String username, String password, String nickname, String email, Gender gender, SecurityQuestion securityQuestion, String securityAnswer, String avatarPath) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.avatarPath = avatarPath;
         player = new Player(this);
     }
 
@@ -119,5 +123,13 @@ public class User implements Serializable {
 
     public void setHighestEarnedBalance(int highestEarnedBalance) {
         this.highestEarnedBalance = highestEarnedBalance;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 }

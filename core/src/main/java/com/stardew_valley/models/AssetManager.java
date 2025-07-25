@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class AssetManager {
 
     private final Skin skin = new Skin(Gdx.files.internal("skin/NzSkin.json"));
-//    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/pixthulhu-ui.json"));
+//    private final Skin skin = new Skin(Gdx.files.internal("skin3/craftacular-ui.json"));
 //    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/terra-mother-ui.json"));
 
     private static AssetManager assetManager;
