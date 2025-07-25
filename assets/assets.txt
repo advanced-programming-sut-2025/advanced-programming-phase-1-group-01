@@ -1,4 +1,3 @@
-images/Wood_Fence.png
 images/a_alex/tile_0_0.png
 images/a_alex/tile_0_1.png
 images/a_alex/tile_0_10.png
@@ -474,6 +473,7 @@ images/map_1.png
 images/r_lake.png
 images/resized_mine.png
 images/tile_9_1_marked.png
+images/wood_fence.png
 libgdx.png
 skin/04B_30__.fnt
 skin/NzSkin.atlas
@@ -484,3 +484,9 @@ skin/impact(1).fnt
 skin/impact(3).fnt
 skin/mac's Extended Minecraft Bold Italic.fnt
 skin/mac's Minecraft(1).fnt
+skin_temp/font-export.fnt
+skin_temp/font-subtitle-export.fnt
+skin_temp/font-title-export.fnt
+skin_temp/pixthulhu-ui.atlas
+skin_temp/pixthulhu-ui.json
+skin_temp/pixthulhu-ui.png
