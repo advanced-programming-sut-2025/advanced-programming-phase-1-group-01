@@ -1,11 +1,3 @@
-avatars/avatar1.png
-avatars/avatar2.png
-avatars/avatar3.png
-avatars/avatar4.png
-avatars/avatar5.png
-avatars/avatar6.png
-avatars/avatar7.png
-avatars/avatar8.png
 images/Wood_Fence.png
 images/a_alex/tile_0_0.png
 images/a_alex/tile_0_1.png
@@ -492,9 +484,3 @@ skin/impact(1).fnt
 skin/impact(3).fnt
 skin/mac's Extended Minecraft Bold Italic.fnt
 skin/mac's Minecraft(1).fnt
-skin3/craftacular-ui.atlas
-skin3/craftacular-ui.json
-skin3/craftacular-ui.png
-skin3/font-bold-export.fnt
-skin3/font-export.fnt
-skin3/font-title-export.fnt
