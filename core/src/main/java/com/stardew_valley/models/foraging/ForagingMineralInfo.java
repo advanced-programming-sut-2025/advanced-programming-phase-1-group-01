@@ -54,25 +54,63 @@ public enum ForagingMineralInfo implements FarmingEnum {
 
     @Override
     public String toString() {
-        return switch (this) {
-            case QUARTZ -> "Quartz";
-            case EARTH_CRISTAL -> "Earth Cristal";
-            case FROZEN_TEAR -> "Frozen Tear";
-            case FIRE_QUARTZ -> "Fire Quartz";
-            case EMERALD -> "Emerald";
-            case AQUAMARINE -> "Aquamarine";
-            case RUBY -> "Ruby";
-            case AMETHYST -> "Amethyst";
-            case TOPAZ -> "Topaz";
-            case JADE -> "Jade";
-            case DIAMOND -> "Diamond";
-            case PRISMATIC_SHARD -> "Prismatic Shard";
-            case COPPER -> "Copper";
-            case IRON -> "Iron";
-            case GOLD -> "Gold";
-            case IRIDIUM -> "Iridium";
-            case COAL -> "Coal";
-        };
+//        return switch (this) {
+//            case QUARTZ -> "Quartz";
+//            case EARTH_CRISTAL -> "Earth Cristal";
+//            case FROZEN_TEAR -> "Frozen Tear";
+//            case FIRE_QUARTZ -> "Fire Quartz";
+//            case EMERALD -> "Emerald";
+//            case AQUAMARINE -> "Aquamarine";
+//            case RUBY -> "Ruby";
+//            case AMETHYST -> "Amethyst";
+//            case TOPAZ -> "Topaz";
+//            case JADE -> "Jade";
+//            case DIAMOND -> "Diamond";
+//            case PRISMATIC_SHARD -> "Prismatic Shard";
+//            case COPPER -> "Copper";
+//            case IRON -> "Iron";
+//            case GOLD -> "Gold";
+//            case IRIDIUM -> "Iridium";
+//            case COAL -> "Coal";
+//        };
+        switch (this) {
+            case QUARTZ:
+                return "Quartz";
+            case EARTH_CRISTAL:
+                return "Earth Cristal";
+            case FROZEN_TEAR:
+                return "Frozen Tear";
+            case FIRE_QUARTZ:
+                return "Fire Quartz";
+            case EMERALD:
+                return "Emerald";
+            case AQUAMARINE:
+                return "Aquamarine";
+            case RUBY:
+                return "Ruby";
+            case AMETHYST:
+                return "Amethyst";
+            case TOPAZ:
+                return "Topaz";
+            case JADE:
+                return "Jade";
+            case DIAMOND:
+                return "Diamond";
+            case PRISMATIC_SHARD:
+                return "Prismatic Shard";
+            case COPPER:
+                return "Copper";
+            case IRON:
+                return "Iron";
+            case GOLD:
+                return "Gold";
+            case IRIDIUM:
+                return "Iridium";
+            case COAL:
+                return "Coal";
+            default:
+                throw new IllegalStateException("Unexpected value: " + this);
+        }
     }
 
     public String getName() {

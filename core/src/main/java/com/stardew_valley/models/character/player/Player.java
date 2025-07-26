@@ -285,17 +285,39 @@ public class Player extends Character {
     }
 
     private AnimalInfo stringToAnimalInfo(String string) {
-        return switch (string) {
-            case "cow" -> AnimalInfo.COW;
-            case "dinosaur" -> AnimalInfo.DINOSAUR;
-            case "duck" -> AnimalInfo.DUCK;
-            case "goat" -> AnimalInfo.GOAT;
-            case "hen" -> AnimalInfo.HEN;
-            case "pig" -> AnimalInfo.PIG;
-            case "rabbit" -> AnimalInfo.RABBIT;
-            case "sheep" -> AnimalInfo.SHEEP;
-            default -> null;
-        };
+//        return switch (string) {
+//            case "cow" -> AnimalInfo.COW;
+//            case "dinosaur" -> AnimalInfo.DINOSAUR;
+//            case "duck" -> AnimalInfo.DUCK;
+//            case "goat" -> AnimalInfo.GOAT;
+//            case "hen" -> AnimalInfo.HEN;
+//            case "pig" -> AnimalInfo.PIG;
+//            case "rabbit" -> AnimalInfo.RABBIT;
+//            case "sheep" -> AnimalInfo.SHEEP;
+//            default -> null;
+//        };
+        if (string == null) return null;
+
+        switch (string) {
+            case "cow":
+                return AnimalInfo.COW;
+            case "dinosaur":
+                return AnimalInfo.DINOSAUR;
+            case "duck":
+                return AnimalInfo.DUCK;
+            case "goat":
+                return AnimalInfo.GOAT;
+            case "hen":
+                return AnimalInfo.HEN;
+            case "pig":
+                return AnimalInfo.PIG;
+            case "rabbit":
+                return AnimalInfo.RABBIT;
+            case "sheep":
+                return AnimalInfo.SHEEP;
+            default:
+                return null;
+        }
     }
 
     public TextureRegion getCurrentFrame() {

@@ -1,0 +1,8 @@
+Username: amir
+Password: Amir@#1385
+Nickname: phony
+Email: amirhossein.zb.a@gmail.com
+Gender: MALE
+securityQuestion: QUESTION1
+securityAnswer: meow
+avatarPath: avatars/avatar3.png

@@ -41,13 +41,25 @@ public enum Season {
     }
 
     public List<CropInfo> getMixedSeeds() {
-        return switch (this) {
-            case SPRING -> List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
-            case SUMMER -> List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
-            case FALL -> List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
-            case WINTER -> List.of(CropInfo.POWDERMELON);
-            case SPECIAL -> List.of();
-        };
+//        return switch (this) {
+//            case SPRING -> List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
+//            case SUMMER -> List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
+//            case FALL -> List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
+//            case WINTER -> List.of(CropInfo.POWDERMELON);
+//            case SPECIAL -> List.of();
+//        };
+        switch (this) {
+            case SPRING:
+                return List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
+            case SUMMER:
+                return List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
+            case FALL:
+                return List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
+            case WINTER:
+                return List.of(CropInfo.POWDERMELON);
+            default:
+                return List.of();
+        }
     }
 
     public CropInfo getRandomMixedSeed() {

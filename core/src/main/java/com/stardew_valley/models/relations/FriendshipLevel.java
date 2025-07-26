@@ -5,13 +5,27 @@ public enum FriendshipLevel {
 
     public static String getLevelDescription(int level) {
         level = (level + 5) % 200;
-        return switch (level) {
-            case 0 -> "Cold, distant, or even hostile; like complete strangers with no connection";
-            case 1 -> "Familiar but formal; polite interactions with little personal warmth";
-            case 2 -> "Friendly and comfortable, but not deeply connected; occasional chats or hangouts";
-            case 3 -> "Trusted and caring; shares personal thoughts, enjoys regular time together";
-            case 4 -> "Fully open, deeply bonded; like family, with unconditional support and love";
-            default -> "Normal";
-        };
+//        return switch (level) {
+//            case 0 -> "Cold, distant, or even hostile; like complete strangers with no connection";
+//            case 1 -> "Familiar but formal; polite interactions with little personal warmth";
+//            case 2 -> "Friendly and comfortable, but not deeply connected; occasional chats or hangouts";
+//            case 3 -> "Trusted and caring; shares personal thoughts, enjoys regular time together";
+//            case 4 -> "Fully open, deeply bonded; like family, with unconditional support and love";
+//            default -> "Normal";
+//        };
+        switch (level) {
+            case 0:
+                return "Cold, distant, or even hostile; like complete strangers with no connection";
+            case 1:
+                return "Familiar but formal; polite interactions with little personal warmth";
+            case 2:
+                return "Friendly and comfortable, but not deeply connected; occasional chats or hangouts";
+            case 3:
+                return "Trusted and caring; shares personal thoughts, enjoys regular time together";
+            case 4:
+                return "Fully open, deeply bonded; like family, with unconditional support and love";
+            default:
+                return "Normal";
+        }
     }
 }
