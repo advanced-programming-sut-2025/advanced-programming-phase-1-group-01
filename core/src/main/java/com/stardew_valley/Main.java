@@ -4,11 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.stardew_valley.controllers.LoginMenuController;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.views.AppView;
 import com.stardew_valley.views.LoginMenuView;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.views.GameView;
+import com.stardew_valley.views.TempLogin;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
@@ -31,9 +33,10 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         repo = new Repository();
-        setScreen(new LoginMenuView(new LoginMenuController(repo)));
-        //getMain().setScreen(new GameView(new GameController(new Repository())));
-        setScreen(new GameView(new GameController(repo)));
+
+        setScreen(new TempLogin(repo));
+//        setScreen(new LoginMenuView(new LoginMenuController(repo)));
+//        setScreen(new GameView(new GameController(repo)));
     }
 
     @Override
