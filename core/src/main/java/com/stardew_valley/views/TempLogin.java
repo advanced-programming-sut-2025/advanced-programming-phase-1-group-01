@@ -66,8 +66,8 @@ public class TempLogin extends View {
     }
 
     public void makeNewGame() {
-        User user = new User("KiaValliant", "Amirkiaghm1385", "Amirkia", "akghasemim@gmail.com", Gender.MALE);
-        Game game = new Game(List.of(user.getPlayer()));
-        repo.setCurrentGame(game);
+//        User user = new User("KiaValliant", "Amirkiaghm1385", "Amirkia", "akghasemim@gmail.com", Gender.MALE);
+//        Game game = new Game(List.of(user.getPlayer()));
+//        repo.setCurrentGame(game);
     }
 }

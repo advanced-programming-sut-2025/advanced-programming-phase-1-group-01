@@ -1,5 +1,8 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Timer;
+import com.stardew_valley.Main;
 import com.stardew_valley.Main;
 import com.stardew_valley.models.Game;
 import com.stardew_valley.models.Result;
@@ -11,6 +14,8 @@ import com.stardew_valley.models.enums.commands.GameMenuCommands;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.initializer.VillageInitializer;
 import com.stardew_valley.views.GameView;
+import com.stardew_valley.views.MainMenuView;
+import com.stardew_valley.views.SignUpMenuView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -182,5 +187,15 @@ public class GameMenuController extends Controller {
         }
 
         return null;
+    }
+
+    public void back(Label messageLabel) {
+        messageLabel.setText("Loading SignUp Menu...");
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                Main.getMain().setScreen(new MainMenuView(new MainMenuController(repo)));
+            }
+        }, 2);
     }
 }

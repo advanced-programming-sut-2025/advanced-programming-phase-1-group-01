@@ -1,8 +1,15 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Timer;
+import com.stardew_valley.Main;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.enums.commands.MainMenuCommands;
+import com.stardew_valley.views.GameMenuView;
+import com.stardew_valley.views.LoginMenuView;
+import com.stardew_valley.views.ProfileMenuView;
 
 public class MainMenuController extends Controller {
     public MainMenuController(Repository repo) {
@@ -36,6 +43,48 @@ public class MainMenuController extends Controller {
     private Result userLogout() {
         repo.setCurrentUser(null);
         return new Result(true, "You are logged out");
+    }
+
+
+    public void pregame(Label messageLabel) {
+        messageLabel.setText("Loading pregame...");
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                Main.getMain().setScreen(new GameMenuView(new GameMenuController(repo)));
+            }
+        }, 2);
+    }
+
+    public void profileMenu(Label messageLabel) {
+        messageLabel.setText("Loading Profile Menu...");
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                Main.getMain().setScreen(new ProfileMenuView(new ProfileMenuController(repo)));
+            }
+        }, 2);
+    }
+
+    public void logout(Label messageLabel) {
+        messageLabel.setText("logged out! Loading login menu...");
+        repo.setCurrentUser(null);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(repo)));
+            }
+        }, 2);
+    }
+
+    public void exit(Label messageLabel) {
+        messageLabel.setText("Bye!");
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                Gdx.app.exit();
+            }
+        }, 2);
     }
 
 }
