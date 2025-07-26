@@ -152,8 +152,7 @@ public class AssetManager {
         return spring_background_tex;
     }
 
-    //    crops:
-
+    // crops:
     private final Texture Blue_Jazz = new Texture("farming/crops/Blue_Jazz.png");
     private final Texture[] Blue_Jazz_Stages = new Texture[]{
         new Texture("farming/crops/Blue_Jazz_Stage_1.png"),
@@ -1607,28 +1606,36 @@ public class AssetManager {
     public Texture getAncientFruit() {
         return Ancient_Fruit;
     }
+
     public Texture getAncientFruitStage1() {
         return Ancient_Fruit_Stages[0];
     }
+
     public Texture getAncientFruitStage2() {
         return Ancient_Fruit_Stages[1];
     }
+
     public Texture getAncientFruitStage3() {
         return Ancient_Fruit_Stages[2];
     }
+
     public Texture getAncientFruitStage4() {
         return Ancient_Fruit_Stages[3];
     }
+
     public Texture getAncientFruitStage5() {
         return Ancient_Fruit_Stages[4];
     }
+
     public Texture getAncientFruitStage6() {
         return Ancient_Fruit_Stages[5];
     }
+
     public Texture getAncientFruitStage7() {
         return Ancient_Fruit_Stages[6];
     }
 
+    // trees:
     private final Texture Apricot = new Texture("farming/trees/Apricot.png");
     private final Texture ApricotSapling = new Texture("farming/trees/Apricot_Sapling.png");
     private final Texture ApricotStage1 = new Texture("farming/trees/Apricot_Stage_1.png");
@@ -2468,6 +2475,410 @@ public class AssetManager {
         return MysticTreeStump;
     }
 
+    // foraging crops:
+    private final Texture Daffodil = new Texture("farming/foraging/Daffodil.png");
+    private final Texture Dandelion = new Texture("farming/foraging/Dandelion.png");
+    private final Texture Leek = new Texture("farming/foraging/Leek.png");
+    private final Texture Morel = new Texture("farming/foraging/Morel.png");
+    private final Texture Salmonberry = new Texture("farming/foraging/Salmonberry.png");
+    private final Texture SpringOnion = new Texture("farming/foraging/Spring_Onion.png");
+    private final Texture WildHorseradish = new Texture("farming/foraging/Wild_Horseradish.png");
+    private final Texture FiddleheadFern = new Texture("farming/foraging/Fiddlehead_Fern.png");
+    private final Texture RedMushroom = new Texture("farming/foraging/Red_Mushroom.png");
+    private final Texture SpiceBerry = new Texture("farming/foraging/Spice_Berry.png");
+    private final Texture SweetPea = new Texture("farming/foraging/Sweet_Pea.png");
+    private final Texture Blackberry = new Texture("farming/foraging/Blackberry.png");
+    private final Texture Chanterelle = new Texture("farming/foraging/Chanterelle.png");
+    private final Texture Hazelnut = new Texture("farming/foraging/Hazelnut.png");
+    private final Texture PurpleMushroom = new Texture("farming/foraging/Purple_Mushroom.png");
+    private final Texture WildPlum = new Texture("farming/foraging/Wild_Plum.png");
+    private final Texture Crocus = new Texture("farming/foraging/Crocus.png");
+    private final Texture CrystalFruit = new Texture("farming/foraging/Crystal_Fruit.png");
+    private final Texture Holly = new Texture("farming/foraging/Holly.png");
+    private final Texture SnowYam = new Texture("farming/foraging/Snow_Yam.png");
+    private final Texture WinterRoot = new Texture("farming/foraging/Winter_Root.png");
+    // Common Mushroom and Grape have already been made
+
+    public Texture getDaffodil() {
+        return Daffodil;
+    }
+
+    public Texture getDandelion() {
+        return Dandelion;
+    }
+
+    public Texture getLeek() {
+        return Leek;
+    }
+
+    public Texture getMorel() {
+        return Morel;
+    }
+
+    public Texture getSalmonberry() {
+        return Salmonberry;
+    }
+
+    public Texture getSpringOnion() {
+        return SpringOnion;
+    }
+
+    public Texture getWildHorseradish() {
+        return WildHorseradish;
+    }
+
+    public Texture getFiddleheadFern() {
+        return FiddleheadFern;
+    }
+
+    public Texture getRedMushroom() {
+        return RedMushroom;
+    }
+
+    public Texture getSpiceBerry() {
+        return SpiceBerry;
+    }
+
+    public Texture getSweetPea() {
+        return SweetPea;
+    }
+
+    public Texture getBlackberry() {
+        return Blackberry;
+    }
+
+    public Texture getChanterelle() {
+        return Chanterelle;
+    }
+
+    public Texture getHazelnut() {
+        return Hazelnut;
+    }
+
+    public Texture getPurpleMushroom() {
+        return PurpleMushroom;
+    }
+
+    public Texture getWildPlum() {
+        return WildPlum;
+    }
+
+    public Texture getCrocus() {
+        return Crocus;
+    }
+
+    public Texture getCrystalFruit() {
+        return CrystalFruit;
+    }
+
+    public Texture getHolly() {
+        return Holly;
+    }
+
+    public Texture getSnowYam() {
+        return SnowYam;
+    }
+
+    public Texture getWinterRoot() {
+        return WinterRoot;
+    }
+
+    // foraging trees(including: Acorn, Maple Seed, Pine Cone, Mahogany Seed, Mushroom Tree Seed) have already been made
+
+    // foraging seeds:
+    private final Texture JazzSeeds = new Texture("farming/crops/Jazz_Seeds.png");
+    private final Texture CarrotSeeds = new Texture("farming/crops/Carrot_Seeds.png");
+    private final Texture CauliflowerSeeds = new Texture("farming/crops/Cauliflower_Seeds.png");
+    private final Texture CoffeeBean = new Texture("farming/crops/Coffee_Bean.png");
+    private final Texture GarlicSeeds = new Texture("farming/crops/Garlic_Seeds.png");
+    private final Texture BeanStarter = new Texture("farming/crops/Bean_Starter.png");
+    private final Texture KaleSeeds = new Texture("farming/crops/Kale_Seeds.png");
+    private final Texture ParsnipSeeds = new Texture("farming/crops/Parsnip_Seeds.png");
+    private final Texture PotatoSeeds = new Texture("farming/crops/Potato_Seeds.png");
+    private final Texture RhubarbSeeds = new Texture("farming/crops/Rhubarb_Seeds.png");
+    private final Texture StrawberrySeeds = new Texture("farming/crops/Strawberry_Seeds.png");
+    private final Texture TulipBulb = new Texture("farming/crops/Tulip_Bulb.png");
+    private final Texture RiceShoot = new Texture("farming/crops/Rice_Shoot.png");
+    private final Texture BlueberrySeeds = new Texture("farming/crops/Blueberry_Seeds.png");
+    private final Texture CornSeeds = new Texture("farming/crops/Corn_Seeds.png");
+    private final Texture HopsStarter = new Texture("farming/crops/Hops_Starter.png");
+    private final Texture PepperSeeds = new Texture("farming/crops/Pepper_Seeds.png");
+    private final Texture MelonSeeds = new Texture("farming/crops/Melon_Seeds.png");
+    private final Texture PoppySeeds = new Texture("farming/crops/Poppy_Seeds.png");
+    private final Texture RadishSeeds = new Texture("farming/crops/Radish_Seeds.png");
+    private final Texture RedCabbageSeeds = new Texture("farming/crops/Red_Cabbage_Seeds.png");
+    private final Texture StarfruitSeeds = new Texture("farming/crops/Starfruit_Seeds.png");
+    private final Texture SpangleSeeds = new Texture("farming/crops/Spangle_Seeds.png");
+    private final Texture SummerSquashSeeds = new Texture("farming/crops/Summer_Squash_Seeds.png");
+    private final Texture SunflowerSeeds = new Texture("farming/crops/Sunflower_Seeds.png");
+    private final Texture TomatoSeeds = new Texture("farming/crops/Tomato_Seeds.png");
+    private final Texture WheatSeeds = new Texture("farming/crops/Wheat_Seeds.png");
+    private final Texture AmaranthSeeds = new Texture("farming/crops/Amaranth_Seeds.png");
+    private final Texture ArtichokeSeeds = new Texture("farming/crops/Artichoke_Seeds.png");
+    private final Texture BeetSeeds = new Texture("farming/crops/Beet_Seeds.png");
+    private final Texture BokChoySeeds = new Texture("farming/crops/Bok_Choy_Seeds.png");
+    private final Texture BroccoliSeeds = new Texture("farming/crops/Broccoli_Seeds.png");
+    private final Texture CranberrySeeds = new Texture("farming/crops/Cranberry_Seeds.png");
+    private final Texture EggplantSeeds = new Texture("farming/crops/Eggplant_Seeds.png");
+    private final Texture FairySeeds = new Texture("farming/crops/Fairy_Seeds.png");
+    private final Texture GrapeStarter = new Texture("farming/crops/Grape_Starter.png");
+    private final Texture PumpkinSeeds = new Texture("farming/crops/Pumpkin_Seeds.png");
+    private final Texture YamSeeds = new Texture("farming/crops/Yam_Seeds.png");
+    private final Texture RareSeed = new Texture("farming/crops/Rare_Seed.png");
+    private final Texture PowdermelonSeeds = new Texture("farming/crops/Powdermelon_Seeds.png");
+    private final Texture AncientSeeds = new Texture("farming/crops/Ancient_Seeds.png");
+    private final Texture MixedSeeds = new Texture("farming/crops/Mixed_Seeds.png");
+
+    public Texture getJazzSeeds() {
+        return JazzSeeds;
+    }
+
+    public Texture getCarrotSeeds() {
+        return CarrotSeeds;
+    }
+
+    public Texture getCauliflowerSeeds() {
+        return CauliflowerSeeds;
+    }
+
+    public Texture getGarlicSeeds() {
+        return GarlicSeeds;
+    }
+
+    public Texture getBeanStarter() {
+        return BeanStarter;
+    }
+
+    public Texture getKaleSeeds() {
+        return KaleSeeds;
+    }
+
+    public Texture getParsnipSeeds() {
+        return ParsnipSeeds;
+    }
+
+    public Texture getPotatoSeeds() {
+        return PotatoSeeds;
+    }
+
+    public Texture getRhubarbSeeds() {
+        return RhubarbSeeds;
+    }
+
+    public Texture getStrawberrySeeds() {
+        return StrawberrySeeds;
+    }
+
+    public Texture getTulipBulb() {
+        return TulipBulb;
+    }
+
+    public Texture getRiceShoot() {
+        return RiceShoot;
+    }
+
+    public Texture getBlueberrySeeds() {
+        return BlueberrySeeds;
+    }
+
+    public Texture getCornSeeds() {
+        return CornSeeds;
+    }
+
+    public Texture getHopsStarter() {
+        return HopsStarter;
+    }
+
+    public Texture getPepperSeeds() {
+        return PepperSeeds;
+    }
+
+    public Texture getMelonSeeds() {
+        return MelonSeeds;
+    }
+
+    public Texture getPoppySeeds() {
+        return PoppySeeds;
+    }
+
+    public Texture getRadishSeeds() {
+        return RadishSeeds;
+    }
+
+    public Texture getRedCabbageSeeds() {
+        return RedCabbageSeeds;
+    }
+
+    public Texture getStarfruitSeeds() {
+        return StarfruitSeeds;
+    }
+
+    public Texture getSpangleSeeds() {
+        return SpangleSeeds;
+    }
+
+    public Texture getSummerSquashSeeds() {
+        return SummerSquashSeeds;
+    }
+
+    public Texture getSunflowerSeeds() {
+        return SunflowerSeeds;
+    }
+
+    public Texture getTomatoSeeds() {
+        return TomatoSeeds;
+    }
+
+    public Texture getWheatSeeds() {
+        return WheatSeeds;
+    }
+
+    public Texture getAmaranthSeeds() {
+        return AmaranthSeeds;
+    }
+
+    public Texture getArtichokeSeeds() {
+        return ArtichokeSeeds;
+    }
+
+    public Texture getBeetSeeds() {
+        return BeetSeeds;
+    }
+
+    public Texture getBokChoySeeds() {
+        return BokChoySeeds;
+    }
+
+    public Texture getBroccoliSeeds() {
+        return BroccoliSeeds;
+    }
+
+    public Texture getCranberrySeeds() {
+        return CranberrySeeds;
+    }
+
+    public Texture getEggplantSeeds() {
+        return EggplantSeeds;
+    }
+
+    public Texture getFairySeeds() {
+        return FairySeeds;
+    }
+
+    public Texture getGrapeStarter() {
+        return GrapeStarter;
+    }
+
+    public Texture getPumpkinSeeds() {
+        return PumpkinSeeds;
+    }
+
+    public Texture getYamSeeds() {
+        return YamSeeds;
+    }
+
+    public Texture getRareSeed() {
+        return RareSeed;
+    }
+
+    public Texture getPowdermelonSeeds() {
+        return PowdermelonSeeds;
+    }
+
+    public Texture getAncientSeeds() {
+        return AncientSeeds;
+    }
+
+    public Texture getMixedSeeds() {
+        return MixedSeeds;
+    }
+
+    // foraging minerals:
+    private final Texture Quartz = new Texture("mineral/Quartz.png");
+    private final Texture EarthCrystal = new Texture("mineral/Earth_Crystal.png");
+    private final Texture FrozenTear = new Texture("mineral/Frozen_Tear.png");
+    private final Texture FireQuartz = new Texture("mineral/Fire_Quartz.png");
+    private final Texture Emerald = new Texture("mineral/Emerald.png");
+    private final Texture Aquamarine = new Texture("mineral/Aquamarine.png");
+    private final Texture Ruby = new Texture("mineral/Ruby.png");
+    private final Texture Amethyst = new Texture("mineral/Amethyst.png");
+    private final Texture Topaz = new Texture("mineral/Topaz.png");
+    private final Texture Jade = new Texture("mineral/Jade.png");
+    private final Texture Diamond = new Texture("mineral/Diamond.png");
+    private final Texture PrismaticShard = new Texture("mineral/Prismatic_Shard.png");
+    private final Texture Copper = new Texture("mineral/Copper.png");
+    private final Texture Iron = new Texture("mineral/Iron.png");
+    private final Texture Gold = new Texture("mineral/Gold.png");
+    private final Texture Iridium = new Texture("mineral/Iridium.png");
+    private final Texture Coal = new Texture("mineral/Coal.png");
+
+    public Texture getQuartz() {
+        return Quartz;
+    }
+
+    public Texture getEarthCrystal() {
+        return EarthCrystal;
+    }
+
+    public Texture getFrozenTear() {
+        return FrozenTear;
+    }
+
+    public Texture getFireQuartz() {
+        return FireQuartz;
+    }
+
+    public Texture getEmerald() {
+        return Emerald;
+    }
+
+    public Texture getAquamarine() {
+        return Aquamarine;
+    }
+
+    public Texture getRuby() {
+        return Ruby;
+    }
+
+    public Texture getAmethyst() {
+        return Amethyst;
+    }
+
+    public Texture getTopaz() {
+        return Topaz;
+    }
+
+    public Texture getJade() {
+        return Jade;
+    }
+
+    public Texture getDiamond() {
+        return Diamond;
+    }
+
+    public Texture getPrismaticShard() {
+        return PrismaticShard;
+    }
+
+    public Texture getCopper() {
+        return Copper;
+    }
+
+    public Texture getIron() {
+        return Iron;
+    }
+
+    public Texture getGold() {
+        return Gold;
+    }
+
+    public Texture getIridium() {
+        return Iridium;
+    }
+
+    public Texture getCoal() {
+        return Coal;
+    }
 
     public static AssetManager getAssetManager() {
         if (assetManager == null) {

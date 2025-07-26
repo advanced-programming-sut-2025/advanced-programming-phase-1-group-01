@@ -1,0 +1,40 @@
+private final Texture MysticTree = new Texture("farming/trees/MysticTree.png");
+    private final Texture MysticTreeSeed = new Texture("farming/trees/MysticTree_Seed.png");
+    private final Texture MysticTreeStage1 = new Texture("farming/trees/MysticTree_Stage_1.png");
+    private final Texture MysticTreeStage2 = new Texture("farming/trees/MysticTree_Stage_2.png");
+    private final Texture MysticTreeStage3 = new Texture("farming/trees/MysticTree_Stage_3.png");
+    private final Texture MysticTreeStage4 = new Texture("farming/trees/MysticTree_Stage_4.png");
+    private final Texture MysticTreeStage5 = new Texture("farming/trees/MysticTree_Stage_5.png");
+    private final Texture MysticTreeStump = new Texture("farming/trees/MysticTree_stump.png");
+
+    public Texture getMysticTree() {
+        return MysticTree;
+    }
+
+    public Texture getMysticTreeSeed() {
+        return MysticTreeSeed;
+    }
+
+    public Texture getMysticTreeStage1() {
+        return MysticTreeStage1;
+    }
+
+    public Texture getMysticTreeStage2() {
+        return MysticTreeStage2;
+    }
+
+    public Texture getMysticTreeStage3() {
+        return MysticTreeStage3;
+    }
+
+    public Texture getMysticTreeStage4() {
+        return MysticTreeStage4;
+    }
+
+    public Texture getMysticTreeStage5() {
+        return MysticTreeStage5;
+    }
+
+    public Texture getMysticTreeStump() {
+        return MysticTreeStump;
+    }

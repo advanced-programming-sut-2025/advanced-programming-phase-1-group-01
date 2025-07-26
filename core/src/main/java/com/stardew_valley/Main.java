@@ -15,7 +15,6 @@ import com.stardew_valley.views.TempLogin;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     private static Main main;
-    private Repository repo;
     private static SpriteBatch batch;
 
     public static Main getMain() {
@@ -32,11 +31,10 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        repo = new Repository();
 
-        setScreen(new TempLogin(repo));
-//        setScreen(new LoginMenuView(new LoginMenuController(repo)));
-//        setScreen(new GameView(new GameController(repo)));
+//        setScreen(new TempLogin(new Repository()));
+        setScreen(new LoginMenuView(new LoginMenuController(new Repository())));
+//        setScreen(new GameView(new GameController(new Repository())));
     }
 
     @Override
