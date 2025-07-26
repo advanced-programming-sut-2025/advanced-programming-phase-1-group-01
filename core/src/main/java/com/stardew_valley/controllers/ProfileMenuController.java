@@ -1,9 +1,13 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Timer;
+import com.stardew_valley.Main;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.commands.ProfileMenuCommands;
+import com.stardew_valley.views.MainMenuView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,95 +32,86 @@ public class ProfileMenuController extends Controller {
             return new Result(false, "invalid command!");
         }
 
-        return switch (matchedCommand) {
-            case MENU_ENTER -> new Result(false, "You cannot navigate to other menus from here");
-            case MENU_EXIT -> new Result(true, "now you are in main menu");
-            case SHOW_CURRENT_MENU -> new Result(true, "now you are in profile menu");
-            case CHANGE_USERNAME -> changeUsername(command);
-            case CHANGE_NICKNAME -> changeNickname(command);
-            case CHANGE_EMAIL -> changeEmail(command);
-            case CHANGE_PASSWORD -> changePassword(command);
-            case USER_INFO -> showUserInfo();
-        };
+//        return switch (matchedCommand) {
+//            case MENU_ENTER -> new Result(false, "You cannot navigate to other menus from here");
+//            case MENU_EXIT -> new Result(true, "now you are in main menu");
+//            case SHOW_CURRENT_MENU -> new Result(true, "now you are in profile menu");
+//            case CHANGE_USERNAME -> changeUsername(command);
+//            case CHANGE_NICKNAME -> changeNickname(command);
+//            case CHANGE_EMAIL -> changeEmail(command);
+//            case CHANGE_PASSWORD -> changePassword(command);
+//            case USER_INFO -> changeEmail(command);
+//        };
+        return null;
     }
 
-    private Result changeUsername(String command) {
-        String username = extractValue(command,"-u",null);
+    public String changeUsername(String newUsername) {
         User user = repo.getCurrentUser();
 
-        if (user.getUsername().equals(username)) {
-            return new Result(false, "Please enter a new username");
+        if (user.getUsername().equals(newUsername)) {
+            return "Please enter a new username";
         }
 
-        if (repo.getUserByUsername(username) != null) {
-            return new Result(false, "This username is already taken");
+        if (repo.getUserByUsername(newUsername) != null) {
+            return "This username is already taken";
         }
 
-        if (!isUsernameValid(username)) {
-            return new Result(false, "new username format is invalid");
+        if (!isUsernameValid(newUsername)) {
+            return "New username format is invalid";
         }
 
-        user.setUsername(username);
-        return new Result(true, "your username changed to " + username + " successfully");
-
+        user.setUsername(newUsername);
+        return "Your username changed to " + newUsername + " successfully";
     }
 
     private boolean isUsernameValid(String username) {
         return username.matches("^[a-zA-Z0-9\\-]+$");
     }
 
-    private Result changeNickname(String command) {
-        String nickname = extractValue(command,"-n",null);
+    public String changeNickname(String newNickname) {
         User user = repo.getCurrentUser();
 
-        if (user.getNickname().equals(nickname)) {
-            return new Result(false, "Please enter a new nickname");
+        if (user.getNickname().equals(newNickname)) {
+            return "Please enter a new nickname";
         }
 
-        user.setNickname(nickname);
-        return new Result(true, "your nickname changed to " + nickname + " successfully");
+        user.setNickname(newNickname);
+        return "Your nickname changed to " + newNickname + " successfully";
     }
 
-    private Result changeEmail(String command) {
-        String email = extractValue(command,"-e",null);
+    public String changeEmail(String newEmail) {
         User user = repo.getCurrentUser();
 
-        if (user.getEmail().equals(email)) {
-            return new Result(false, "Please enter a new email");
+        if (user.getEmail().equals(newEmail)) {
+            return "Please enter a new email";
         }
 
-        if (!isEmailValid(email)) {
-            return new Result(false, "email format is invalid");
+        if (!isEmailValid(newEmail)) {
+            return "Email format is invalid";
         }
 
-        user.setEmail(email);
-        return new Result(true, "your email changed to " + email + " successfully");
+        user.setEmail(newEmail);
+        return "Your email changed to " + newEmail + " successfully";
     }
 
     private boolean isEmailValid(String email) {
         return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+$");
     }
 
-    private Result changePassword(String command) {
-        String newPassword = extractValue(command,"-p","-o");
-        String oldPassword = extractValue(command,"-o",null);
-
+    public String changePassword(String newPassword) {
         User user = repo.getCurrentUser();
 
-        if (!user.getPassword().equals(oldPassword)) {
-            return new Result(false, "Password is incorrect");
+        if (user.getPassword().equals(newPassword)) {
+            return "Please enter a new password different from the old one";
         }
 
-        if (oldPassword.equals(newPassword)) {
-            return new Result(false, "please enter a new password");
-        }
-
-        if (isPasswordValid(newPassword) != null) {
-            return new Result(false, isPasswordValid(newPassword));
+        String validationError = isPasswordValid(newPassword);
+        if (validationError != null) {
+            return validationError;
         }
 
         user.setPassword(newPassword);
-        return new Result(true, "your password changed to " + newPassword + " successfully");
+        return "Your password changed successfully";
     }
 
     private String isPasswordValid(String password) {
@@ -138,34 +133,13 @@ public class ProfileMenuController extends Controller {
         return null;
     }
 
-    private Result showUserInfo() {
-        User user = repo.getCurrentUser();
-        String info = "username : " + user.getUsername() + "\n" +
-                "nickname : " + user.getNickname() + "\n" +
-                "highest amount of money : " + user.getHighestEarnedBalance() + "\n" +
-                "number of played games : " + user.getNumOfPlayedGames();
-
-        return new Result(true,info);
-    }
-
-    private String extractValue(String command, String startFlag, String endFlag) {
-        String patternString;
-
-        if (endFlag != null) {
-            patternString = startFlag + " (.*?) " + endFlag;
-        }
-
-        else {
-            patternString = startFlag + " (.*)";
-        }
-
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(command);
-
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-
-        return null;
+    public void back(Label messageLabel) {
+        messageLabel.setText("Back! Loading main menu...");
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                Main.getMain().setScreen(new MainMenuView(new MainMenuController(repo)));
+            }
+        }, 2);
     }
 }

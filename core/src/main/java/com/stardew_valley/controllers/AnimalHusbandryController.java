@@ -52,7 +52,7 @@ public class AnimalHusbandryController extends Controller {
     private Result handleBuildShelter(String commandLine) {
         Pattern pattern = Pattern.compile(AnimalHusbandryCommands.BUILD.getRegex());
         Matcher matcher = pattern.matcher(commandLine);
-        Player player = repo.getTempUser().getPlayer();
+        Player player = repo.getCurrentUser().getPlayer();
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");

@@ -11,17 +11,14 @@ import java.util.Map;
 public class Repository {
     private List<Game> games;
     private User currentUser;
-    private User tempUser;
     private View currentView;
     private Game currentGame;
     private static Map<String, User> users;
-    private FileManager fileManager;
 
     public Repository() {
         games = new ArrayList<>();
         users = new HashMap<>();
         currentView = View.LOGIN_MENU;
-        fileManager = new FileManager();
     }
 
     public User getCurrentUser() {
@@ -67,14 +64,5 @@ public class Repository {
     public void addGame(Game game) {
         games.add(game);
     }
-
-    public User getTempUser() {
-        return tempUser;
-    }
-
-    public void setTempUser(User tempUser) {
-        this.tempUser = tempUser;
-    }
-
 
 }
