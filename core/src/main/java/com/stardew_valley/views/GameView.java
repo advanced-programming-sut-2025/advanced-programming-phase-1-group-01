@@ -196,10 +196,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             float heightOffset = (float)(80 * Math.sin(Math.PI * faintTime / totalFaintDuration));
             float rotation = 90f * (faintTime / totalFaintDuration);
 
-            if (faintSprite == null) {
-                faintingSprite = new Sprite(player.getCurrentFrame());
-                faintingSprite.setOriginCenter();
-            }
+//            if (faintSprite == null) {
+//                faintingSprite = new Sprite(player.getCurrentFrame());
+//                faintingSprite.setOriginCenter();
+//            }
 
             faintingSprite.setPosition(vectorPosition.x, vectorPosition.y + heightOffset);
             faintingSprite.setRotation(rotation);

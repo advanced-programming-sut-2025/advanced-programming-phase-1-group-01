@@ -1119,6 +1119,8 @@ images/a_alex/tile_9_7.png
 images/a_alex/tile_9_8.png
 images/a_alex/tile_9_9.png
 images/all_dirt.png
+images/arrow.png
+images/clock.png
 images/house.png
 images/lake.png
 images/map_1.png
