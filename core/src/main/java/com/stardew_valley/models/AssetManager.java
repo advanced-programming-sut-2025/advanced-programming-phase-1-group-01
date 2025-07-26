@@ -1629,6 +1629,844 @@ public class AssetManager {
         return Ancient_Fruit_Stages[6];
     }
 
+    private final Texture Apricot = new Texture("farming/trees/Apricot.png");
+    private final Texture ApricotSapling = new Texture("farming/trees/Apricot_Sapling.png");
+    private final Texture ApricotStage1 = new Texture("farming/trees/Apricot_Stage_1.png");
+    private final Texture ApricotStage2 = new Texture("farming/trees/Apricot_Stage_2.png");
+    private final Texture ApricotStage3 = new Texture("farming/trees/Apricot_Stage_3.png");
+    private final Texture ApricotStage4 = new Texture("farming/trees/Apricot_Stage_4.png");
+    private final Texture ApricotStage5Spring = new Texture("farming/trees/Apricot_Stage_5_Spring.png");
+    private final Texture ApricotStage5Summer = new Texture("farming/trees/Apricot_Stage_5_Summer.png");
+    private final Texture ApricotStage5Fall = new Texture("farming/trees/Apricot_Stage_5_Fall.png");
+    private final Texture ApricotStage5Winter = new Texture("farming/trees/Apricot_Stage_5_Winter.png");
+    private final Texture ApricotStage5Fruit = new Texture("farming/trees/Apricot_Stage_5_Fruit.png");
+    private final Texture ApricotTreeLightning = new Texture("farming/trees/ApricotTreeLightning.png");
+
+    public Texture getApricot() {
+        return Apricot;
+    }
+
+    public Texture getApricotSapling() {
+        return ApricotSapling;
+    }
+
+    public Texture getApricotStage1() {
+        return ApricotStage1;
+    }
+
+    public Texture getApricotStage2() {
+        return ApricotStage2;
+    }
+
+    public Texture getApricotStage3() {
+        return ApricotStage3;
+    }
+
+    public Texture getApricotStage4() {
+        return ApricotStage4;
+    }
+
+    public Texture getApricotStage5Spring() {
+        return ApricotStage5Spring;
+    }
+
+    public Texture getApricotStage5Summer() {
+        return ApricotStage5Summer;
+    }
+
+    public Texture getApricotStage5Fall() {
+        return ApricotStage5Fall;
+    }
+
+    public Texture getApricotStage5Winter() {
+        return ApricotStage5Winter;
+    }
+
+    public Texture getApricotStage5Fruit() {
+        return ApricotStage5Fruit;
+    }
+
+    public Texture getApricotTreeLightning() {
+        return ApricotTreeLightning;
+    }
+
+    private final Texture Banana = new Texture("farming/trees/Banana.png");
+    private final Texture BananaSapling = new Texture("farming/trees/Banana_Sapling.png");
+    private final Texture BananaPudding = new Texture("farming/trees/Banana_Pudding.png");
+    private final Texture BananaStage1 = new Texture("farming/trees/Banana_Stage_1.png");
+    private final Texture BananaStage2 = new Texture("farming/trees/Banana_Stage_2.png");
+    private final Texture BananaStage3 = new Texture("farming/trees/Banana_Stage_3.png");
+    private final Texture BananaStage4 = new Texture("farming/trees/Banana_Stage_4.png");
+    private final Texture BananaStage5Spring = new Texture("farming/trees/Banana_Stage_5_Spring.png");
+    private final Texture BananaStage5Summer = new Texture("farming/trees/Banana_Stage_5_Summer.png");
+    private final Texture BananaStage5Fall = new Texture("farming/trees/Banana_Stage_5_Fall.png");
+    private final Texture BananaStage5Winter = new Texture("farming/trees/Banana_Stage_5_Winter.png");
+    private final Texture BananaStage5Fruit = new Texture("farming/trees/Banana_Stage_5_Fruit.png");
+    private final Texture BananaTreeLightning = new Texture("farming/trees/BananaTreeLightning.png");
+
+    public Texture getBanana() {
+        return Banana;
+    }
+
+    public Texture getBananaSapling() {
+        return BananaSapling;
+    }
+
+    public Texture getBananaPudding() {
+        return BananaPudding;
+    }
+
+    public Texture getBananaStage1() {
+        return BananaStage1;
+    }
+
+    public Texture getBananaStage2() {
+        return BananaStage2;
+    }
+
+    public Texture getBananaStage3() {
+        return BananaStage3;
+    }
+
+    public Texture getBananaStage4() {
+        return BananaStage4;
+    }
+
+    public Texture getBananaStage5Spring() {
+        return BananaStage5Spring;
+    }
+
+    public Texture getBananaStage5Summer() {
+        return BananaStage5Summer;
+    }
+
+    public Texture getBananaStage5Fall() {
+        return BananaStage5Fall;
+    }
+
+    public Texture getBananaStage5Winter() {
+        return BananaStage5Winter;
+    }
+
+    public Texture getBananaStage5Fruit() {
+        return BananaStage5Fruit;
+    }
+
+    public Texture getBananaTreeLightning() {
+        return BananaTreeLightning;
+    }
+
+    private final Texture Cherry = new Texture("farming/trees/Cherry.png");
+    private final Texture CherrySapling = new Texture("farming/trees/Cherry_Sapling.png");
+    private final Texture CherryStage1 = new Texture("farming/trees/Cherry_Stage_1.png");
+    private final Texture CherryStage2 = new Texture("farming/trees/Cherry_Stage_2.png");
+    private final Texture CherryStage3 = new Texture("farming/trees/Cherry_Stage_3.png");
+    private final Texture CherryStage4 = new Texture("farming/trees/Cherry_Stage_4.png");
+    private final Texture CherryStage5Spring = new Texture("farming/trees/Cherry_Stage_5_Spring.png");
+    private final Texture CherryStage5Summer = new Texture("farming/trees/Cherry_Stage_5_Summer.png");
+    private final Texture CherryStage5Fall = new Texture("farming/trees/Cherry_Stage_5_Fall.png");
+    private final Texture CherryStage5Winter = new Texture("farming/trees/Cherry_Stage_5_Winter.png");
+    private final Texture CherryStage5Fruit = new Texture("farming/trees/Cherry_Stage_5_Fruit.png");
+    private final Texture CherryTreeLightning = new Texture("farming/trees/CherryTreeLightning.png");
+
+    public Texture getCherry() {
+        return Cherry;
+    }
+
+    public Texture getCherrySapling() {
+        return CherrySapling;
+    }
+
+    public Texture getCherryStage1() {
+        return CherryStage1;
+    }
+
+    public Texture getCherryStage2() {
+        return CherryStage2;
+    }
+
+    public Texture getCherryStage3() {
+        return CherryStage3;
+    }
+
+    public Texture getCherryStage4() {
+        return CherryStage4;
+    }
+
+    public Texture getCherryStage5Spring() {
+        return CherryStage5Spring;
+    }
+
+    public Texture getCherryStage5Summer() {
+        return CherryStage5Summer;
+    }
+
+    public Texture getCherryStage5Fall() {
+        return CherryStage5Fall;
+    }
+
+    public Texture getCherryStage5Winter() {
+        return CherryStage5Winter;
+    }
+
+    public Texture getCherryStage5Fruit() {
+        return CherryStage5Fruit;
+    }
+
+    public Texture getCherryTreeLightning() {
+        return CherryTreeLightning;
+    }
+
+    private final Texture Mango = new Texture("farming/trees/Mango.png");
+    private final Texture MangoSapling = new Texture("farming/trees/Mango_Sapling.png");
+    private final Texture MangoStage1 = new Texture("farming/trees/Mango_Stage_1.png");
+    private final Texture MangoStage2 = new Texture("farming/trees/Mango_Stage_2.png");
+    private final Texture MangoStage3 = new Texture("farming/trees/Mango_Stage_3.png");
+    private final Texture MangoStage4 = new Texture("farming/trees/Mango_Stage_4.png");
+    private final Texture MangoStage5Spring = new Texture("farming/trees/Mango_Stage_5_Spring.png");
+    private final Texture MangoStage5Summer = new Texture("farming/trees/Mango_Stage_5_Summer.png");
+    private final Texture MangoStage5Fall = new Texture("farming/trees/Mango_Stage_5_Fall.png");
+    private final Texture MangoStage5Winter = new Texture("farming/trees/Mango_Stage_5_Winter.png");
+    private final Texture MangoStage5Fruit = new Texture("farming/trees/Mango_Stage_5_Fruit.png");
+    private final Texture MangoStickyRice = new Texture("farming/trees/Mango_Sticky_Rice.png");
+    private final Texture MangoTreeLightning = new Texture("farming/trees/MangoTreeLightning.png");
+
+    public Texture getMango() {
+        return Mango;
+    }
+
+    public Texture getMangoSapling() {
+        return MangoSapling;
+    }
+
+    public Texture getMangoStage1() {
+        return MangoStage1;
+    }
+
+    public Texture getMangoStage2() {
+        return MangoStage2;
+    }
+
+    public Texture getMangoStage3() {
+        return MangoStage3;
+    }
+
+    public Texture getMangoStage4() {
+        return MangoStage4;
+    }
+
+    public Texture getMangoStage5Spring() {
+        return MangoStage5Spring;
+    }
+
+    public Texture getMangoStage5Summer() {
+        return MangoStage5Summer;
+    }
+
+    public Texture getMangoStage5Fall() {
+        return MangoStage5Fall;
+    }
+
+    public Texture getMangoStage5Winter() {
+        return MangoStage5Winter;
+    }
+
+    public Texture getMangoStage5Fruit() {
+        return MangoStage5Fruit;
+    }
+
+    public Texture getMangoStickyRice() {
+        return MangoStickyRice;
+    }
+
+    public Texture getMangoTreeLightning() {
+        return MangoTreeLightning;
+    }
+
+    private final Texture Orange = new Texture("farming/trees/Orange.png");
+    private final Texture OrangeSapling = new Texture("farming/trees/Orange_Sapling.png");
+    private final Texture OrangeStage1 = new Texture("farming/trees/Orange_Stage_1.png");
+    private final Texture OrangeStage2 = new Texture("farming/trees/Orange_Stage_2.png");
+    private final Texture OrangeStage3 = new Texture("farming/trees/Orange_Stage_3.png");
+    private final Texture OrangeStage4 = new Texture("farming/trees/Orange_Stage_4.png");
+    private final Texture OrangeStage5Spring = new Texture("farming/trees/Orange_Stage_5_Spring.png");
+    private final Texture OrangeStage5Summer = new Texture("farming/trees/Orange_Stage_5_Summer.png");
+    private final Texture OrangeStage5Fall = new Texture("farming/trees/Orange_Stage_5_Fall.png");
+    private final Texture OrangeStage5Winter = new Texture("farming/trees/Orange_Stage_5_Winter.png");
+    private final Texture OrangeStage5Fruit = new Texture("farming/trees/Orange_Stage_5_Fruit.png");
+    private final Texture OrangeTreeLightning = new Texture("farming/trees/OrangeTreeLightning.png");
+
+    public Texture getOrange() {
+        return Orange;
+    }
+
+    public Texture getOrangeSapling() {
+        return OrangeSapling;
+    }
+
+    public Texture getOrangeStage1() {
+        return OrangeStage1;
+    }
+
+    public Texture getOrangeStage2() {
+        return OrangeStage2;
+    }
+
+    public Texture getOrangeStage3() {
+        return OrangeStage3;
+    }
+
+    public Texture getOrangeStage4() {
+        return OrangeStage4;
+    }
+
+    public Texture getOrangeStage5Spring() {
+        return OrangeStage5Spring;
+    }
+
+    public Texture getOrangeStage5Summer() {
+        return OrangeStage5Summer;
+    }
+
+    public Texture getOrangeStage5Fall() {
+        return OrangeStage5Fall;
+    }
+
+    public Texture getOrangeStage5Winter() {
+        return OrangeStage5Winter;
+    }
+
+    public Texture getOrangeStage5Fruit() {
+        return OrangeStage5Fruit;
+    }
+
+    public Texture getOrangeTreeLightning() {
+        return OrangeTreeLightning;
+    }
+
+    private final Texture Peach = new Texture("farming/trees/Peach.png");
+    private final Texture PeachSapling = new Texture("farming/trees/Peach_Sapling.png");
+    private final Texture PeachStage1 = new Texture("farming/trees/Peach_Stage_1.png");
+    private final Texture PeachStage2 = new Texture("farming/trees/Peach_Stage_2.png");
+    private final Texture PeachStage3 = new Texture("farming/trees/Peach_Stage_3.png");
+    private final Texture PeachStage4 = new Texture("farming/trees/Peach_Stage_4.png");
+    private final Texture PeachStage5Spring = new Texture("farming/trees/Peach_Stage_5_Spring.png");
+    private final Texture PeachStage5Summer = new Texture("farming/trees/Peach_Stage_5_Summer.png");
+    private final Texture PeachStage5Fall = new Texture("farming/trees/Peach_Stage_5_Fall.png");
+    private final Texture PeachStage5Winter = new Texture("farming/trees/Peach_Stage_5_Winter.png");
+    private final Texture PeachStage5Fruit = new Texture("farming/trees/Peach_Stage_5_Fruit.png");
+    private final Texture PeachTreeLightning = new Texture("farming/trees/PeachTreeLightning.png");
+
+    public Texture getPeach() {
+        return Peach;
+    }
+
+    public Texture getPeachSapling() {
+        return PeachSapling;
+    }
+
+    public Texture getPeachStage1() {
+        return PeachStage1;
+    }
+
+    public Texture getPeachStage2() {
+        return PeachStage2;
+    }
+
+    public Texture getPeachStage3() {
+        return PeachStage3;
+    }
+
+    public Texture getPeachStage4() {
+        return PeachStage4;
+    }
+
+    public Texture getPeachStage5Spring() {
+        return PeachStage5Spring;
+    }
+
+    public Texture getPeachStage5Summer() {
+        return PeachStage5Summer;
+    }
+
+    public Texture getPeachStage5Fall() {
+        return PeachStage5Fall;
+    }
+
+    public Texture getPeachStage5Winter() {
+        return PeachStage5Winter;
+    }
+
+    public Texture getPeachStage5Fruit() {
+        return PeachStage5Fruit;
+    }
+
+    public Texture getPeachTreeLightning() {
+        return PeachTreeLightning;
+    }
+
+    private final Texture Apple = new Texture("farming/trees/Apple.png");
+    private final Texture AppleSapling = new Texture("farming/trees/Apple_Sapling.png");
+    private final Texture AppleStage1 = new Texture("farming/trees/Apple_Stage_1.png");
+    private final Texture AppleStage2 = new Texture("farming/trees/Apple_Stage_2.png");
+    private final Texture AppleStage3 = new Texture("farming/trees/Apple_Stage_3.png");
+    private final Texture AppleStage4 = new Texture("farming/trees/Apple_Stage_4.png");
+    private final Texture AppleStage5Spring = new Texture("farming/trees/Apple_Stage_5_Spring.png");
+    private final Texture AppleStage5Summer = new Texture("farming/trees/Apple_Stage_5_Summer.png");
+    private final Texture AppleStage5Fall = new Texture("farming/trees/Apple_Stage_5_Fall.png");
+    private final Texture AppleStage5Winter = new Texture("farming/trees/Apple_Stage_5_Winter.png");
+    private final Texture AppleStage5Fruit = new Texture("farming/trees/Apple_Stage_5_Fruit.png");
+    private final Texture AppleTreeLightning = new Texture("farming/trees/AppleTreeLightning.png");
+
+    public Texture getApple() {
+        return Apple;
+    }
+
+    public Texture getAppleSapling() {
+        return AppleSapling;
+    }
+
+    public Texture getAppleStage1() {
+        return AppleStage1;
+    }
+
+    public Texture getAppleStage2() {
+        return AppleStage2;
+    }
+
+    public Texture getAppleStage3() {
+        return AppleStage3;
+    }
+
+    public Texture getAppleStage4() {
+        return AppleStage4;
+    }
+
+    public Texture getAppleStage5Spring() {
+        return AppleStage5Spring;
+    }
+
+    public Texture getAppleStage5Summer() {
+        return AppleStage5Summer;
+    }
+
+    public Texture getAppleStage5Fall() {
+        return AppleStage5Fall;
+    }
+
+    public Texture getAppleStage5Winter() {
+        return AppleStage5Winter;
+    }
+
+    public Texture getAppleStage5Fruit() {
+        return AppleStage5Fruit;
+    }
+
+    public Texture getAppleTreeLightning() {
+        return AppleTreeLightning;
+    }
+
+    private final Texture Pomegranate = new Texture("farming/trees/Pomegranate.png");
+    private final Texture PomegranateSapling = new Texture("farming/trees/Pomegranate_Sapling.png");
+    private final Texture PomegranateStage1 = new Texture("farming/trees/Pomegranate_Stage_1.png");
+    private final Texture PomegranateStage2 = new Texture("farming/trees/Pomegranate_Stage_2.png");
+    private final Texture PomegranateStage3 = new Texture("farming/trees/Pomegranate_Stage_3.png");
+    private final Texture PomegranateStage4 = new Texture("farming/trees/Pomegranate_Stage_4.png");
+    private final Texture PomegranateStage5Spring = new Texture("farming/trees/Pomegranate_Stage_5_Spring.png");
+    private final Texture PomegranateStage5Summer = new Texture("farming/trees/Pomegranate_Stage_5_Summer.png");
+    private final Texture PomegranateStage5Fall = new Texture("farming/trees/Pomegranate_Stage_5_Fall.png");
+    private final Texture PomegranateStage5Winter = new Texture("farming/trees/Pomegranate_Stage_5_Winter.png");
+    private final Texture PomegranateStage5Fruit = new Texture("farming/trees/Pomegranate_Stage_5_Fruit.png");
+    private final Texture PomegranateTreeLightning = new Texture("farming/trees/PomegranateTreeLightning.png");
+
+    public Texture getPomegranate() {
+        return Pomegranate;
+    }
+
+    public Texture getPomegranateSapling() {
+        return PomegranateSapling;
+    }
+
+    public Texture getPomegranateStage1() {
+        return PomegranateStage1;
+    }
+
+    public Texture getPomegranateStage2() {
+        return PomegranateStage2;
+    }
+
+    public Texture getPomegranateStage3() {
+        return PomegranateStage3;
+    }
+
+    public Texture getPomegranateStage4() {
+        return PomegranateStage4;
+    }
+
+    public Texture getPomegranateStage5Spring() {
+        return PomegranateStage5Spring;
+    }
+
+    public Texture getPomegranateStage5Summer() {
+        return PomegranateStage5Summer;
+    }
+
+    public Texture getPomegranateStage5Fall() {
+        return PomegranateStage5Fall;
+    }
+
+    public Texture getPomegranateStage5Winter() {
+        return PomegranateStage5Winter;
+    }
+
+    public Texture getPomegranateStage5Fruit() {
+        return PomegranateStage5Fruit;
+    }
+
+    public Texture getPomegranateTreeLightning() {
+        return PomegranateTreeLightning;
+    }
+
+    private final Texture OakResin = new Texture("farming/trees/Oak_Resin.png");
+    private final Texture OakStage1 = new Texture("farming/trees/Oak_Stage_1.png");
+    private final Texture OakStage2 = new Texture("farming/trees/Oak_Stage_2.png");
+    private final Texture OakStage3 = new Texture("farming/trees/Oak_Stage_3.png");
+    private final Texture OakStage4 = new Texture("farming/trees/Oak_Stage_4.png");
+    private final Texture OakStage5Spring = new Texture("farming/trees/Oak_Stage_5_Spring.png");
+    private final Texture OakStage5Summer = new Texture("farming/trees/Oak_Stage_5_Summer.png");
+    private final Texture OakStage5Fall = new Texture("farming/trees/Oak_Stage_5_Fall.png");
+    private final Texture OakStage5Winter = new Texture("farming/trees/Oak_Stage_5_Winter.png");
+    private final Texture OakStumpSpring = new Texture("farming/trees/Oak_stump_Spring.png");
+    private final Texture OakStumpWinter = new Texture("farming/trees/Oak_stump_Winter.png");
+
+    public Texture getOakResin() {
+        return OakResin;
+    }
+
+    public Texture getOakStage1() {
+        return OakStage1;
+    }
+
+    public Texture getOakStage2() {
+        return OakStage2;
+    }
+
+    public Texture getOakStage3() {
+        return OakStage3;
+    }
+
+    public Texture getOakStage4() {
+        return OakStage4;
+    }
+
+    public Texture getOakStage5Spring() {
+        return OakStage5Spring;
+    }
+
+    public Texture getOakStage5Summer() {
+        return OakStage5Summer;
+    }
+
+    public Texture getOakStage5Fall() {
+        return OakStage5Fall;
+    }
+
+    public Texture getOakStage5Winter() {
+        return OakStage5Winter;
+    }
+
+    public Texture getOakStumpSpring() {
+        return OakStumpSpring;
+    }
+
+    public Texture getOakStumpWinter() {
+        return OakStumpWinter;
+    }
+
+    private final Texture MapleSyrup = new Texture("farming/trees/Maple_Syrup.png");
+    private final Texture MapleSeed = new Texture("farming/trees/Maple_Seed.png");
+    private final Texture MapleStage1 = new Texture("farming/trees/Maple_Stage_1.png");
+    private final Texture MapleStage2 = new Texture("farming/trees/Maple_Stage_2.png");
+    private final Texture MapleStage3 = new Texture("farming/trees/Maple_Stage_3.png");
+    private final Texture MapleStage4 = new Texture("farming/trees/Maple_Stage_4.png");
+    private final Texture MapleStage5Spring = new Texture("farming/trees/Maple_Stage_5_Spring.png");
+    private final Texture MapleStage5Summer = new Texture("farming/trees/Maple_Stage_5_Summer.png");
+    private final Texture MapleStage5Fall = new Texture("farming/trees/Maple_Stage_5_Fall.png");
+    private final Texture MapleStage5Winter = new Texture("farming/trees/Maple_Stage_5_Winter.png");
+    private final Texture MapleStumpSpring = new Texture("farming/trees/Maple_stump_Spring.png");
+    private final Texture MapleStumpSummer = new Texture("farming/trees/Maple_stump_Summer.png");
+    private final Texture MapleStumpFall = new Texture("farming/trees/Maple_stump_Fall.png");
+    private final Texture MapleStumpWinter = new Texture("farming/trees/Maple_stump_Winter.png");
+
+    public Texture getMapleSyrup() {
+        return MapleSyrup;
+    }
+
+    public Texture getMapleSeed() {
+        return MapleSeed;
+    }
+
+    public Texture getMapleStage1() {
+        return MapleStage1;
+    }
+
+    public Texture getMapleStage2() {
+        return MapleStage2;
+    }
+
+    public Texture getMapleStage3() {
+        return MapleStage3;
+    }
+
+    public Texture getMapleStage4() {
+        return MapleStage4;
+    }
+
+    public Texture getMapleStage5Spring() {
+        return MapleStage5Spring;
+    }
+
+    public Texture getMapleStage5Summer() {
+        return MapleStage5Summer;
+    }
+
+    public Texture getMapleStage5Fall() {
+        return MapleStage5Fall;
+    }
+
+    public Texture getMapleStage5Winter() {
+        return MapleStage5Winter;
+    }
+
+    public Texture getMapleStumpSpring() {
+        return MapleStumpSpring;
+    }
+
+    public Texture getMapleStumpSummer() {
+        return MapleStumpSummer;
+    }
+
+    public Texture getMapleStumpFall() {
+        return MapleStumpFall;
+    }
+
+    public Texture getMapleStumpWinter() {
+        return MapleStumpWinter;
+    }
+
+    private final Texture PineTar = new Texture("farming/trees/Pine_Tar.png");
+    private final Texture PineCone = new Texture("farming/trees/Pine_Cone.png");
+    private final Texture PineStage1 = new Texture("farming/trees/Pine_Stage_1.png");
+    private final Texture PineStage2 = new Texture("farming/trees/Pine_Stage_2.png");
+    private final Texture PineStage3 = new Texture("farming/trees/Pine_Stage_3.png");
+    private final Texture PineStage4 = new Texture("farming/trees/Pine_Stage_4.png");
+    private final Texture PineStage5Spring = new Texture("farming/trees/Pine_Stage_5_Spring.png");
+    private final Texture PineStage5Summer = new Texture("farming/trees/Pine_Stage_5_Summer.png");
+    private final Texture PineStage5Fall = new Texture("farming/trees/Pine_Stage_5_Fall.png");
+    private final Texture PineStage5Winter = new Texture("farming/trees/Pine_Stage_5_Winter.png");
+    private final Texture PineStumpSpring = new Texture("farming/trees/Pine_stump_Spring.png");
+    private final Texture PineStumpFall = new Texture("farming/trees/Pine_stump_Fall.png");
+    private final Texture PineStumpWinter = new Texture("farming/trees/Pine_stump_Winter.png");
+
+    public Texture getPineTar() {
+        return PineTar;
+    }
+
+    public Texture getPineCone() {
+        return PineCone;
+    }
+
+    public Texture getPineStage1() {
+        return PineStage1;
+    }
+
+    public Texture getPineStage2() {
+        return PineStage2;
+    }
+
+    public Texture getPineStage3() {
+        return PineStage3;
+    }
+
+    public Texture getPineStage4() {
+        return PineStage4;
+    }
+
+    public Texture getPineStage5Spring() {
+        return PineStage5Spring;
+    }
+
+    public Texture getPineStage5Summer() {
+        return PineStage5Summer;
+    }
+
+    public Texture getPineStage5Fall() {
+        return PineStage5Fall;
+    }
+
+    public Texture getPineStage5Winter() {
+        return PineStage5Winter;
+    }
+
+    public Texture getPineStumpSpring() {
+        return PineStumpSpring;
+    }
+
+    public Texture getPineStumpFall() {
+        return PineStumpFall;
+    }
+
+    public Texture getPineStumpWinter() {
+        return PineStumpWinter;
+    }
+
+    private final Texture Sap = new Texture("farming/trees/Sap.png");
+    private final Texture MahoganySeed = new Texture("farming/trees/Mahogany_Seed.png");
+    private final Texture MahoganyStage1 = new Texture("farming/trees/Mahogany_Stage_1.png");
+    private final Texture MahoganyStage2 = new Texture("farming/trees/Mahogany_Stage_2.png");
+    private final Texture MahoganyStage3 = new Texture("farming/trees/Mahogany_Stage_3.png");
+    private final Texture MahoganyStage4 = new Texture("farming/trees/Mahogany_Stage_4.png");
+    private final Texture MahoganyStage5Spring = new Texture("farming/trees/Mahogany_Stage_5_Spring.png");
+    private final Texture MahoganyStage5Summer = new Texture("farming/trees/Mahogany_Stage_5_Summer.png");
+    private final Texture MahoganyStage5Fall = new Texture("farming/trees/Mahogany_Stage_5_Fall.png");
+    private final Texture MahoganyStage5Winter = new Texture("farming/trees/Mahogany_Stage_5_Winter.png");
+    private final Texture MahoganyStumpSpring = new Texture("farming/trees/Mahogany_stump_Spring.png");
+    private final Texture MahoganyStumpFall = new Texture("farming/trees/Mahogany_stump_Fall.png");
+    private final Texture MahoganyStumpWinter = new Texture("farming/trees/Mahogany_stump_Winter.png");
+
+    public Texture getSap() {
+        return Sap;
+    }
+
+    public Texture getMahoganySeed() {
+        return MahoganySeed;
+    }
+
+    public Texture getMahoganyStage1() {
+        return MahoganyStage1;
+    }
+
+    public Texture getMahoganyStage2() {
+        return MahoganyStage2;
+    }
+
+    public Texture getMahoganyStage3() {
+        return MahoganyStage3;
+    }
+
+    public Texture getMahoganyStage4() {
+        return MahoganyStage4;
+    }
+
+    public Texture getMahoganyStage5Spring() {
+        return MahoganyStage5Spring;
+    }
+
+    public Texture getMahoganyStage5Summer() {
+        return MahoganyStage5Summer;
+    }
+
+    public Texture getMahoganyStage5Fall() {
+        return MahoganyStage5Fall;
+    }
+
+    public Texture getMahoganyStage5Winter() {
+        return MahoganyStage5Winter;
+    }
+
+    public Texture getMahoganyStumpSpring() {
+        return MahoganyStumpSpring;
+    }
+
+    public Texture getMahoganyStumpFall() {
+        return MahoganyStumpFall;
+    }
+
+    public Texture getMahoganyStumpWinter() {
+        return MahoganyStumpWinter;
+    }
+
+    private final Texture CommonMushroom = new Texture("farming/trees/Common_Mushroom.png");
+    private final Texture MushroomTreeSeed = new Texture("farming/trees/Mushroom_Tree_Seed.png");
+    private final Texture MushroomTreeStage1 = new Texture("farming/trees/MushroomTree_Stage_1.png");
+    private final Texture MushroomTreeStage2 = new Texture("farming/trees/MushroomTree_Stage_2.png");
+    private final Texture MushroomTreeStage3 = new Texture("farming/trees/MushroomTree_Stage_3.png");
+    private final Texture MushroomTreeStage4 = new Texture("farming/trees/MushroomTree_Stage_4.png");
+    private final Texture MushroomTreeStage5 = new Texture("farming/trees/MushroomTree_Stage_5.png");
+    private final Texture MushroomTreeStump = new Texture("farming/trees/Mushroom_stump.png");
+
+    public Texture getCommonMushroom() {
+        return CommonMushroom;
+    }
+
+    public Texture getMushroomTreeSeed() {
+        return MushroomTreeSeed;
+    }
+
+    public Texture getMushroomTreeStage1() {
+        return MushroomTreeStage1;
+    }
+
+    public Texture getMushroomTreeStage2() {
+        return MushroomTreeStage2;
+    }
+
+    public Texture getMushroomTreeStage3() {
+        return MushroomTreeStage3;
+    }
+
+    public Texture getMushroomTreeStage4() {
+        return MushroomTreeStage4;
+    }
+
+    public Texture getMushroomTreeStage5() {
+        return MushroomTreeStage5;
+    }
+
+    public Texture getMushroomTreeStump() {
+        return MushroomTreeStump;
+    }
+
+    private final Texture MysticSyrup = new Texture("farming/trees/Mystic_Syrup.png");
+    private final Texture MysticTreeSeed = new Texture("farming/trees/Mystic_Tree_Seed.png");
+    private final Texture MysticTreeStage1 = new Texture("farming/trees/Mystic_Tree_Stage_1.png");
+    private final Texture MysticTreeStage2 = new Texture("farming/trees/Mystic_Tree_Stage_2.png");
+    private final Texture MysticTreeStage3 = new Texture("farming/trees/Mystic_Tree_Stage_3.png");
+    private final Texture MysticTreeStage4 = new Texture("farming/trees/Mystic_Tree_Stage_4.png");
+    private final Texture MysticTreeStage5 = new Texture("farming/trees/Mystic_Tree_Stage_5.png");
+    private final Texture MysticTreeStump = new Texture("farming/trees/Mystic_Tree_Stump.png");
+
+    public Texture getMysticSyrup() {
+        return MysticSyrup;
+    }
+
+    public Texture getMysticTreeSeed() {
+        return MysticTreeSeed;
+    }
+
+    public Texture getMysticTreeStage1() {
+        return MysticTreeStage1;
+    }
+
+    public Texture getMysticTreeStage2() {
+        return MysticTreeStage2;
+    }
+
+    public Texture getMysticTreeStage3() {
+        return MysticTreeStage3;
+    }
+
+    public Texture getMysticTreeStage4() {
+        return MysticTreeStage4;
+    }
+
+    public Texture getMysticTreeStage5() {
+        return MysticTreeStage5;
+    }
+
+    public Texture getMysticTreeStump() {
+        return MysticTreeStump;
+    }
 
 
     public static AssetManager getAssetManager() {
