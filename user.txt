@@ -1,8 +1,8 @@
 Username: amir
-Password: Amir#1234
-Nickname: amir
-Email: amir@gmail.com
+Password: Amir@#1385
+Nickname: phony
+Email: amirhossein.zb.a@gmail.com
 Gender: MALE
 securityQuestion: QUESTION1
-securityAnswer: amir
-avatarPath: avatars/avatar7.png
+securityAnswer: meow
+avatarPath: avatars/avatar3.png

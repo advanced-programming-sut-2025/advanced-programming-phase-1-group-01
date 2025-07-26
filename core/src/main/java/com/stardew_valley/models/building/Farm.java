@@ -208,15 +208,31 @@ public class Farm extends Maps {
 //    }
 
     private AnimalHouseType stringToAnimalHouseType(String animalType) {
-        return switch (animalType) {
-            case "coop" -> AnimalHouseType.COOP;
-            case "big_coop" -> AnimalHouseType.BIG_COOP;
-            case "deluxe_coop" -> AnimalHouseType.DELUXE_COOP;
-            case "barn" -> AnimalHouseType.BARN;
-            case "big_barn" -> AnimalHouseType.BIG_BARN;
-            case "deluxe_barn" -> AnimalHouseType.DELUXE_BARN;
-            default -> null;
-        };
+//        return switch (animalType) {
+//            case "coop" -> AnimalHouseType.COOP;
+//            case "big_coop" -> AnimalHouseType.BIG_COOP;
+//            case "deluxe_coop" -> AnimalHouseType.DELUXE_COOP;
+//            case "barn" -> AnimalHouseType.BARN;
+//            case "big_barn" -> AnimalHouseType.BIG_BARN;
+//            case "deluxe_barn" -> AnimalHouseType.DELUXE_BARN;
+//            default -> null;
+//        };
+        switch (animalType) {
+            case "coop":
+                return AnimalHouseType.COOP;
+            case "big_coop":
+                return AnimalHouseType.BIG_COOP;
+            case "deluxe_coop":
+                return AnimalHouseType.DELUXE_COOP;
+            case "barn":
+                return AnimalHouseType.BARN;
+            case "big_barn":
+                return AnimalHouseType.BIG_BARN;
+            case "deluxe_barn":
+                return AnimalHouseType.DELUXE_BARN;
+            default:
+                return null;
+        }
     }
 
     public String buildShelter(Position position, String houseType) {

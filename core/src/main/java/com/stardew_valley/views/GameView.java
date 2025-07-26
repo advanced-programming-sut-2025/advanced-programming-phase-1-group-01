@@ -33,9 +33,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private float faintTime = 0f;
     private Sprite faintingSprite;
     private Stage stage;
-    private GameController controller;
+    private final GameController controller;
     private final OrthographicCamera camera;
-    private Player player;
+    private final Player player;
     private final Batch batch;
     private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
@@ -74,12 +74,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void render(float delta) {
-        batch.begin();
         updateGame(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         drawWorld();
         dateTimeView.render();
         batch.end();
@@ -157,19 +157,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawBuilding () {
         for (int i = 0; i < 4; i++) {
             batch.draw(mine, getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i)));
-            batch.draw(mine, getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
-            batch.draw(mine, getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i)));
-            batch.draw(mine, getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            batch.draw(house, getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            batch.draw(lake, getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            batch.draw(greenhouse, getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
         }
     }
 
     private void drawFence() {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
-        for (List<Tile> tileList : tiles) {
-            for (Tile tile : tileList) {
+        for (int row = 0; row < tiles.size(); row++) {
+            List<Tile> tileList = tiles.get(row);
+            for (int col = 0; col < tileList.size(); col++) {
+                Tile tile = tileList.get(col);
                 if (tile.getType() == TileType.FENCE) {
-                    int tileX = getTilePixel(tiles.indexOf(tileList));
-                    int tileY = getTilePixel(tileList.indexOf(tile));
+                    int tileX = getTilePixel(col);
+                    int tileY = getTilePixel(row);
                     batch.draw(woodFence, tileX, tileY);
                 }
             }
@@ -187,6 +189,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     public void updateGame(float delta) {
         controller.getRepo().getCurrentGame().getCurrentPlayer().updateStateTime(delta);
+        handleMovement(delta);
     }
 
     public void handleMovement(float delta) {
@@ -196,10 +199,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             float heightOffset = (float)(80 * Math.sin(Math.PI * faintTime / totalFaintDuration));
             float rotation = 90f * (faintTime / totalFaintDuration);
 
-//            if (faintSprite == null) {
-//                faintingSprite = new Sprite(player.getCurrentFrame());
-//                faintingSprite.setOriginCenter();
-//            }
+            if (faintingSprite == null) {
+                faintingSprite = new Sprite(player.getCurrentFrame());
+                faintingSprite.setOriginCenter();
+            }
 
             faintingSprite.setPosition(vectorPosition.x, vectorPosition.y + heightOffset);
             faintingSprite.setRotation(rotation);
