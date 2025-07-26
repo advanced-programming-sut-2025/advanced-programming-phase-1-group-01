@@ -1,5 +1,6 @@
 package com.stardew_valley.controllers;
 
+import com.stardew_valley.Main;
 import com.stardew_valley.models.Game;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Farm;
@@ -9,6 +10,7 @@ import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.commands.GameMenuCommands;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.initializer.VillageInitializer;
+import com.stardew_valley.views.GameView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,13 +43,13 @@ public class GameMenuController extends Controller {
 
         switch (matchedCommand) {
             case MENU_ENTER:
-                return new Result(false,"You cannot navigate to other menus from here");
+                return new Result(false, "You cannot navigate to other menus from here");
 
             case MENU_EXIT:
-                return new Result(true,"now you are in main menu");
+                return new Result(true, "now you are in main menu");
 
             case SHOW_CURRENT_MENU:
-                return new Result(false,"now you are in game menu");
+                return new Result(false, "now you are in game menu");
 
             case GAME_NEW:
                 return handleGameNewCommand(command);
@@ -63,63 +65,64 @@ public class GameMenuController extends Controller {
     }
 
     private Result handleGameNewCommand(String command) {
-        String usernamesString = extractValue(command,"-u",null);
+        String usernamesString = extractValue(command, "-u", null);
 
-            if (usernamesString.trim().isEmpty()) {
-                return new Result(false,"No usernames provided");
+        if (usernamesString.trim().isEmpty()) {
+            return new Result(false, "No usernames provided");
+        }
+
+        String[] usernames = usernamesString.trim().split("\\s+");
+
+        if (usernames.length > 3) {
+            return new Result(false, "You must provide between 1 and 3 usernames.");
+        }
+
+        Set<String> usernameSet = new HashSet<>();
+        usernameSet.add(repo.getCurrentUser().getUsername());
+
+        for (String username : usernames) {
+            User user = repo.getUserByUsername(username);
+
+            if (user == null) {
+                return new Result(false, "Invalid username: " + username);
             }
 
-            String[] usernames = usernamesString.trim().split("\\s+");
-
-            if (usernames.length > 3) {
-                return new Result(false,"You must provide between 1 and 3 usernames.");
+            if (!usernameSet.add(username)) {
+                return new Result(false, "Duplicate username: " + username);
             }
 
-            Set<String> usernameSet = new HashSet<>();
-            usernameSet.add(repo.getCurrentUser().getUsername());
-
-            for (String username : usernames) {
-                User user = repo.getUserByUsername(username);
-
-                if (user == null) {
-                    return new Result(false,"Invalid username: " + username);
-                }
-
-                if (!usernameSet.add(username)) {
-                    return new Result(false,"Duplicate username: " + username);
-                }
-
-                if (user.getGame() != null) {
-                    return new Result(false,"User already in another game: " + username);
-                }
+            if (user.getGame() != null) {
+                return new Result(false, "User already in another game: " + username);
             }
+        }
 
-            List<Player> players = new ArrayList<>();
-            players.add(repo.getCurrentUser().getPlayer());
+        List<Player> players = new ArrayList<>();
+        players.add(repo.getCurrentUser().getPlayer());
 
-            for (String username : usernames) {
-                players.add(repo.getUserByUsername(username).getPlayer());
-            }
+        for (String username : usernames) {
+            players.add(repo.getUserByUsername(username).getPlayer());
+        }
 
-            Game game = new Game(players);
-            repo.addGame(game);
-            repo.setCurrentGame(game);
-            repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(players));
-            repo.getCurrentUser().getPlayer().setPosition(Game.PLAYERS_STARTING_POSITION);
+        Game game = new Game(players);
+        repo.addGame(game);
+        repo.setCurrentGame(game);
+        repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(players));
+        repo.getCurrentUser().getPlayer().setPosition(Game.PLAYERS_STARTING_POSITION);
 
-            return new Result(true,"New game created successfully with users: " + String.join(", ", usernames) + "\n" +
-                    "map #1: has more trees" + "\n" +
-                    "map #2: has more stones");
+        return new Result(true, "New game created successfully with users: " + String.join(", ", usernames) + "\n" +
+            "map #1: has more trees" + "\n" +
+            "map #2: has more stones");
     }
 
     private int index = 0;
+
     private Result chooseGameMap(int mapNumber) {
 
         if (mapNumber < 1 || mapNumber > 3) {
-            return new Result(false,"Invalid map number");
+            return new Result(false, "Invalid map number");
         }
 
-        List<Player> players= repo.getCurrentGame().getPlayers();
+        List<Player> players = repo.getCurrentGame().getPlayers();
         Player currentPlayer = players.get(index);
 //        Farm farm1 = FarmInitializer.initializeFarm(0,0); FIXME : phony
 //        Farm farm2 = FarmInitializer.initializeFarm(3,3); FIXME : phony
@@ -141,7 +144,7 @@ public class GameMenuController extends Controller {
         } else {
             Player nextPlayer = players.get(index);
             return new Result(true, "Map " + mapNumber + " selected for player " + currentPlayer.getUser().getUsername() +
-                    ". Next player: " + nextPlayer.getUser().getUsername() + ", please select your map.");
+                ". Next player: " + nextPlayer.getUser().getUsername() + ", please select your map.");
         }
     }
 
@@ -159,7 +162,7 @@ public class GameMenuController extends Controller {
 
     private Result handleNextTurn() {
         repo.getCurrentGame().nextTurn();
-        return new Result(true,"next turn done");
+        return new Result(true, "next turn done");
     }
 
     private String extractValue(String command, String startFlag, String endFlag) {
@@ -167,9 +170,7 @@ public class GameMenuController extends Controller {
 
         if (endFlag != null) {
             patternString = startFlag + " (.*?) " + endFlag;
-        }
-
-        else {
+        } else {
             patternString = startFlag + " (.*)";
         }
 
