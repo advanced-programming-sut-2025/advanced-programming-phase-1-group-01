@@ -1,0 +1,8 @@
+Username: amir
+Password: Amir#1234
+Nickname: amir
+Email: amir@gmail.com
+Gender: MALE
+securityQuestion: QUESTION1
+securityAnswer: amir
+avatarPath: avatars/avatar7.png
