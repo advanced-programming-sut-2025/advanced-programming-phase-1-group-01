@@ -19,9 +19,6 @@ public class Main extends Game {
     private static SpriteBatch batch;
 
     public static Main getMain() {
-        if (main == null) {
-            main = new Main();
-        }
         return main;
     }
 
@@ -33,10 +30,10 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         repo = new Repository();
-
-        setScreen(new TempLogin(repo));
-//        setScreen(new LoginMenuView(new LoginMenuController(repo)));
-//        setScreen(new GameView(new GameController(repo)));
+        main = this;
+        setScreen(new LoginMenuView(new LoginMenuController(repo)));
+        //getMain().setScreen(new GameView(new GameController(new Repository())));
+        //setScreen(new GameView(new GameController(repo)));
     }
 
     @Override
