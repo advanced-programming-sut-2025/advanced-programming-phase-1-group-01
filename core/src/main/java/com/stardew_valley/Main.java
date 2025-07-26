@@ -4,6 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.stardew_valley.controllers.LoginMenuController;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.data.User;
+import com.stardew_valley.models.enums.Gender;
+import com.stardew_valley.models.enums.SecurityQuestion;
 import com.stardew_valley.views.AppView;
 import com.stardew_valley.views.LoginMenuView;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -32,8 +35,6 @@ public class Main extends Game {
         repo = new Repository();
         main = this;
         setScreen(new LoginMenuView(new LoginMenuController(repo)));
-        //getMain().setScreen(new GameView(new GameController(new Repository())));
-        //setScreen(new GameView(new GameController(repo)));
     }
 
     @Override
