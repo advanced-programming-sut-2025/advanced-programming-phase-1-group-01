@@ -131,4 +131,8 @@ public class GameController extends Controller {
 
 
     }
+
+    public DateTimeController getDateTimeController() {
+        return this.dateTimeController;
+    }
 }

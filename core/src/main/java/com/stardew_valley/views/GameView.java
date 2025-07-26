@@ -38,6 +38,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
+    private final DateTimeView dateTimeView;
 
     private final static int TILE_SIZE = 16;
 
@@ -57,6 +58,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         vectorPosition = new Vector2(player.getPosition().x(), player.getPosition().y());
         incompleteMovement = new IncompleteMovement((int) player.getPosition().x() / 16, (int) player.getPosition().y() / 16);
+        this.dateTimeView = new DateTimeView(controller.getDateTimeController());
     }
 
     @Override
@@ -67,14 +69,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void render(float delta) {
+        batch.begin();
         updateGame(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         drawWorld();
-        batch.begin();
-
+        dateTimeView.render();
+        batch.end();
     }
 
     @Override
