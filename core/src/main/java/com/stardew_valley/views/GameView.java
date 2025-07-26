@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,6 +28,10 @@ import java.util.List;
 
 
 public class GameView extends ScreenAdapter implements InputProcessor {
+    private boolean isFainting = false;
+    private final float totalFaintDuration = 1.5f;
+    private float faintTime = 0f;
+    private Sprite faintingSprite;
     private Stage stage;
     private GameController controller;
     private final OrthographicCamera camera;
@@ -38,6 +43,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
+    private final DateTimeView dateTimeView;
 
     private final static int TILE_SIZE = 16;
 
@@ -57,6 +63,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         vectorPosition = new Vector2(player.getPosition().x(), player.getPosition().y());
         incompleteMovement = new IncompleteMovement((int) player.getPosition().x() / 16, (int) player.getPosition().y() / 16);
+        this.dateTimeView = new DateTimeView(controller.getDateTimeController());
     }
 
     @Override
@@ -67,14 +74,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void render(float delta) {
+        batch.begin();
         updateGame(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         drawWorld();
-        batch.begin();
-
+        dateTimeView.render();
+        batch.end();
     }
 
     @Override
@@ -182,6 +190,31 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     public void handleMovement(float delta) {
+        if (isFainting) {
+            faintTime += delta;
+
+            float heightOffset = (float)(80 * Math.sin(Math.PI * faintTime / totalFaintDuration));
+            float rotation = 90f * (faintTime / totalFaintDuration);
+
+            if (faintSprite == null) {
+                faintingSprite = new Sprite(player.getCurrentFrame());
+                faintingSprite.setOriginCenter();
+            }
+
+            faintingSprite.setPosition(vectorPosition.x, vectorPosition.y + heightOffset);
+            faintingSprite.setRotation(rotation);
+
+            faintingSprite.draw(batch);
+
+            if (faintTime >= totalFaintDuration) {
+                isFainting = false;
+                faintingSprite = null;
+            }
+
+            return;
+        }
+
+
         if (incompleteMovement.isHasIncompleteMovement()) {
             Vector2 direction = new Vector2(incompleteMovement.getVectorPosition()).sub(vectorPosition).nor();
             vectorPosition.add(direction.scl(speed * delta));
@@ -204,6 +237,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             incompleteMovement = new IncompleteMovement(player.getPosition(), 0, 1);
             player.setDirection(Direction.DOWN);
         }
+    }
+
+    public void setFainting(boolean fainting) {
+        isFainting = fainting;
     }
 }
 
