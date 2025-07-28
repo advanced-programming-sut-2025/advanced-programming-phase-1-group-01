@@ -30,14 +30,27 @@ public class MainMenuController extends Controller {
         if (matchedCommand == null) {
             return new Result(false, "invalid command");
         }
-
-        return switch (matchedCommand) {
-            case SHOW_CURRENT_MENU -> new Result(true, "now you are in main menu");
-            case MENU_EXIT -> new Result(true, "now you are in login menu");
-            case MENU_ENTER_GAME_MENU -> new Result(true, "now you are in game menu");
-            case MENU_ENTER_PROFILE_MENU -> new Result(true, "now you are in profile menu");
-            case USER_LOGOUT -> userLogout();
-        };
+//        return switch (matchedCommand) {
+//            case SHOW_CURRENT_MENU -> new Result(true, "now you are in main menu");
+//            case MENU_EXIT -> new Result(true, "now you are in login menu");
+//            case MENU_ENTER_GAME_MENU -> new Result(true, "now you are in game menu");
+//            case MENU_ENTER_PROFILE_MENU -> new Result(true, "now you are in profile menu");
+//            case USER_LOGOUT -> userLogout();
+//        };
+        switch (matchedCommand) {
+            case SHOW_CURRENT_MENU:
+                return new Result(true, "now you are in main menu");
+            case MENU_EXIT:
+                return new Result(true, "now you are in login menu");
+            case MENU_ENTER_GAME_MENU:
+                return new Result(true, "now you are in game menu");
+            case MENU_ENTER_PROFILE_MENU:
+                return new Result(true, "now you are in profile menu");
+            case USER_LOGOUT:
+                return userLogout();
+            default:
+                throw new IllegalArgumentException("Unknown command: " + matchedCommand);
+        }
     }
 
     private Result userLogout() {

@@ -48,14 +48,28 @@ public class NPCVillage extends Maps {
     }
 
     public NPC getNPCIdByName(String name) {
-        return switch (name.toLowerCase()) {
-            case "sebastian" -> NPCs.get(0);
-            case "abigail" -> NPCs.get(1);
-            case "harvey" -> NPCs.get(2);
-            case "leah" -> NPCs.get(3);
-            case "robin" -> NPCs.get(4);
-            default -> null;
-        };
+//        return switch (name.toLowerCase()) {
+//            case "sebastian" -> NPCs.get(0);
+//            case "abigail" -> NPCs.get(1);
+//            case "harvey" -> NPCs.get(2);
+//            case "leah" -> NPCs.get(3);
+//            case "robin" -> NPCs.get(4);
+//            default -> null;
+//        };
+        switch (name.toLowerCase()) {
+            case "sebastian":
+                return NPCs.get(0);
+            case "abigail":
+                return NPCs.get(1);
+            case "harvey":
+                return NPCs.get(2);
+            case "leah":
+                return NPCs.get(3);
+            case "robin":
+                return NPCs.get(4);
+            default:
+                return null;
+        }
     }
 
     public String getListedNPCFriendships(Player player) {

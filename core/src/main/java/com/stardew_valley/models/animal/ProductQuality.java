@@ -25,11 +25,17 @@ public enum ProductQuality {
 
     @Override
     public String toString() {
-        return switch (this) {
-            case REGULAR -> "Regular";
-            case SILVER -> "Silver";
-            case GOLD -> "Gold";
-            case IRIDIUM -> "Iridium";
-        };
+        switch (this) {
+            case REGULAR:
+                return "Regular";
+            case SILVER:
+                return "Silver";
+            case GOLD:
+                return "Gold";
+            case IRIDIUM:
+                return "Iridium";
+            default:
+                throw new IllegalStateException("Unexpected value: " + this);
+        }
     }
 }

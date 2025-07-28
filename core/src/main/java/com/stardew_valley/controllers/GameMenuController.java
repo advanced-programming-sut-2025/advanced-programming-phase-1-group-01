@@ -1,6 +1,7 @@
 package com.stardew_valley.controllers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Timer;
 import com.stardew_valley.Main;
 import com.stardew_valley.Main;
@@ -13,6 +14,7 @@ import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.commands.GameMenuCommands;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.initializer.VillageInitializer;
+import com.stardew_valley.views.GameMenuView;
 import com.stardew_valley.views.GameView;
 import com.stardew_valley.views.MainMenuView;
 import com.stardew_valley.views.SignUpMenuView;
@@ -46,111 +48,27 @@ public class GameMenuController extends Controller {
             return new Result(false, "invalid command!");
         }
 
-        switch (matchedCommand) {
-            case MENU_ENTER:
-                return new Result(false, "You cannot navigate to other menus from here");
-
-            case MENU_EXIT:
-                return new Result(true, "now you are in main menu");
-
-            case SHOW_CURRENT_MENU:
-                return new Result(false, "now you are in game menu");
-
-            case GAME_NEW:
-                return handleGameNewCommand(command);
-
-            case GAME_MAP:
-                String mapNumberStr = command.split("\\s+")[2];
-                int mapNumber = Integer.parseInt(mapNumberStr);
-                return chooseGameMap(mapNumber);
-            case NEXT_TURN:
-                return handleNextTurn();
-        }
+//        switch (matchedCommand) {
+//            case MENU_ENTER:
+//                return new Result(false, "You cannot navigate to other menus from here");
+//
+//            case MENU_EXIT:
+//                return new Result(true, "now you are in main menu");
+//
+//            case SHOW_CURRENT_MENU:
+//                return new Result(false, "now you are in game menu");
+//
+//            case GAME_NEW:
+//                return handleGameNewCommand(command);
+//
+//            case GAME_MAP:
+//                String mapNumberStr = command.split("\\s+")[2];
+//                int mapNumber = Integer.parseInt(mapNumberStr);
+//                return chooseGameMap(mapNumber);
+//            case NEXT_TURN:
+//                return handleNextTurn();
+//        }
         return null;
-    }
-
-    private Result handleGameNewCommand(String command) {
-        String usernamesString = extractValue(command, "-u", null);
-
-        if (usernamesString.trim().isEmpty()) {
-            return new Result(false, "No usernames provided");
-        }
-
-        String[] usernames = usernamesString.trim().split("\\s+");
-
-        if (usernames.length > 3) {
-            return new Result(false, "You must provide between 1 and 3 usernames.");
-        }
-
-        Set<String> usernameSet = new HashSet<>();
-        usernameSet.add(repo.getCurrentUser().getUsername());
-
-        for (String username : usernames) {
-            User user = repo.getUserByUsername(username);
-
-            if (user == null) {
-                return new Result(false, "Invalid username: " + username);
-            }
-
-            if (!usernameSet.add(username)) {
-                return new Result(false, "Duplicate username: " + username);
-            }
-
-            if (user.getGame() != null) {
-                return new Result(false, "User already in another game: " + username);
-            }
-        }
-
-        List<Player> players = new ArrayList<>();
-        players.add(repo.getCurrentUser().getPlayer());
-
-        for (String username : usernames) {
-            players.add(repo.getUserByUsername(username).getPlayer());
-        }
-
-        Game game = new Game(players);
-        repo.addGame(game);
-        repo.setCurrentGame(game);
-        repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(players));
-        repo.getCurrentUser().getPlayer().setPosition(Game.PLAYERS_STARTING_POSITION);
-
-        return new Result(true, "New game created successfully with users: " + String.join(", ", usernames) + "\n" +
-            "map #1: has more trees" + "\n" +
-            "map #2: has more stones");
-    }
-
-    private int index = 0;
-
-    private Result chooseGameMap(int mapNumber) {
-
-        if (mapNumber < 1 || mapNumber > 3) {
-            return new Result(false, "Invalid map number");
-        }
-
-        List<Player> players = repo.getCurrentGame().getPlayers();
-        Player currentPlayer = players.get(index);
-//        Farm farm1 = FarmInitializer.initializeFarm(0,0); FIXME : phony
-//        Farm farm2 = FarmInitializer.initializeFarm(3,3); FIXME : phony
-
-        if (mapNumber == 1) {
-//            currentPlayer.setFarm(farm1); FIXME : phony
-//            currentPlayer.setCurrentMap(farm1); FIXME : phony
-        }
-
-        if (mapNumber == 2) {
-//            currentPlayer.setFarm(farm2); FIXME : phony
-//            currentPlayer.setCurrentMap(farm2); FIXME : phony
-        }
-        index++;
-
-        if (index == players.size()) {
-//            currentPlayer.getGame().setCurrentMap(currentPlayer.getFarm());
-            return new Result(true, "All players have selected their maps. Game starting...");
-        } else {
-            Player nextPlayer = players.get(index);
-            return new Result(true, "Map " + mapNumber + " selected for player " + currentPlayer.getUser().getUsername() +
-                ". Next player: " + nextPlayer.getUser().getUsername() + ", please select your map.");
-        }
     }
 
     private Result loadGame() {
@@ -165,28 +83,55 @@ public class GameMenuController extends Controller {
         return null;
     }
 
-    private Result handleNextTurn() {
-        repo.getCurrentGame().nextTurn();
-        return new Result(true, "next turn done");
+    public void startGame(Label messageLabel, List<TextField> players) {
+        Set<String> playerSet = new HashSet();
+        playerSet.add(repo.getCurrentUser().getUsername());
+
+        List<Player> playerList = null;
+        for (TextField textField : players) {
+            User user = repo.getUserByUsername(textField.getText());
+            if (user == null) {
+                messageLabel.setText("Invalid username: " + textField.getText());
+                return;
+            }
+
+            if (!playerSet.add(textField.getText())) {
+                messageLabel.setText("Duplicate username: " + textField.getText());
+                return;
+            }
+
+            if (user.getGame() != null) {
+                messageLabel.setText("Game already in another game: " + textField.getText());
+                return;
+            }
+
+            playerList = new ArrayList<>();
+            playerList.add(repo.getCurrentUser().getPlayer());
+
+            for (String username : playerSet) {
+                playerList.add(repo.getUserByUsername(username).getPlayer());
+            }
+        }
+
+        //phony
+        Game game = new Game(playerList);
+        repo.addGame(game);
+        repo.setCurrentGame(game);
+        repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));
+        repo.getCurrentUser().getPlayer().setPosition(PLAYERS_STARTING_POSITION);
+
+        Farm farm = FarmInitializer.initializeFarm();
+
+        for (Player player : playerList) {
+            player.setFarm(farm);
+            player.setCurrentMap(farm);
+        }
+
+        Main.getMain().setScreen(new GameView(new GameController(repo)));
     }
 
-    private String extractValue(String command, String startFlag, String endFlag) {
-        String patternString;
-
-        if (endFlag != null) {
-            patternString = startFlag + " (.*?) " + endFlag;
-        } else {
-            patternString = startFlag + " (.*)";
-        }
-
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(command);
-
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-
-        return null;
+    public void nextTurn(Label messageLabel) {
+        messageLabel.setText("Sik baba!");
     }
 
     public void back(Label messageLabel) {
