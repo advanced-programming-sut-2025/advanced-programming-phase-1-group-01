@@ -3615,6 +3615,154 @@ public class AssetManager {
         return Coal;
     }
 
+    private final Texture Hoe = new Texture("tools/Hoe.png");
+    private final Texture CopperHoe = new Texture("tools/Copper_Hoe.png");
+    private final Texture SteelHoe = new Texture("tools/Steel_Hoe.png");
+    private final Texture GoldHoe = new Texture("tools/Gold_Hoe.png");
+    private final Texture IridiumHoe = new Texture("tools/Iridium_Hoe.png");
+
+    private final Texture Pickaxe = new Texture("tools/Pickaxe.png");
+    private final Texture CopperPickaxe = new Texture("tools/Copper_Pickaxe.png");
+    private final Texture SteelPickaxe = new Texture("tools/Steel_Pickaxe.png");
+    private final Texture GoldPickaxe = new Texture("tools/Gold_Pickaxe.png");
+    private final Texture IridiumPickaxe = new Texture("tools/Iridium_Pickaxe.png");
+
+    private final Texture Axe = new Texture("tools/Axe.png");
+    private final Texture CopperAxe = new Texture("tools/Copper_Axe.png");
+    private final Texture SteelAxe = new Texture("tools/Steel_Axe.png");
+    private final Texture GoldAxe = new Texture("tools/Gold_Axe.png");
+    private final Texture IridiumAxe = new Texture("tools/Iridium_Axe.png");
+
+    private final Texture WateringCan = new Texture("tools/Watering_Can.png");
+    private final Texture CopperWateringCan = new Texture("tools/Copper_Watering_Can.png");
+    private final Texture SteelWateringCan = new Texture("tools/Steel_Watering_Can.png");
+    private final Texture GoldWateringCan = new Texture("tools/Gold_Watering_Can.png");
+    private final Texture IridiumWateringCan = new Texture("tools/Iridium_Watering_Can.png");
+
+    private final Texture TrainingRod = new Texture("tools/Training_Rod.png");
+    private final Texture IridiumRod = new Texture("tools/Iridium_Rod.png");
+    private final Texture FiberglassRod = new Texture("tools/Fiberglass_Rod.png");
+    private final Texture BambooPole = new Texture("tools/Bamboo_Pole.png");
+    private final Texture AdvancedIridiumRod = new Texture("tools/Advanced_Iridium_Rod.png");
+
+    private final Texture Scythe = new Texture("tools/Scythe.png");
+
+    private final Texture MilkPail = new Texture("tools/Milk_Pail.png");
+
+    private final Texture Shear = new Texture("tools/Shears.png");
+
+    public Texture getHoe() {
+        return Hoe;
+    }
+
+    public Texture getCopperHoe() {
+        return CopperHoe;
+    }
+
+    public Texture getSteelHoe() {
+        return SteelHoe;
+    }
+
+    public Texture getGoldHoe() {
+        return GoldHoe;
+    }
+
+    public Texture getIridiumHoe() {
+        return IridiumHoe;
+    }
+
+    public Texture getPickaxe() {
+        return Pickaxe;
+    }
+
+    public Texture getCopperPickaxe() {
+        return CopperPickaxe;
+    }
+
+    public Texture getSteelPickaxe() {
+        return SteelPickaxe;
+    }
+
+    public Texture getGoldPickaxe() {
+        return GoldPickaxe;
+    }
+
+    public Texture getIridiumPickaxe() {
+        return IridiumPickaxe;
+    }
+
+    public Texture getAxe() {
+        return Axe;
+    }
+
+    public Texture getCopperAxe() {
+        return CopperAxe;
+    }
+
+    public Texture getSteelAxe() {
+        return SteelAxe;
+    }
+
+    public Texture getGoldAxe() {
+        return GoldAxe;
+    }
+
+    public Texture getIridiumAxe() {
+        return IridiumAxe;
+    }
+
+    public Texture getWateringCan() {
+        return WateringCan;
+    }
+
+    public Texture getCopperWateringCan() {
+        return CopperWateringCan;
+    }
+
+    public Texture getSteelWateringCan() {
+        return SteelWateringCan;
+    }
+
+    public Texture getGoldWateringCan() {
+        return GoldWateringCan;
+    }
+
+    public Texture getIridiumWateringCan() {
+        return IridiumWateringCan;
+    }
+
+    public Texture getTrainingRod() {
+        return TrainingRod;
+    }
+
+    public Texture getIridiumRod() {
+        return IridiumRod;
+    }
+
+    public Texture getFiberglassRod() {
+        return FiberglassRod;
+    }
+
+    public Texture getBambooPole() {
+        return BambooPole;
+    }
+
+    public Texture getAdvancedIridiumRod() {
+        return AdvancedIridiumRod;
+    }
+
+    public Texture getScythe() {
+        return Scythe;
+    }
+
+    public Texture getMilkPail() {
+        return MilkPail;
+    }
+
+    public Texture getShear() {
+        return Shear;
+    }
+
     public static AssetManager getAssetManager() {
         if (assetManager == null) {
             assetManager = new AssetManager();
