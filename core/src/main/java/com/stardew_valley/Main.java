@@ -17,10 +17,12 @@ import com.stardew_valley.models.data.Repository;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     private static Main main;
-    private Repository repo;
     private static SpriteBatch batch;
 
     public static Main getMain() {
+        if (main == null) {
+            main = new Main();
+        }
         return main;
     }
 
@@ -31,10 +33,10 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        repo = new Repository();
         main = this;
-        setScreen(new SignUpMenuView(new SignUpMenuController(repo)));
+        setScreen(new SignUpMenuView(new SignUpMenuController(new Repository())));
         //setScreen(new GameMenuView(new GameMenuController(repo)));
+//        setScreen(new TempLogin(new Repository()));
     }
 
     @Override
