@@ -1525,6 +1525,17 @@ images/a_hen/tile_6_2.png
 images/a_hen/tile_6_3.png
 images/all_dirt.png
 images/arrow.png
+images/artisans/Bee_House.png
+images/artisans/Charcoal_Kiln.png
+images/artisans/Cheese_Press.png
+images/artisans/Dehydrator.png
+images/artisans/Fish_Smoker.png
+images/artisans/Furnace.png
+images/artisans/Keg.png
+images/artisans/Loom.png
+images/artisans/Mayonnaise_Machine.png
+images/artisans/Oil_Maker.png
+images/artisans/Preserves_Jar.png
 images/clock.png
 images/house.png
 images/lake.png
@@ -1663,3 +1674,4 @@ tools/Trash_Can_Gold.png
 tools/Trash_Can_Iridium.png
 tools/Trash_Can_Steel.png
 tools/Watering_Can.png
+user.txt

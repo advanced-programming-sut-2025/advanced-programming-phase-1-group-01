@@ -1,8 +1,0 @@
-Username: Amirkia
-Password: Amirkia#1385
-Nickname: Amirkia
-Email: akghasemim@gmail.com
-Gender: MALE
-securityQuestion: QUESTION1
-securityAnswer: kir
-avatarPath: avatars/avatar5.png
