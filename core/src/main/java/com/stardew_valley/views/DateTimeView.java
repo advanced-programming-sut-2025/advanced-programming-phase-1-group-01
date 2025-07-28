@@ -24,8 +24,8 @@ public class DateTimeView {
         this.controller = controller;
         this.batch = Main.getBatch();
         this.uiStage = new Stage(new ScreenViewport());
-        this.skin = new Skin(Gdx.files.internal("skin/NzSkin.json"));
-        this.font = skin.getFont("default-font");
+        this.skin = AssetManager.getAssetManager().getSkin();
+        this.font = skin.getFont("Impact");
         font.getData().setScale(1.5f);
     }
 
