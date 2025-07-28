@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
@@ -83,6 +84,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawWorld();
         dateTimeView.render();
         batch.end();
+
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -245,6 +249,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void setFainting(boolean fainting) {
         isFainting = fainting;
     }
+
+    public void showMiniMap(Stage stage, List<List<Tile>> tiles, int buildingWidth, int buildingHeight, TextureRegion textureRegion) {
+        MiniMapWidget miniMap = new MiniMapWidget(tiles, buildingWidth, buildingHeight);
+
+        Window miniMapWindow = miniMap.showWindow((x, y) -> {
+
+            if (miniMap.canPlant(x, y, buildingWidth, buildingHeight)) {
+                //set tiles
+            }
+        });
+
+        stage.addActor(miniMapWindow);
+        Gdx.input.setInputProcessor(stage);
+    }
+
+
 }
 
 

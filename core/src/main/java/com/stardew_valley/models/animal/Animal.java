@@ -104,7 +104,7 @@ public class Animal extends Character {
 
     public AnimalProductType collectProduct() {
         hasProduct = false;
-        setProduct(animalInfo.getProducts().getFirst());
+        setProduct(animalInfo.getProducts().get(0));
         return getAnimalProductType();
     }
 

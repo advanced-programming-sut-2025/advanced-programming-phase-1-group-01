@@ -1,3 +1,11 @@
+avatars/avatar1.png
+avatars/avatar2.png
+avatars/avatar3.png
+avatars/avatar4.png
+avatars/avatar5.png
+avatars/avatar6.png
+avatars/avatar7.png
+avatars/avatar8.png
 farming/crops/Amaranth.png
 farming/crops/Amaranth_Seeds.png
 farming/crops/Amaranth_Stage_1.png
@@ -1360,6 +1368,17 @@ images/a_pig/tile_4_2.png
 images/a_pig/tile_4_3.png
 images/all_dirt.png
 images/arrow.png
+images/artisans/Bee_House.png
+images/artisans/Charcoal_Kiln.png
+images/artisans/Cheese_Press.png
+images/artisans/Dehydrator.png
+images/artisans/Fish_Smoker.png
+images/artisans/Furnace.png
+images/artisans/Keg.png
+images/artisans/Loom.png
+images/artisans/Mayonnaise_Machine.png
+images/artisans/Oil_Maker.png
+images/artisans/Preserves_Jar.png
 images/clock.png
 images/house.png
 images/lake.png
@@ -1384,3 +1403,4 @@ skin_temp/font-title-export.fnt
 skin_temp/pixthulhu-ui.atlas
 skin_temp/pixthulhu-ui.json
 skin_temp/pixthulhu-ui.png
+user.txt

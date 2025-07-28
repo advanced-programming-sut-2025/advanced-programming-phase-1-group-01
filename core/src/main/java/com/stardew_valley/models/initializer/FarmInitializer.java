@@ -137,7 +137,8 @@ public class FarmInitializer {
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-                tiles.get(x).set(y, tile);
+                if (x < 225 && y < 225) { tiles.get(x).set(y, tile); }
+                //@
             }
         }
     }
