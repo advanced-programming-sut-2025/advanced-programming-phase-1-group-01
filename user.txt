@@ -1,8 +1,8 @@
-Username: Amir
-Password: Amir#1234
-Nickname: Amir
-Email: Amir@gmail.com
+Username: Amirkia
+Password: Amirkia#1385
+Nickname: Amirkia
+Email: akghasemim@gmail.com
 Gender: MALE
 securityQuestion: QUESTION1
-securityAnswer: Amir
-avatarPath: avatars/avatar1.png
+securityAnswer: kir
+avatarPath: avatars/avatar5.png
