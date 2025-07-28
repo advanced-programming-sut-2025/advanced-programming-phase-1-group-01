@@ -26,11 +26,21 @@ public enum AnimalHouseType {
     }
 
     public AnimalHouseType getBaseType() {
-        return switch (this) {
-            case DELUXE_BARN, BIG_BARN -> BARN;
-            case DELUXE_COOP, BIG_COOP -> COOP;
-            default -> this;
-        };
+//        return switch (this) {
+//            case DELUXE_BARN, BIG_BARN -> BARN;
+//            case DELUXE_COOP, BIG_COOP -> COOP;
+//            default -> this;
+//        };
+        switch (this) {
+            case DELUXE_BARN:
+            case BIG_BARN:
+                return BARN;
+            case DELUXE_COOP:
+            case BIG_COOP:
+                return COOP;
+            default:
+                return this;
+        }
     }
 
     public int getCapacity() {

@@ -139,13 +139,25 @@ public class Game {
     }
 
     private Maps getMapById(int id) {
-        return switch (id) {
-            case 0 -> players.get(0).getFarm();
-            case 1 -> players.get(1).getFarm();
-            case 2 -> players.get(2).getFarm();
-            case 3 -> players.get(3).getFarm();
-            default -> npcVillage;
-        };
+//        return switch (id) {
+//            case 0 -> players.get(0).getFarm();
+//            case 1 -> players.get(1).getFarm();
+//            case 2 -> players.get(2).getFarm();
+//            case 3 -> players.get(3).getFarm();
+//            default -> npcVillage;
+//        };
+        switch (id) {
+            case 0:
+                return players.get(0).getFarm();
+            case 1:
+                return players.get(1).getFarm();
+            case 2:
+                return players.get(2).getFarm();
+            case 3:
+                return players.get(3).getFarm();
+            default:
+                return npcVillage;
+        }
     }
 
     public String enterOthersRoom(int id) {

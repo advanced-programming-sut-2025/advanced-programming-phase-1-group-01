@@ -27,6 +27,181 @@ public class AssetManager {
 
     private final String greenhouse = "images/map_1.png";
 
+    private final String clock = "images/clock.png";
+    private final String arrow = "images/arrow.png";
+
+    private final String sheep_down_0 = "images/a_Sheep/tile_0_0.png";
+    private final String sheep_down_1 = "images/a_Sheep/tile_0_1.png";
+    private final String sheep_down_2 = "images/a_Sheep/tile_0_2.png";
+    private final String sheep_down_3 = "images/a_Sheep/tile_0_3.png";
+
+    private final String sheep_right_0 = "images/a_Sheep/tile_1_0.png";
+    private final String sheep_right_1 = "images/a_Sheep/tile_1_1.png";
+    private final String sheep_right_2 = "images/a_Sheep/tile_1_2.png";
+    private final String sheep_right_3 = "images/a_Sheep/tile_1_3.png";
+
+    private final String sheep_left_0 = "images/a_Sheep/tile_1_0_flipped.png";
+    private final String sheep_left_1 = "images/a_Sheep/tile_1_1_flipped.png";
+    private final String sheep_left_2 = "images/a_Sheep/tile_1_2_flipped.png";
+    private final String sheep_left_3 = "images/a_Sheep/tile_1_3_flipped.png";
+
+    private final String sheep_up_0 = "images/a_Sheep/tile_2_0.png";
+    private final String sheep_up_1 = "images/a_Sheep/tile_2_1.png";
+    private final String sheep_up_2 = "images/a_Sheep/tile_2_2.png";
+    private final String sheep_up_3 = "images/a_Sheep/tile_2_3.png";
+
+
+    private final String rabbit_down_0 = "images/a_Rabbit/tile_0_0.png";
+    private final String rabbit_down_1 = "images/a_Rabbit/tile_0_1.png";
+    private final String rabbit_down_2 = "images/a_Rabbit/tile_0_2.png";
+    private final String rabbit_down_3 = "images/a_Rabbit/tile_0_3.png";
+
+    private final String rabbit_right_0 = "images/a_Rabbit/tile_1_0.png";
+    private final String rabbit_right_1 = "images/a_Rabbit/tile_1_1.png";
+    private final String rabbit_right_2 = "images/a_Rabbit/tile_1_2.png";
+    private final String rabbit_right_3 = "images/a_Rabbit/tile_1_3.png";
+
+    private final String rabbit_left_0 = "images/a_Rabbit/tile_3_0.png";
+    private final String rabbit_left_1 = "images/a_Rabbit/tile_3_1.png";
+    private final String rabbit_left_2 = "images/a_Rabbit/tile_3_2.png";
+    private final String rabbit_left_3 = "images/a_Rabbit/tile_3_3.png";
+
+    private final String rabbit_up_0 = "images/a_Rabbit/tile_2_0.png";
+    private final String rabbit_up_1 = "images/a_Rabbit/tile_2_1.png";
+    private final String rabbit_up_2 = "images/a_Rabbit/tile_2_2.png";
+    private final String rabbit_up_3 = "images/a_Rabbit/tile_2_3.png";
+
+
+
+    private final String pig_down_0 = "images/a_Pig/tile_0_0.png";
+    private final String pig_down_1 = "images/a_Pig/tile_0_1.png";
+    private final String pig_down_2 = "images/a_Pig/tile_0_2.png";
+    private final String pig_down_3 = "images/a_Pig/tile_0_3.png";
+
+    private final String pig_right_0 = "images/a_Pig/tile_1_0.png";
+    private final String pig_right_1 = "images/a_Pig/tile_1_1.png";
+    private final String pig_right_2 = "images/a_Pig/tile_1_2.png";
+    private final String pig_right_3 = "images/a_Pig/tile_1_3.png";
+
+    private final String pig_left_0 = "images/a_Pig/tile_1_0_flipped.png";
+    private final String pig_left_1 = "images/a_Pig/tile_1_1_flipped.png";
+    private final String pig_left_2 = "images/a_Pig/tile_1_2_flipped.png";
+    private final String pig_left_3 = "images/a_Pig/tile_1_3_flipped.png";
+
+    private final String pig_up_0 = "images/a_Pig/tile_2_0.png";
+    private final String pig_up_1 = "images/a_Pig/tile_2_1.png";
+    private final String pig_up_2 = "images/a_Pig/tile_2_2.png";
+    private final String pig_up_3 = "images/a_Pig/tile_2_3.png";
+
+
+
+
+    private final String hen_down_0 = "images/a_hen/tile_0_0.png";
+    private final String hen_down_1 = "images/a_hen/tile_0_1.png";
+    private final String hen_down_2 = "images/a_dino/tile_0_2.png";
+    private final String hen_down_3 = "images/a_dino/tile_0_3.png";
+
+    private final String hen_right_0 = "images/a_hen/tile_1_0.png";
+    private final String hen_right_1 = "images/a_hen/tile_1_1.png";
+    private final String hen_right_2 = "images/a_hen/tile_1_2.png";
+    private final String hen_right_3 = "images/a_hen/tile_1_3.png";
+
+    private final String hen_left_0 = "images/a_hen/tile_3_0.png";
+    private final String hen_left_1 = "images/a_dino/tile_3_1.png";
+    private final String hen_left_2 = "images/a_hen/tile_3_2.png";
+    private final String hen_left_3 = "images/a_hen/tile_3_3.png";
+
+    private final String hen_up_0 = "images/a_dino/tile_2_0.png";
+    private final String hen_up_1 = "images/a_hen/tile_2_1.png";
+    private final String hen_up_2 = "images/a_hen/tile_2_2.png";
+    private final String hen_up_3 = "images/a_hen/tile_2_3.png";
+
+
+    private final String duck_down_0 = "images/a_Duck/tile_0_0.png";
+    private final String duck_down_1 = "images/a_Duck/tile_0_1.png";
+    private final String duck_down_2 = "images/a_Duck/tile_0_2.png";
+    private final String duck_down_3 = "images/a_Duck/tile_0_3.png";
+
+    private final String duck_right_0 = "images/a_Duck/tile_1_0.png";
+    private final String duck_right_1 = "images/a_Duck/tile_1_1.png";
+    private final String duck_right_2 = "images/a_Duck/tile_1_2.png";
+    private final String duck_right_3 = "images/a_Duck/tile_1_3.png";
+
+    private final String duck_left_0 = "images/a_Duck/tile_1_0_flipped.png";
+    private final String duck_left_1 = "images/a_Duck/tile_1_1_flipped.png";
+    private final String duck_left_2 = "images/a_Duck/tile_1_2_flipped.png";
+    private final String duck_left_3 = "images/a_Duck/tile_1_3_flipped.png";
+
+    private final String duck_up_0 = "images/a_Duck/tile_0_0.png";
+    private final String duck_up_1 = "images/a_Duck/tile_0_1.png";
+    private final String duck_up_2 = "images/a_Duck/tile_0_2.png";
+    private final String duck_up_3 = "images/a_Duck/tile_0_3.png";
+
+
+    private final String dino_down_0 = "images/a_dino/tile_0_0.png";
+    private final String dino_down_1 = "images/a_dino/tile_0_1.png";
+    private final String dino_down_2 = "images/a_dino/tile_0_2.png";
+    private final String dino_down_3 = "images/a_dino/tile_0_3.png";
+
+    private final String dino_right_0 = "images/a_dino/tile_1_0.png";
+    private final String dino_right_1 = "images/a_dino/tile_1_1.png";
+    private final String dino_right_2 = "images/a_dino/tile_1_2.png";
+    private final String dino_right_3 = "images/a_dino/tile_1_3.png";
+
+    private final String dino_left_0 = "images/a_dino/tile_3_0.png";
+    private final String dino_left_1 = "images/a_dino/tile_3_1.png";
+    private final String dino_left_2 = "images/a_dino/tile_3_2.png";
+    private final String dino_left_3 = "images/a_dino/tile_3_3.png";
+
+    private final String dino_up_0 = "images/a_dino/tile_2_0.png";
+    private final String dino_up_1 = "images/a_dino/tile_2_1.png";
+    private final String dino_up_2 = "images/a_dino/tile_2_2.png";
+    private final String dino_up_3 = "images/a_dino/tile_2_3.png";
+
+
+    private final String goat_down_0 = "images/a_Goat/tile_0_0.png";
+    private final String goat_down_1 = "images/a_Goat/tile_0_1.png";
+    private final String goat_down_2 = "images/a_Goat/tile_0_2.png";
+    private final String goat_down_3 = "images/a_Goat/tile_0_3.png";
+
+    private final String goat_right_0 = "images/a_Goat/tile_1_0.png";
+    private final String goat_right_1 = "images/a_Goat/tile_1_1.png";
+    private final String goat_right_2 = "images/a_Goat/tile_1_2.png";
+    private final String goat_right_3 = "images/a_Goat/tile_1_3.png";
+
+    private final String goat_left_0 = "images/a_Goat/tile_1_0_flipped.png";
+    private final String goat_left_1 = "images/a_Goat/tile_1_1_flipped.png";
+    private final String goat_left_2 = "images/a_Goat/tile_1_2_flipped.png";
+    private final String goat_left_3 = "images/a_Goat/tile_1_3_flipped.png";
+
+    private final String goat_up_0 = "images/a_Goat/tile_2_0.png";
+    private final String goat_up_1 = "images/a_Goat/tile_2_1.png";
+    private final String goat_up_2 = "images/a_Goat/tile_2_2.png";
+    private final String goat_up_3 = "images/a_Goat/tile_2_3.png";
+
+
+    private final String cow_down_0 = "images/a_cow/tile_0_0.png";
+    private final String cow_down_1 = "images/a_cow/tile_0_0.png";
+    private final String cow_down_2 = "images/a_cow/tile_0_0.png";
+    private final String cow_down_3 = "images/a_cow/tile_0_0.png";
+
+    private final String cow_right_0 = "images/a_cow/tile_1_0.png";
+    private final String cow_right_1 = "images/a_cow/tile_1_1.png";
+    private final String cow_right_2 = "images/a_cow/tile_1_2.png";
+    private final String cow_right_3 = "images/a_cow/tile_1_3.png";
+
+    private final String cow_left_0 = "images/a_cow/tile_1_0_flipped.png";
+    private final String cow_left_1 = "images/a_cow/tile_1_1_flipped.png";
+    private final String cow_left_2 = "images/a_cow/tile_1_2_flipped.png";
+    private final String cow_left_3 = "images/a_cow/tile_1_3_flipped.png";
+
+    private final String cow_up_0 = "images/a_cow/tile_2_0.png";
+    private final String cow_up_1 = "images/a_cow/tile_2_1.png";
+    private final String cow_up_2 = "images/a_cow/tile_2_2.png";
+    private final String cow_up_3 = "images/a_cow/tile_2_3.png";
+
+
+
     private final String alex_0_walking_right_0 = "images/a_alex/tile_1_0.png";
     private final String alex_0_walking_right_1 = "images/a_alex/tile_1_1.png";
     private final String alex_0_walking_right_2 = "images/a_alex/tile_1_2.png";
@@ -57,7 +232,183 @@ public class AssetManager {
 
     private final TextureRegion greenhouse_tex = new TextureRegion(new Texture(greenhouse));
 
+    private final TextureRegion clock_tex = new TextureRegion(new Texture(clock));
+    private final TextureRegion arrow_tex = new TextureRegion(new Texture(arrow));
+
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
+
+
+    private final TextureRegion sheep_down_0_tex = new TextureRegion(new Texture(sheep_down_0));
+    private final TextureRegion sheep_down_1_tex = new TextureRegion(new Texture(sheep_down_1));
+    private final TextureRegion sheep_down_2_tex = new TextureRegion(new Texture(sheep_down_2));
+    private final TextureRegion sheep_down_3_tex = new TextureRegion(new Texture(sheep_down_3));
+
+    private final TextureRegion sheep_right_0_tex = new TextureRegion(new Texture(sheep_right_0));
+    private final TextureRegion sheep_right_1_tex = new TextureRegion(new Texture(sheep_right_1));
+    private final TextureRegion sheep_right_2_tex = new TextureRegion(new Texture(sheep_right_2));
+    private final TextureRegion sheep_right_3_tex = new TextureRegion(new Texture(sheep_right_3));
+
+    private final TextureRegion sheep_up_0_tex = new TextureRegion(new Texture(sheep_up_0));
+    private final TextureRegion sheep_up_1_tex = new TextureRegion(new Texture(sheep_up_1));
+    private final TextureRegion sheep_up_2_tex = new TextureRegion(new Texture(sheep_up_2));
+    private final TextureRegion sheep_up_3_tex = new TextureRegion(new Texture(sheep_up_3));
+
+    private final TextureRegion sheep_left_0_tex = new TextureRegion(new Texture(sheep_left_0));
+    private final TextureRegion sheep_left_1_tex = new TextureRegion(new Texture(sheep_left_1));
+    private final TextureRegion sheep_left_2_tex = new TextureRegion(new Texture(sheep_left_2));
+    private final TextureRegion sheep_left_3_tex = new TextureRegion(new Texture(sheep_left_3));
+
+
+
+    private final TextureRegion rabbit_down_0_tex = new TextureRegion(new Texture(rabbit_down_0));
+    private final TextureRegion rabbit_down_1_tex = new TextureRegion(new Texture(rabbit_down_1));
+    private final TextureRegion rabbit_down_2_tex = new TextureRegion(new Texture(rabbit_down_2));
+    private final TextureRegion rabbit_down_3_tex = new TextureRegion(new Texture(rabbit_down_3));
+
+    private final TextureRegion rabbit_right_0_tex = new TextureRegion(new Texture(rabbit_right_0));
+    private final TextureRegion rabbit_right_1_tex = new TextureRegion(new Texture(rabbit_right_1));
+    private final TextureRegion rabbit_right_2_tex = new TextureRegion(new Texture(rabbit_right_2));
+    private final TextureRegion rabbit_right_3_tex = new TextureRegion(new Texture(rabbit_right_3));
+
+    private final TextureRegion rabbit_up_0_tex = new TextureRegion(new Texture(rabbit_up_0));
+    private final TextureRegion rabbit_up_1_tex = new TextureRegion(new Texture(rabbit_up_1));
+    private final TextureRegion rabbit_up_2_tex = new TextureRegion(new Texture(rabbit_up_2));
+    private final TextureRegion rabbit_up_3_tex = new TextureRegion(new Texture(rabbit_up_3));
+
+    private final TextureRegion rabbit_left_0_tex = new TextureRegion(new Texture(rabbit_left_0));
+    private final TextureRegion rabbit_left_1_tex = new TextureRegion(new Texture(rabbit_left_1));
+    private final TextureRegion rabbit_left_2_tex = new TextureRegion(new Texture(rabbit_left_2));
+    private final TextureRegion rabbit_left_3_tex = new TextureRegion(new Texture(rabbit_left_3));
+
+
+
+    private final TextureRegion pig_down_0_tex = new TextureRegion(new Texture(pig_down_0));
+    private final TextureRegion pig_down_1_tex = new TextureRegion(new Texture(pig_down_1));
+    private final TextureRegion pig_down_2_tex = new TextureRegion(new Texture(pig_down_2));
+    private final TextureRegion pig_down_3_tex = new TextureRegion(new Texture(pig_down_3));
+
+    private final TextureRegion pig_right_0_tex = new TextureRegion(new Texture(pig_right_0));
+    private final TextureRegion pig_right_1_tex = new TextureRegion(new Texture(pig_right_1));
+    private final TextureRegion pig_right_2_tex = new TextureRegion(new Texture(pig_right_2));
+    private final TextureRegion pig_right_3_tex = new TextureRegion(new Texture(pig_right_3));
+
+    private final TextureRegion pig_up_0_tex = new TextureRegion(new Texture(pig_up_0));
+    private final TextureRegion pig_up_1_tex = new TextureRegion(new Texture(pig_up_1));
+    private final TextureRegion pig_up_2_tex = new TextureRegion(new Texture(pig_up_2));
+    private final TextureRegion pig_up_3_tex = new TextureRegion(new Texture(pig_up_3));
+
+    private final TextureRegion pig_left_0_tex = new TextureRegion(new Texture(pig_left_0));
+    private final TextureRegion pig_left_1_tex = new TextureRegion(new Texture(pig_left_1));
+    private final TextureRegion pig_left_2_tex = new TextureRegion(new Texture(pig_left_2));
+    private final TextureRegion pig_left_3_tex = new TextureRegion(new Texture(pig_left_3));
+
+
+
+    private final TextureRegion hen_down_0_tex = new TextureRegion(new Texture(hen_down_0));
+    private final TextureRegion hen_down_1_tex = new TextureRegion(new Texture(hen_down_1));
+    private final TextureRegion hen_down_2_tex = new TextureRegion(new Texture(hen_down_2));
+    private final TextureRegion hen_down_3_tex = new TextureRegion(new Texture(hen_down_3));
+
+    private final TextureRegion hen_right_0_tex = new TextureRegion(new Texture(hen_right_0));
+    private final TextureRegion hen_right_1_tex = new TextureRegion(new Texture(hen_right_1));
+    private final TextureRegion hen_right_2_tex = new TextureRegion(new Texture(hen_right_2));
+    private final TextureRegion hen_right_3_tex = new TextureRegion(new Texture(hen_right_3));
+
+    private final TextureRegion hen_up_0_tex = new TextureRegion(new Texture(hen_up_0));
+    private final TextureRegion hen_up_1_tex = new TextureRegion(new Texture(hen_up_1));
+    private final TextureRegion hen_up_2_tex = new TextureRegion(new Texture(hen_up_2));
+    private final TextureRegion hen_up_3_tex = new TextureRegion(new Texture(hen_up_3));
+
+    private final TextureRegion hen_left_0_tex = new TextureRegion(new Texture(hen_left_0));
+    private final TextureRegion hen_left_1_tex = new TextureRegion(new Texture(hen_left_1));
+    private final TextureRegion hen_left_2_tex = new TextureRegion(new Texture(hen_left_2));
+    private final TextureRegion hen_left_3_tex = new TextureRegion(new Texture(hen_left_3));
+
+
+    private final TextureRegion duck_down_0_tex = new TextureRegion(new Texture(duck_down_0));
+    private final TextureRegion duck_down_1_tex = new TextureRegion(new Texture(duck_down_1));
+    private final TextureRegion duck_down_2_tex = new TextureRegion(new Texture(duck_down_2));
+    private final TextureRegion duck_down_3_tex = new TextureRegion(new Texture(duck_down_3));
+
+    private final TextureRegion duck_right_0_tex = new TextureRegion(new Texture(duck_right_0));
+    private final TextureRegion duck_right_1_tex = new TextureRegion(new Texture(duck_right_1));
+    private final TextureRegion duck_right_2_tex = new TextureRegion(new Texture(duck_right_2));
+    private final TextureRegion duck_right_3_tex = new TextureRegion(new Texture(duck_right_3));
+
+    private final TextureRegion duck_up_0_tex = new TextureRegion(new Texture(duck_up_0));
+    private final TextureRegion duck_up_1_tex = new TextureRegion(new Texture(duck_up_1));
+    private final TextureRegion duck_up_2_tex = new TextureRegion(new Texture(duck_up_2));
+    private final TextureRegion duck_up_3_tex = new TextureRegion(new Texture(duck_up_3));
+
+    private final TextureRegion duck_left_0_tex = new TextureRegion(new Texture(duck_left_0));
+    private final TextureRegion duck_left_1_tex = new TextureRegion(new Texture(duck_left_1));
+    private final TextureRegion duck_left_2_tex = new TextureRegion(new Texture(duck_left_2));
+    private final TextureRegion duck_left_3_tex = new TextureRegion(new Texture(duck_left_3));
+
+
+
+    private final TextureRegion goat_down_0_tex = new TextureRegion(new Texture(goat_down_0));
+    private final TextureRegion goat_down_1_tex = new TextureRegion(new Texture(goat_down_1));
+    private final TextureRegion goat_down_2_tex = new TextureRegion(new Texture(goat_down_2));
+    private final TextureRegion goat_down_3_tex = new TextureRegion(new Texture(goat_down_3));
+
+    private final TextureRegion goat_right_0_tex = new TextureRegion(new Texture(goat_right_0));
+    private final TextureRegion goat_right_1_tex = new TextureRegion(new Texture(goat_right_1));
+    private final TextureRegion goat_right_2_tex = new TextureRegion(new Texture(goat_right_2));
+    private final TextureRegion goat_right_3_tex = new TextureRegion(new Texture(goat_right_3));
+
+    private final TextureRegion goat_up_0_tex = new TextureRegion(new Texture(goat_up_0));
+    private final TextureRegion goat_up_1_tex = new TextureRegion(new Texture(goat_up_1));
+    private final TextureRegion goat_up_2_tex = new TextureRegion(new Texture(goat_up_2));
+    private final TextureRegion goat_up_3_tex = new TextureRegion(new Texture(goat_up_3));
+
+    private final TextureRegion goat_left_0_tex = new TextureRegion(new Texture(goat_left_0));
+    private final TextureRegion goat_left_1_tex = new TextureRegion(new Texture(goat_left_1));
+    private final TextureRegion goat_left_2_tex = new TextureRegion(new Texture(goat_left_2));
+    private final TextureRegion goat_left_3_tex = new TextureRegion(new Texture(goat_left_3));
+
+
+    private final TextureRegion dino_down_0_tex = new TextureRegion(new Texture(dino_down_0));
+    private final TextureRegion dino_down_1_tex = new TextureRegion(new Texture(dino_down_1));
+    private final TextureRegion dino_down_2_tex = new TextureRegion(new Texture(dino_down_2));
+    private final TextureRegion dino_down_3_tex = new TextureRegion(new Texture(dino_down_3));
+
+    private final TextureRegion dino_right_0_tex = new TextureRegion(new Texture(dino_right_0));
+    private final TextureRegion dino_right_1_tex = new TextureRegion(new Texture(dino_right_1));
+    private final TextureRegion dino_right_2_tex = new TextureRegion(new Texture(dino_right_2));
+    private final TextureRegion dino_right_3_tex = new TextureRegion(new Texture(dino_right_3));
+
+    private final TextureRegion dino_up_0_tex = new TextureRegion(new Texture(dino_up_0));
+    private final TextureRegion dino_up_1_tex = new TextureRegion(new Texture(dino_up_1));
+    private final TextureRegion dino_up_2_tex = new TextureRegion(new Texture(dino_up_2));
+    private final TextureRegion dino_up_3_tex = new TextureRegion(new Texture(dino_up_3));
+
+    private final TextureRegion dino_left_0_tex = new TextureRegion(new Texture(dino_left_0));
+    private final TextureRegion dino_left_1_tex = new TextureRegion(new Texture(dino_left_1));
+    private final TextureRegion dino_left_2_tex = new TextureRegion(new Texture(dino_left_2));
+    private final TextureRegion dino_left_3_tex = new TextureRegion(new Texture(dino_left_3));
+
+
+    private final TextureRegion cow_down_0_tex = new TextureRegion(new Texture(cow_down_0));
+    private final TextureRegion cow_down_1_tex = new TextureRegion(new Texture(cow_down_1));
+    private final TextureRegion cow_down_2_tex = new TextureRegion(new Texture(cow_down_2));
+    private final TextureRegion cow_down_3_tex = new TextureRegion(new Texture(cow_down_3));
+
+    private final TextureRegion cow_right_0_tex = new TextureRegion(new Texture(cow_right_0));
+    private final TextureRegion cow_right_1_tex = new TextureRegion(new Texture(cow_right_1));
+    private final TextureRegion cow_right_2_tex = new TextureRegion(new Texture(cow_right_2));
+    private final TextureRegion cow_right_3_tex = new TextureRegion(new Texture(cow_right_3));
+
+    private final TextureRegion cow_up_0_tex = new TextureRegion(new Texture(cow_up_0));
+    private final TextureRegion cow_up_1_tex = new TextureRegion(new Texture(cow_up_1));
+    private final TextureRegion cow_up_2_tex = new TextureRegion(new Texture(cow_up_2));
+    private final TextureRegion cow_up_3_tex = new TextureRegion(new Texture(cow_up_3));
+
+    private final TextureRegion cow_left_0_tex = new TextureRegion(new Texture(cow_left_0));
+    private final TextureRegion cow_left_1_tex = new TextureRegion(new Texture(cow_left_1));
+    private final TextureRegion cow_left_2_tex = new TextureRegion(new Texture(cow_left_2));
+    private final TextureRegion cow_left_3_tex = new TextureRegion(new Texture(cow_left_3));
+
 
     private final TextureRegion alex_0_walking_right_0_tex = new TextureRegion(new Texture(alex_0_walking_right_0));
     private final TextureRegion alex_0_walking_right_1_tex = new TextureRegion(new Texture(alex_0_walking_right_1));
@@ -109,6 +460,245 @@ public class AssetManager {
     );
 
 
+    private final Animation<TextureRegion> sheep_up_animation = new Animation<>(0.1f,
+        sheep_up_0_tex,
+        sheep_up_1_tex,
+        sheep_up_2_tex,
+        sheep_up_3_tex
+    );
+
+    private final Animation<TextureRegion> sheep_right_animation = new Animation<>(0.1f,
+        sheep_right_0_tex,
+        sheep_right_1_tex,
+        sheep_right_2_tex,
+        sheep_right_3_tex
+    );
+
+    private final Animation<TextureRegion> sheep_down_animation = new Animation<>(0.1f,
+        sheep_down_0_tex,
+        sheep_down_1_tex,
+        sheep_down_2_tex,
+        sheep_down_3_tex
+    );
+
+    private final Animation<TextureRegion> sheep_left_animation = new Animation<>(0.1f,
+        sheep_left_0_tex,
+        sheep_left_1_tex,
+        sheep_left_2_tex,
+        sheep_left_3_tex
+    );
+
+
+    private final Animation<TextureRegion> rabbit_up_animation = new Animation<>(0.1f,
+        rabbit_up_0_tex,
+        rabbit_up_1_tex,
+        rabbit_up_2_tex,
+        rabbit_up_3_tex
+    );
+
+    private final Animation<TextureRegion> rabbit_right_animation = new Animation<>(0.1f,
+        rabbit_right_0_tex,
+        rabbit_right_1_tex,
+        rabbit_right_2_tex,
+        rabbit_right_3_tex
+    );
+
+    private final Animation<TextureRegion> rabbit_down_animation = new Animation<>(0.1f,
+        rabbit_down_0_tex,
+        rabbit_down_1_tex,
+        rabbit_down_2_tex,
+        rabbit_down_3_tex
+    );
+
+    private final Animation<TextureRegion> rabbit_left_animation = new Animation<>(0.1f,
+        rabbit_left_0_tex,
+        rabbit_left_1_tex,
+        rabbit_left_2_tex,
+        rabbit_left_3_tex
+    );
+
+
+
+    private final Animation<TextureRegion> pig_up_animation = new Animation<>(0.1f,
+        pig_up_0_tex,
+        pig_up_1_tex,
+        pig_up_2_tex,
+        pig_up_3_tex
+    );
+
+    private final Animation<TextureRegion> pig_right_animation = new Animation<>(0.1f,
+        pig_right_0_tex,
+        pig_right_1_tex,
+        pig_right_2_tex,
+        pig_right_3_tex
+    );
+
+    private final Animation<TextureRegion> pig_down_animation = new Animation<>(0.1f,
+        pig_down_0_tex,
+        pig_down_1_tex,
+        pig_down_2_tex,
+        pig_down_3_tex
+    );
+
+    private final Animation<TextureRegion> pig_left_animation = new Animation<>(0.1f,
+        pig_left_0_tex,
+        pig_left_1_tex,
+        pig_left_2_tex,
+        pig_left_3_tex
+    );
+
+
+
+    private final Animation<TextureRegion> hen_up_animation = new Animation<>(0.1f,
+        hen_up_0_tex,
+        hen_up_1_tex,
+        hen_up_2_tex,
+        hen_up_3_tex
+    );
+
+    private final Animation<TextureRegion> hen_right_animation = new Animation<>(0.1f,
+        hen_right_0_tex,
+        hen_right_1_tex,
+        hen_right_2_tex,
+        hen_right_3_tex
+    );
+
+    private final Animation<TextureRegion> hen_down_animation = new Animation<>(0.1f,
+        hen_down_0_tex,
+        hen_down_1_tex,
+        hen_down_2_tex,
+        hen_down_3_tex
+    );
+
+    private final Animation<TextureRegion> hen_left_animation = new Animation<>(0.1f,
+        hen_left_0_tex,
+        hen_left_1_tex,
+        hen_left_2_tex,
+        hen_left_3_tex
+    );
+
+
+
+    private final Animation<TextureRegion> duck_up_animation = new Animation<>(0.1f,
+        duck_up_0_tex,
+        duck_up_1_tex,
+        duck_up_2_tex,
+        duck_up_3_tex
+    );
+
+    private final Animation<TextureRegion> duck_right_animation = new Animation<>(0.1f,
+        duck_right_0_tex,
+        duck_right_1_tex,
+        duck_right_2_tex,
+        duck_right_3_tex
+    );
+
+    private final Animation<TextureRegion> duck_down_animation = new Animation<>(0.1f,
+        duck_down_0_tex,
+        duck_down_1_tex,
+        duck_down_2_tex,
+        duck_down_3_tex
+    );
+
+    private final Animation<TextureRegion> duck_left_animation = new Animation<>(0.1f,
+        duck_left_0_tex,
+        duck_left_1_tex,
+        duck_left_2_tex,
+        duck_left_3_tex
+    );
+
+
+
+    private final Animation<TextureRegion> goat_up_animation = new Animation<>(0.1f,
+        goat_up_0_tex,
+        goat_up_1_tex,
+        goat_up_2_tex,
+        goat_up_3_tex
+    );
+
+    private final Animation<TextureRegion> goat_right_animation = new Animation<>(0.1f,
+        goat_right_0_tex,
+        goat_right_1_tex,
+        goat_right_2_tex,
+        goat_right_3_tex
+    );
+
+    private final Animation<TextureRegion> goat_down_animation = new Animation<>(0.1f,
+        goat_down_0_tex,
+        goat_down_1_tex,
+        goat_down_2_tex,
+        goat_down_3_tex
+    );
+
+    private final Animation<TextureRegion> goat_left_animation = new Animation<>(0.1f,
+        goat_left_0_tex,
+        goat_left_1_tex,
+        goat_left_2_tex,
+        goat_left_3_tex
+    );
+
+
+
+    private final Animation<TextureRegion> dino_up_animation = new Animation<>(0.1f,
+        dino_up_0_tex,
+        dino_up_1_tex,
+        dino_up_2_tex,
+        dino_up_3_tex
+    );
+
+    private final Animation<TextureRegion> dino_right_animation = new Animation<>(0.1f,
+        dino_right_0_tex,
+        dino_right_1_tex,
+        dino_right_2_tex,
+        dino_right_3_tex
+    );
+
+    private final Animation<TextureRegion> dino_down_animation = new Animation<>(0.1f,
+        dino_down_0_tex,
+        dino_down_1_tex,
+        dino_down_2_tex,
+        dino_down_3_tex
+    );
+
+    private final Animation<TextureRegion> dino_left_animation = new Animation<>(0.1f,
+        dino_left_0_tex,
+        dino_left_1_tex,
+        dino_left_2_tex,
+        dino_left_3_tex
+    );
+
+
+
+    private final Animation<TextureRegion> cow_up_animation = new Animation<>(0.1f,
+        cow_up_0_tex,
+        cow_up_1_tex,
+        cow_up_2_tex,
+        cow_up_3_tex
+    );
+
+    private final Animation<TextureRegion> cow_right_animation = new Animation<>(0.1f,
+        cow_right_0_tex,
+        cow_right_1_tex,
+        cow_right_2_tex,
+        cow_right_3_tex
+    );
+
+    private final Animation<TextureRegion> cow_down_animation = new Animation<>(0.1f,
+        cow_down_0_tex,
+        cow_down_1_tex,
+        cow_down_2_tex,
+        cow_down_3_tex
+    );
+
+    private final Animation<TextureRegion> cow_left_animation = new Animation<>(0.1f,
+        cow_left_0_tex,
+        cow_left_1_tex,
+        cow_left_2_tex,
+        cow_left_3_tex
+    );
+
+
+
     public TextureRegion getHouse() {
         return house_tex;
     }
@@ -129,6 +719,14 @@ public class AssetManager {
         return greenhouse_tex;
     }
 
+    public TextureRegion getClock() {
+        return clock_tex;
+    }
+
+    public TextureRegion getArrow() {
+        return arrow_tex;
+    }
+
 
     public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
         return alex_0_walking_right_animation;
@@ -144,6 +742,143 @@ public class AssetManager {
 
     public Animation<TextureRegion> get_Alex_0_walking_down_animation() {
         return alex_0_walking_down_animation;
+    }
+
+    public Animation<TextureRegion> getSheepUpAnimation() {
+        return sheep_up_animation;
+    }
+
+    public Animation<TextureRegion> getSheepRightAnimation() {
+        return sheep_right_animation;
+    }
+
+    public Animation<TextureRegion> getSheepDownAnimation() {
+        return sheep_down_animation;
+    }
+
+    public Animation<TextureRegion> getSheepLeftAnimation() {
+        return sheep_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getRabbitUpAnimation() {
+        return rabbit_up_animation;
+    }
+
+    public Animation<TextureRegion> getRabbitRightAnimation() {
+        return rabbit_right_animation;
+    }
+
+    public Animation<TextureRegion> getRabbitDownAnimation() {
+        return rabbit_down_animation;
+    }
+
+    public Animation<TextureRegion> getRabbitLeftAnimation() {
+        return rabbit_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getPigUpAnimation() {
+        return pig_up_animation;
+    }
+
+    public Animation<TextureRegion> getPigRightAnimation() {
+        return pig_right_animation;
+    }
+
+    public Animation<TextureRegion> getPigDownAnimation() {
+        return pig_down_animation;
+    }
+
+    public Animation<TextureRegion> getPigLeftAnimation() {
+        return pig_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getDuckUpAnimation() {
+        return duck_up_animation;
+    }
+
+    public Animation<TextureRegion> getDuckRightAnimation() {
+        return duck_right_animation;
+    }
+
+    public Animation<TextureRegion> getDuckDownAnimation() {
+        return duck_down_animation;
+    }
+
+    public Animation<TextureRegion> getDuckLeftAnimation() {
+        return duck_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getHenUpAnimation() {
+        return hen_up_animation;
+    }
+
+    public Animation<TextureRegion> getHenRightAnimation() {
+        return hen_right_animation;
+    }
+
+    public Animation<TextureRegion> getHenDownAnimation() {
+        return hen_down_animation;
+    }
+
+    public Animation<TextureRegion> getHenLeftAnimation() {
+        return hen_left_animation;
+    }
+
+
+
+    public Animation<TextureRegion> getgoatUpAnimation() {
+        return goat_up_animation;
+    }
+
+    public Animation<TextureRegion> getgoatRightAnimation() {
+        return goat_right_animation;
+    }
+
+    public Animation<TextureRegion> getgoatDownAnimation() {
+        return goat_down_animation;
+    }
+
+    public Animation<TextureRegion> getgoatLeftAnimation() {
+        return goat_left_animation;
+    }
+
+
+
+    public Animation<TextureRegion> getDinoUpAnimation() {
+        return dino_up_animation;
+    }
+
+    public Animation<TextureRegion> getDinoRightAnimation() {
+        return dino_right_animation;
+    }
+
+    public Animation<TextureRegion> getDinoDownAnimation() {
+        return dino_down_animation;
+    }
+
+    public Animation<TextureRegion> getDinoLeftAnimation() {
+        return dino_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getCowUpAnimation() {
+        return cow_up_animation;
+    }
+
+    public Animation<TextureRegion> getCowRightAnimation() {
+        return cow_right_animation;
+    }
+
+    public Animation<TextureRegion> getCowDownAnimation() {
+        return cow_down_animation;
+    }
+
+    public Animation<TextureRegion> getCowLeftAnimation() {
+        return cow_left_animation;
     }
 
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));
