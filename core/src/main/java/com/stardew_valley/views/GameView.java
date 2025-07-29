@@ -82,7 +82,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         drawWorld();
-        dateTimeView.render();
+        dateTimeView.update();
         batch.end();
 
         stage.act(delta);
@@ -228,8 +228,24 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     public void handleMovement(float delta) {
+
+        /*
+            g = cc, advance hour
+            space = minimap
+            w = up
+            s = down
+            d = right
+            a = left
+
+        */
+
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             showMiniMap(stage, controller.getRepo().getCurrentGame().getFarm().getTiles(), 3, 3);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
         }
 
 
@@ -271,15 +287,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             float nextX = player.getX() + speed * delta;
             player.setX(nextX);
             player.setDirection(Direction.RIGHT);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             float nextX = player.getX() - speed * delta;
             player.setX(nextX);
             player.setDirection(Direction.LEFT);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        } if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             float nextY = player.getY() + speed * delta;
             player.setY(nextY);
             player.setDirection(Direction.UP);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             float nextY = player.getY() - speed * delta;
             player.setY(nextY);
             player.setDirection(Direction.DOWN);
