@@ -19,13 +19,17 @@ import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.relations.RelationshipService;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Player extends Character {
     private Game game;
     private final User user;
     private final Gender gender;
     private Position position;
+    private float x;
+    private float y;
     private Direction direction;
     private Farm farm;
     private int numOfCoins;
@@ -93,6 +97,8 @@ public class Player extends Character {
     }
 
     public void setPosition(Position position) {
+        this.x = position.x();
+        this.y = position.y();
         this.position = position;
     }
 
@@ -812,6 +818,14 @@ public class Player extends Character {
         return false;
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public String getArtisan(String artisanName) {
         Item item = null;
         for (UnripeProduct unripeProduct : unripeProducts) {
@@ -850,5 +864,15 @@ public class Player extends Character {
 
     public void updateStateTime(float delta) {
         stateTime += delta;
+    }
+
+    public void setX(float x) {
+        setPosition(new Position((int) x, position.y()));
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        setPosition(new Position(position.x(), (int) y));
+        this.y = y;
     }
 }

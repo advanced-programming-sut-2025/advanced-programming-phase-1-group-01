@@ -155,7 +155,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void drawPlayer() {
-        batch.draw(player.getCurrentFrame(), player.getPosition().x(), player.getPosition().y());
+        batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
     }
 
     private void drawBuilding () {
@@ -221,27 +221,31 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
-
-        if (incompleteMovement.isHasIncompleteMovement()) {
-            Vector2 direction = new Vector2(incompleteMovement.getVectorPosition()).sub(vectorPosition).nor();
-            vectorPosition.add(direction.scl(speed * delta));
-            incompleteMovement.checkDestination(vectorPosition);
-            return;
-        }
+//
+//        if (incompleteMovement.isHasIncompleteMovement()) {
+//            Vector2 direction = new Vector2(incompleteMovement.getVectorPosition()).sub(vectorPosition).nor();
+//            vectorPosition.add(direction.scl(speed * delta));
+//            incompleteMovement.checkDestination(vectorPosition);
+//            return;
+//        }
 
         //@ check if is allowed
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            incompleteMovement = new IncompleteMovement(player.getPosition(), 1, 0);
+            float nextX = player.getX() + speed * delta;
+            player.setX(nextX);
             player.setDirection(Direction.RIGHT);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            incompleteMovement = new IncompleteMovement(player.getPosition(), -1, 0);
+            float nextX = player.getX() - speed * delta;
+            player.setX(nextX);
             player.setDirection(Direction.LEFT);
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            incompleteMovement = new IncompleteMovement(player.getPosition(), 0, -1);
+            float nextY = player.getY() + speed * delta;
+            player.setY(nextY);
             player.setDirection(Direction.UP);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            incompleteMovement = new IncompleteMovement(player.getPosition(), 0, 1);
+            float nextY = player.getY() - speed * delta;
+            player.setY(nextY);
             player.setDirection(Direction.DOWN);
         }
     }
