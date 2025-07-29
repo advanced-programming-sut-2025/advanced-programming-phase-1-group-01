@@ -49,7 +49,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final static int TILE_SIZE = 16;
 
 
-    private final float speed = 100f;
+    private final float speed = 500f;
     private Vector2 vectorPosition;
     private IncompleteMovement incompleteMovement;
 
@@ -197,6 +197,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     public void handleMovement(float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            showMiniMap(stage, controller.getRepo().getCurrentGame().getFarm().getTiles(), 3, 3);
+        }
+
+
         if (isFainting) {
             faintTime += delta;
 
@@ -254,7 +259,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         isFainting = fainting;
     }
 
-    public void showMiniMap(Stage stage, List<List<Tile>> tiles, int buildingWidth, int buildingHeight, TextureRegion textureRegion) {
+    public void showMiniMap(Stage stage, List<List<Tile>> tiles, int buildingWidth, int buildingHeight) {
         MiniMapWidget miniMap = new MiniMapWidget(tiles, buildingWidth, buildingHeight);
 
         Window miniMapWindow = miniMap.showWindow((x, y) -> {

@@ -80,7 +80,7 @@ public class MiniMapWidget extends Widget {
 
                 for (int i = 0; i < tiles.size(); i++) {
                     for (int j = 0; j < tiles.get(i).size(); j++) {
-                        if (tiles.get(i).get(j).isPlowed()) {
+                        if (tiles.get(i).get(j).isMovable()) {
                             shapeRenderer.setColor(Color.WHITE);
                         } else {
                             shapeRenderer.setColor(Color.RED);
