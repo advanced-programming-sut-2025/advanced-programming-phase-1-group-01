@@ -27,7 +27,7 @@ public class FarmInitializer {
     private final static Position GREENHOUSE_BL = new Position(6, 5);
     private final static Position GREENHOUSE_TR = new Position(20, 22);
     private final static Position MINE_BL = new Position(3, 57);
-    private final static Position MINE_TR = new Position(22, 70);
+    private final static Position MINE_TR = new Position(22 - 7, 70);
     private final static Position COTTAGE_BL = new Position(50, 35);
     private final static Position COTTAGE_TR = new Position(59, 44);
 
@@ -62,9 +62,6 @@ public class FarmInitializer {
             }
             tiles.add(row);
         }
-
-        System.out.println("cols: " + tiles.size());
-        System.out.println("rows: " + tiles.get(0).size());
     }
 
     private static void greenhouseInitializer(int greenhouseId) {
@@ -132,7 +129,7 @@ public class FarmInitializer {
 
 
         for (int x = COTTAGE_BL.x() + additionalX; x < COTTAGE_TR.x() + additionalX; x++) {
-            for (int y = FARM_BL.y() + additionalY; y < FARM_TR.y() + additionalY; y++) {
+            for (int y = COTTAGE_BL.y() + additionalY; y < COTTAGE_TR.y() + additionalY; y++) {
                 Tile tile = new Tile.Builder()
                     .setPosition(new Position(x, y))
                     .setType(TileType.COTTAGE)
@@ -140,8 +137,7 @@ public class FarmInitializer {
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-//                if (x < 225 && y < 225 ) { tiles.get(x).set(y, tile); }
-                //@
+                tiles.get(x).set(y, tile);
             }
         }
     }
@@ -155,146 +151,109 @@ public class FarmInitializer {
     }
 
     public static int getLakeStartingPointX() {
-        return COTTAGE_BL.x();
+        return RIVER_BL.x();
     }
 
     public static int getLakeStartingPointY() {
-        return COTTAGE_BL.y();
+        return RIVER_BL.y();
     }
 
     public static int getMineStartingPointX() {
-        return COTTAGE_BL.x();
+        return MINE_BL.x();
     }
 
     public static int getMineStartingPointY() {
-        return COTTAGE_BL.y();
+        return MINE_BL.y();
     }
 
     public static int getGreenhouseStartingPointX() {
-        return COTTAGE_BL.x();
+        return GREENHOUSE_BL.x();
     }
 
     public static int getGreenhouseStartingPointY() {
-        return COTTAGE_BL.y();
+        return GREENHOUSE_BL.y();
     }
+
 
     private static void minerInitializer(int mineId) {
         int additionalX = getAdditionalX(mineId);
         int additionalY = getAdditionalY(mineId);
 
-        for (int y = MINE_BL.y() + additionalY; y < MINE_TR.y() + additionalY; y++) {
-            switch (y) {
-                case 0:
-                    for (int x = MINE_BL.x() + additionalX + 5; x <= MINE_BL.x() + additionalX + 13; x++) {
-                        tiles.get(y).set(x, new Tile.Builder()
-                            .setPosition(new Position(x, y))
-                            .setType(TileType.FENCE)
-                            .setMovable(false)
-                            .build());
-                    }
-                    break;
-                case 1:
-                    for (int x = MINE_BL.x() + additionalX + 2; x <= MINE_BL.x() + additionalX + 16; x++) {
-                        if (x > 5 && x < 14) {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.MINE)
-                                .setMovable(true)
-                                .build());
-                        } else {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.FENCE)
-                                .setMovable(false)
-                                .build());
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int x = MINE_BL.x() + additionalX + 2; x <= MINE_BL.x() + additionalX + 17; x++) {
-                        if (x == 2 || x > 14 && x < 18) {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.FENCE)
-                                .setMovable(false)
-                                .build());
-                        } else {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.MINE)
-                                .setMovable(true)
-                                .build());
-                        }
-                    }
-                    break;
-                case 3:
-                    for (int x = MINE_BL.x() + additionalX + 1; x <= MINE_BL.x() + additionalX + 18; x++) {
-                        if (x == 1 || x == 2 || x == 17 || x == 18) {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.FENCE)
-                                .setMovable(false)
-                                .build());
-                        } else {
-                                tiles.get(y).set(x, new Tile.Builder()
-                                    .setPosition(new Position(x, y))
-                                    .setType(TileType.MINE)
-                                    .setMovable(true)
-                                    .build());
-                            }
-                        }
-                        break;
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    for (int x = MINE_BL.x() + additionalX; x <= MINE_BL.x() + additionalX + 18; x++) {
-                        if (x == 0 || x == 1 || x == 17 || x == 18) {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.FENCE)
-                                .setMovable(false)
-                                .build());
-                        } else {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.MINE)
-                                .setMovable(true)
-                                .build());
-                        }
-                    }
-                    break;
-                case 8:
-                    for (int x = MINE_BL.x() + additionalX + 2; x <= MINE_BL.x() + additionalX + 17; x++) {
-                        if (x >= 0 && x < 4 || x >= 15 && x <= 18) {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.FENCE)
-                                .setMovable(false)
-                                .build());
-                        } else {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.MINE)
-                                .setMovable(true)
-                                .build());
-                        }
-                    }
-                    break;
-                default:
-                    for (int x = 0; x < 19; x++) {
-                        if (x != 5) {
-                            tiles.get(y).set(x, new Tile.Builder()
-                                .setPosition(new Position(x, y))
-                                .setType(TileType.FENCE)
-                                .setMovable(false)
-                                .build());
-                        }
-                    }
+        int baseX = MINE_BL.x() + additionalX;
+        int baseY = MINE_BL.y() + additionalY;
 
+        for (int y = baseY; y < MINE_TR.y() + additionalY; y++) {
+            int localY = y - baseY;
+
+            switch (localY) {
+                case 0:
+                    for (int localX = 5; localX <= 13; localX++) {
+                        setTile(y, baseX + localX, TileType.FENCE, false);
+                    }
+                    break;
+
+                case 1:
+                    for (int localX = 2; localX <= 16; localX++) {
+                        TileType type = (localX > 5 && localX < 14) ? TileType.MINE : TileType.FENCE;
+                        boolean movable = type == TileType.MINE;
+                        setTile(y, baseX + localX, type, movable);
+                    }
+                    break;
+
+                case 2:
+                    for (int localX = 2; localX <= 17; localX++) {
+                        boolean isFence = localX == 2 || localX > 14;
+                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
+                        boolean movable = !isFence;
+                        setTile(y, baseX + localX, type, movable);
+                    }
+                    break;
+
+                case 3:
+                    for (int localX = 1; localX <= 18; localX++) {
+                        boolean isFence = (localX == 1 || localX == 2 || localX == 17 || localX == 18);
+                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
+                        boolean movable = !isFence;
+                        setTile(y, baseX + localX, type, movable);
+                    }
+                    break;
+
+                case 4: case 5: case 6: case 7:
+                    for (int localX = 0; localX <= 18; localX++) {
+                        boolean isFence = (localX == 0 || localX == 1 || localX == 17 || localX == 18);
+                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
+                        boolean movable = !isFence;
+                        setTile(y, baseX + localX, type, movable);
+                    }
+                    break;
+
+                case 8:
+                    for (int localX = 2; localX <= 17; localX++) {
+                        boolean isFence = localX < 4 || localX >= 15;
+                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
+                        boolean movable = !isFence;
+                        setTile(y, baseX + localX, type, movable);
+                    }
+                    break;
+
+                default:
+                    for (int localX = 0; localX < 19; localX++) {
+                        if (localX != 5) {
+                            setTile(y, localX, TileType.FENCE, false);
+                        }
+                    }
             }
         }
     }
+
+    private static void setTile(int y, int x, TileType type, boolean movable) {
+        tiles.get(y).set(x, new Tile.Builder()
+            .setPosition(new Position(x, y))
+            .setType(type)
+            .setMovable(movable)
+            .build());
+    }
+
 
 
     private static void lakeInitializer(int lakeId) {
@@ -378,10 +337,6 @@ public class FarmInitializer {
         if (tiles.isEmpty()) {
             initializeTiles();
         }
-        System.out.println();
-        System.out.println(tiles.get(224).get(203).getType().name());
-        System.out.println(tiles.get(224).get(100).getType().name());
-        System.out.println();
         return new Farm(tiles, lake, cottage, quarry, greenhouse);
     }
 }

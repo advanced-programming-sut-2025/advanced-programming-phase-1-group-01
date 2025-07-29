@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -25,7 +26,9 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.initializer.FarmInitializer;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class GameView extends ScreenAdapter implements InputProcessor {
@@ -44,6 +47,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
+    private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
 
     private final static int TILE_SIZE = 16;
@@ -153,22 +157,36 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawFence();
 
+//        drawTileHighlights();
 
+        //printTileTypeCounts();
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+//        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
     private void drawBuilding () {
         for (int i = 0; i < 4; i++) {
-            batch.draw(mine, getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i)));
-            batch.draw(house, getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
-            batch.draw(lake, getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i)));
-            batch.draw(greenhouse, getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i)), getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i)));
+            int mineX = getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i));
+            int mineY = getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i) - 1);
+            batch.draw(mine, mineX, mineY);
+
+            int houseX = getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i));
+            int houseY = getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(house, houseX, houseY);
+
+            int lakeX = getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i));
+            int lakeY = getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(lake, lakeX, lakeY);
+
+            int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i));
+            int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(greenhouse, greenhouseX, greenhouseY);
         }
     }
+
 
     private void drawFence() {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
@@ -176,22 +194,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         int numCols = tiles.get(0).size();
 
 
-        System.out.println("numRows: " + numRows);
-        System.out.println("numCols: " + numCols);
-
         for (int col = 0; col < numCols; col++) {
             Tile topTile = tiles.get(0).get(col);
             if (topTile.getType() == TileType.FENCE) {
                 batch.draw(woodFence, getTilePixel(col), getTilePixel(0));
-            } else {
-                System.out.println(topTile.getType().name() + " " + col);
             }
 
             Tile bottomTile = tiles.get(numRows - 1).get(col);
             if (bottomTile.getType() == TileType.FENCE) {
                 batch.draw(woodFence, getTilePixel(col), getTilePixel(numRows - 1));
-            } else {
-                System.out.println(bottomTile.getType().name() + " " + col);
             }
         }
 
@@ -199,18 +210,74 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             Tile leftTile = tiles.get(row).get(0);
             if (leftTile.getType() == TileType.FENCE) {
                 batch.draw(woodFence, getTilePixel(0), getTilePixel(row));
-            } else {
-                System.out.println(leftTile.getType().name() + " " + row);
             }
 
             Tile rightTile = tiles.get(row).get(numCols - 1);
             if (rightTile.getType() == TileType.FENCE) {
                 batch.draw(woodFence, getTilePixel(numCols - 1), getTilePixel(row));
-            } else {
-                System.out.println(rightTile.getType().name() + " " + row);
             }
         }
     }
+
+    public void printTileTypeCounts() {
+        Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
+
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+
+        for (List<Tile> row : tiles) {
+            for (Tile tile : row) {
+                TileType type = tile.getType();
+                tileCounts.put(type, tileCounts.getOrDefault(type, 0) + 1);
+            }
+        }
+
+        for (Map.Entry<TileType, Integer> entry : tileCounts.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
+
+    private void drawTileHighlights() {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+        Color originalColor = batch.getColor();
+
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                Tile tile = tiles.get(row).get(col);
+                TileType type = tile.getType();
+
+                Color highlightColor = getColorForTileType(type);
+                if (highlightColor != null) {
+                    batch.setColor(highlightColor);
+                    batch.draw(highlightBox, getTilePixel(col), getTilePixel(row), 16, 16);
+                }
+            }
+        }
+
+        // بازیابی رنگ اصلی
+        batch.setColor(originalColor);
+    }
+
+    private Color getColorForTileType(TileType type) {
+        switch (type) {
+            case GROUND: return new Color(0f, 1f, 0f, 0.3f);
+            case RIVER: return new Color(0f, 0.5f, 1f, 0.3f);
+            case MINE: {
+                //System.out.println("meow");
+                return Color.BLACK;
+            }
+            case GREENHOUSE: return new Color(0f, 1f, 0.5f, 0.3f);
+            case COTTAGE: return new Color(0.6f, 0.3f, 0.1f, 0.3f);
+            case WALL: return new Color(0.4f, 0.4f, 0.4f, 0.3f);
+            case SALE_BUCKET: return new Color(1f, 0f, 0f, 0.3f);
+            case FENCE: return new Color(1f, 1f, 0f, 0.3f);
+            default: return null;
+        }
+    }
+
+
 
 
     private int getTilePixel(int tileCol) {
@@ -230,6 +297,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void handleMovement(float delta) {
 
         /*
+
             g = cc, advance hour
             space = minimap
             w = up

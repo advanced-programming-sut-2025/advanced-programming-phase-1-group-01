@@ -3558,6 +3558,7 @@ images/artisans/Loom.png
 images/artisans/Mayonnaise_Machine.png
 images/artisans/Oil_Maker.png
 images/artisans/Preserves_Jar.png
+images/black.png
 images/circle.png
 images/clock.png
 images/house.png

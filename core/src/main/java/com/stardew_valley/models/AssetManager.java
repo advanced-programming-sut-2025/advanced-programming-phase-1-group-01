@@ -15,6 +15,8 @@ public class AssetManager {
     private static AssetManager assetManager;
     public static final float SCALE = 4f;
 
+    private final String black = "images/black.png";
+
     private final String spring_background = "images/all_dirt.png";
 
     private final String wood_fence = "images/wood_fence.png";
@@ -1269,8 +1271,14 @@ public class AssetManager {
 
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));
 
+    private final TextureRegion black_tex = new TextureRegion(new Texture(black));
+
     public TextureRegion getSpringBackground() {
         return spring_background_tex;
+    }
+
+    public TextureRegion getBlackTexture() {
+        return black_tex;
     }
 
     // crops:
