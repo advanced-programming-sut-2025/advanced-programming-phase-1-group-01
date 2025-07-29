@@ -30,6 +30,8 @@ public class AssetManager {
     private final String clock = "images/clock.png";
     private final String arrow = "images/arrow.png";
 
+    private final String circleSign = "images/circle.png";
+
     private final String sheep_down_0 = "images/a_Sheep/tile_0_0.png";
     private final String sheep_down_1 = "images/a_Sheep/tile_0_1.png";
     private final String sheep_down_2 = "images/a_Sheep/tile_0_2.png";
@@ -70,6 +72,93 @@ public class AssetManager {
     private final String rabbit_up_1 = "images/a_Rabbit/tile_2_1.png";
     private final String rabbit_up_2 = "images/a_Rabbit/tile_2_2.png";
     private final String rabbit_up_3 = "images/a_Rabbit/tile_2_3.png";
+
+
+
+    private final String abigail_down_0 = "images/a_Abigail/tile_0_0.png";
+    private final String abigail_down_1 = "images/a_Abigail/tile_0_1.png";
+    private final String abigail_down_2 = "images/a_Abigail/tile_0_2.png";
+    private final String abigail_down_3 = "images/a_Abigail/tile_0_3.png";
+
+    private final String abigail_right_0 = "images/a_Abigail/tile_1_0.png";
+    private final String abigail_right_1 = "images/a_Abigail/tile_1_1.png";
+    private final String abigail_right_2 = "images/a_Abigail/tile_1_2.png";
+    private final String abigail_right_3 = "images/a_Abigail/tile_1_3.png";
+
+    private final String abigail_left_0 = "images/a_Abigail/tile_3_0.png";
+    private final String abigail_left_1 = "images/a_Abigail/tile_3_1.png";
+    private final String abigail_left_2 = "images/a_Abigail/tile_3_2.png";
+    private final String abigail_left_3 = "images/a_Abigail/tile_3_3.png";
+
+    private final String abigail_up_0 = "images/a_Abigail/tile_2_0.png";
+    private final String abigail_up_1 = "images/a_Abigail/tile_2_1.png";
+    private final String abigail_up_2 = "images/a_Abigail/tile_2_2.png";
+    private final String abigail_up_3 = "images/a_Abigail/tile_2_3.png";
+
+
+
+    private final String harvey_down_0 = "images/a_harvey/tile_0_0.png";
+    private final String harvey_down_1 = "images/a_harvey/tile_0_1.png";
+    private final String harvey_down_2 = "images/a_harvey/tile_0_2.png";
+    private final String harvey_down_3 = "images/a_harvey/tile_0_3.png";
+
+    private final String harvey_right_0 = "images/a_harvey/tile_1_0.png";
+    private final String harvey_right_1 = "images/a_harvey/tile_1_1.png";
+    private final String harvey_right_2 = "images/a_harvey/tile_1_2.png";
+    private final String harvey_right_3 = "images/a_harvey/tile_1_3.png";
+
+    private final String harvey_left_0 = "images/a_harvey/tile_3_0.png";
+    private final String harvey_left_1 = "images/a_harvey/tile_3_1.png";
+    private final String harvey_left_2 = "images/a_harvey/tile_3_2.png";
+    private final String harvey_left_3 = "images/a_harvey/tile_3_3.png";
+
+    private final String harvey_up_0 = "images/a_harvey/tile_2_0.png";
+    private final String harvey_up_1 = "images/a_harvey/tile_2_1.png";
+    private final String harvey_up_2 = "images/a_harvey/tile_2_2.png";
+    private final String harvey_up_3 = "images/a_harvey/tile_2_3.png";
+
+
+    private final String sebastian_down_0 = "images/a_sebastian/tile_0_0.png";
+    private final String sebastian_down_1 = "images/a_sebastian/tile_0_1.png";
+    private final String sebastian_down_2 = "images/a_sebastian/tile_0_2.png";
+    private final String sebastian_down_3 = "images/a_sebastian/tile_0_3.png";
+
+    private final String sebastian_right_0 = "images/a_sebastian/tile_1_0.png";
+    private final String sebastian_right_1 = "images/a_sebastian/tile_1_1.png";
+    private final String sebastian_right_2 = "images/a_sebastian/tile_1_2.png";
+    private final String sebastian_right_3 = "images/a_sebastian/tile_1_3.png";
+
+    private final String sebastian_left_0 = "images/a_sebastian/tile_3_0.png";
+    private final String sebastian_left_1 = "images/a_sebastian/tile_3_1.png";
+    private final String sebastian_left_2 = "images/a_sebastian/tile_3_2.png";
+    private final String sebastian_left_3 = "images/a_sebastian/tile_3_3.png";
+
+    private final String sebastian_up_0 = "images/a_sebastian/tile_2_0.png";
+    private final String sebastian_up_1 = "images/a_sebastian/tile_2_1.png";
+    private final String sebastian_up_2 = "images/a_sebastian/tile_2_2.png";
+    private final String sebastian_up_3 = "images/a_sebastian/tile_2_3.png";
+
+
+    private final String leah_down_0 = "images/a_leah/tile_0_0.png";
+    private final String leah_down_1 = "images/a_leah/tile_0_1.png";
+    private final String leah_down_2 = "images/a_leah/tile_0_2.png";
+    private final String leah_down_3 = "images/a_leah/tile_0_3.png";
+
+    private final String leah_right_0 = "images/a_leah/tile_1_0.png";
+    private final String leah_right_1 = "images/a_leah/tile_1_1.png";
+    private final String leah_right_2 = "images/a_leah/tile_1_2.png";
+    private final String leah_right_3 = "images/a_leah/tile_1_3.png";
+
+    private final String leah_left_0 = "images/a_leah/tile_3_0.png";
+    private final String leah_left_1 = "images/a_leah/tile_3_1.png";
+    private final String leah_left_2 = "images/a_leah/tile_3_2.png";
+    private final String leah_left_3 = "images/a_leah/tile_3_3.png";
+
+    private final String leah_up_0 = "images/a_leah/tile_2_0.png";
+    private final String leah_up_1 = "images/a_leah/tile_2_1.png";
+    private final String leah_up_2 = "images/a_leah/tile_2_2.png";
+    private final String leah_up_3 = "images/a_leah/tile_2_3.png";
+
 
 
 
@@ -235,6 +324,8 @@ public class AssetManager {
     private final TextureRegion clock_tex = new TextureRegion(new Texture(clock));
     private final TextureRegion arrow_tex = new TextureRegion(new Texture(arrow));
 
+    private final TextureRegion circle_tex = new TextureRegion(new Texture(circleSign));
+
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
 
 
@@ -279,6 +370,93 @@ public class AssetManager {
     private final TextureRegion rabbit_left_1_tex = new TextureRegion(new Texture(rabbit_left_1));
     private final TextureRegion rabbit_left_2_tex = new TextureRegion(new Texture(rabbit_left_2));
     private final TextureRegion rabbit_left_3_tex = new TextureRegion(new Texture(rabbit_left_3));
+
+
+    private final TextureRegion leah_down_0_tex = new TextureRegion(new Texture(leah_down_0));
+    private final TextureRegion leah_down_1_tex = new TextureRegion(new Texture(leah_down_1));
+    private final TextureRegion leah_down_2_tex = new TextureRegion(new Texture(leah_down_2));
+    private final TextureRegion leah_down_3_tex = new TextureRegion(new Texture(leah_down_3));
+
+    private final TextureRegion leah_right_0_tex = new TextureRegion(new Texture(leah_right_0));
+    private final TextureRegion leah_right_1_tex = new TextureRegion(new Texture(leah_right_1));
+    private final TextureRegion leah_right_2_tex = new TextureRegion(new Texture(leah_right_2));
+    private final TextureRegion leah_right_3_tex = new TextureRegion(new Texture(leah_right_3));
+
+    private final TextureRegion leah_up_0_tex = new TextureRegion(new Texture(leah_up_0));
+    private final TextureRegion leah_up_1_tex = new TextureRegion(new Texture(leah_up_1));
+    private final TextureRegion leah_up_2_tex = new TextureRegion(new Texture(leah_up_2));
+    private final TextureRegion leah_up_3_tex = new TextureRegion(new Texture(leah_up_3));
+
+    private final TextureRegion leah_left_0_tex = new TextureRegion(new Texture(leah_left_0));
+    private final TextureRegion leah_left_1_tex = new TextureRegion(new Texture(leah_left_1));
+    private final TextureRegion leah_left_2_tex = new TextureRegion(new Texture(leah_left_2));
+    private final TextureRegion leah_left_3_tex = new TextureRegion(new Texture(leah_left_3));
+
+
+    private final TextureRegion sebastian_down_0_tex = new TextureRegion(new Texture(sebastian_down_0));
+    private final TextureRegion sebastian_down_1_tex = new TextureRegion(new Texture(sebastian_down_1));
+    private final TextureRegion sebastian_down_2_tex = new TextureRegion(new Texture(sebastian_down_2));
+    private final TextureRegion sebastian_down_3_tex = new TextureRegion(new Texture(sebastian_down_3));
+
+    private final TextureRegion sebastian_right_0_tex = new TextureRegion(new Texture(sebastian_right_0));
+    private final TextureRegion sebastian_right_1_tex = new TextureRegion(new Texture(sebastian_right_1));
+    private final TextureRegion sebastian_right_2_tex = new TextureRegion(new Texture(sebastian_right_2));
+    private final TextureRegion sebastian_right_3_tex = new TextureRegion(new Texture(sebastian_right_3));
+
+    private final TextureRegion sebastian_up_0_tex = new TextureRegion(new Texture(sebastian_up_0));
+    private final TextureRegion sebastian_up_1_tex = new TextureRegion(new Texture(sebastian_up_1));
+    private final TextureRegion sebastian_up_2_tex = new TextureRegion(new Texture(sebastian_up_2));
+    private final TextureRegion sebastian_up_3_tex = new TextureRegion(new Texture(sebastian_up_3));
+
+    private final TextureRegion sebastian_left_0_tex = new TextureRegion(new Texture(sebastian_left_0));
+    private final TextureRegion sebastian_left_1_tex = new TextureRegion(new Texture(sebastian_left_1));
+    private final TextureRegion sebastian_left_2_tex = new TextureRegion(new Texture(sebastian_left_2));
+    private final TextureRegion sebastian_left_3_tex = new TextureRegion(new Texture(sebastian_left_3));
+
+
+    private final TextureRegion harvey_down_0_tex = new TextureRegion(new Texture(harvey_down_0));
+    private final TextureRegion harvey_down_1_tex = new TextureRegion(new Texture(harvey_down_1));
+    private final TextureRegion harvey_down_2_tex = new TextureRegion(new Texture(harvey_down_2));
+    private final TextureRegion harvey_down_3_tex = new TextureRegion(new Texture(harvey_down_3));
+
+    private final TextureRegion harvey_right_0_tex = new TextureRegion(new Texture(harvey_right_0));
+    private final TextureRegion harvey_right_1_tex = new TextureRegion(new Texture(harvey_right_1));
+    private final TextureRegion harvey_right_2_tex = new TextureRegion(new Texture(harvey_right_2));
+    private final TextureRegion harvey_right_3_tex = new TextureRegion(new Texture(harvey_right_3));
+
+    private final TextureRegion harvey_up_0_tex = new TextureRegion(new Texture(harvey_up_0));
+    private final TextureRegion harvey_up_1_tex = new TextureRegion(new Texture(harvey_up_1));
+    private final TextureRegion harvey_up_2_tex = new TextureRegion(new Texture(harvey_up_2));
+    private final TextureRegion harvey_up_3_tex = new TextureRegion(new Texture(harvey_up_3));
+
+    private final TextureRegion harvey_left_0_tex = new TextureRegion(new Texture(harvey_left_0));
+    private final TextureRegion harvey_left_1_tex = new TextureRegion(new Texture(harvey_left_1));
+    private final TextureRegion harvey_left_2_tex = new TextureRegion(new Texture(harvey_left_2));
+    private final TextureRegion harvey_left_3_tex = new TextureRegion(new Texture(harvey_left_3));
+
+
+    private final TextureRegion abigail_down_0_tex = new TextureRegion(new Texture(abigail_down_0));
+    private final TextureRegion abigail_down_1_tex = new TextureRegion(new Texture(abigail_down_1));
+    private final TextureRegion abigail_down_2_tex = new TextureRegion(new Texture(abigail_down_2));
+    private final TextureRegion abigail_down_3_tex = new TextureRegion(new Texture(abigail_down_3));
+
+    private final TextureRegion abigail_right_0_tex = new TextureRegion(new Texture(abigail_right_0));
+    private final TextureRegion abigail_right_1_tex = new TextureRegion(new Texture(abigail_right_1));
+    private final TextureRegion abigail_right_2_tex = new TextureRegion(new Texture(abigail_right_2));
+    private final TextureRegion abigail_right_3_tex = new TextureRegion(new Texture(abigail_right_3));
+
+    private final TextureRegion abigail_up_0_tex = new TextureRegion(new Texture(abigail_up_0));
+    private final TextureRegion abigail_up_1_tex = new TextureRegion(new Texture(abigail_up_1));
+    private final TextureRegion abigail_up_2_tex = new TextureRegion(new Texture(abigail_up_2));
+    private final TextureRegion abigail_up_3_tex = new TextureRegion(new Texture(abigail_up_3));
+
+    private final TextureRegion abigail_left_0_tex = new TextureRegion(new Texture(abigail_left_0));
+    private final TextureRegion abigail_left_1_tex = new TextureRegion(new Texture(abigail_left_1));
+    private final TextureRegion abigail_left_2_tex = new TextureRegion(new Texture(abigail_left_2));
+    private final TextureRegion abigail_left_3_tex = new TextureRegion(new Texture(abigail_left_3));
+
+
+
 
 
 
@@ -519,6 +697,124 @@ public class AssetManager {
 
 
 
+    private final Animation<TextureRegion> leah_up_animation = new Animation<>(0.1f,
+        leah_up_0_tex,
+        leah_up_1_tex,
+        leah_up_2_tex,
+        leah_up_3_tex
+    );
+
+    private final Animation<TextureRegion> leah_right_animation = new Animation<>(0.1f,
+        leah_right_0_tex,
+        leah_right_1_tex,
+        leah_right_2_tex,
+        leah_right_3_tex
+    );
+
+    private final Animation<TextureRegion> leah_down_animation = new Animation<>(0.1f,
+        leah_down_0_tex,
+        leah_down_1_tex,
+        leah_down_2_tex,
+        leah_down_3_tex
+    );
+
+    private final Animation<TextureRegion> leah_left_animation = new Animation<>(0.1f,
+        leah_left_0_tex,
+        leah_left_1_tex,
+        leah_left_2_tex,
+        leah_left_3_tex
+    );
+
+
+    private final Animation<TextureRegion> sebastian_up_animation = new Animation<>(0.1f,
+        sebastian_up_0_tex,
+        sebastian_up_1_tex,
+        sebastian_up_2_tex,
+        sebastian_up_3_tex
+    );
+
+    private final Animation<TextureRegion> sebastian_right_animation = new Animation<>(0.1f,
+        sebastian_right_0_tex,
+        sebastian_right_1_tex,
+        sebastian_right_2_tex,
+        sebastian_right_3_tex
+    );
+
+    private final Animation<TextureRegion> sebastian_down_animation = new Animation<>(0.1f,
+        sebastian_down_0_tex,
+        sebastian_down_1_tex,
+        sebastian_down_2_tex,
+        sebastian_down_3_tex
+    );
+
+    private final Animation<TextureRegion> sebastian_left_animation = new Animation<>(0.1f,
+        sebastian_left_0_tex,
+        sebastian_left_1_tex,
+        sebastian_left_2_tex,
+        sebastian_left_3_tex
+    );
+
+
+    private final Animation<TextureRegion> harvey_up_animation = new Animation<>(0.1f,
+        harvey_up_0_tex,
+        harvey_up_1_tex,
+        harvey_up_2_tex,
+        harvey_up_3_tex
+    );
+
+    private final Animation<TextureRegion> harvey_right_animation = new Animation<>(0.1f,
+        harvey_right_0_tex,
+        harvey_right_1_tex,
+        harvey_right_2_tex,
+        harvey_right_3_tex
+    );
+
+    private final Animation<TextureRegion> harvey_down_animation = new Animation<>(0.1f,
+        harvey_down_0_tex,
+        harvey_down_1_tex,
+        harvey_down_2_tex,
+        harvey_down_3_tex
+    );
+
+    private final Animation<TextureRegion> harvey_left_animation = new Animation<>(0.1f,
+        harvey_left_0_tex,
+        harvey_left_1_tex,
+        harvey_left_2_tex,
+        harvey_left_3_tex
+    );
+
+
+    private final Animation<TextureRegion> abigail_up_animation = new Animation<>(0.1f,
+        abigail_up_0_tex,
+        abigail_up_1_tex,
+        abigail_up_2_tex,
+        abigail_up_3_tex
+    );
+
+    private final Animation<TextureRegion> abigail_right_animation = new Animation<>(0.1f,
+        abigail_right_0_tex,
+        abigail_right_1_tex,
+        abigail_right_2_tex,
+        abigail_right_3_tex
+    );
+
+    private final Animation<TextureRegion> abigail_down_animation = new Animation<>(0.1f,
+        abigail_down_0_tex,
+        abigail_down_1_tex,
+        abigail_down_2_tex,
+        abigail_down_3_tex
+    );
+
+    private final Animation<TextureRegion> abigail_left_animation = new Animation<>(0.1f,
+        abigail_left_0_tex,
+        abigail_left_1_tex,
+        abigail_left_2_tex,
+        abigail_left_3_tex
+    );
+
+
+
+
     private final Animation<TextureRegion> pig_up_animation = new Animation<>(0.1f,
         pig_up_0_tex,
         pig_up_1_tex,
@@ -727,6 +1023,10 @@ public class AssetManager {
         return arrow_tex;
     }
 
+    public TextureRegion getCircleSign() {
+        return circle_tex;
+    }
+
 
     public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
         return alex_0_walking_right_animation;
@@ -776,6 +1076,92 @@ public class AssetManager {
     public Animation<TextureRegion> getRabbitLeftAnimation() {
         return rabbit_left_animation;
     }
+
+
+    public TextureRegion getAbigailRight() {
+        return abigail_right_0_tex;
+    }
+
+    public TextureRegion getLeahUp() {
+        return leah_up_0_tex;
+    }
+
+    public TextureRegion getHarveyDown() {
+        return harvey_down_0_tex;
+    }
+
+    public TextureRegion getSebastianLeft() {
+        return sebastian_left_0_tex;
+    }
+
+
+    public Animation<TextureRegion> getAbigailUpAnimation() {
+        return abigail_up_animation;
+    }
+
+    public Animation<TextureRegion> getAbigailRightAnimation() {
+        return abigail_right_animation;
+    }
+
+    public Animation<TextureRegion> getAbigailDownAnimation() {
+        return abigail_down_animation;
+    }
+
+    public Animation<TextureRegion> getAbigailLeftAnimation() {
+        return abigail_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getHarveyUpAnimation() {
+        return harvey_up_animation;
+    }
+
+    public Animation<TextureRegion> getHarveyRightAnimation() {
+        return harvey_right_animation;
+    }
+
+    public Animation<TextureRegion> getHarveyDownAnimation() {
+        return harvey_down_animation;
+    }
+
+    public Animation<TextureRegion> getHarveyLeftAnimation() {
+        return harvey_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getSebastianUpAnimation() {
+        return sebastian_up_animation;
+    }
+
+    public Animation<TextureRegion> getSebastianRightAnimation() {
+        return sebastian_right_animation;
+    }
+
+    public Animation<TextureRegion> getSebastianDownAnimation() {
+        return sebastian_down_animation;
+    }
+
+    public Animation<TextureRegion> getSebastianLeftAnimation() {
+        return sebastian_left_animation;
+    }
+
+
+    public Animation<TextureRegion> getLeahUpAnimation() {
+        return leah_up_animation;
+    }
+
+    public Animation<TextureRegion> getLeahRightAnimation() {
+        return leah_right_animation;
+    }
+
+    public Animation<TextureRegion> getLeahDownAnimation() {
+        return leah_down_animation;
+    }
+
+    public Animation<TextureRegion> getLeahLeftAnimation() {
+        return leah_left_animation;
+    }
+
 
 
     public Animation<TextureRegion> getPigUpAnimation() {
