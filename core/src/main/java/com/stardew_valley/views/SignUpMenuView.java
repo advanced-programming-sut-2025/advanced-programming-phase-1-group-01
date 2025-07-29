@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.controllers.SignUpMenuController;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.SecurityQuestion;
 import java.util.List;
