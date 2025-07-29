@@ -62,6 +62,9 @@ public class FarmInitializer {
             }
             tiles.add(row);
         }
+
+        System.out.println("cols: " + tiles.size());
+        System.out.println("rows: " + tiles.get(0).size());
     }
 
     private static void greenhouseInitializer(int greenhouseId) {
@@ -137,7 +140,7 @@ public class FarmInitializer {
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-                if (x < 225 && y < 225) { tiles.get(x).set(y, tile); }
+//                if (x < 225 && y < 225 ) { tiles.get(x).set(y, tile); }
                 //@
             }
         }
@@ -372,7 +375,13 @@ public class FarmInitializer {
 
 
     public static Farm initializeFarm() {
-        initializeTiles();
+        if (tiles.isEmpty()) {
+            initializeTiles();
+        }
+        System.out.println();
+        System.out.println(tiles.get(224).get(203).getType().name());
+        System.out.println(tiles.get(224).get(100).getType().name());
+        System.out.println();
         return new Farm(tiles, lake, cottage, quarry, greenhouse);
     }
 }

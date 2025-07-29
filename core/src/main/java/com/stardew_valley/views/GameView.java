@@ -152,10 +152,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawPlayer();
 
         drawFence();
+
+
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
+        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
     private void drawBuilding () {
@@ -169,18 +172,46 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawFence() {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
-        for (int row = 0; row < tiles.size(); row++) {
-            List<Tile> tileList = tiles.get(row);
-            for (int col = 0; col < tileList.size(); col++) {
-                Tile tile = tileList.get(col);
-                if (tile.getType() == TileType.FENCE) {
-                    int tileX = getTilePixel(col);
-                    int tileY = getTilePixel(row);
-                    batch.draw(woodFence, tileX, tileY);
-                }
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+
+        System.out.println("numRows: " + numRows);
+        System.out.println("numCols: " + numCols);
+
+        for (int col = 0; col < numCols; col++) {
+            Tile topTile = tiles.get(0).get(col);
+            if (topTile.getType() == TileType.FENCE) {
+                batch.draw(woodFence, getTilePixel(col), getTilePixel(0));
+            } else {
+                System.out.println(topTile.getType().name() + " " + col);
+            }
+
+            Tile bottomTile = tiles.get(numRows - 1).get(col);
+            if (bottomTile.getType() == TileType.FENCE) {
+                batch.draw(woodFence, getTilePixel(col), getTilePixel(numRows - 1));
+            } else {
+                System.out.println(bottomTile.getType().name() + " " + col);
+            }
+        }
+
+        for (int row = 1; row < numRows - 1; row++) {
+            Tile leftTile = tiles.get(row).get(0);
+            if (leftTile.getType() == TileType.FENCE) {
+                batch.draw(woodFence, getTilePixel(0), getTilePixel(row));
+            } else {
+                System.out.println(leftTile.getType().name() + " " + row);
+            }
+
+            Tile rightTile = tiles.get(row).get(numCols - 1);
+            if (rightTile.getType() == TileType.FENCE) {
+                batch.draw(woodFence, getTilePixel(numCols - 1), getTilePixel(row));
+            } else {
+                System.out.println(rightTile.getType().name() + " " + row);
             }
         }
     }
+
 
     private int getTilePixel(int tileCol) {
         return tileCol * TILE_SIZE;
