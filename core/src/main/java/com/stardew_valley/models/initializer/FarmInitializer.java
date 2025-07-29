@@ -40,7 +40,7 @@ public class FarmInitializer {
     private static void initializeTiles() {
         firstInitializer();
         surroundWithFence();
-
+        divideMapWithFence();
         for (int i = 0; i < 4; i++) {
             houseInitializer(i);
             minerInitializer(i);
@@ -89,6 +89,37 @@ public class FarmInitializer {
             }
         }
     }
+
+    private static void divideMapWithFence() {
+        int height = tiles.size();
+        int width = tiles.get(0).size();
+
+        int thirdHeight = height / 3;
+        int thirdWidth = width / 3;
+
+        for (int yOffset = 1; yOffset <= 2; yOffset++) {
+            int y = yOffset * thirdHeight;
+            for (int x = 0; x < width; x++) {
+                tiles.get(y).set(x, new Tile.Builder()
+                    .setPosition(new Position(x, y))
+                    .setType(TileType.FENCE)
+                    .setMovable(false)
+                    .build());
+            }
+        }
+
+        for (int xOffset = 1; xOffset <= 2; xOffset++) {
+            int x = xOffset * thirdWidth;
+            for (int y = 0; y < height; y++) {
+                tiles.get(y).set(x, new Tile.Builder()
+                    .setPosition(new Position(x, y))
+                    .setType(TileType.FENCE)
+                    .setMovable(false)
+                    .build());
+            }
+        }
+    }
+
 
     private static void surroundWithFence() {
         int height = tiles.size();

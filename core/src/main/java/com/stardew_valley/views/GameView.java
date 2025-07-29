@@ -50,10 +50,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
 
+
     private final static int TILE_SIZE = 16;
 
 
-    private final float speed = 500f;
+    private final float speed = 200f;
     private Vector2 vectorPosition;
     private IncompleteMovement incompleteMovement;
 
@@ -82,6 +83,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         updateGame(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
+        camera.zoom = 0.5f;
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -153,9 +155,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawBuilding();
 
-        drawPlayer();
-
         drawFence();
+
+        drawDividingFences();
+
+        drawPlayer();
 
 //        drawTileHighlights();
 
@@ -164,7 +168,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-//        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
     private void drawBuilding () {
@@ -219,6 +223,36 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private void drawDividingFences() {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+        int thirdRow = numRows / 3;
+        int thirdCol = numCols / 3;
+
+        for (int yOffset = 1; yOffset <= 2; yOffset++) {
+            int y = yOffset * thirdRow;
+            for (int col = 0; col < numCols; col++) {
+                Tile tile = tiles.get(y).get(col);
+                if (tile.getType() == TileType.FENCE) {
+                    batch.draw(woodFence, getTilePixel(col), getTilePixel(y));
+                }
+            }
+        }
+
+        for (int xOffset = 1; xOffset <= 2; xOffset++) {
+            int x = xOffset * thirdCol;
+            for (int row = 0; row < numRows; row++) {
+                Tile tile = tiles.get(row).get(x);
+                if (tile.getType() == TileType.FENCE) {
+                    batch.draw(woodFence, getTilePixel(x), getTilePixel(row));
+                }
+            }
+        }
+    }
+
+
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
 
@@ -248,32 +282,34 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 Tile tile = tiles.get(row).get(col);
                 TileType type = tile.getType();
 
-                Color highlightColor = getColorForTileType(type);
+                Color highlightColor = getColorForTileType(tile.isMovable());
                 if (highlightColor != null) {
-                    batch.setColor(highlightColor);
-                    batch.draw(highlightBox, getTilePixel(col), getTilePixel(row), 16, 16);
+                    //batch.setColor(highlightColor);
+                    batch.draw(woodFence, getTilePixel(col), getTilePixel(row));
                 }
             }
         }
 
-        // بازیابی رنگ اصلی
         batch.setColor(originalColor);
     }
 
-    private Color getColorForTileType(TileType type) {
-        switch (type) {
-            case GROUND: return new Color(0f, 1f, 0f, 0.3f);
-            case RIVER: return new Color(0f, 0.5f, 1f, 0.3f);
-            case MINE: {
-                //System.out.println("meow");
-                return Color.BLACK;
-            }
-            case GREENHOUSE: return new Color(0f, 1f, 0.5f, 0.3f);
-            case COTTAGE: return new Color(0.6f, 0.3f, 0.1f, 0.3f);
-            case WALL: return new Color(0.4f, 0.4f, 0.4f, 0.3f);
-            case SALE_BUCKET: return new Color(1f, 0f, 0f, 0.3f);
-            case FENCE: return new Color(1f, 1f, 0f, 0.3f);
-            default: return null;
+    private Color getColorForTileType(boolean type) {
+        if (type) {
+            return null;
+        } else {
+            return Color.BLACK;
+//            case GROUND: return new Color(0f, 1f, 0f, 0.3f);
+//            case RIVER: return new Color(0f, 0.5f, 1f, 0.3f);
+//            case MINE: {
+//                //System.out.println("meow");
+//                return Color.BLACK;
+//            }
+//            case GREENHOUSE: return new Color(0f, 1f, 0.5f, 0.3f);
+//            case COTTAGE: return new Color(0.6f, 0.3f, 0.1f, 0.3f);
+//            case WALL: return new Color(0.4f, 0.4f, 0.4f, 0.3f);
+//            case SALE_BUCKET: return new Color(1f, 0f, 0f, 0.3f);
+//            case FENCE: return new Color(1f, 1f, 0f, 0.3f);
+//            default: return null;
         }
     }
 
@@ -295,6 +331,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     public void handleMovement(float delta) {
+        boolean moving = false;
 
         /*
 
@@ -353,22 +390,50 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             float nextX = player.getX() + speed * delta;
-            player.setX(nextX);
-            player.setDirection(Direction.RIGHT);
-        } if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            float nextX = player.getX() - speed * delta;
-            player.setX(nextX);
-            player.setDirection(Direction.LEFT);
-        } if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            float nextY = player.getY() + speed * delta;
-            player.setY(nextY);
-            player.setDirection(Direction.UP);
-        } if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            float nextY = player.getY() - speed * delta;
-            player.setY(nextY);
-            player.setDirection(Direction.DOWN);
+            if (canMoveTo(nextX, player.getY())) {
+                player.setX(nextX);
+                player.setDirection(Direction.RIGHT);
+                moving = true;
+            }
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            float nextX = player.getX() - speed * delta;
+            if (canMoveTo(nextX, player.getY())) {
+                player.setX(nextX);
+                player.setDirection(Direction.LEFT);
+                moving = true;
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            float nextY = player.getY() + speed * delta;
+            if (canMoveTo(player.getX(), nextY)) {
+                player.setY(nextY);
+                player.setDirection(Direction.UP);
+                moving = true;
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            float nextY = player.getY() - speed * delta;
+            if (canMoveTo(player.getX(), nextY)) {
+                player.setY(nextY);
+                player.setDirection(Direction.DOWN);
+                moving = true;
+            }
+        }
+
+        player.setMoving(moving);
+
     }
+
+    private boolean canMoveTo(float x, float y) {
+        int tileX = (int)(x / 16);
+        int tileY = (int)(y / 16);
+
+        Tile tile = controller.getRepo().getCurrentGame().getFarm().getTile(tileX, tileY);
+
+        return tile != null && tile.isMovable();
+    }
+
 
     public void setFainting(boolean fainting) {
         isFainting = fainting;

@@ -19,7 +19,7 @@ public class AssetManager {
 
     private final String spring_background = "images/all_dirt.png";
 
-    private final String wood_fence = "images/wood_fence.png";
+    private final String wood_fence = "images/wood_fence_16x16.png";
 
     private final String house = "images/house.png";
 

@@ -55,6 +55,7 @@ public class Player extends Character {
     private boolean hasEnergyBuff = false;
     private final List<Integer> tommorrowMoney = new ArrayList<>();
     private float stateTime = 0f;
+    private boolean isMoving = false;
 
 
     public Player(User user) {
@@ -327,17 +328,32 @@ public class Player extends Character {
     }
 
     public TextureRegion getCurrentFrame() {
+        AssetManager manager = AssetManager.getAssetManager();
+
         switch (direction) {
             case UP:
-                return AssetManager.getAssetManager().get_Alex_0_walking_up_animation().getKeyFrame(stateTime, true);
+                return isMoving
+                    ? manager.get_Alex_0_walking_up_animation().getKeyFrame(stateTime, true)
+                    : manager.get_Alex_0_walking_up_animation().getKeyFrame(0, true);
+
             case DOWN:
-                return AssetManager.getAssetManager().get_Alex_0_walking_down_animation().getKeyFrame(stateTime, true);
+                return isMoving
+                    ? manager.get_Alex_0_walking_down_animation().getKeyFrame(stateTime, true)
+                    : manager.get_Alex_0_walking_down_animation().getKeyFrame(0, true);
+
             case LEFT:
-                return AssetManager.getAssetManager().get_Alex_0_walking_left_animation().getKeyFrame(stateTime, true);
+                return isMoving
+                    ? manager.get_Alex_0_walking_left_animation().getKeyFrame(stateTime, true)
+                    : manager.get_Alex_0_walking_left_animation().getKeyFrame(0, true);
+
+            case RIGHT:
             default:
-                return AssetManager.getAssetManager().get_Alex_0_walking_right_animation().getKeyFrame(stateTime, true);
+                return isMoving
+                    ? manager.get_Alex_0_walking_right_animation().getKeyFrame(stateTime, true)
+                    : manager.get_Alex_0_walking_right_animation().getKeyFrame(0, true);
         }
     }
+
 
     public String buyAnimal(String animalType, String animalName) {
         AnimalInfo animalInfo = stringToAnimalInfo(animalType);
@@ -874,5 +890,9 @@ public class Player extends Character {
     public void setY(float y) {
         setPosition(new Position(position.x(), (int) y));
         this.y = y;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
     }
 }

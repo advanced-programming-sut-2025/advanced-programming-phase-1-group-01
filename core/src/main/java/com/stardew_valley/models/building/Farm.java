@@ -327,4 +327,14 @@ public class Farm extends Maps {
         }
         return map;
     }
+
+    public Tile getTile(int x, int y) {
+        if (y >= 0 && y < tiles.size()) {
+            List<Tile> row = tiles.get(y);
+            if (x >= 0 && x < row.size()) {
+                return row.get(x);
+            }
+        }
+        return null;
+    }
 }
