@@ -9,9 +9,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
@@ -49,14 +56,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Actor miniMapActor = null;
+
 
 
     private final static int TILE_SIZE = 16;
 
 
     private final float speed = 200f;
-    private Vector2 vectorPosition;
-    private IncompleteMovement incompleteMovement;
+
 
 
 
@@ -67,8 +76,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
         batch = Main.getBatch();
-        vectorPosition = new Vector2(player.getPosition().x(), player.getPosition().y());
-        incompleteMovement = new IncompleteMovement((int) player.getPosition().x() / 16, (int) player.getPosition().y() / 16);
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
     }
 
@@ -168,7 +175,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
     private void drawBuilding () {
@@ -336,7 +343,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         /*
 
             g = cc, advance hour
-            space = minimap
+            space = toggle minimap
             w = up
             s = down
             d = right
@@ -346,47 +353,44 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            showMiniMap(stage, controller.getRepo().getCurrentGame().getFarm().getTiles(), 3, 3);
+            if (miniMapActor == null) {
+                showMiniMap(stage);
+            } else {
+                miniMapActor.remove();
+                miniMapActor = null;
+            }
         }
+
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
         }
 
 
-        if (isFainting) {
-            faintTime += delta;
-
-            float heightOffset = (float)(80 * Math.sin(Math.PI * faintTime / totalFaintDuration));
-            float rotation = 90f * (faintTime / totalFaintDuration);
-
-            if (faintingSprite == null) {
-                faintingSprite = new Sprite(player.getCurrentFrame());
-                faintingSprite.setOriginCenter();
-            }
-
-            faintingSprite.setPosition(vectorPosition.x, vectorPosition.y + heightOffset);
-            faintingSprite.setRotation(rotation);
-
-            faintingSprite.draw(batch);
-
-            if (faintTime >= totalFaintDuration) {
-                isFainting = false;
-                faintingSprite = null;
-            }
-
-            return;
-        }
-
+//        if (isFainting) {
+//            faintTime += delta;
 //
-//        if (incompleteMovement.isHasIncompleteMovement()) {
-//            Vector2 direction = new Vector2(incompleteMovement.getVectorPosition()).sub(vectorPosition).nor();
-//            vectorPosition.add(direction.scl(speed * delta));
-//            incompleteMovement.checkDestination(vectorPosition);
+//            float heightOffset = (float)(80 * Math.sin(Math.PI * faintTime / totalFaintDuration));
+//            float rotation = 90f * (faintTime / totalFaintDuration);
+//
+//            if (faintingSprite == null) {
+//                faintingSprite = new Sprite(player.getCurrentFrame());
+//                faintingSprite.setOriginCenter();
+//            }
+//
+//            faintingSprite.setPosition(vectorPosition.x, vectorPosition.y + heightOffset);
+//            faintingSprite.setRotation(rotation);
+//
+//            faintingSprite.draw(batch);
+//
+//            if (faintTime >= totalFaintDuration) {
+//                isFainting = false;
+//                faintingSprite = null;
+//            }
+//
 //            return;
 //        }
 
-        //@ check if is allowed
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             float nextX = player.getX() + speed * delta;
@@ -439,19 +443,65 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         isFainting = fainting;
     }
 
-    public void showMiniMap(Stage stage, List<List<Tile>> tiles, int buildingWidth, int buildingHeight) {
-        MiniMapWidget miniMap = new MiniMapWidget(tiles, buildingWidth, buildingHeight);
 
-        Window miniMapWindow = miniMap.showWindow((x, y) -> {
+    public void showMiniMap(Stage stage) {
+        final int tileSize = 2;
+        final List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
 
-            if (miniMap.canPlant(x, y, buildingWidth, buildingHeight)) {
-                //set tiles
+        miniMapActor = new Actor() {
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+                batch.end();
+
+                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+                for (int y = 0; y < tiles.size(); y++) {
+                    for (int x = 0; x < tiles.get(y).size(); x++) {
+                        Tile tile = tiles.get(y).get(x);
+                        shapeRenderer.setColor(getColorForTileType(tile.getType()));
+                        shapeRenderer.rect(getX() + x * tileSize, getY() + y * tileSize, tileSize, tileSize);
+                    }
+                }
+
+                shapeRenderer.end();
+                batch.begin();
             }
-        });
 
-        stage.addActor(miniMapWindow);
-        Gdx.input.setInputProcessor(stage);
+            @Override
+            public float getWidth() {
+                return tiles.get(0).size() * tileSize;
+            }
+
+            @Override
+            public float getHeight() {
+                return tiles.size() * tileSize;
+            }
+        };
+
+        miniMapActor.setPosition(20, 20);
+        stage.addActor(miniMapActor);
     }
+
+
+
+
+
+    private Color getColorForTileType(TileType type) {
+        switch (type) {
+            case GROUND: return Color.GREEN;
+            case RIVER: return Color.CYAN;
+            case MINE: return Color.GRAY;
+            case GREENHOUSE: return Color.FOREST;
+            case COTTAGE: return Color.BROWN;
+            case WALL: return Color.DARK_GRAY;
+            case SALE_BUCKET: return Color.PINK;
+            case FENCE: return Color.BLUE;
+            default: return Color.LIGHT_GRAY;
+        }
+    }
+
+
 
 
 }

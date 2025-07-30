@@ -130,4 +130,5 @@ public class MiniMapWidget extends Widget {
         }
         return true;
     }
+
 }
