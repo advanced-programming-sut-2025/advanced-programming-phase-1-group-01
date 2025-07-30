@@ -15,9 +15,11 @@ public class AssetManager {
     private static AssetManager assetManager;
     public static final float SCALE = 4f;
 
+    private final String black = "images/black.png";
+
     private final String spring_background = "images/all_dirt.png";
 
-    private final String wood_fence = "images/wood_fence.png";
+    private final String wood_fence = "images/wood_fence_16x16.png";
 
     private final String house = "images/house.png";
 
@@ -31,6 +33,17 @@ public class AssetManager {
     private final String arrow = "images/arrow.png";
 
     private final String circleSign = "images/circle.png";
+
+    private final String lake_water = "images/lake_water.png";
+
+    private final String house_top = "images/house_top.png";
+
+    private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
+    private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
+    private final String fainting_3 = "images/fainting/resized_3-Photoroom.png";
+    private final String fainting_4 = "images/fainting/resized_4-Photoroom.png";
+    private final String fainting_5 = "images/fainting/resized_5-Photoroom.png";
+
 
     private final String sheep_down_0 = "images/a_Sheep/tile_0_0.png";
     private final String sheep_down_1 = "images/a_Sheep/tile_0_1.png";
@@ -319,7 +332,18 @@ public class AssetManager {
 
     private final TextureRegion circle_tex = new TextureRegion(new Texture(circleSign));
 
+    private final TextureRegion lake_water_tex = new TextureRegion(new Texture(lake_water));
+
+    private final TextureRegion house_top_tex = new TextureRegion(new Texture(house_top));
+
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
+
+    private final TextureRegion fainting_tex1 = new TextureRegion(new Texture(fainting_1));
+    private final TextureRegion fainting_tex2 = new TextureRegion(new Texture(fainting_2));
+    private final TextureRegion fainting_tex3 = new TextureRegion(new Texture(fainting_3));
+    private final TextureRegion fainting_tex4 = new TextureRegion(new Texture(fainting_4));
+    private final TextureRegion fainting_tex5 = new TextureRegion(new Texture(fainting_5));
+
 
 
     private final TextureRegion sheep_down_0_tex = new TextureRegion(new Texture(sheep_down_0));
@@ -964,6 +988,16 @@ public class AssetManager {
         cow_down_3_tex
     );
 
+    private final Animation<TextureRegion> fainting_animation = new Animation<>(
+        0.25f,
+        fainting_tex1,
+        fainting_tex2,
+        fainting_tex3,
+        fainting_tex4,
+        fainting_tex5
+    );
+
+
     private final Animation<TextureRegion> cow_left_animation = new Animation<>(0.1f,
         cow_left_0_tex,
         cow_left_1_tex,
@@ -1002,6 +1036,14 @@ public class AssetManager {
 
     public TextureRegion getCircleSign() {
         return circle_tex;
+    }
+
+    public TextureRegion getLakeWater() {
+        return lake_water_tex;
+    }
+
+    public TextureRegion getHouseTop() {
+        return house_top_tex;
     }
 
 
@@ -1241,10 +1283,20 @@ public class AssetManager {
         return cow_left_animation;
     }
 
+    public Animation<TextureRegion> getFaintingAnimation() {
+        return fainting_animation;
+    }
+
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));
+
+    private final TextureRegion black_tex = new TextureRegion(new Texture(black));
 
     public TextureRegion getSpringBackground() {
         return spring_background_tex;
+    }
+
+    public TextureRegion getBlackTexture() {
+        return black_tex;
     }
 
     // crops:
