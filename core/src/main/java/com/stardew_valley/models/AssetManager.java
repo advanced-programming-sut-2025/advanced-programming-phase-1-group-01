@@ -34,6 +34,8 @@ public class AssetManager {
 
     private final String circleSign = "images/circle.png";
 
+    private final String lake_water = "images/lake_water.png";
+
     private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
     private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
     private final String fainting_3 = "images/fainting/resized_3-Photoroom.png";
@@ -334,6 +336,8 @@ public class AssetManager {
     private final TextureRegion arrow_tex = new TextureRegion(new Texture(arrow));
 
     private final TextureRegion circle_tex = new TextureRegion(new Texture(circleSign));
+
+    private final TextureRegion lake_water_tex = new TextureRegion(new Texture(lake_water));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
 
@@ -1051,6 +1055,10 @@ public class AssetManager {
 
     public TextureRegion getCircleSign() {
         return circle_tex;
+    }
+
+    public TextureRegion getLakeWater() {
+        return lake_water_tex;
     }
 
 

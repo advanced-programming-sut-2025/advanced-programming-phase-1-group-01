@@ -70,8 +70,8 @@ public class FarmInitializer {
         int additionalY = getAdditionalY(greenhouseId);
 
 
-        for (int i = GREENHOUSE_BL.x() + additionalX; i <= GREENHOUSE_TR.x() + additionalX; i++) {
-            for (int j = GREENHOUSE_BL.y() + additionalY; j <= GREENHOUSE_TR.y() + additionalY; j++) {
+        for (int i = GREENHOUSE_BL.x() + additionalX - 1; i <= GREENHOUSE_TR.x() + additionalX + 1; i++) {
+            for (int j = GREENHOUSE_BL.y() + additionalY; j <= GREENHOUSE_TR.y() + additionalY - 3; j++) {
                 tiles.get(i).set(j, new Tile.Builder()
                     .setPosition(new Position(i, j))
                     .setType(TileType.FENCE)
@@ -80,7 +80,7 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = GREENHOUSE_BL.x() + additionalX + 3; i <= GREENHOUSE_TR.x() + additionalX - 3; i++) {
+        for (int i = GREENHOUSE_BL.x() + additionalX + 3 - 1; i <= GREENHOUSE_TR.x() + additionalX - 3 - 2; i++) {
             for (int j = GREENHOUSE_BL.y() + additionalY + 3; j <= GREENHOUSE_TR.y() + additionalY - 7; j++) {
                 tiles.get(i).set(j, new Tile.Builder()
                     .setPosition(new Position(i, j))

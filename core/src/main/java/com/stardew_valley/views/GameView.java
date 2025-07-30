@@ -50,6 +50,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
+    private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -171,7 +172,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
     private void drawBuilding () {
@@ -186,7 +187,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             int lakeX = getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i));
             int lakeY = getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(lakeWater, lakeX + 16, lakeY + 16);
             batch.draw(lake, lakeX, lakeY);
+
 
             int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i));
             int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i));
@@ -447,7 +450,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 shapeRenderer.setColor(Color.RED);
                 float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
                 float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
-                shapeRenderer.circle(centerX, centerY, tileSize * 3);
+                shapeRenderer.circle(centerX, centerY, (int)(tileSize * 0.5));
 
                 shapeRenderer.end();
                 batch.begin();
