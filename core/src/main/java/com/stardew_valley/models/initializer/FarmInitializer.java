@@ -3,6 +3,7 @@ package com.stardew_valley.models.initializer;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Random;
 import com.stardew_valley.models.building.*;
+import com.stardew_valley.models.crafting.Bomb;
 import com.stardew_valley.models.farming.FarmingManager;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.SeedInfo;
@@ -20,8 +21,8 @@ public class FarmInitializer {
     private final static Position FARM_TR = new Position(225, 225);
     private final static Position GROUND_TP = new Position(0, 0);
     private final static Position GROUND_BR = new Position(75, 75);
-    private final static Position RIVER_BL = new Position(40, 5);
-    private final static Position RIVER_TR = new Position(10, 13);
+    private final static Position RIVER_BL = new Position(45, 5);
+    private final static Position RIVER_TR = new Position(53, 12);
     private final static Position MINE_TP = new Position(1, 1);
     private final static Position MINE_BR = new Position(13, 10);
     private final static Position GREENHOUSE_BL = new Position(6, 5);
@@ -68,9 +69,20 @@ public class FarmInitializer {
         int additionalX = getAdditionalX(greenhouseId);
         int additionalY = getAdditionalY(greenhouseId);
 
+        int xStart = GREENHOUSE_BL.x() + additionalX - 1;
+        int xEnd = GREENHOUSE_TR.x() + additionalX + 1;
 
-        for (int i = GREENHOUSE_BL.x() + additionalX; i <= GREENHOUSE_TR.x() + additionalX; i++) {
-            for (int j = GREENHOUSE_BL.y() + additionalY; j <= GREENHOUSE_TR.y() + additionalY; j++) {
+        int yStart = GREENHOUSE_BL.y() + additionalY;
+        int yEnd = GREENHOUSE_TR.y() + additionalY - 3;
+
+        for (int i = xStart; i <= xEnd; i++) {
+            for (int j = yStart; j <= yEnd; j++) {
+                System.out.println((i - additionalX) + " " +  (j - additionalY));
+                if ((i == 5 + additionalX || i == 6 + additionalX || i == 7 + additionalX) &&
+                    (j == 12 + additionalY)) {
+                    continue;
+                }
+
                 tiles.get(i).set(j, new Tile.Builder()
                     .setPosition(new Position(i, j))
                     .setType(TileType.FENCE)
@@ -79,8 +91,8 @@ public class FarmInitializer {
             }
         }
 
-        for (int i = GREENHOUSE_BL.x() + additionalX + 3; i <= GREENHOUSE_TR.x() + additionalX - 3; i++) {
-            for (int j = GREENHOUSE_BL.y() + additionalY + 3; j <= GREENHOUSE_TR.y() + additionalY - 7; j++) {
+        for (int i = GREENHOUSE_BL.x() + additionalX + 2; i <= GREENHOUSE_TR.x() + additionalX - 5 - 1; i++) {
+            for (int j = GREENHOUSE_BL.y() + additionalY + 3 + 1; j <= GREENHOUSE_TR.y() + additionalY - 7; j++) {
                 tiles.get(i).set(j, new Tile.Builder()
                     .setPosition(new Position(i, j))
                     .setType(TileType.GREENHOUSE)
@@ -89,6 +101,7 @@ public class FarmInitializer {
             }
         }
     }
+
 
     private static void divideMapWithFence() {
         int height = tiles.size();
@@ -102,7 +115,7 @@ public class FarmInitializer {
             for (int x = 0; x < width; x++) {
                 tiles.get(y).set(x, new Tile.Builder()
                     .setPosition(new Position(x, y))
-                    .setType(TileType.FENCE)
+                    .setType(TileType.FENCE) //*
                     .setMovable(false)
                     .build());
             }
@@ -113,7 +126,7 @@ public class FarmInitializer {
             for (int y = 0; y < height; y++) {
                 tiles.get(y).set(x, new Tile.Builder()
                     .setPosition(new Position(x, y))
-                    .setType(TileType.FENCE)
+                    .setType(TileType.FENCE) //*
                     .setMovable(false)
                     .build());
             }
@@ -128,13 +141,13 @@ public class FarmInitializer {
         for (int x = 0; x < width; x++) {
             tiles.get(0).set(x, new Tile.Builder()
                 .setPosition(new Position(0, x))
-                .setType(TileType.FENCE)
+                .setType(TileType.FENCE) //*
                 .setMovable(false)
                 .build());
 
             tiles.get(height - 1).set(x, new Tile.Builder()
                 .setPosition(new Position(height - 1, x))
-                .setType(TileType.FENCE)
+                .setType(TileType.FENCE) //*
                 .setMovable(false)
                 .build());
         }
@@ -142,13 +155,13 @@ public class FarmInitializer {
         for (int y = 0; y < height; y++) {
             tiles.get(y).set(0, new Tile.Builder()
                 .setPosition(new Position(y, 0))
-                .setType(TileType.FENCE)
+                .setType(TileType.FENCE) //*
                 .setMovable(false)
                 .build());
 
             tiles.get(y).set(width - 1, new Tile.Builder()
                 .setPosition(new Position(y, width - 1))
-                .setType(TileType.FENCE)
+                .setType(TileType.FENCE) //*
                 .setMovable(false)
                 .build());
         }
@@ -159,8 +172,8 @@ public class FarmInitializer {
         int additionalY = getAdditionalY(houseId);
 
 
-        for (int x = COTTAGE_BL.x() + additionalX; x < COTTAGE_TR.x() + additionalX; x++) {
-            for (int y = COTTAGE_BL.y() + additionalY; y < COTTAGE_TR.y() + additionalY; y++) {
+        for (int x = COTTAGE_BL.x() + additionalX - 1; x < COTTAGE_TR.x() + additionalX; x++) {
+            for (int y = COTTAGE_BL.y() + additionalY; y < COTTAGE_TR.y() + additionalY - 2; y++) {
                 Tile tile = new Tile.Builder()
                     .setPosition(new Position(x, y))
                     .setType(TileType.COTTAGE)
@@ -168,7 +181,7 @@ public class FarmInitializer {
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-                tiles.get(x).set(y, tile);
+                tiles.get(y).set(x, tile);
             }
         }
     }
@@ -216,66 +229,72 @@ public class FarmInitializer {
         for (int y = baseY; y < MINE_TR.y() + additionalY; y++) {
             int localY = y - baseY;
 
-            switch (localY) {
-                case 0:
-                    for (int localX = 5; localX <= 13; localX++) {
-                        setTile(y, baseX + localX, TileType.FENCE, false);
-                    }
-                    break;
+            for (int localX = 0; localX <= 18; localX++) {
+                TileType type;
+                boolean movable;
 
-                case 1:
-                    for (int localX = 2; localX <= 16; localX++) {
-                        TileType type = (localX > 5 && localX < 14) ? TileType.MINE : TileType.FENCE;
-                        boolean movable = type == TileType.MINE;
-                        setTile(y, baseX + localX, type, movable);
-                    }
-                    break;
+                switch (localY) {
+                    case 0:
+                        if (localX >= 5 && localX <= 13) {
+                            type = TileType.FENCE;
+                            movable = false;
+                        } else continue;
+                        break;
 
-                case 2:
-                    for (int localX = 2; localX <= 17; localX++) {
-                        boolean isFence = localX == 2 || localX > 14;
-                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
-                        boolean movable = !isFence;
-                        setTile(y, baseX + localX, type, movable);
-                    }
-                    break;
+                    case 1:
+                        if (localX >= 2 && localX <= 16) {
+                            if (localX > 5 && localX < 14) {
+                                type = TileType.MINE;
+                                movable = true;
+                            } else {
+                                type = TileType.FENCE;
+                                movable = false;
+                            }
+                        } else continue;
+                        break;
 
-                case 3:
-                    for (int localX = 1; localX <= 18; localX++) {
-                        boolean isFence = (localX == 1 || localX == 2 || localX == 17 || localX == 18);
-                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
-                        boolean movable = !isFence;
-                        setTile(y, baseX + localX, type, movable);
-                    }
-                    break;
+                    case 2:
+                        if (localX >= 2 && localX <= 17) {
+                            boolean isFence = localX == 2 || localX > 14;
+                            type = isFence ? TileType.FENCE : TileType.MINE;
+                            movable = !isFence;
+                        } else continue;
+                        break;
 
-                case 4: case 5: case 6: case 7:
-                    for (int localX = 0; localX <= 18; localX++) {
+                    case 3:
+                        if (localX >= 1 && localX <= 18) {
+                            boolean isFence = (localX == 1 || localX == 2 || localX == 17 || localX == 18);
+                            type = isFence ? TileType.FENCE : TileType.MINE;
+                            movable = !isFence;
+                        } else continue;
+                        break;
+
+                    case 4: case 5: case 6: case 7:
                         boolean isFence = (localX == 0 || localX == 1 || localX == 17 || localX == 18);
-                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
-                        boolean movable = !isFence;
-                        setTile(y, baseX + localX, type, movable);
-                    }
-                    break;
+                        type = isFence ? TileType.FENCE : TileType.MINE;
+                        movable = !isFence;
+                        break;
 
-                case 8:
-                    for (int localX = 2; localX <= 17; localX++) {
-                        boolean isFence = localX < 4 || localX >= 15;
-                        TileType type = isFence ? TileType.FENCE : TileType.MINE;
-                        boolean movable = !isFence;
-                        setTile(y, baseX + localX, type, movable);
-                    }
-                    break;
+                    case 8:
+                        if (localX >= 2 && localX <= 17) {
+                            boolean isRiver = localX < 4 || localX >= 15;
+                            type = isRiver ? TileType.RIVER : TileType.MINE;
+                            movable = !isRiver;
+                        } else continue;
+                        break;
 
-                default:
-                    for (int localX = 0; localX < 19; localX++) {
+                    default:
                         if (localX != 5) {
-                            setTile(y, localX, TileType.FENCE, false);
-                        }
-                    }
+                            type = TileType.FENCE;
+                            movable = false;
+                        } else continue;
+                }
+
+                setTile(y, baseX + localX, type, movable);
             }
         }
     }
+
 
     private static void setTile(int y, int x, TileType type, boolean movable) {
         tiles.get(y).set(x, new Tile.Builder()
@@ -283,7 +302,13 @@ public class FarmInitializer {
             .setType(type)
             .setMovable(movable)
             .build());
+        debugPrint(x, y, type, "setTile");
     }
+
+    private static void debugPrint(int x, int y, TileType type, String source) {
+        System.out.println("[" + source + "] Setting tile at (" + x + ", " + y + ") to " + type);
+    }
+
 
 
 
@@ -291,39 +316,27 @@ public class FarmInitializer {
         int additionalX = getAdditionalX(lakeId);
         int additionalY = getAdditionalY(lakeId);
 
-        for (int y = RIVER_BL.y() + additionalY; y <= RIVER_TR.y() + additionalY; y++) {
-            switch (y) {
-                case 0:
-                case 7:
-                    for (int x = RIVER_BL.x() + additionalX; x <= RIVER_TR.x() + additionalX; x++) {
-                        tiles.get(y).set(x, new Tile.Builder()
-                            .setPosition(new Position(x, y))
-                            .setType(TileType.FENCE)
-                            .setMovable(false)
-                            .build());
-                    }
-                    break;
-                default:
-                    tiles.get(y).set(RIVER_BL.x() + additionalX, new Tile.Builder()
-                        .setPosition(new Position(RIVER_BL.x() + additionalX, y))
-                        .setType(TileType.FENCE)
-                        .setMovable(false)
-                        .build());
-                    for (int x = RIVER_BL.x() + additionalX + 1; x <= RIVER_TR.x() + additionalX - 1; x++) {
-                        tiles.get(y).set(x, new Tile.Builder()
-                            .setPosition(new Position(x, y))
-                            .setType(TileType.RIVER)
-                            .setMovable(false)
-                            .build());
-                    }
-                    tiles.get(y).set(RIVER_TR.x() + additionalX, new Tile.Builder()
-                        .setPosition(new Position(RIVER_TR.x() + additionalX, y))
-                        .setType(TileType.FENCE)
-                        .setMovable(false)
-                        .build());
+        int xStart = RIVER_BL.x() + additionalX;
+        int xEnd = RIVER_TR.x() + additionalX;
+        int yStart = RIVER_BL.y() + additionalY;
+        int yEnd = RIVER_TR.y() + additionalY;
+
+        for (int y = yStart; y <= yEnd; y++) {
+            for (int x = xStart; x <= xEnd; x++) {
+                boolean isBorderX = (x == xStart || x == xEnd);
+                boolean isBorderY = (y == yStart || y == yEnd);
+
+                TileType type = (isBorderX || isBorderY) ? TileType.FENCE : TileType.RIVER;
+
+                tiles.get(y).set(x, new Tile.Builder()
+                    .setPosition(new Position(x, y))
+                    .setType(type)
+                    .setMovable(type != TileType.FENCE) //*
+                    .build());
             }
         }
     }
+
 
 
 

@@ -37,7 +37,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private final GameController controller;
@@ -50,20 +49,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
+    private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
+    private final TextureRegion houseTop = AssetManager.getAssetManager().getHouseTop();
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Actor miniMapActor = null;
 
 
-
     private final static int TILE_SIZE = 16;
 
 
     private final float speed = 200f;
-
-
-
 
 
     public GameView(GameController controller) {
@@ -164,17 +161,29 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawPlayer();
 
+        drawHouseTop();
+
 //        drawTileHighlights();
 
         //printTileTypeCounts();
+
+        drawTileObjects();
+    }
+
+    private void drawTileObjects() {
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                batch.draw(tile.getObject().getTexture(), tile.getPosition().x(), tile.getPosition().y());
+            }
+        }
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
-    private void drawBuilding () {
+    private void drawBuilding() {
         for (int i = 0; i < 4; i++) {
             int mineX = getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i));
             int mineY = getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i) - 1);
@@ -186,11 +195,24 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             int lakeX = getTilePixel(FarmInitializer.getLakeStartingPointX() + FarmInitializer.getAdditionalX(i));
             int lakeY = getTilePixel(FarmInitializer.getLakeStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(lakeWater, lakeX + 16, lakeY + 16);
             batch.draw(lake, lakeX, lakeY);
+
 
             int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i));
             int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i));
             batch.draw(greenhouse, greenhouseX, greenhouseY);
+
+            //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
+
+        }
+    }
+
+    private void drawHouseTop() {
+        for (int i = 0; i < 4; i++) {
+            int houseX = getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i));
+            int houseY = getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(houseTop, houseX, houseY + 100);
         }
     }
 
@@ -317,8 +339,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
     private int getTilePixel(int tileCol) {
         return tileCol * TILE_SIZE;
     }
@@ -409,8 +429,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private boolean canMoveTo(float x, float y) {
-        int tileX = (int)(x / 16);
-        int tileY = (int)(y / 16);
+        int tileX = (int) (x / 16);
+        int tileY = (int) (y / 16);
 
         Tile tile = controller.getRepo().getCurrentGame().getFarm().getTile(tileX, tileY);
 
@@ -438,6 +458,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
 
+                int playerTileX = (int) player.getX() / 16;
+                int playerTileY = (int) player.getY() / 16;
+
+                shapeRenderer.setColor(Color.RED);
+                float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
+                float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
+                shapeRenderer.circle(centerX, centerY, (int) (tileSize * 3));
+
                 shapeRenderer.end();
                 batch.begin();
             }
@@ -458,25 +486,28 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
-
     private Color getColorForTileType(TileType type) {
         switch (type) {
-            case GROUND: return Color.GREEN;
-            case RIVER: return Color.CYAN;
-            case MINE: return Color.GRAY;
-            case GREENHOUSE: return Color.FOREST;
-            case COTTAGE: return Color.BROWN;
-            case WALL: return Color.DARK_GRAY;
-            case SALE_BUCKET: return Color.PINK;
-            case FENCE: return Color.BLUE;
-            default: return Color.LIGHT_GRAY;
+            case GROUND:
+                return Color.GREEN;
+            case RIVER:
+                return Color.BLACK;
+            case MINE:
+                return Color.GRAY;
+            case GREENHOUSE:
+                return Color.FOREST;
+            case COTTAGE:
+                return Color.BROWN;
+            case WALL:
+                return Color.DARK_GRAY;
+            case SALE_BUCKET:
+                return Color.PINK;
+            case FENCE:
+                return Color.BLUE;
+            default:
+                return Color.LIGHT_GRAY;
         }
     }
-
-
-
 
 }
 
