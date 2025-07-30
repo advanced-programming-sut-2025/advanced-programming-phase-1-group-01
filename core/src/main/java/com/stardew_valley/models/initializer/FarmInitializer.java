@@ -160,8 +160,8 @@ public class FarmInitializer {
         int additionalY = getAdditionalY(houseId);
 
 
-        for (int x = COTTAGE_BL.x() + additionalX; x < COTTAGE_TR.x() + additionalX; x++) {
-            for (int y = COTTAGE_BL.y() + additionalY; y < COTTAGE_TR.y() + additionalY; y++) {
+        for (int x = COTTAGE_BL.x() + additionalX - 1; x < COTTAGE_TR.x() + additionalX; x++) {
+            for (int y = COTTAGE_BL.y() + additionalY; y < COTTAGE_TR.y() + additionalY - 2; y++) {
                 Tile tile = new Tile.Builder()
                     .setPosition(new Position(x, y))
                     .setType(TileType.COTTAGE)
@@ -169,7 +169,7 @@ public class FarmInitializer {
                     .setBuilding(null)
                     .setObject(null)
                     .build();
-                tiles.get(x).set(y, tile);
+                tiles.get(y).set(x, tile);
             }
         }
     }

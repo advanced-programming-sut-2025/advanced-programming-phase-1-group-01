@@ -51,6 +51,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
+    private final TextureRegion houseTop = AssetManager.getAssetManager().getHouseTop();
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -165,6 +166,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawPlayer();
 
+        drawHouseTop();
+
 //        drawTileHighlights();
 
         //printTileTypeCounts();
@@ -197,6 +200,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
 
+        }
+    }
+
+    private void drawHouseTop() {
+        for (int i = 0; i < 4; i++) {
+            int houseX = getTilePixel(FarmInitializer.getHouseStartingPointX() + FarmInitializer.getAdditionalX(i));
+            int houseY = getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i));
+            batch.draw(houseTop, houseX, houseY + 100);
         }
     }
 

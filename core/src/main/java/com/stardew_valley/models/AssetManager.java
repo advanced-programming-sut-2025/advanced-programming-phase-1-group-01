@@ -36,6 +36,8 @@ public class AssetManager {
 
     private final String lake_water = "images/lake_water.png";
 
+    private final String house_top = "images/house_top.png";
+
     private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
     private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
     private final String fainting_3 = "images/fainting/resized_3-Photoroom.png";
@@ -338,6 +340,8 @@ public class AssetManager {
     private final TextureRegion circle_tex = new TextureRegion(new Texture(circleSign));
 
     private final TextureRegion lake_water_tex = new TextureRegion(new Texture(lake_water));
+
+    private final TextureRegion house_top_tex = new TextureRegion(new Texture(house_top));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
 
@@ -1059,6 +1063,10 @@ public class AssetManager {
 
     public TextureRegion getLakeWater() {
         return lake_water_tex;
+    }
+
+    public TextureRegion getHouseTop() {
+        return house_top_tex;
     }
 
 
