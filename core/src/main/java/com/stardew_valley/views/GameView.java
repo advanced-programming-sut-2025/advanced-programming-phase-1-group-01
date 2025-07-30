@@ -461,7 +461,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 shapeRenderer.setColor(Color.RED);
                 float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
                 float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
-                shapeRenderer.circle(centerX, centerY, (int)(tileSize * 0.5));
+                shapeRenderer.circle(centerX, centerY, (int)(tileSize * 3));
 
                 shapeRenderer.end();
                 batch.begin();
