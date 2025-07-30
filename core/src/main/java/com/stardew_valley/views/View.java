@@ -15,9 +15,9 @@ public abstract class View implements Screen {
     public void render(float v) {
         ScreenUtils.clear(0, 0, 0, 1);
         Main.getBatch().begin();
-        Main.getBatch().end();
         getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         getStage().draw();
+        Main.getBatch().end();
     }
 
     public abstract Stage getStage();

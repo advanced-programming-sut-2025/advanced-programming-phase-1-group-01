@@ -34,7 +34,7 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         main = this;
-        setScreen(new SignUpMenuView(new SignUpMenuController(new Repository())));
+        setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
         //setScreen(new GameMenuView(new GameMenuController(repo)));
 //        setScreen(new TempLogin(new Repository()));
     }

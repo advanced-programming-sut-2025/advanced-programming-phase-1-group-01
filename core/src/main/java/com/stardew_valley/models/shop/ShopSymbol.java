@@ -2,7 +2,7 @@ package com.stardew_valley.models.shop;
 
 import com.stardew_valley.models.building.TileObject;
 
-public enum ShopSymbol implements TileObject {
+public enum ShopSymbol /*implements TileObject*/ {
     BLACKSMITH("blacksmith", "⚒️"),
     JOJA_MART("jojomart", "🏪"),
     PIERRE_GENERAL_STORE("pierre", "🏬"),
@@ -19,17 +19,17 @@ public enum ShopSymbol implements TileObject {
         this.symbol = symbol;
     }
 
-    @Override
+//    @Override
     public String getSymbol() {
         return symbol;
     }
 
-    @Override
+//    @Override
     public String getName() {
         return name;
     }
 
-    @Override
+//    @Override
     public int getPrice() {
         return -1;
     }
