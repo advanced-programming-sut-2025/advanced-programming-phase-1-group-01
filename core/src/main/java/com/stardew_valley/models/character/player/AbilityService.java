@@ -95,7 +95,7 @@ public class AbilityService {
                 } else if (newLevel == 2) {
                     player.addCookingRecipe(CookingRecipes.DISH_O_THE_SEA.toRecipe());
                 } else if (newLevel == 3) {
-                    player.addCookingRecipe(CookingRecipes.SEAFORM_PUDDING.toRecipe());
+                    player.addCookingRecipe(CookingRecipes.SEAFOAM_PUDDING.toRecipe());
                 }
                 break;
 

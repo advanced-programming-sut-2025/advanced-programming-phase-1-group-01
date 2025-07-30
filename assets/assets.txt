@@ -13,7 +13,7 @@ cooking/Dish_O'_The_Sea.png
 cooking/Farmer's_Lunch.png
 cooking/Fried_Egg.png
 cooking/Fruit_Salad.png
-cooking/Hashbrowns.png
+cooking/Hash_Browns.png
 cooking/Maki_Roll.png
 cooking/Miner's_Treat.png
 cooking/Omelet.png
