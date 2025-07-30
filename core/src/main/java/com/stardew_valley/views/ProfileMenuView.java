@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.controllers.ProfileMenuController;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.data.FileManager;
 import com.stardew_valley.models.data.User;
 
 import java.util.function.Consumer;
@@ -27,6 +28,7 @@ public class ProfileMenuView extends View {
     private TextButton changeEmail;
     private TextButton changeNickname;
     private TextButton changeAvatar;
+    private TextButton clearAccount;
     private TextButton back;
     private Label messageLabel;
 
@@ -49,6 +51,7 @@ public class ProfileMenuView extends View {
         changeEmail = new TextButton("changeEmail", skin);
         changeNickname = new TextButton("changeNickname", skin);
         changeAvatar = new TextButton("changeAvatar", skin);
+        clearAccount = new TextButton("clearAccount", skin);
         back = new TextButton("back", skin);
         messageLabel = new Label("", skin);
     }
@@ -64,9 +67,10 @@ public class ProfileMenuView extends View {
 
         table.add(changeUsername).pad(10).row();
         table.add(changePassword).pad(10).row();
-        table.add(changeEmail).pad(10).row();
         table.add(changeNickname).pad(10).row();
+        table.add(changeEmail).pad(10).row();
         table.add(changeAvatar).pad(10).row();
+        table.add(clearAccount).pad(10).row();
         table.add(back).pad(10).row();
         table.add(messageLabel).pad(10);
         stage.addActor(table);
@@ -140,6 +144,14 @@ public class ProfileMenuView extends View {
                  });
              }
          });
+
+        clearAccount.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                FileManager.clearFile();
+                messageLabel.setText("account has been cleared!");
+            }
+        });
 
         back.addListener(new ClickListener() {
             @Override

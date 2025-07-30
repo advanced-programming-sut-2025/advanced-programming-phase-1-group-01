@@ -6,6 +6,8 @@ avatars/avatar5.png
 avatars/avatar6.png
 avatars/avatar7.png
 avatars/avatar8.png
+cooking/kitchen.png
+cooking/refrigerator.png
 farming/crops/Amaranth.png
 farming/crops/Amaranth_Seeds.png
 farming/crops/Amaranth_Stage_1.png

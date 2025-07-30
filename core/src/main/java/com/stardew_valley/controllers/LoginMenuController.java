@@ -80,7 +80,6 @@ public class LoginMenuController extends Controller {
         }
 
         repo.setCurrentUser(user);
-        FileManager.clearFile();
         messageLabel.setText("You are logged in!");
 
         Timer.schedule(new Timer.Task() {

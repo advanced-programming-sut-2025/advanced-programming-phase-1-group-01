@@ -1,8 +1,0 @@
-Username: amir
-Password: #Amir@1385
-Nickname: phony
-Email: aaa@gmail.com
-Gender: MALE
-securityQuestion: QUESTION1
-securityAnswer: me
-avatarPath: avatars/avatar3.png

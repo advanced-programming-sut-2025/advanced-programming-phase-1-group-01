@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CookingController extends Controller {
-    CookingController(Repository repo) {
+    public CookingController(Repository repo) {
         super(repo);
     }
 
