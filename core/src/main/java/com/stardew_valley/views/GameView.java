@@ -191,6 +191,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i));
             int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i));
             batch.draw(greenhouse, greenhouseX, greenhouseY);
+
+            //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
+
         }
     }
 
@@ -438,6 +441,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
 
+                int playerTileX = (int)player.getX() / 16;
+                int playerTileY = (int)player.getY() / 16;
+
+                shapeRenderer.setColor(Color.RED);
+                float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
+                float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
+                shapeRenderer.circle(centerX, centerY, tileSize * 3);
+
                 shapeRenderer.end();
                 batch.begin();
             }
@@ -461,10 +472,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
 
+
     private Color getColorForTileType(TileType type) {
         switch (type) {
             case GROUND: return Color.GREEN;
-            case RIVER: return Color.CYAN;
+            case RIVER: return Color.BLACK;
             case MINE: return Color.GRAY;
             case GREENHOUSE: return Color.FOREST;
             case COTTAGE: return Color.BROWN;
@@ -474,9 +486,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             default: return Color.LIGHT_GRAY;
         }
     }
-
-
-
 
 }
 
