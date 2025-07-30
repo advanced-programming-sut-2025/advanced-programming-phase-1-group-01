@@ -27,7 +27,6 @@ import com.stardew_valley.models.initializer.FarmInitializer;
 
 import java.util.List;
 
-
 public class GameView extends ScreenAdapter implements InputProcessor {
     private boolean isFainting = false;
     private final float totalFaintDuration = 1.5f;
@@ -52,9 +51,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 100f;
     private Vector2 vectorPosition;
     private IncompleteMovement incompleteMovement;
-
-
-
 
     public GameView(GameController controller) {
         this.controller = controller;
@@ -152,6 +148,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawPlayer();
 
         drawFence();
+
+        drawTileObjects();
+    }
+
+    private void drawTileObjects() {
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                batch.draw(tile.getObject().getTexture(), tile.getPosition().x(), tile.getPosition().y());
+            }
+        }
     }
 
     private void drawPlayer() {

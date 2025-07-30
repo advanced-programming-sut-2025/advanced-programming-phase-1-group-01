@@ -1,5 +1,6 @@
 package com.stardew_valley.models.ingredients;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.building.TileObject;
 import com.stardew_valley.models.enums.StoneType;

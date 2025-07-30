@@ -1,6 +1,8 @@
 package com.stardew_valley.models.farming;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
+import com.stardew_valley.models.data.Repository;
 
 public class Tree extends Plant {
     private final TreeInfo info;
@@ -116,7 +118,15 @@ public class Tree extends Plant {
     }
 
     @Override
+    public Texture getTexture() {
+        if (growthLevel < 5) {
+//            info.getTe
+        }
+        return null;
+    }
+
+    @Override
     public String getSymbol() {
-        return info.getSymbol();
+        return null;
     }
 }

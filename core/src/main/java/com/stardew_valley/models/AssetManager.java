@@ -74,7 +74,6 @@ public class AssetManager {
     private final String rabbit_up_3 = "images/a_Rabbit/tile_2_3.png";
 
 
-
     private final String abigail_down_0 = "images/a_Abigail/tile_0_0.png";
     private final String abigail_down_1 = "images/a_Abigail/tile_0_1.png";
     private final String abigail_down_2 = "images/a_Abigail/tile_0_2.png";
@@ -94,7 +93,6 @@ public class AssetManager {
     private final String abigail_up_1 = "images/a_Abigail/tile_2_1.png";
     private final String abigail_up_2 = "images/a_Abigail/tile_2_2.png";
     private final String abigail_up_3 = "images/a_Abigail/tile_2_3.png";
-
 
 
     private final String harvey_down_0 = "images/a_harvey/tile_0_0.png";
@@ -160,8 +158,6 @@ public class AssetManager {
     private final String leah_up_3 = "images/a_leah/tile_2_3.png";
 
 
-
-
     private final String pig_down_0 = "images/a_Pig/tile_0_0.png";
     private final String pig_down_1 = "images/a_Pig/tile_0_1.png";
     private final String pig_down_2 = "images/a_Pig/tile_0_2.png";
@@ -181,8 +177,6 @@ public class AssetManager {
     private final String pig_up_1 = "images/a_Pig/tile_2_1.png";
     private final String pig_up_2 = "images/a_Pig/tile_2_2.png";
     private final String pig_up_3 = "images/a_Pig/tile_2_3.png";
-
-
 
 
     private final String hen_down_0 = "images/a_hen/tile_0_0.png";
@@ -290,7 +284,6 @@ public class AssetManager {
     private final String cow_up_3 = "images/a_cow/tile_2_3.png";
 
 
-
     private final String alex_0_walking_right_0 = "images/a_alex/tile_1_0.png";
     private final String alex_0_walking_right_1 = "images/a_alex/tile_1_1.png";
     private final String alex_0_walking_right_2 = "images/a_alex/tile_1_2.png";
@@ -348,7 +341,6 @@ public class AssetManager {
     private final TextureRegion sheep_left_1_tex = new TextureRegion(new Texture(sheep_left_1));
     private final TextureRegion sheep_left_2_tex = new TextureRegion(new Texture(sheep_left_2));
     private final TextureRegion sheep_left_3_tex = new TextureRegion(new Texture(sheep_left_3));
-
 
 
     private final TextureRegion rabbit_down_0_tex = new TextureRegion(new Texture(rabbit_down_0));
@@ -456,10 +448,6 @@ public class AssetManager {
     private final TextureRegion abigail_left_3_tex = new TextureRegion(new Texture(abigail_left_3));
 
 
-
-
-
-
     private final TextureRegion pig_down_0_tex = new TextureRegion(new Texture(pig_down_0));
     private final TextureRegion pig_down_1_tex = new TextureRegion(new Texture(pig_down_1));
     private final TextureRegion pig_down_2_tex = new TextureRegion(new Texture(pig_down_2));
@@ -479,7 +467,6 @@ public class AssetManager {
     private final TextureRegion pig_left_1_tex = new TextureRegion(new Texture(pig_left_1));
     private final TextureRegion pig_left_2_tex = new TextureRegion(new Texture(pig_left_2));
     private final TextureRegion pig_left_3_tex = new TextureRegion(new Texture(pig_left_3));
-
 
 
     private final TextureRegion hen_down_0_tex = new TextureRegion(new Texture(hen_down_0));
@@ -522,7 +509,6 @@ public class AssetManager {
     private final TextureRegion duck_left_1_tex = new TextureRegion(new Texture(duck_left_1));
     private final TextureRegion duck_left_2_tex = new TextureRegion(new Texture(duck_left_2));
     private final TextureRegion duck_left_3_tex = new TextureRegion(new Texture(duck_left_3));
-
 
 
     private final TextureRegion goat_down_0_tex = new TextureRegion(new Texture(goat_down_0));
@@ -696,7 +682,6 @@ public class AssetManager {
     );
 
 
-
     private final Animation<TextureRegion> leah_up_animation = new Animation<>(0.1f,
         leah_up_0_tex,
         leah_up_1_tex,
@@ -813,8 +798,6 @@ public class AssetManager {
     );
 
 
-
-
     private final Animation<TextureRegion> pig_up_animation = new Animation<>(0.1f,
         pig_up_0_tex,
         pig_up_1_tex,
@@ -842,7 +825,6 @@ public class AssetManager {
         pig_left_2_tex,
         pig_left_3_tex
     );
-
 
 
     private final Animation<TextureRegion> hen_up_animation = new Animation<>(0.1f,
@@ -874,7 +856,6 @@ public class AssetManager {
     );
 
 
-
     private final Animation<TextureRegion> duck_up_animation = new Animation<>(0.1f,
         duck_up_0_tex,
         duck_up_1_tex,
@@ -902,7 +883,6 @@ public class AssetManager {
         duck_left_2_tex,
         duck_left_3_tex
     );
-
 
 
     private final Animation<TextureRegion> goat_up_animation = new Animation<>(0.1f,
@@ -934,7 +914,6 @@ public class AssetManager {
     );
 
 
-
     private final Animation<TextureRegion> dino_up_animation = new Animation<>(0.1f,
         dino_up_0_tex,
         dino_up_1_tex,
@@ -964,7 +943,6 @@ public class AssetManager {
     );
 
 
-
     private final Animation<TextureRegion> cow_up_animation = new Animation<>(0.1f,
         cow_up_0_tex,
         cow_up_1_tex,
@@ -992,7 +970,6 @@ public class AssetManager {
         cow_left_2_tex,
         cow_left_3_tex
     );
-
 
 
     public TextureRegion getHouse() {
@@ -1163,7 +1140,6 @@ public class AssetManager {
     }
 
 
-
     public Animation<TextureRegion> getPigUpAnimation() {
         return pig_up_animation;
     }
@@ -1215,7 +1191,6 @@ public class AssetManager {
     }
 
 
-
     public Animation<TextureRegion> getgoatUpAnimation() {
         return goat_up_animation;
     }
@@ -1231,7 +1206,6 @@ public class AssetManager {
     public Animation<TextureRegion> getgoatLeftAnimation() {
         return goat_left_animation;
     }
-
 
 
     public Animation<TextureRegion> getDinoUpAnimation() {
@@ -1381,6 +1355,7 @@ public class AssetManager {
         new Texture("farming/crops/Coffee_Stage_4.png"),
         new Texture("farming/crops/Coffee_Stage_5.png"),
         new Texture("farming/crops/Coffee_Stage_6.png"),
+        new Texture("farming/crops/Coffee_Stage_7.png"),
     };
 
     public Texture getCoffeeBean() {
@@ -1409,6 +1384,10 @@ public class AssetManager {
 
     public Texture getCoffeeBeanStage6() {
         return Coffee_Bean_Stages[5];
+    }
+
+    public Texture getCoffeeBeanStage7() {
+        return Coffee_Bean_Stages[6];
     }
 
     private final Texture Garlic = new Texture("farming/crops/Garlic.png");
@@ -1638,6 +1617,7 @@ public class AssetManager {
         new Texture("farming/crops/Strawberry_Stage_4.png"),
         new Texture("farming/crops/Strawberry_Stage_5.png"),
         new Texture("farming/crops/Strawberry_Stage_6.png"),
+        new Texture("farming/crops/Strawberry_Stage_7.png")
     };
 
     public Texture getStrawberry() {
@@ -1666,6 +1646,10 @@ public class AssetManager {
 
     public Texture getStrawberryStage6() {
         return Strawberry_Stages[5];
+    }
+
+    public Texture getStrawberryStage7() {
+        return Strawberry_Stages[6];
     }
 
     private final Texture Tulip = new Texture("farming/crops/Tulip.png");
@@ -1743,6 +1727,7 @@ public class AssetManager {
         new Texture("farming/crops/Blueberry_Stage_4.png"),
         new Texture("farming/crops/Blueberry_Stage_5.png"),
         new Texture("farming/crops/Blueberry_Stage_6.png"),
+        new Texture("farming/crops/Blueberry_Stage_7.png"),
     };
 
     public Texture getBlueberry() {
@@ -1773,6 +1758,10 @@ public class AssetManager {
         return Blueberry_Stages[5];
     }
 
+    public Texture getBlueberryStage7() {
+        return Blueberry_Stages[6];
+    }
+
     private final Texture Corn = new Texture("farming/crops/Corn.png");
     private final Texture[] Corn_Stages = new Texture[]{
         new Texture("farming/crops/Corn_Stage_1.png"),
@@ -1781,6 +1770,7 @@ public class AssetManager {
         new Texture("farming/crops/Corn_Stage_4.png"),
         new Texture("farming/crops/Corn_Stage_5.png"),
         new Texture("farming/crops/Corn_Stage_6.png"),
+        new Texture("farming/crops/Corn_Stage_7.png"),
     };
 
     public Texture getCorn() {
@@ -1809,6 +1799,10 @@ public class AssetManager {
 
     public Texture getCornStage6() {
         return Corn_Stages[5];
+    }
+
+    public Texture getCornStage7() {
+        return Corn_Stages[6];
     }
 
     private final Texture Hops = new Texture("farming/crops/Hops.png");
@@ -2115,6 +2109,7 @@ public class AssetManager {
         new Texture("farming/crops/Summer_Squash_Stage_4.png"),
         new Texture("farming/crops/Summer_Squash_Stage_5.png"),
         new Texture("farming/crops/Summer_Squash_Stage_6.png"),
+        new Texture("farming/crops/Summer_Squash_Stage_7.png"),
     };
 
     public Texture getSummerSquash() {
@@ -2143,6 +2138,10 @@ public class AssetManager {
 
     public Texture getSummerSquashStage6() {
         return Summer_Squash_Stages[5];
+    }
+
+    public Texture getSummerSquashStage7() {
+        return Summer_Squash_Stages[6];
     }
 
     private final Texture Sunflower = new Texture("farming/crops/Sunflower.png");
@@ -2186,6 +2185,7 @@ public class AssetManager {
         new Texture("farming/crops/Tomato_Stage_4.png"),
         new Texture("farming/crops/Tomato_Stage_5.png"),
         new Texture("farming/crops/Tomato_Stage_6.png"),
+        new Texture("farming/crops/Tomato_Stage_7.png"),
     };
 
     public Texture getTomato() {
@@ -2214,6 +2214,10 @@ public class AssetManager {
 
     public Texture getTomatoStage6() {
         return Tomato_Stages[5];
+    }
+
+    public Texture getTomatoStage7() {
+        return Tomato_Stages[6];
     }
 
     private final Texture Wheat = new Texture("farming/crops/Wheat.png");
@@ -2469,6 +2473,8 @@ public class AssetManager {
         new Texture("farming/crops/Eggplant_Stage_3.png"),
         new Texture("farming/crops/Eggplant_Stage_4.png"),
         new Texture("farming/crops/Eggplant_Stage_5.png"),
+        new Texture("farming/crops/Eggplant_Stage_6.png"),
+        new Texture("farming/crops/Eggplant_Stage_7.png")
     };
 
     public Texture getEggplant() {
@@ -2493,6 +2499,14 @@ public class AssetManager {
 
     public Texture getEggplantStage5() {
         return Eggplant_Stages[4];
+    }
+
+    public Texture getEggplantStage6() {
+        return Eggplant_Stages[5];
+    }
+
+    public Texture getEggplantStage7() {
+        return Eggplant_Stages[6];
     }
 
     private final Texture Fairy_Rose = new Texture("farming/crops/Fairy_Rose.png");
@@ -3745,7 +3759,7 @@ public class AssetManager {
     private final Texture GrapeStarter = new Texture("farming/crops/Grape_Starter.png");
     private final Texture PumpkinSeeds = new Texture("farming/crops/Pumpkin_Seeds.png");
     private final Texture YamSeeds = new Texture("farming/crops/Yam_Seeds.png");
-    private final Texture RareSeed = new Texture("farming/crops/Rare_Seed.png");
+    private final Texture RareSeeds = new Texture("farming/crops/Rare_Seed.png");
     private final Texture PowdermelonSeeds = new Texture("farming/crops/Powdermelon_Seeds.png");
     private final Texture AncientSeeds = new Texture("farming/crops/Ancient_Seeds.png");
     private final Texture MixedSeeds = new Texture("farming/crops/Mixed_Seeds.png");
@@ -3898,8 +3912,8 @@ public class AssetManager {
         return YamSeeds;
     }
 
-    public Texture getRareSeed() {
-        return RareSeed;
+    public Texture getRareSeeds() {
+        return RareSeeds;
     }
 
     public Texture getPowdermelonSeeds() {

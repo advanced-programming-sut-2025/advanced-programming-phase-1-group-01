@@ -33,8 +33,11 @@ public class Scythe extends Tool {
         Item product = null;
         if (tile.getObject() instanceof Plant plant && plant.hasProduct()) {
             product = plant.getProduct();
-            if (product instanceof Crop crop && crop.getInfo().isOneTime()) {
-                tile.removeObject();
+            if (product instanceof Crop crop) {
+                crop.setPlanted(false);
+                if (crop.getInfo().isOneTime()) {
+                    tile.removeObject();
+                }
             }
             player.getInventory().addItem(product.getName(), 1);
         } else if (tile.getObject() instanceof ForagingCrop foragingCrop) {

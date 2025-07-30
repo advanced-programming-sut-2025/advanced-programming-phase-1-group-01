@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Repository {
+    private static Repository repo;
+
     private List<Game> games;
     private User currentUser;
     private View currentView;
@@ -19,6 +21,11 @@ public class Repository {
         games = new ArrayList<>();
         users = new HashMap<>();
         currentView = View.LOGIN_MENU;
+    }
+
+    public static Repository getRepo() {
+        if (repo == null) repo = new Repository();
+        return repo;
     }
 
     public User getCurrentUser() {
