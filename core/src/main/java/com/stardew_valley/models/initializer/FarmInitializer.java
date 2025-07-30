@@ -69,19 +69,30 @@ public class FarmInitializer {
         int additionalX = getAdditionalX(greenhouseId);
         int additionalY = getAdditionalY(greenhouseId);
 
+        int xStart = GREENHOUSE_BL.x() + additionalX - 1;
+        int xEnd = GREENHOUSE_TR.x() + additionalX + 1;
 
-        for (int i = GREENHOUSE_BL.x() + additionalX - 1; i <= GREENHOUSE_TR.x() + additionalX + 1; i++) {
-            for (int j = GREENHOUSE_BL.y() + additionalY; j <= GREENHOUSE_TR.y() + additionalY - 3; j++) {
+        int yStart = GREENHOUSE_BL.y() + additionalY;
+        int yEnd = GREENHOUSE_TR.y() + additionalY - 3;
+
+        for (int i = xStart; i <= xEnd; i++) {
+            for (int j = yStart; j <= yEnd; j++) {
+                System.out.println((i - additionalX) + " " +  (j - additionalY));
+                if ((i == 5 + additionalX || i == 6 + additionalX || i == 7 + additionalX) &&
+                    (j == 12 + additionalY)) {
+                    continue;
+                }
+
                 tiles.get(i).set(j, new Tile.Builder()
                     .setPosition(new Position(i, j))
-                    .setType(TileType.FENCE) //*
+                    .setType(TileType.FENCE)
                     .setMovable(false)
                     .build());
             }
         }
 
-        for (int i = GREENHOUSE_BL.x() + additionalX + 3 - 1; i <= GREENHOUSE_TR.x() + additionalX - 3 - 2; i++) {
-            for (int j = GREENHOUSE_BL.y() + additionalY + 3; j <= GREENHOUSE_TR.y() + additionalY - 7; j++) {
+        for (int i = GREENHOUSE_BL.x() + additionalX + 2; i <= GREENHOUSE_TR.x() + additionalX - 5 - 1; i++) {
+            for (int j = GREENHOUSE_BL.y() + additionalY + 3 + 1; j <= GREENHOUSE_TR.y() + additionalY - 7; j++) {
                 tiles.get(i).set(j, new Tile.Builder()
                     .setPosition(new Position(i, j))
                     .setType(TileType.GREENHOUSE)
@@ -90,6 +101,7 @@ public class FarmInitializer {
             }
         }
     }
+
 
     private static void divideMapWithFence() {
         int height = tiles.size();
@@ -314,7 +326,7 @@ public class FarmInitializer {
                 boolean isBorderX = (x == xStart || x == xEnd);
                 boolean isBorderY = (y == yStart || y == yEnd);
 
-                TileType type = (isBorderX || isBorderY) ? TileType.FENCE : TileType.RIVER; //* first
+                TileType type = (isBorderX || isBorderY) ? TileType.FENCE : TileType.RIVER;
 
                 tiles.get(y).set(x, new Tile.Builder()
                     .setPosition(new Position(x, y))
