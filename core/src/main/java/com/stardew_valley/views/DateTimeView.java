@@ -1,9 +1,7 @@
 package com.stardew_valley.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -13,7 +11,6 @@ import com.stardew_valley.models.AssetManager;
 
 public class DateTimeView {
     private final DateTimeController controller;
-    private final Batch batch;
     private Stage uiStage;
     private final Skin skin;
     private final BitmapFont font;
@@ -22,19 +19,18 @@ public class DateTimeView {
 
     public DateTimeView(DateTimeController controller) {
         this.controller = controller;
-        this.batch = Main.getBatch();
         this.uiStage = new Stage(new ScreenViewport());
-        this.skin = new Skin(Gdx.files.internal("skin/NzSkin.json"));
-        this.font = skin.getFont("default-font");
+        this.skin = AssetManager.getAssetManager().getSkin();
+        this.font = skin.getFont("Impact");
         font.getData().setScale(1.5f);
     }
 
-    private void update() {
+    public void update() {
         uiStage.act(Gdx.graphics.getDeltaTime());
-        render();
+        render(Main.getBatch());
     }
 
-    public void render() {
+    public void render(SpriteBatch batch) {
         float startX = 15;
         float startY = Gdx.graphics.getHeight() - 15;
         String clock = String.valueOf(controller.getRepo().getCurrentGame().getTimeManager().getNow().getDay())
@@ -43,6 +39,8 @@ public class DateTimeView {
             + controller.getRepo().getCurrentGame().getTimeManager().getNow().getSeason()
             + controller.getRepo().getCurrentGame().getTimeManager().getNow().getYear();
 
+
         font.draw(batch, clock, startX, startY);
+        uiStage.draw();
     }
 }

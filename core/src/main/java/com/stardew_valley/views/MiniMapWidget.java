@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class MiniMapWidget extends Widget {
     private final List<List<Tile>> tiles;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Window window;
-    private final float tileSize = 5;
+    private final float tileSize = 0.5f;
     private final int buildingWidth;
     private final int buildingHeight;
 
@@ -77,13 +78,17 @@ public class MiniMapWidget extends Widget {
                 batch.end();
                 shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                int width = tiles.size();
+                int height = tiles.get(0).size();
 
                 for (int i = 0; i < tiles.size(); i++) {
                     for (int j = 0; j < tiles.get(i).size(); j++) {
-                        if (tiles.get(i).get(j).isPlowed()) {
-                            shapeRenderer.setColor(Color.WHITE);
-                        } else {
+                        if (i == 0 || i == width - 1 || j == 0 || j == height - 1) {
                             shapeRenderer.setColor(Color.RED);
+                        } else if (tiles.get(i).get(j).getType() == TileType.FENCE) {
+                            shapeRenderer.setColor(Color.BLUE);
+                        } else {
+                            shapeRenderer.setColor(Color.YELLOW);
                         }
                         shapeRenderer.rect(i * tileSize, j * tileSize, tileSize, tileSize);
                     }
@@ -92,6 +97,7 @@ public class MiniMapWidget extends Widget {
                 shapeRenderer.end();
                 batch.begin();
             }
+
 
 
         };
@@ -124,4 +130,5 @@ public class MiniMapWidget extends Widget {
         }
         return true;
     }
+
 }

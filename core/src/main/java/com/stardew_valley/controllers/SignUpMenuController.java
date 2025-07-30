@@ -23,6 +23,37 @@ public class SignUpMenuController extends Controller {
     public SignUpMenuController(Repository repo) {
 
         super(repo);
+
+
+        //D
+        //adding four users to test
+        if (getRepo().getUserByUsername("1") == null) {
+            String path = getRandomAvatarPath();
+            User user = new User("1", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+
+            getRepo().addUser(user);
+        }
+
+        if (getRepo().getUserByUsername("2") == null) {
+            String path = getRandomAvatarPath();
+            User user = new User("2", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+
+            getRepo().addUser(user);
+        }
+
+        if (getRepo().getUserByUsername("3") == null) {
+            String path = getRandomAvatarPath();
+            User user = new User("3", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+
+            getRepo().addUser(user);
+        }
+
+        if (getRepo().getUserByUsername("4") == null) {
+            String path = getRandomAvatarPath();
+            User user = new User("4", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+
+            getRepo().addUser(user);
+        }
     }
 
     @Override

@@ -18,7 +18,7 @@ import com.stardew_valley.models.weather.WeatherManager;
 import com.stardew_valley.models.shop.DelayedPaymentSystem;
 
 public class Game {
-    public final static Position PLAYERS_STARTING_POSITION = new Position(67, 6);
+    public final static Position PLAYERS_STARTING_POSITION = new Position(80, 1280);
     private Player currentPlayer;
     private final List<Player> players;
     private final TimeManager timeManager;
