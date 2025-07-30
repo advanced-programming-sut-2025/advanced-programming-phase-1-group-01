@@ -39,10 +39,6 @@ import java.util.Map;
 
 
 public class GameView extends ScreenAdapter implements InputProcessor {
-    private boolean isFainting = false;
-    private final float totalFaintDuration = 1.5f;
-    private float faintTime = 0f;
-    private Sprite faintingSprite;
     private Stage stage;
     private final GameController controller;
     private final OrthographicCamera camera;
@@ -344,6 +340,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             g = cc, advance hour
             space = toggle minimap
+            f = set fainting
             w = up
             s = down
             d = right
@@ -366,31 +363,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            player.setFainting(true);
+        }
 
-//        if (isFainting) {
-//            faintTime += delta;
-//
-//            float heightOffset = (float)(80 * Math.sin(Math.PI * faintTime / totalFaintDuration));
-//            float rotation = 90f * (faintTime / totalFaintDuration);
-//
-//            if (faintingSprite == null) {
-//                faintingSprite = new Sprite(player.getCurrentFrame());
-//                faintingSprite.setOriginCenter();
-//            }
-//
-//            faintingSprite.setPosition(vectorPosition.x, vectorPosition.y + heightOffset);
-//            faintingSprite.setRotation(rotation);
-//
-//            faintingSprite.draw(batch);
-//
-//            if (faintTime >= totalFaintDuration) {
-//                isFainting = false;
-//                faintingSprite = null;
-//            }
-//
-//            return;
-//        }
-
+        if (player.isFainting()) {
+            return;
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             float nextX = player.getX() + speed * delta;
@@ -436,11 +415,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Tile tile = controller.getRepo().getCurrentGame().getFarm().getTile(tileX, tileY);
 
         return tile != null && tile.isMovable();
-    }
-
-
-    public void setFainting(boolean fainting) {
-        isFainting = fainting;
     }
 
 

@@ -34,6 +34,13 @@ public class AssetManager {
 
     private final String circleSign = "images/circle.png";
 
+    private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
+    private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
+    private final String fainting_3 = "images/fainting/resized_3-Photoroom.png";
+    private final String fainting_4 = "images/fainting/resized_4-Photoroom.png";
+    private final String fainting_5 = "images/fainting/resized_5-Photoroom.png";
+
+
     private final String sheep_down_0 = "images/a_Sheep/tile_0_0.png";
     private final String sheep_down_1 = "images/a_Sheep/tile_0_1.png";
     private final String sheep_down_2 = "images/a_Sheep/tile_0_2.png";
@@ -329,6 +336,13 @@ public class AssetManager {
     private final TextureRegion circle_tex = new TextureRegion(new Texture(circleSign));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
+
+    private final TextureRegion fainting_tex1 = new TextureRegion(new Texture(fainting_1));
+    private final TextureRegion fainting_tex2 = new TextureRegion(new Texture(fainting_2));
+    private final TextureRegion fainting_tex3 = new TextureRegion(new Texture(fainting_3));
+    private final TextureRegion fainting_tex4 = new TextureRegion(new Texture(fainting_4));
+    private final TextureRegion fainting_tex5 = new TextureRegion(new Texture(fainting_5));
+
 
 
     private final TextureRegion sheep_down_0_tex = new TextureRegion(new Texture(sheep_down_0));
@@ -988,6 +1002,16 @@ public class AssetManager {
         cow_down_3_tex
     );
 
+    private final Animation<TextureRegion> fainting_animation = new Animation<>(
+        0.25f,
+        fainting_tex1,
+        fainting_tex2,
+        fainting_tex3,
+        fainting_tex4,
+        fainting_tex5
+    );
+
+
     private final Animation<TextureRegion> cow_left_animation = new Animation<>(0.1f,
         cow_left_0_tex,
         cow_left_1_tex,
@@ -1267,6 +1291,10 @@ public class AssetManager {
 
     public Animation<TextureRegion> getCowLeftAnimation() {
         return cow_left_animation;
+    }
+
+    public Animation<TextureRegion> getFaintingAnimation() {
+        return fainting_animation;
     }
 
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));

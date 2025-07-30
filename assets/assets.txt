@@ -3561,6 +3561,11 @@ images/artisans/Preserves_Jar.png
 images/black.png
 images/circle.png
 images/clock.png
+images/fainting/resized_1-Photoroom.png
+images/fainting/resized_2-Photoroom.png
+images/fainting/resized_3-Photoroom.png
+images/fainting/resized_4-Photoroom.png
+images/fainting/resized_5-Photoroom.png
 images/house.png
 images/lake.png
 images/map_1.png

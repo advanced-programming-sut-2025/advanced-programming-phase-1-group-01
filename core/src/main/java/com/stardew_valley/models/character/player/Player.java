@@ -19,7 +19,6 @@ import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.relations.RelationshipService;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -56,6 +55,12 @@ public class Player extends Character {
     private final List<Integer> tommorrowMoney = new ArrayList<>();
     private float stateTime = 0f;
     private boolean isMoving = false;
+
+    private final float totalFaintingTime = 2f;
+    private float faintingTime = 0f;
+    private boolean whileFainting = false;
+
+    private float globalDelta = 0f;
 
 
     public Player(User user) {
@@ -329,6 +334,15 @@ public class Player extends Character {
 
     public TextureRegion getCurrentFrame() {
         AssetManager manager = AssetManager.getAssetManager();
+
+        if (whileFainting) {
+            updateFaintingStateTime();
+            if (faintingTime > totalFaintingTime) {
+                whileFainting = false;
+                faintingTime = 0;
+            }
+            return manager.getFaintingAnimation().getKeyFrame(faintingTime, false);
+        }
 
         switch (direction) {
             case UP:
@@ -880,6 +894,11 @@ public class Player extends Character {
 
     public void updateStateTime(float delta) {
         stateTime += delta;
+        globalDelta = delta;
+    }
+
+    public void updateFaintingStateTime() {
+        faintingTime += globalDelta;
     }
 
     public void setX(float x) {
@@ -894,5 +913,13 @@ public class Player extends Character {
 
     public void setMoving(boolean moving) {
         isMoving = moving;
+    }
+
+    public boolean isFainting() {
+        return whileFainting;
+    }
+
+    public void setFainting(boolean fainting) {
+        whileFainting = fainting;
     }
 }
