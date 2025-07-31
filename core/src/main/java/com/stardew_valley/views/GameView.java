@@ -430,7 +430,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void handleMovement(float delta) {
         boolean moving = false;
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
             toggleDialog();
         }
 
