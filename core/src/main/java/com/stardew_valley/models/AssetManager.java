@@ -12,6 +12,8 @@ public class AssetManager {
 //    private final Skin skin = new Skin(Gdx.files.internal("skin3/craftacular-ui.json"));
 //    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/terra-mother-ui.json"));
 
+    private final Texture tempTex = new Texture("farming/crops/Broccoli.png");
+
     private static AssetManager assetManager;
     public static final float SCALE = 4f;
 
@@ -4224,5 +4226,9 @@ public class AssetManager {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public Texture getTempTex() {
+        return tempTex;
     }
 }

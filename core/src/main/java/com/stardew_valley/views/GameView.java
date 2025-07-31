@@ -173,14 +173,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawTileObjects() {
         for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
             for (Tile tile : row) {
-                batch.draw(tile.getObject().getTexture(), tile.getPosition().x(), tile.getPosition().y());
+                if (!tile.isEmpty())
+                    batch.draw(tile.getObject().getTexture(), tile.getPosition().x(), tile.getPosition().y());
             }
         }
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawBuilding() {

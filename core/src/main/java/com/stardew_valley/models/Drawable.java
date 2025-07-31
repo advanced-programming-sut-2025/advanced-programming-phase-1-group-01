@@ -4,5 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import org.w3c.dom.Text;
 
 public interface Drawable {
-    Texture getTexture();
+    default Texture getTexture() {
+        return AssetManager.getAssetManager().getTempTex();
+    }
 }
