@@ -2,6 +2,7 @@ package com.stardew_valley.models.building;
 
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.animal.*;
+import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.initializer.CreateShelter;
@@ -21,6 +22,7 @@ public class Farm extends Maps {
     private Quarry quarry;
     private final List<AnimalHouse> shelters;
     private final List<Animal> animals;
+    private final List<NPC> NPCs = new ArrayList<>();
 
     public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse) {
         super(tiles);
@@ -30,6 +32,11 @@ public class Farm extends Maps {
         this.greenhouse = greenhouse;
         shelters = new ArrayList<>();
         animals = new ArrayList<>();
+    }
+
+    public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse, List<NPC> NPCs) {
+        this(tiles, lake, cottage, quarry, greenhouse);
+        this.NPCs.addAll(NPCs);
     }
 
     public Lake getLake() {
@@ -336,5 +343,13 @@ public class Farm extends Maps {
             }
         }
         return null;
+    }
+
+    public void addNPC(NPC npc) {
+        NPCs.add(npc);
+    }
+
+    public List<NPC> getNPCs() {
+        return NPCs;
     }
 }

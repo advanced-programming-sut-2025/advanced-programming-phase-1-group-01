@@ -14,10 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -37,6 +34,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private final GameController controller;
@@ -51,16 +49,44 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
     private final TextureRegion houseTop = AssetManager.getAssetManager().getHouseTop();
+
+    private final TextureRegion sebastianHouseTexture = AssetManager.getAssetManager().getNpcHouse1Full();
+    private final TextureRegion abigailHouseTexture = AssetManager.getAssetManager().getNpcHouse2Full();
+    private final TextureRegion leahHouseTexture = AssetManager.getAssetManager().getNpcHouse3Full();
+    private final TextureRegion harveyHouseTexture = AssetManager.getAssetManager().getNpcHouse4Full();
+
+    private final TextureRegion abigailRightTexture = AssetManager.getAssetManager().getAbigailRight();
+    private final TextureRegion sebastianLeftTexture = AssetManager.getAssetManager().getSebastianLeft();
+    private final TextureRegion leahUpTexture = AssetManager.getAssetManager().getLeahUp();
+    private final TextureRegion harveyDownTexture = AssetManager.getAssetManager().getHarveyDown();
+
+    private final TextureRegion sebastianHouseTopTexture = AssetManager.getAssetManager().getNpcHouse1Top();
+    private final TextureRegion abigailHouseTopTexture = AssetManager.getAssetManager().getNpcHouse2Top();
+    private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
+    private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
+
+    private Dialog terminalDialog;
+    private TextField textField;
+
+
+    private boolean isDialogShown = false;
+
+
+
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Actor miniMapActor = null;
 
 
+
     private final static int TILE_SIZE = 16;
 
 
     private final float speed = 200f;
+
+
+
 
 
     public GameView(GameController controller) {
@@ -76,6 +102,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        createDialog();
     }
 
     @Override
@@ -163,28 +190,37 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawHouseTop();
 
+        drawNPCs();
+
 //        drawTileHighlights();
 
         //printTileTypeCounts();
-
-        drawTileObjects();
-    }
-
-    private void drawTileObjects() {
-        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
-            for (Tile tile : row) {
-                if (!tile.isEmpty())
-                    batch.draw(tile.getObject().getTexture(), tile.getPosition().x(), tile.getPosition().y());
-            }
-        }
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
-    private void drawBuilding() {
+    private void drawNPCs() {
+        int sebastianX = getTilePixel(FarmInitializer.getSebastianStartingPointX());
+        int sebastianY = getTilePixel(FarmInitializer.getSebastianStartingPointY());
+        batch.draw(sebastianLeftTexture, sebastianX, sebastianY);
+
+        int abigailX = getTilePixel(FarmInitializer.getAbigailStartingPointX());
+        int abigailY = getTilePixel(FarmInitializer.getAbigailStartingPointY());
+        batch.draw(abigailRightTexture, abigailX, abigailY);
+
+        int leahX = getTilePixel(FarmInitializer.getLeahStartingPointX());
+        int leahY = getTilePixel(FarmInitializer.getLeahStartingPointY());
+        batch.draw(leahUpTexture, leahX, leahY);
+
+        int harveyX = getTilePixel(FarmInitializer.getHarveyStartingPointX());
+        int harveyY = getTilePixel(FarmInitializer.getHarveyStartingPointY());
+        batch.draw(harveyDownTexture, harveyX, harveyY);
+    }
+
+    private void drawBuilding () {
         for (int i = 0; i < 4; i++) {
             int mineX = getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i));
             int mineY = getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i) - 1);
@@ -207,6 +243,25 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
 
         }
+
+        int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
+        int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
+        batch.draw(sebastianHouseTexture, sebastianX, sebastianY);
+
+        int abigailX = getTilePixel(FarmInitializer.getAbigailCottageStartingPointX());
+        int abigailY = getTilePixel(FarmInitializer.getAbigailCottageStartingPointY());
+        batch.draw(abigailHouseTexture, abigailX, abigailY);
+
+        int leahX = getTilePixel(FarmInitializer.getLeahCottageStartingPointX());
+        int leahY = getTilePixel(FarmInitializer.getLeahCottageStartingPointY());
+        batch.draw(leahHouseTexture, leahX, leahY);
+
+        int harveyX = getTilePixel(FarmInitializer.getHarveyCottageStartingPointX());
+        int harveyY = getTilePixel(FarmInitializer.getHarveyCottageStartingPointY());
+        batch.draw(harveyHouseTexture, harveyX, harveyY);
+
+
+
     }
 
     private void drawHouseTop() {
@@ -215,6 +270,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             int houseY = getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i));
             batch.draw(houseTop, houseX, houseY + 100);
         }
+
+        int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
+        int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
+        batch.draw(sebastianHouseTopTexture, sebastianX, sebastianY + 70);
+
+        int abigailX = getTilePixel(FarmInitializer.getAbigailCottageStartingPointX());
+        int abigailY = getTilePixel(FarmInitializer.getAbigailCottageStartingPointY());
+        batch.draw(abigailHouseTopTexture, abigailX, abigailY + 70);
+
+        int leahX = getTilePixel(FarmInitializer.getLeahCottageStartingPointX());
+        int leahY = getTilePixel(FarmInitializer.getLeahCottageStartingPointY());
+        batch.draw(leahHouseTopTexture, leahX, leahY + 70);
+
+        int harveyX = getTilePixel(FarmInitializer.getHarveyCottageStartingPointX());
+        int harveyY = getTilePixel(FarmInitializer.getHarveyCottageStartingPointY());
+        batch.draw(harveyHouseTopTexture, harveyX, harveyY + 70);
     }
 
 
@@ -340,6 +411,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
+
+
     private int getTilePixel(int tileCol) {
         return tileCol * TILE_SIZE;
     }
@@ -357,6 +430,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void handleMovement(float delta) {
         boolean moving = false;
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
+            toggleDialog();
+        }
+
+        if (isDialogShown) {
+            return;
+        }
+
         /*
 
             g = cc, advance hour
@@ -366,6 +447,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             s = down
             d = right
             a = left
+            h = toggle terminal
 
         */
 
@@ -383,6 +465,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
         }
+
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             player.setFainting(true);
@@ -430,8 +513,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private boolean canMoveTo(float x, float y) {
-        int tileX = (int) (x / 16);
-        int tileY = (int) (y / 16);
+        int tileX = (int)(x / 16);
+        int tileY = (int)(y / 16);
 
         Tile tile = controller.getRepo().getCurrentGame().getFarm().getTile(tileX, tileY);
 
@@ -459,13 +542,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
 
-                int playerTileX = (int) player.getX() / 16;
-                int playerTileY = (int) player.getY() / 16;
+                int playerTileX = (int)player.getX() / 16;
+                int playerTileY = (int)player.getY() / 16;
 
                 shapeRenderer.setColor(Color.RED);
                 float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
                 float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
-                shapeRenderer.circle(centerX, centerY, (int) (tileSize * 3));
+                shapeRenderer.circle(centerX, centerY, (int)(tileSize * 3));
 
                 shapeRenderer.end();
                 batch.begin();
@@ -487,27 +570,64 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
+
+
+
+
     private Color getColorForTileType(TileType type) {
         switch (type) {
-            case GROUND:
-                return Color.GREEN;
-            case RIVER:
-                return Color.BLACK;
-            case MINE:
-                return Color.GRAY;
-            case GREENHOUSE:
-                return Color.FOREST;
-            case COTTAGE:
-                return Color.BROWN;
-            case WALL:
-                return Color.DARK_GRAY;
-            case SALE_BUCKET:
-                return Color.PINK;
-            case FENCE:
-                return Color.BLUE;
-            default:
-                return Color.LIGHT_GRAY;
+            case GROUND: return Color.GREEN;
+            case RIVER: return Color.BLACK;
+            case MINE: return Color.GRAY;
+            case GREENHOUSE: return Color.FOREST;
+            case COTTAGE: return Color.BROWN;
+            case WALL: return Color.DARK_GRAY;
+            case SALE_BUCKET: return Color.PINK;
+            case FENCE: return Color.BLUE;
+            default: return Color.LIGHT_GRAY;
         }
+    }
+
+    private void createDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        terminalDialog = new Dialog("Enter command", skin) {
+            @Override
+            protected void result(Object object) {
+                if ((boolean) object) {
+                    String input = textField.getText();
+                    handleInput(input);
+                    isDialogShown = false;
+                }
+            }
+        };
+
+        terminalDialog.setModal(true);
+
+        textField = new TextField("", skin);
+        terminalDialog.getContentTable().add(textField).width(200).pad(10);
+
+        terminalDialog.row();
+        terminalDialog.button("Ok", true).pad(10);
+
+        terminalDialog.pack();
+    }
+
+
+    private void toggleDialog() {
+        if (!isDialogShown) {
+            terminalDialog.show(stage);
+            isDialogShown = true;
+
+            terminalDialog.setObject(terminalDialog.getButtonTable().getCells().first().getActor(), true);
+        } else {
+            terminalDialog.hide();
+            isDialogShown = false;
+        }
+    }
+
+    private void handleInput(String input) {
+        System.out.println("handleInput: " + input);
     }
 
 }
