@@ -1,61 +1,64 @@
 package com.stardew_valley.models.farming;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.dateTime.Season;
 
 import java.util.Random;
 
 public enum SeedInfo implements FarmingEnum {
-    JAZZ_SEEDS("Jazz Seeds", Season.SPRING, "🎷"),
-    CARROT_SEEDS("Carrot Seeds", Season.SPRING, "🥕"),
-    CAULIFLOWER_SEEDS("Cauliflower Seeds", Season.SPRING, "🥦"),
-    COFFEE_BEAN("Coffee Bean", Season.SPRING, "☕"),
-    GARLIC_SEEDS("Garlic Seeds", Season.SPRING, "🧄"),
-    BEAN_STARTER("Bean Starter", Season.SPRING, "🌱"),
-    KALE_SEEDS("Kale Seeds", Season.SPRING, "🥬"),
-    PARSNIP_SEEDS("Parsnip Seeds", Season.SPRING, "🫒"),
-    POTATO_SEEDS("Potato Seeds", Season.SPRING, "🥔"),
-    RHUBARB_SEEDS("Rhubarb Seeds", Season.SPRING, "🍃"),
-    STRAWBERRY_SEEDS("Strawberry Seeds", Season.SPRING, "🍓"),
-    TULIP_BULB("Tulip Bulb", Season.SPRING, "🌷"),
-    RICE_SHOOT("Rice Shoot", Season.SPRING, "🌾"),
-    BLUEBERRY_SEEDS("Blueberry Seeds", Season.SUMMER, "🫐"),
-    CORN_SEEDS("Corn Seeds", Season.SUMMER, "🌽"),
-    HOPS_STARTER("Hops Starter", Season.SUMMER, "🍺"),
-    PEPPER_SEEDS("Pepper Seeds", Season.SUMMER, "🌶️"),
-    MELON_SEEDS("Melon Seeds", Season.SUMMER, "🍈"),
-    POPPY_SEEDS("Poppy Seeds", Season.SUMMER, "🌸"),
-    RADISH_SEEDS("Radish Seeds", Season.SUMMER, "🌰"),
-    RED_CABBAGE_SEEDS("Red Cabbage Seeds", Season.SUMMER, "🥬"),
-    STARFRUIT_SEEDS("Starfruit Seeds", Season.SUMMER, "⭐"),
-    SPANGLE_SEEDS("Spangle Seeds", Season.SUMMER, "🌼"),
-    SUMMER_SQUASH_SEEDS("Summer Squash Seeds", Season.SUMMER, "🎃"),
-    SUNFLOWER_SEEDS("Sunflower Seeds", Season.SUMMER, "🌻"),
-    TOMATO_SEEDS("Tomato Seeds", Season.SUMMER, "🍅"),
-    WHEAT_SEEDS("Wheat Seeds", Season.SUMMER, "🌾"),
-    AMARANTH_SEEDS("Amaranth Seeds", Season.FALL, "🌺"),
-    ARTICHOKE_SEEDS("Artichoke Seeds", Season.FALL, "🌿"),
-    BEET_SEEDS("Beet Seeds", Season.FALL, "🧃"),
-    BOKCHOY_SEEDS("Bokchoy Seeds", Season.FALL, "🥬"),
-    BROCCOLI_SEEDS("Broccoli Seeds", Season.FALL, "🥦"),
-    CRANBERRY_SEEDS("Cranberry Seeds", Season.FALL, "🫐"),
-    EGGPLANT_SEEDS("Eggplant Seeds", Season.FALL, "🍆"),
-    FAIRY_SEEDS("Fairy Seeds", Season.FALL, "🧚"),
-    GRAPE_STARTER("Grape Starter", Season.FALL, "🍇"),
-    PUMPKIN_SEEDS("Pumpkin Seeds", Season.FALL, "🎃"),
-    YAM_SEEDS("Yam Seeds", Season.FALL, "🍠"),
-    RARE_SEEDS("Rare Seeds", Season.FALL, "🌟"),
-    POWDERMELON_SEEDS("Powdermelon Seeds", Season.WINTER, "🍉"),
-    ANCIENT_SEEDS("Ancient Seeds", Season.SPECIAL, "🗿"),
-    MIXED_SEEDS("Mixed Seeds", Season.SPECIAL, "🎲");
+    JAZZ_SEEDS("Jazz Seeds", Season.SPRING, AssetManager.getAssetManager().getJazzSeeds()),
+    CARROT_SEEDS("Carrot Seeds", Season.SPRING, AssetManager.getAssetManager().getCarrotSeeds()),
+    CAULIFLOWER_SEEDS("Cauliflower Seeds", Season.SPRING, AssetManager.getAssetManager().getCauliflowerSeeds()),
+    COFFEE_BEAN("Coffee Bean", Season.SPRING, AssetManager.getAssetManager().getCoffeeBean()),
+    GARLIC_SEEDS("Garlic Seeds", Season.SPRING, AssetManager.getAssetManager().getGarlicSeeds()),
+    BEAN_STARTER("Bean Starter", Season.SPRING, AssetManager.getAssetManager().getBeanStarter()),
+    KALE_SEEDS("Kale Seeds", Season.SPRING, AssetManager.getAssetManager().getKaleSeeds()),
+    PARSNIP_SEEDS("Parsnip Seeds", Season.SPRING, AssetManager.getAssetManager().getParsnipSeeds()),
+    POTATO_SEEDS("Potato Seeds", Season.SPRING, AssetManager.getAssetManager().getPotatoSeeds()),
+    RHUBARB_SEEDS("Rhubarb Seeds", Season.SPRING, AssetManager.getAssetManager().getRhubarbSeeds()),
+    STRAWBERRY_SEEDS("Strawberry Seeds", Season.SPRING, AssetManager.getAssetManager().getStrawberrySeeds()),
+    TULIP_BULB("Tulip Bulb", Season.SPRING, AssetManager.getAssetManager().getTulipBulb()),
+    RICE_SHOOT("Rice Shoot", Season.SPRING, AssetManager.getAssetManager().getRiceShoot()),
+    BLUEBERRY_SEEDS("Blueberry Seeds", Season.SUMMER, AssetManager.getAssetManager().getBlueberrySeeds()),
+    CORN_SEEDS("Corn Seeds", Season.SUMMER, AssetManager.getAssetManager().getCornSeeds()),
+    HOPS_STARTER("Hops Starter", Season.SUMMER, AssetManager.getAssetManager().getHopsStarter()),
+    PEPPER_SEEDS("Pepper Seeds", Season.SUMMER, AssetManager.getAssetManager().getPepperSeeds()),
+    MELON_SEEDS("Melon Seeds", Season.SUMMER, AssetManager.getAssetManager().getMelonSeeds()),
+    POPPY_SEEDS("Poppy Seeds", Season.SUMMER, AssetManager.getAssetManager().getPoppySeeds()),
+    RADISH_SEEDS("Radish Seeds", Season.SUMMER, AssetManager.getAssetManager().getRadishSeeds()),
+    RED_CABBAGE_SEEDS("Red Cabbage Seeds", Season.SUMMER, AssetManager.getAssetManager().getRedCabbageSeeds()),
+    STARFRUIT_SEEDS("Starfruit Seeds", Season.SUMMER, AssetManager.getAssetManager().getStarfruitSeeds()),
+    SPANGLE_SEEDS("Spangle Seeds", Season.SUMMER, AssetManager.getAssetManager().getSpangleSeeds()),
+    SUMMER_SQUASH_SEEDS("Summer Squash Seeds", Season.SUMMER, AssetManager.getAssetManager().getSummerSquashSeeds()),
+    SUNFLOWER_SEEDS("Sunflower Seeds", Season.SUMMER, AssetManager.getAssetManager().getSunflowerSeeds()),
+    TOMATO_SEEDS("Tomato Seeds", Season.SUMMER, AssetManager.getAssetManager().getTomatoSeeds()),
+    WHEAT_SEEDS("Wheat Seeds", Season.SUMMER, AssetManager.getAssetManager().getWheatSeeds()),
+    AMARANTH_SEEDS("Amaranth Seeds", Season.FALL, AssetManager.getAssetManager().getAmaranthSeeds()),
+    ARTICHOKE_SEEDS("Artichoke Seeds", Season.FALL, AssetManager.getAssetManager().getArtichokeSeeds()),
+    BEET_SEEDS("Beet Seeds", Season.FALL, AssetManager.getAssetManager().getBeetSeeds()),
+    BOKCHOY_SEEDS("Bokchoy Seeds", Season.FALL, AssetManager.getAssetManager().getBokChoySeeds()),
+    BROCCOLI_SEEDS("Broccoli Seeds", Season.FALL, AssetManager.getAssetManager().getBroccoliSeeds()),
+    CRANBERRY_SEEDS("Cranberry Seeds", Season.FALL, AssetManager.getAssetManager().getCranberrySeeds()),
+    EGGPLANT_SEEDS("Eggplant Seeds", Season.FALL, AssetManager.getAssetManager().getEggplantSeeds()),
+    FAIRY_SEEDS("Fairy Seeds", Season.FALL, AssetManager.getAssetManager().getFairySeeds()),
+    GRAPE_STARTER("Grape Starter", Season.FALL, AssetManager.getAssetManager().getGrapeStarter()),
+    PUMPKIN_SEEDS("Pumpkin Seeds", Season.FALL, AssetManager.getAssetManager().getPumpkinSeeds()),
+    YAM_SEEDS("Yam Seeds", Season.FALL, AssetManager.getAssetManager().getYamSeeds()),
+    RARE_SEEDS("Rare Seeds", Season.FALL, AssetManager.getAssetManager().getRareSeeds()),
+    POWDERMELON_SEEDS("Powdermelon Seeds", Season.WINTER, AssetManager.getAssetManager().getPowdermelonSeeds()),
+    ANCIENT_SEEDS("Ancient Seeds", Season.SPECIAL, AssetManager.getAssetManager().getAncientSeeds()),
+    MIXED_SEEDS("Mixed Seeds", Season.SPECIAL, AssetManager.getAssetManager().getMixedSeeds());
 
     private final String name;
     private final Season season;
-    private final String symbol;
+    private final Texture texture;
 
-    SeedInfo(String name, Season season, String symbol) {
+    SeedInfo(String name, Season season, Texture texture) {
         this.name = name;
         this.season = season;
-        this.symbol = symbol;
+        this.texture = texture;
+
     }
 
     private static final Random RANDOM = new Random();
@@ -94,6 +97,10 @@ public enum SeedInfo implements FarmingEnum {
     }
 
     public String getSymbol() {
-        return symbol;
+        return null;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 }

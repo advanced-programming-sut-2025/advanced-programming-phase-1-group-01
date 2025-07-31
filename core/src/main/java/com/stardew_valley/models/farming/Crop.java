@@ -1,5 +1,6 @@
 package com.stardew_valley.models.farming;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.enums.Emoji;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.dateTime.Season;
@@ -9,6 +10,7 @@ public class Crop extends Plant implements Item, Cloneable {
     private CropState state;
     private final Seed seed;
     private boolean becameGiant;
+    private boolean isPlanted = true;
 
     public Crop(Seed seed) {
         this.seed = seed;
@@ -100,10 +102,17 @@ public class Crop extends Plant implements Item, Cloneable {
     }
 
     @Override
+    public Texture getTexture() {
+         if (isPlanted) {
+             return info.getTextureByStage(growthLevel);
+         }
+         return info.getCropTexture();
+    }
+
+    @Override
     public String getSymbol() {
         return Emoji.CORN.getSymbol();
     }
-
 
     public boolean isBecameGiant() {
         return becameGiant;
@@ -158,5 +167,13 @@ public class Crop extends Plant implements Item, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    public boolean isPlanted() {
+        return isPlanted;
+    }
+
+    public void setPlanted(boolean planted) {
+        isPlanted = planted;
     }
 }
