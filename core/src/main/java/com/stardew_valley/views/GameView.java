@@ -52,6 +52,19 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
     private final TextureRegion houseTop = AssetManager.getAssetManager().getHouseTop();
+
+    private final TextureRegion sebastianHouseTexture = AssetManager.getAssetManager().getNpcHouse1Full();
+    private final TextureRegion abigailHouseTexture = AssetManager.getAssetManager().getNpcHouse2Full();
+    private final TextureRegion leahHouseTexture = AssetManager.getAssetManager().getNpcHouse3Full();
+    private final TextureRegion harveyHouseTexture = AssetManager.getAssetManager().getNpcHouse4Full();
+
+    private final TextureRegion sebastianHouseTopTexture = AssetManager.getAssetManager().getNpcHouse1Top();
+    private final TextureRegion abigailHouseTopTexture = AssetManager.getAssetManager().getNpcHouse2Top();
+    private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
+    private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
+
+
+
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -201,6 +214,25 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
 
         }
+
+        int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
+        int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
+        batch.draw(sebastianHouseTexture, sebastianX, sebastianY);
+
+        int abigailX = getTilePixel(FarmInitializer.getAbigailCottageStartingPointX());
+        int abigailY = getTilePixel(FarmInitializer.getAbigailCottageStartingPointY());
+        batch.draw(abigailHouseTexture, abigailX, abigailY);
+
+        int leahX = getTilePixel(FarmInitializer.getLeahCottageStartingPointX());
+        int leahY = getTilePixel(FarmInitializer.getLeahCottageStartingPointY());
+        batch.draw(leahHouseTexture, leahX, leahY);
+
+        int harveyX = getTilePixel(FarmInitializer.getHarveyCottageStartingPointX());
+        int harveyY = getTilePixel(FarmInitializer.getHarveyCottageStartingPointY());
+        batch.draw(harveyHouseTexture, harveyX, harveyY);
+
+
+
     }
 
     private void drawHouseTop() {
@@ -209,6 +241,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             int houseY = getTilePixel(FarmInitializer.getHouseStartingPointY() + FarmInitializer.getAdditionalY(i));
             batch.draw(houseTop, houseX, houseY + 100);
         }
+
+        int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
+        int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
+        batch.draw(sebastianHouseTopTexture, sebastianX, sebastianY + 70);
+
+        int abigailX = getTilePixel(FarmInitializer.getAbigailCottageStartingPointX());
+        int abigailY = getTilePixel(FarmInitializer.getAbigailCottageStartingPointY());
+        batch.draw(abigailHouseTopTexture, abigailX, abigailY + 70);
+
+        int leahX = getTilePixel(FarmInitializer.getLeahCottageStartingPointX());
+        int leahY = getTilePixel(FarmInitializer.getLeahCottageStartingPointY());
+        batch.draw(leahHouseTopTexture, leahX, leahY + 70);
+
+        int harveyX = getTilePixel(FarmInitializer.getHarveyCottageStartingPointX());
+        int harveyY = getTilePixel(FarmInitializer.getHarveyCottageStartingPointY());
+        batch.draw(harveyHouseTopTexture, harveyX, harveyY + 70);
     }
 
 

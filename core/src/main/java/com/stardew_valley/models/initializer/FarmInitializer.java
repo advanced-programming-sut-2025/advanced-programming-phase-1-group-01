@@ -3,15 +3,7 @@ package com.stardew_valley.models.initializer;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Random;
 import com.stardew_valley.models.building.*;
-import com.stardew_valley.models.crafting.Bomb;
-import com.stardew_valley.models.farming.FarmingManager;
-import com.stardew_valley.models.farming.Seed;
-import com.stardew_valley.models.farming.SeedInfo;
-import com.stardew_valley.models.farming.Tree;
-import com.stardew_valley.models.enums.StoneType;
-import com.stardew_valley.models.foraging.*;
-import com.stardew_valley.models.ingredients.Stone;
-import com.stardew_valley.models.shop.ShopSymbol;
+import com.stardew_valley.models.character.NPC.NPC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +23,35 @@ public class FarmInitializer {
     private final static Position MINE_TR = new Position(22 - 7, 70);
     private final static Position COTTAGE_BL = new Position(50, 35);
     private final static Position COTTAGE_TR = new Position(59, 44);
-    private final static Position NPC_1_STARTING_POSITION = new Position(0, 0);
-    private final static Position NPC_2_STARTING_POSITION = new Position(0, 0);
-    private final static Position NPC_3_STARTING_POSITION = new Position(0, 0);
-    private final static Position NPC_4_STARTING_POSITION = new Position(0, 0);
+
+    private static NPC sebastian;
+    private static NPC abigail;
+    private static NPC harvey;
+    private static NPC leah;
+
+    private final static Position SEBASTIAN_COTTAGE_BL = new Position(80 + 10, 130);
+    private final static Position SEBASTIAN_COTTAGE_TR = new Position(84 + 10, 136);
+
+    private final static Position SEBASTIAN_STARTING_POSITION = new Position(82, 129);
+
+
+    private final static Position ABIGAIL_COTTAGE_BL = new Position(120 + 10, 130);
+    private final static Position ABIGAIL_COTTAGE_TR = new Position(124 + 10, 136);
+
+    private final static Position ABIGAIL_STARTING_POSITION = new Position(122, 129);
+
+
+    private final static Position LEAH_COTTAGE_BL = new Position(120 + 10, 90);
+    private final static Position LEAH_COTTAGE_TR = new Position(124 + 10, 96);
+
+    private final static Position LEAH_STARTING_POSITION = new Position(122, 89);
+
+
+    private final static Position HARVEY_COTTAGE_BL = new Position(80 + 10, 90);
+    private final static Position HARVEY_COTTAGE_TR = new Position(84 + 10, 96);
+
+    private final static Position HARVEY_STARTING_POSITION = new Position(82, 89);
+
 
     private final static List<List<Tile>> tiles = new ArrayList<>();
     private static Cottage cottage;
@@ -46,12 +63,20 @@ public class FarmInitializer {
         firstInitializer();
         surroundWithFence();
         divideMapWithFence();
+        npcsHouseInitializer();
         for (int i = 0; i < 4; i++) {
             houseInitializer(i);
             minerInitializer(i);
             lakeInitializer(i);
             greenhouseInitializer(i);
         }
+    }
+
+    private static void npcsHouseInitializer() {
+        npcHouseInitializer(LEAH_COTTAGE_BL, LEAH_COTTAGE_TR, TileType.COTTAGE);
+        npcHouseInitializer(SEBASTIAN_COTTAGE_BL, SEBASTIAN_COTTAGE_TR, TileType.COTTAGE);
+        npcHouseInitializer(ABIGAIL_COTTAGE_BL, ABIGAIL_COTTAGE_TR, TileType.COTTAGE);
+        npcHouseInitializer(HARVEY_COTTAGE_BL, HARVEY_COTTAGE_TR, TileType.COTTAGE);
     }
 
     private static void firstInitializer() {
@@ -190,6 +215,21 @@ public class FarmInitializer {
         }
     }
 
+    private static void npcHouseInitializer(Position bottomLeft, Position topRight, TileType houseType) {
+        for (int x = bottomLeft.x() - 1; x <= topRight.x(); x++) {
+            for (int y = bottomLeft.y(); y <= topRight.y() - 2; y++) {
+                Tile tile = new Tile.Builder()
+                    .setPosition(new Position(x, y))
+                    .setType(houseType)
+                    .setMovable(false)
+                    .setBuilding(null)
+                    .setObject(null)
+                    .build();
+                tiles.get(y).set(x, tile);
+            }
+        }
+    }
+
     public static int getHouseStartingPointX() {
         return COTTAGE_BL.x();
     }
@@ -221,6 +261,40 @@ public class FarmInitializer {
     public static int getGreenhouseStartingPointY() {
         return GREENHOUSE_BL.y();
     }
+
+
+    public static int getSebastianCottageStartingPointX() {
+        return SEBASTIAN_COTTAGE_BL.x();
+    }
+
+    public static int getSebastianCottageStartingPointY() {
+        return SEBASTIAN_COTTAGE_BL.y();
+    }
+
+    public static int getAbigailCottageStartingPointX() {
+        return ABIGAIL_COTTAGE_BL.x();
+    }
+
+    public static int getAbigailCottageStartingPointY() {
+        return ABIGAIL_COTTAGE_BL.y();
+    }
+
+    public static int getLeahCottageStartingPointX() {
+        return LEAH_COTTAGE_BL.x();
+    }
+
+    public static int getLeahCottageStartingPointY() {
+        return LEAH_COTTAGE_BL.y();
+    }
+
+    public static int getHarveyCottageStartingPointX() {
+        return HARVEY_COTTAGE_BL.x();
+    }
+
+    public static int getHarveyCottageStartingPointY() {
+        return HARVEY_COTTAGE_BL.y();
+    }
+
 
 
     private static void minerInitializer(int mineId) {
@@ -385,6 +459,9 @@ public class FarmInitializer {
         if (tiles.isEmpty()) {
             initializeTiles();
         }
+
+        tiles.get(75).get(105).setMovable(true);
+        tiles.get(105).get(75).setMovable(true);
         return new Farm(tiles, lake, cottage, quarry, greenhouse);
     }
 }
