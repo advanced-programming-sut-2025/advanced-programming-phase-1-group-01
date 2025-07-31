@@ -533,6 +533,6 @@ public class FarmInitializer {
 
         tiles.get(75).get(105).setMovable(true);
         tiles.get(105).get(75).setMovable(true);
-        return new Farm(tiles, lake, cottage, quarry, greenhouse);
+        return new Farm(tiles, lake, cottage, quarry, greenhouse, List.of(sebastian, abigail, harvey, leah));
     }
 }

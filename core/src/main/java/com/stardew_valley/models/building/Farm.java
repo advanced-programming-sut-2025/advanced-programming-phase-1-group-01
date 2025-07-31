@@ -34,6 +34,11 @@ public class Farm extends Maps {
         animals = new ArrayList<>();
     }
 
+    public Farm(List<List<Tile>> tiles, Lake lake, Cottage cottage, Quarry quarry, Greenhouse greenhouse, List<NPC> NPCs) {
+        this(tiles, lake, cottage, quarry, greenhouse);
+        this.NPCs.addAll(NPCs);
+    }
+
     public Lake getLake() {
         return lake;
     }
