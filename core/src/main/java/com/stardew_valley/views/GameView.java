@@ -58,6 +58,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion leahHouseTexture = AssetManager.getAssetManager().getNpcHouse3Full();
     private final TextureRegion harveyHouseTexture = AssetManager.getAssetManager().getNpcHouse4Full();
 
+    private final TextureRegion abigailRightTexture = AssetManager.getAssetManager().getAbigailRight();
+    private final TextureRegion sebastianLeftTexture = AssetManager.getAssetManager().getSebastianLeft();
+    private final TextureRegion leahUpTexture = AssetManager.getAssetManager().getLeahUp();
+    private final TextureRegion harveyDownTexture = AssetManager.getAssetManager().getHarveyDown();
+
     private final TextureRegion sebastianHouseTopTexture = AssetManager.getAssetManager().getNpcHouse1Top();
     private final TextureRegion abigailHouseTopTexture = AssetManager.getAssetManager().getNpcHouse2Top();
     private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
@@ -181,6 +186,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawHouseTop();
 
+        drawNPCs();
+
 //        drawTileHighlights();
 
         //printTileTypeCounts();
@@ -189,6 +196,24 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
         System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+    }
+
+    private void drawNPCs() {
+        int sebastianX = getTilePixel(FarmInitializer.getSebastianStartingPointX());
+        int sebastianY = getTilePixel(FarmInitializer.getSebastianStartingPointY());
+        batch.draw(sebastianLeftTexture, sebastianX, sebastianY);
+
+        int abigailX = getTilePixel(FarmInitializer.getAbigailStartingPointX());
+        int abigailY = getTilePixel(FarmInitializer.getAbigailStartingPointY());
+        batch.draw(abigailRightTexture, abigailX, abigailY);
+
+        int leahX = getTilePixel(FarmInitializer.getLeahStartingPointX());
+        int leahY = getTilePixel(FarmInitializer.getLeahStartingPointY());
+        batch.draw(leahUpTexture, leahX, leahY);
+
+        int harveyX = getTilePixel(FarmInitializer.getHarveyStartingPointX());
+        int harveyY = getTilePixel(FarmInitializer.getHarveyStartingPointY());
+        batch.draw(harveyDownTexture, harveyX, harveyY);
     }
 
     private void drawBuilding () {

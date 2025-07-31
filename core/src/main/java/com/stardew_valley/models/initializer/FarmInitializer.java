@@ -4,6 +4,11 @@ import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Random;
 import com.stardew_valley.models.building.*;
 import com.stardew_valley.models.character.NPC.NPC;
+import com.stardew_valley.models.character.NPC.NPCQuest;
+import com.stardew_valley.models.character.NPC.NPCQuestType;
+import com.stardew_valley.models.character.NPC.NPCType;
+import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.enums.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +69,7 @@ public class FarmInitializer {
         surroundWithFence();
         divideMapWithFence();
         npcsHouseInitializer();
+        npcsInitializer();
         for (int i = 0; i < 4; i++) {
             houseInitializer(i);
             minerInitializer(i);
@@ -230,6 +236,38 @@ public class FarmInitializer {
         }
     }
 
+    private static void initializeSebastian() {
+        sebastian = new NPC(NPCType.SEBASTIAN,
+            SEBASTIAN_STARTING_POSITION,
+            Direction.DOWN, List.of(new NPCQuest(NPCQuestType.SEBASTIAN_1),
+            new NPCQuest(NPCQuestType.SEBASTIAN_2), new NPCQuest(NPCQuestType.SEBASTIAN_3)));
+    }
+    private static void initializeAbigail() {
+        abigail = new NPC(NPCType.ABIGAIL,
+            ABIGAIL_STARTING_POSITION,
+            Direction.RIGHT, List.of(new NPCQuest(NPCQuestType.ABIGAIL_1),
+            new NPCQuest(NPCQuestType.ABIGAIL_2), new NPCQuest(NPCQuestType.ABIGAIL_3)));
+    }
+    private static void initializeHarvey() {
+        harvey = new NPC(NPCType.HARVEY,
+            HARVEY_STARTING_POSITION,
+            Direction.UP, List.of(new NPCQuest(NPCQuestType.HARVEY_1),
+            new NPCQuest(NPCQuestType.HARVEY_2), new NPCQuest(NPCQuestType.HARVEY_3)));
+    }
+    private static void initializeLeah() {
+        leah = new NPC(NPCType.LEAH,
+            LEAH_STARTING_POSITION,
+            Direction.UP, List.of(new NPCQuest(NPCQuestType.LEAH_1),
+            new NPCQuest(NPCQuestType.LEAH_2), new NPCQuest(NPCQuestType.LEAH_3)));
+    }
+
+    private static void npcsInitializer() {
+        initializeLeah();
+        initializeSebastian();
+        initializeAbigail();
+        initializeHarvey();
+    }
+
     public static int getHouseStartingPointX() {
         return COTTAGE_BL.x();
     }
@@ -293,6 +331,39 @@ public class FarmInitializer {
 
     public static int getHarveyCottageStartingPointY() {
         return HARVEY_COTTAGE_BL.y();
+    }
+
+
+    public static int getHarveyStartingPointX() {
+        return HARVEY_STARTING_POSITION.x();
+    }
+
+    public static int getHarveyStartingPointY() {
+        return HARVEY_STARTING_POSITION.y();
+    }
+
+    public static int getLeahStartingPointX() {
+        return LEAH_STARTING_POSITION.x();
+    }
+
+    public static int getLeahStartingPointY() {
+        return LEAH_STARTING_POSITION.y();
+    }
+
+    public static int getSebastianStartingPointX() {
+        return SEBASTIAN_STARTING_POSITION.x();
+    }
+
+    public static int getSebastianStartingPointY() {
+        return SEBASTIAN_STARTING_POSITION.y();
+    }
+
+    public static int getAbigailStartingPointX() {
+        return ABIGAIL_STARTING_POSITION.x();
+    }
+
+    public static int getAbigailStartingPointY() {
+        return ABIGAIL_STARTING_POSITION.y();
     }
 
 
