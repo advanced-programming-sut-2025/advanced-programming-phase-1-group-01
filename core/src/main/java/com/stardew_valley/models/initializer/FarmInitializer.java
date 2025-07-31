@@ -31,6 +31,10 @@ public class FarmInitializer {
     private final static Position MINE_TR = new Position(22 - 7, 70);
     private final static Position COTTAGE_BL = new Position(50, 35);
     private final static Position COTTAGE_TR = new Position(59, 44);
+    private final static Position NPC_1_STARTING_POSITION = new Position(0, 0);
+    private final static Position NPC_2_STARTING_POSITION = new Position(0, 0);
+    private final static Position NPC_3_STARTING_POSITION = new Position(0, 0);
+    private final static Position NPC_4_STARTING_POSITION = new Position(0, 0);
 
     private final static List<List<Tile>> tiles = new ArrayList<>();
     private static Cottage cottage;

@@ -38,6 +38,19 @@ public class AssetManager {
 
     private final String house_top = "images/house_top.png";
 
+    private final String npc_house_1_full = "images/cabins/1_full.png";
+    private final String npc_house_1_top = "images/cabins/1_top.png";
+
+    private final String npc_house_2_full = "images/cabins/2_full.png";
+    private final String npc_house_2_top = "images/cabins/2_top.png";
+
+    private final String npc_house_3_full = "images/cabins/3_full.png";
+    private final String npc_house_3_top = "images/cabins/3_top.png";
+
+    private final String npc_house_4_full = "images/cabins/4_full.png";
+    private final String npc_house_4_top = "images/cabins/4_top.png";
+
+
     private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
     private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
     private final String fainting_3 = "images/fainting/resized_3-Photoroom.png";
@@ -342,6 +355,18 @@ public class AssetManager {
     private final TextureRegion lake_water_tex = new TextureRegion(new Texture(lake_water));
 
     private final TextureRegion house_top_tex = new TextureRegion(new Texture(house_top));
+
+    private final TextureRegion npc_house_1_full_tex = new TextureRegion(new Texture(npc_house_1_full));
+    private final TextureRegion npc_house_1_top_tex = new TextureRegion(new Texture(npc_house_1_top));
+
+    private final TextureRegion npc_house_2_full_tex = new TextureRegion(new Texture(npc_house_2_full));
+    private final TextureRegion npc_house_2_top_tex = new TextureRegion(new Texture(npc_house_2_top));
+
+    private final TextureRegion npc_house_3_full_tex = new TextureRegion(new Texture(npc_house_3_full));
+    private final TextureRegion npc_house_3_top_tex = new TextureRegion(new Texture(npc_house_3_top));
+
+    private final TextureRegion npc_house_4_full_tex = new TextureRegion(new Texture(npc_house_4_full));
+    private final TextureRegion npc_house_4_top_tex = new TextureRegion(new Texture(npc_house_4_top));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
 
@@ -1070,7 +1095,40 @@ public class AssetManager {
     }
 
 
-    public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
+    public TextureRegion getNpcHouse1Full() {
+        return npc_house_1_full_tex;
+    }
+
+    public TextureRegion getNpcHouse1Top() {
+        return npc_house_1_top_tex;
+    }
+
+    public TextureRegion getNpcHouse2Full() {
+        return npc_house_2_full_tex;
+    }
+
+    public TextureRegion getNpcHouse2Top() {
+        return npc_house_2_top_tex;
+    }
+
+    public TextureRegion getNpcHouse3Full() {
+        return npc_house_3_full_tex;
+    }
+
+    public TextureRegion getNpcHouse3Top() {
+        return npc_house_3_top_tex;
+    }
+
+    public TextureRegion getNpcHouse4Full() {
+        return npc_house_4_full_tex;
+    }
+
+    public TextureRegion getNpcHouse4Top() {
+        return npc_house_4_top_tex;
+    }
+
+
+        public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
         return alex_0_walking_right_animation;
     }
 
