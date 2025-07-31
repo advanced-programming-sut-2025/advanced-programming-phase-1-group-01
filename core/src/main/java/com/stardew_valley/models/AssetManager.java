@@ -4215,6 +4215,10 @@ public class AssetManager {
         return Shear;
     }
 
+    public Texture defaultTexture() {
+        return Hoe;
+    }
+
     public static AssetManager getAssetManager() {
         if (assetManager == null) {
             assetManager = new AssetManager();

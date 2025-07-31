@@ -1,6 +1,7 @@
 package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.data.Repository;
 
@@ -119,10 +120,7 @@ public class Tree extends Plant {
 
     @Override
     public Texture getTexture() {
-        if (growthLevel < 5) {
-//            info.getTe
-        }
-        return null;
+        return AssetManager.getAssetManager().defaultTexture();
     }
 
     @Override

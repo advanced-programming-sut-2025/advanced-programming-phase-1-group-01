@@ -1,5 +1,7 @@
 package com.stardew_valley.models.crafting;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.enums.Emoji;
 
@@ -35,6 +37,11 @@ public class BeeHouse extends CraftingDevice {
     @Override
     public String getSymbol() {
         return Emoji.BEE_HOUSE.getSymbol();
+    }
+
+    @Override
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().defaultTexture();
     }
 }
 

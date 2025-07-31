@@ -1,6 +1,7 @@
 package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.enums.Emoji;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.dateTime.Season;
@@ -103,10 +104,11 @@ public class Crop extends Plant implements Item, Cloneable {
 
     @Override
     public Texture getTexture() {
-         if (isPlanted) {
-             return info.getTextureByStage(growthLevel);
-         }
-         return info.getCropTexture();
+//         if (isPlanted) {
+//             return info.getTextureByStage(growthLevel);
+//         }
+//         return info.getCropTexture();
+        return AssetManager.getAssetManager().defaultTexture();
     }
 
     @Override

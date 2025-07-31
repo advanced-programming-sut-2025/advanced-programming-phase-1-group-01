@@ -5,4 +5,4 @@ Email: a
 Gender: MALE
 securityQuestion: QUESTION1
 securityAnswer: a
-avatarPath: avatars/avatar3.png
+avatarPath: avatars/avatar7.png
