@@ -320,6 +320,15 @@ public enum TreeInfo implements FarmingEnum {
         return lastStageTextures;
     }
 
+    public Texture getLastStageTextureBySeason(Season season) {
+        return switch (season) {
+            case SPRING, SPECIAL -> lastStageTextures.get("Spring");
+            case SUMMER -> lastStageTextures.get("Summer");
+            case FALL -> lastStageTextures.get("Fall");
+            case WINTER -> lastStageTextures.get("Winter");
+        };
+    }
+
     public Texture getLightningTexture() {
         return lightningTexture;
     }

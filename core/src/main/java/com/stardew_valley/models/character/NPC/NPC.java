@@ -35,6 +35,10 @@ public class NPC extends Character {
         quests.get(0).activateQuest();
     }
 
+    public NPC(NPCType type, Position position, Direction direction, List<NPCQuest> quests) {
+        this(type, null, position, direction, quests);
+    }
+
     public void addFriendshipAndLevel(Player player) {
         friendshipLevels.put(player, 0);
     }

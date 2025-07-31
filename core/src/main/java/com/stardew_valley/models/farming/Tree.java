@@ -1,9 +1,9 @@
 package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.dateTime.Season;
 
 public class Tree extends Plant {
     private final TreeInfo info;
@@ -120,7 +120,12 @@ public class Tree extends Plant {
 
     @Override
     public Texture getTexture() {
-        return AssetManager.getAssetManager().defaultTexture();
+        // FIXME : incomplete
+        if (growthLevel < 5) {
+            return info.getTextureByStage(growthLevel);
+        }
+        Season currSeason = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason();
+        return info.getLastStageTextureBySeason(currSeason);
     }
 
     @Override
