@@ -14,10 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -68,6 +65,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
     private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
 
+    private Dialog terminalDialog;
+    private TextField textField;
+
+
+    private boolean isDialogShown = false;
+
 
 
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
@@ -99,6 +102,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        createDialog();
     }
 
     @Override
@@ -195,7 +199,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -426,6 +430,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void handleMovement(float delta) {
         boolean moving = false;
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            toggleDialog();
+        }
+
+        if (isDialogShown) {
+            return;
+        }
+
         /*
 
             g = cc, advance hour
@@ -435,6 +447,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             s = down
             d = right
             a = left
+            h = toggle terminal
 
         */
 
@@ -452,6 +465,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
         }
+
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             player.setFainting(true);
@@ -572,6 +586,48 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             case FENCE: return Color.BLUE;
             default: return Color.LIGHT_GRAY;
         }
+    }
+
+    private void createDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        terminalDialog = new Dialog("Enter command", skin) {
+            @Override
+            protected void result(Object object) {
+                if ((boolean) object) {
+                    String input = textField.getText();
+                    handleInput(input);
+                    isDialogShown = false;
+                }
+            }
+        };
+
+        terminalDialog.setModal(true);
+
+        textField = new TextField("", skin);
+        terminalDialog.getContentTable().add(textField).width(200).pad(10);
+
+        terminalDialog.row();
+        terminalDialog.button("Ok", true).pad(10);
+
+        terminalDialog.pack();
+    }
+
+
+    private void toggleDialog() {
+        if (!isDialogShown) {
+            terminalDialog.show(stage);
+            isDialogShown = true;
+
+            terminalDialog.setObject(terminalDialog.getButtonTable().getCells().first().getActor(), true);
+        } else {
+            terminalDialog.hide();
+            isDialogShown = false;
+        }
+    }
+
+    private void handleInput(String input) {
+        System.out.println("handleInput: " + input);
     }
 
 }
