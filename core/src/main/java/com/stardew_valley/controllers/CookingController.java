@@ -1,5 +1,6 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Building;
@@ -41,35 +42,25 @@ public class CookingController extends Controller {
             return new Result(false, "invalid command");
         }
 
-        switch (matchedCommand) {
-            case SHOW_RECIPE:
-                return showRecipe();
-            case CHEAT_ADD_RECIPE:
-                return cheatAddRecipe(command);
-            case PUT_REFRIGERATOR:
-                return putRefrigerator(command);
-            case PICK_REFRIGERATOR:
-                return pickRefrigerator(command);
-            case COOKING_PREPARE:
-                return cookingPrepare(command);
-            case EAT:
-                return eat(command);
-        }
+//        switch (matchedCommand) {
+//            case SHOW_RECIPE:
+//                return showRecipe();
+//            case CHEAT_ADD_RECIPE:
+//                return cheatAddRecipe(command);
+//            case PUT_REFRIGERATOR:
+//                return putRefrigerator(command);
+//            case PICK_REFRIGERATOR:
+//                return pickRefrigerator(command);
+//            case COOKING_PREPARE:
+//                return cookingPrepare(command);
+//            case EAT:
+//                return eat(command);
+//        }
         return null;
     }
 
-    private Result showRecipe() {
-        StringBuilder info = new StringBuilder("Available Recipes:\n");
-
-        for (CookingRecipe recipe : repo.getCurrentUser().getPlayer().getCookingRecipes()) {
-            info.append("- ").append(recipe.name()).append("\n");
-        }
-
-        return new Result(true,info.toString());
-    }
-
     private Result cheatAddRecipe(String command) {
-        String recipeName = extractValue(command, "-r", null);
+        String recipeName = "ali";
 
         Player player = repo.getCurrentUser().getPlayer();
 
@@ -99,24 +90,25 @@ public class CookingController extends Controller {
         return new Result(true, "Recipe added");
     }
 
-    private Result putRefrigerator(String command) {
-        String itemStr = extractValue(command,"put","-a");
-        String itemCountStr = extractValue(command,"-a",null);
-        int itemCount = Integer.parseInt(itemCountStr);
+    public void put(Label messageLabel, String itemStr, String count) {
+        int itemCount = Integer.parseInt(count);
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
 
         if (inventory.getSlot(itemStr) == null) {
-            return new Result(false, "You do not have this " + itemStr + " in your inventory.");
+            messageLabel.setText("You do not have this " + itemStr + " in your inventory.");
+            return;
         }
 
         if (!FridgeOnlyItem.isFridgeItem(itemStr)) {
-            return new Result(false, "You cannot place non-food items in the fridge.");
+             messageLabel.setText("You cannot place non-food items in the fridge.");
+             return;
         }
 
         if (!player.getRefrigerator().refrigerateHasCapacity()) {
-            return new Result(false, "You do not have refrigerate capacity.");
+            messageLabel.setText("You do not have refrigerate capacity.");
+            return;
         }
 
         Item item = inventory.getSlot(itemStr).getItem();
@@ -124,38 +116,38 @@ public class CookingController extends Controller {
 
         slot.removeQuantity(itemCount);
         player.getRefrigerator().addItem(item,itemCount);
-        return new Result(true, "Item added to refrigerator");
+        messageLabel.setText("Item added to refrigerator");
     }
 
-    private Result pickRefrigerator(String command) {
-        String itemStr = extractValue(command,"pick","-a");
-        String itemCountStr = extractValue(command,"-a",null);
-        int itemCount = Integer.parseInt(itemCountStr);
+    public void pick(Label messageLabel, String itemStr, String count) {
+        int itemCount = Integer.parseInt(count);
 
         Player player = repo.getCurrentUser().getPlayer();
         Refrigerator refrigerator = player.getRefrigerator();
         Item item = player.getInventory().getNewItem(itemStr);
 
         if (refrigerator.containsItem(item)) {
-            return new Result(false, "You do not have this " + itemStr + " in your refrigerator.");
+            messageLabel.setText("You do not have this " + itemStr + " in your refrigerator.");
+            return;
         }
 
         if (refrigerator.containsItem(item, itemCount)) {
-            return new Result(false, "You do not have enough of this " + itemStr + " in your refrigerator.");
+            messageLabel.setText("You do not have enough of this " + itemStr + " in your refrigerator.");
+            return;
         }
 
         Inventory inventory = player.getInventory();
         if (!inventory.hasCapacity()) {
-            return new Result(false, "You do not have inventory capacity.");
+            messageLabel.setText("You do not have inventory capacity.");
+            return;
         }
 
         inventory.addItem(itemStr,itemCount);
         refrigerator.removeItem(item,itemCount);
-        return new Result(true, "Item added to inventory");
+        messageLabel.setText("Item added to inventory");
     }
 
-    private Result cookingPrepare(String command) {
-        String itemName = extractValue(command,"prepare",null);
+    public void cook(Label messageLabel, String itemName) {
 
         Set<CookingRecipe> recipes = repo.getCurrentUser().getPlayer().getCookingRecipes();
         CookingRecipe targetRecipe = null;
@@ -168,7 +160,8 @@ public class CookingController extends Controller {
         }
 
         if (targetRecipe == null) {
-            return new Result(false, "Recipe not found.");
+            messageLabel.setText("Recipe not found.");
+            return;
         }
 
         Player player = repo.getCurrentUser().getPlayer();
@@ -176,11 +169,11 @@ public class CookingController extends Controller {
         Refrigerator refrigerator = player.getRefrigerator();
 
         if (!inventory.hasCapacity()) {
-            return new Result(false, "You do not have enough capacity.");
+            messageLabel.setText("You do not have enough capacity.");
+            return;
         }
 
         Map<String, Integer> requiredIngredients = targetRecipe.ingredients();
-
 
         for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
             String materialName = entry.getKey();
@@ -190,13 +183,15 @@ public class CookingController extends Controller {
             Slot slot = inventory.getSlot(materialName);
 
             if (slot == null) {
-                return new Result(false, "Slot not found.");
+                messageLabel.setText("Slot not found.");
+                return;
             }
 
             int inventoryAmount = slot.getQuantity();
 
             if (fridgeAmount + inventoryAmount < requiredAmount) {
-                return new Result(false, "You do not have enough" + materialName + " in your inventory and refrigerator.");
+                messageLabel.setText("You do not have enough" + materialName + " in your inventory and refrigerator.");
+                return;
             }
         }
 
@@ -223,16 +218,11 @@ public class CookingController extends Controller {
 
         inventory.addItem(itemName,1);
         player.getEnergy().consume(3);
-        if (player.getEnergy().getAmount() == 0) {
-            player.getEnergy().setHasPassedOut(true);
-            repo.getCurrentGame().nextTurn();
-        }
-
-        return new Result(true, itemName + " added to your inventory");
+        messageLabel.setText(itemName + " added to your inventory");
     }
 
     private Result eat(String command) {
-        String foodName = extractValue(command,"eat",null);
+        String foodName ="ali";
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
@@ -279,24 +269,5 @@ public class CookingController extends Controller {
 
 
         return new Result(true, "This " + foodName + " has been eaten.");
-    }
-
-    private String extractValue(String command, String startFlag, String endFlag) {
-        String patternString;
-
-        if (endFlag != null) {
-            patternString = startFlag + " (.*?) " + endFlag;
-        } else {
-            patternString = startFlag + " (.*)";
-        }
-
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(command);
-
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-
-        return null;
     }
 }

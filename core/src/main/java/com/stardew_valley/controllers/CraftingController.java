@@ -1,5 +1,6 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
@@ -8,6 +9,7 @@ import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.crafting.*;
+import com.stardew_valley.models.crafting.enums.CraftingDevices;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.commands.CraftingCommands;
@@ -19,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CraftingController extends Controller {
-    CraftingController(Repository repo) {
+    public CraftingController(Repository repo) {
         super(repo);
     }
 
@@ -45,32 +47,20 @@ public class CraftingController extends Controller {
             return new Result(false, "invalid command");
         }
 
-        switch (matchedCommand) {
-            case SHOW_RECIPE:
-                return showRecipe();
-            case CRAFT:
-                return craft(command);
-            case CHEAT_ADD_RECIPE:
-                return cheatAddRecipe(command);
-            case PLACE_ITEM:
-                return placeItem(command);
-        }
+//        switch (matchedCommand) {
+//            case SHOW_RECIPE:
+//                return showRecipe();
+//            case CRAFT:
+//                return craft(command);
+//            case CHEAT_ADD_RECIPE:
+//                return cheatAddRecipe(command);
+//            case PLACE_ITEM:
+//                return placeItem(command);
+//        }
         return null;
     }
 
-    private Result showRecipe() {
-        StringBuilder info = new StringBuilder("Available Recipes:\n");
-
-        for (CraftingRecipe recipe : repo.getCurrentUser().getPlayer().getCraftingRecipes()) {
-            info.append("- ").append(recipe.name()).append("\n");
-        }
-
-        return new Result(true, info.toString());
-    }
-
-    private Result craft(String command) {
-        String itemName = extractValue(command, "craft", null);
-
+    public void craft(Label messageLabel,String itemName) {
         Set<CraftingRecipe> recipes = repo.getCurrentUser().getPlayer().getCraftingRecipes();
 
         CraftingRecipe targetRecipe = null;
@@ -83,7 +73,8 @@ public class CraftingController extends Controller {
         }
 
         if (targetRecipe == null) {
-            return new Result(false, "Recipe not found.");
+            messageLabel.setText("Recipe not found.");
+            return;
         }
 
         Map<String, Integer> requiredIngredients = targetRecipe.ingredients();
@@ -92,7 +83,8 @@ public class CraftingController extends Controller {
         Inventory inventory = player.getInventory();
 
         if (!inventory.hasCapacity()) {
-            return new Result(false, "Inventory is full.");
+            messageLabel.setText("Inventory is full.");
+            return;
         }
 
         for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
@@ -101,12 +93,13 @@ public class CraftingController extends Controller {
 
             Slot inventorySlot = inventory.getSlot(materialName);
             if (inventorySlot == null) {
-                return new Result(false, materialName + "Slot not found.");
+                messageLabel.setText(materialName + "Slot not found.");
+                return;
             }
             int itemCount = inventorySlot.getQuantity();
 
             if (itemCount < requiredAmount) {
-                return new Result(false, "You don't have enough " + materialName);
+                messageLabel.setText("You don't have enough " + materialName);
             }
         }
 
@@ -118,21 +111,15 @@ public class CraftingController extends Controller {
         }
 
         player.getEnergy().consume(2);
-
-        if (player.getEnergy().getAmount() == 0) {
-            player.getEnergy().setHasPassedOut(true);
-            repo.getCurrentGame().nextTurn();
-        }
-
         inventory.addItem(itemName, 1);
 
-        //repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(itemName);
+        //repo.getCurrentGame().getCurrentPlayer().addCraftingDevices(CraftingDevice);
 
-        return new Result(true, "Crafted " + targetRecipe.name() + " successfully!");
+        messageLabel.setText("Crafted " + targetRecipe.name() + " successfully!");
     }
 
     private Result cheatAddRecipe(String command) {
-        String recipeName = extractValue(command, "-r", null);
+        String recipeName = "mas";
 
         Player player = repo.getCurrentUser().getPlayer();
 
@@ -161,8 +148,8 @@ public class CraftingController extends Controller {
     }
 
     private Result placeItem(String command) {
-        String itemName = extractValue(command, "-n", "-d");
-        String directionStr = extractValue(command, "-d", null);
+        String itemName = "ali";
+        String directionStr = "mamad";
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
@@ -197,24 +184,5 @@ public class CraftingController extends Controller {
         slot.removeQuantity(1);
 
         return new Result(true, item.getName() + " placed successfully at (" + directionPosition.x() + ", " + directionPosition.y() + ").");
-    }
-
-    private String extractValue(String command, String startFlag, String endFlag) {
-        String patternString;
-
-        if (endFlag != null) {
-            patternString = startFlag + " (.*?) " + endFlag;
-        } else {
-            patternString = startFlag + " (.*)";
-        }
-
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(command);
-
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-
-        return null;
     }
 }
