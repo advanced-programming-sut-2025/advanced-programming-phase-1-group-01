@@ -1,5 +1,7 @@
 package com.stardew_valley.models.tool;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.character.player.Inventory;
@@ -19,7 +21,7 @@ public class WateringCan extends Tool {
     public WateringCan(Inventory inventory) {
         super(inventory);
         capacity = INITIAL_CAPACITY;
-        name = "watering can";
+        name = "Watering Can";
         type = WateringCanType.PRIMARY;
     }
 
@@ -88,5 +90,10 @@ public class WateringCan extends Tool {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    @Override
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().getWateringCan();
     }
 }

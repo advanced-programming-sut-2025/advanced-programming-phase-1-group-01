@@ -3706,6 +3706,7 @@ tools/Steel_Pan.png
 tools/Steel_Pickaxe.png
 tools/Steel_Watering_Can.png
 tools/Training_Rod.png
+tools/Trash_Can.png
 tools/Trash_Can_Copper.png
 tools/Trash_Can_Gold.png
 tools/Trash_Can_Iridium.png

@@ -1,5 +1,7 @@
 package com.stardew_valley.models.tool;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.enums.Direction;
 
@@ -8,7 +10,7 @@ public class MilkPail extends Tool {
 
     public MilkPail(Inventory inventory) {
         super(inventory);
-        name = "milk pail";
+        name = "Milk Pail";
     }
 
     @Override
@@ -27,5 +29,10 @@ public class MilkPail extends Tool {
     @Override
     public void upgrade() {
 
+    }
+
+    @Override
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().getMilkPail();
     }
 }

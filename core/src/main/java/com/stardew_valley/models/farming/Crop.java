@@ -10,7 +10,7 @@ public class Crop extends Plant implements Item, Cloneable {
     private CropState state;
     private final Seed seed;
     private boolean becameGiant;
-    private boolean isPlanted = true;
+    private boolean isPlanted;
 
     public Crop(Seed seed) {
         this.seed = seed;
