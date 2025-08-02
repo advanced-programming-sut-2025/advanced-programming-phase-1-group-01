@@ -68,6 +68,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Dialog terminalDialog;
     private TextField textField;
 
+    private Dialog pixelDialog;
+    private boolean isPixelDialogVisible = false;
+
 
     private boolean isDialogShown = false;
 
