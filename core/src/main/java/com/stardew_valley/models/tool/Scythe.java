@@ -1,5 +1,7 @@
 package com.stardew_valley.models.tool;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
@@ -10,13 +12,14 @@ import com.stardew_valley.models.farming.Crop;
 import com.stardew_valley.models.farming.Fruit;
 import com.stardew_valley.models.farming.Plant;
 import com.stardew_valley.models.foraging.ForagingCrop;
+import org.w3c.dom.Text;
 
 public class Scythe extends Tool {
     private static final int INITIAL_SCYTHE_USE_ENERGY = 2;
 
     public Scythe(Inventory inventory) {
         super(inventory);
-        name = "scythe";
+        name = "Scythe";
     }
 
     @Override
@@ -60,5 +63,10 @@ public class Scythe extends Tool {
     @Override
     public void upgrade() {
 
+    }
+
+    @Override
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().getScythe();
     }
 }

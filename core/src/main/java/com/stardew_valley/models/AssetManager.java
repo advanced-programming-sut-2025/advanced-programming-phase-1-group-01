@@ -373,7 +373,6 @@ public class AssetManager {
     private final TextureRegion fainting_tex5 = new TextureRegion(new Texture(fainting_5));
 
 
-
     private final TextureRegion sheep_down_0_tex = new TextureRegion(new Texture(sheep_down_0));
     private final TextureRegion sheep_down_1_tex = new TextureRegion(new Texture(sheep_down_1));
     private final TextureRegion sheep_down_2_tex = new TextureRegion(new Texture(sheep_down_2));
@@ -1108,7 +1107,7 @@ public class AssetManager {
     }
 
 
-        public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
+    public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
         return alex_0_walking_right_animation;
     }
 
@@ -1558,31 +1557,31 @@ public class AssetManager {
     }
 
     public Texture getGreenBeanStage2() {
-        return Green_Bean_Stages[1];
+        return Green_Bean_Stages[0];
     }
 
     public Texture getGreenBeanStage3() {
-        return Green_Bean_Stages[2];
+        return Green_Bean_Stages[1];
     }
 
     public Texture getGreenBeanStage4() {
-        return Green_Bean_Stages[3];
+        return Green_Bean_Stages[2];
     }
 
     public Texture getGreenBeanStage5() {
-        return Green_Bean_Stages[4];
+        return Green_Bean_Stages[3];
     }
 
     public Texture getGreenBeanStage6() {
-        return Green_Bean_Stages[5];
+        return Green_Bean_Stages[4];
     }
 
     public Texture getGreenBeanStage7() {
-        return Green_Bean_Stages[6];
+        return Green_Bean_Stages[5];
     }
 
     public Texture getGreenBeanStage8() {
-        return Green_Bean_Stages[7];
+        return Green_Bean_Stages[6];
     }
 
     private final Texture Kale = new Texture("farming/crops/Kale.png");
@@ -4133,6 +4132,7 @@ public class AssetManager {
         return Coal;
     }
 
+    // tools:
     private final Texture Hoe = new Texture("tools/Hoe.png");
     private final Texture CopperHoe = new Texture("tools/Copper_Hoe.png");
     private final Texture SteelHoe = new Texture("tools/Steel_Hoe.png");
@@ -4162,6 +4162,12 @@ public class AssetManager {
     private final Texture FiberglassRod = new Texture("tools/Fiberglass_Rod.png");
     private final Texture BambooPole = new Texture("tools/Bamboo_Pole.png");
     private final Texture AdvancedIridiumRod = new Texture("tools/Advanced_Iridium_Rod.png");
+
+    private final Texture TrashCan = new Texture("tools/Trash_Can.png");
+    private final Texture TrashCanCopper = new Texture("tools/Trash_Can_Copper.png");
+    private final Texture TrashCanSteel = new Texture("tools/Trash_Can_Steel.png");
+    private final Texture TrashCanGold = new Texture("tools/Trash_Can_Gold.png");
+    private final Texture TrashCanIridium = new Texture("tools/Trash_Can_Iridium.png");
 
     private final Texture Scythe = new Texture("tools/Scythe.png");
 
@@ -4267,6 +4273,26 @@ public class AssetManager {
 
     public Texture getAdvancedIridiumRod() {
         return AdvancedIridiumRod;
+    }
+
+    public Texture getTrashCan() {
+        return TrashCan;
+    }
+
+    public Texture getTrashCanCopper() {
+        return TrashCanCopper;
+    }
+
+    public Texture getTrashCanSteel() {
+        return TrashCanSteel;
+    }
+
+    public Texture getTrashCanGold() {
+        return TrashCanGold;
+    }
+
+    public Texture getTrashCanIridium() {
+        return TrashCanIridium;
     }
 
     public Texture getScythe() {

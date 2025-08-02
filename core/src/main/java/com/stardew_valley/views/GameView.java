@@ -1,9 +1,6 @@
 package com.stardew_valley.views;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,13 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
-import com.stardew_valley.controllers.FarmingController;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
-import com.stardew_valley.models.character.player.IncompleteMovement;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.initializer.FarmInitializer;
@@ -35,7 +30,6 @@ import com.stardew_valley.models.initializer.FarmInitializer;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 
 public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
@@ -76,8 +70,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private boolean isDialogShown = false;
 
-
-
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
     private final TextureRegion highlightBoxLight = AssetManager.getAssetManager().getWhiteTexture();
 
@@ -85,16 +77,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Actor miniMapActor = null;
 
-
-
     private final static int TILE_SIZE = 16;
-
 
     private final float speed = 200f;
 
-
-
-
+    private final InventoryView inventoryView;
 
     public GameView(GameController controller) {
         this.controller = controller;
@@ -103,13 +90,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
+        this.inventoryView = new InventoryView();
     }
 
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(multiplexer);
+
         createDialog();
+
+        stage.addActor(inventoryView);
     }
 
     @Override
@@ -125,6 +120,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dateTimeView.update();
         batch.end();
 
+        inventoryView.update();
         stage.act(delta);
         stage.draw();
     }
@@ -141,6 +137,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
+        if (i == Input.Keys.ESCAPE) {
+            inventoryView.setVisible(!inventoryView.isVisible());
+            return true;
+        }
         return false;
     }
 
@@ -193,8 +193,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawDividingFences();
 
-        drawPlayer();
-
         drawHouseTop();
 
         drawNPCs();
@@ -202,11 +200,29 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 //        drawTileHighlights();
 
         //printTileTypeCounts();
+
+        drawTileObjects();
+
+        drawPlayer();
+    }
+
+    private void drawTileObjects() {
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                if (!tile.isEmpty()) {
+                    Sprite objSprite = new Sprite(tile.getObject().getTexture());
+//                    objSprite.setSize(16, 16);
+//                    objSprite.setPosition(tile.getPosition().x() * 16, tile.getPosition().y() * 16);
+//                    objSprite.draw(batch);
+                    batch.draw(objSprite, tile.getPosition().y() * 16, tile.getPosition().x() * 16, 16, 16);
+                }
+            }
+        }
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -227,7 +243,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.draw(harveyDownTexture, harveyX, harveyY);
     }
 
-    private void drawBuilding () {
+    private void drawBuilding() {
         for (int i = 0; i < 4; i++) {
             int mineX = getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i));
             int mineY = getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i) - 1);
@@ -266,7 +282,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         int harveyX = getTilePixel(FarmInitializer.getHarveyCottageStartingPointX());
         int harveyY = getTilePixel(FarmInitializer.getHarveyCottageStartingPointY());
         batch.draw(harveyHouseTexture, harveyX, harveyY);
-
 
 
     }
@@ -418,8 +433,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
     private int getTilePixel(int tileCol) {
         return tileCol * TILE_SIZE;
     }
@@ -472,7 +485,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             }
         }
 
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
         }
@@ -524,8 +536,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private boolean canMoveTo(float x, float y) {
-        int tileX = (int)(x / 16);
-        int tileY = (int)(y / 16);
+        int tileX = (int) (x / 16);
+        int tileY = (int) (y / 16);
 
         Tile tile = controller.getRepo().getCurrentGame().getFarm().getTile(tileX, tileY);
 
@@ -634,13 +646,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
 
-                int playerTileX = (int)player.getX() / 16;
-                int playerTileY = (int)player.getY() / 16;
+                int playerTileX = (int) player.getX() / 16;
+                int playerTileY = (int) player.getY() / 16;
 
                 shapeRenderer.setColor(Color.RED);
                 float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
                 float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
-                shapeRenderer.circle(centerX, centerY, (int)(tileSize * 3));
+                shapeRenderer.circle(centerX, centerY, (int) (tileSize * 3));
 
                 shapeRenderer.end();
                 batch.begin();
@@ -719,7 +731,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void handleInput(String input) {
-        System.out.println("handleInput: " + input);
+        Result result = controller.handleCommand(input);
+        System.out.println("[" + result.success() + "] " + result.message());
     }
 
 }
