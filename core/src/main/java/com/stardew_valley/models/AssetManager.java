@@ -18,6 +18,7 @@ public class AssetManager {
     public static final float SCALE = 4f;
 
     private final String black = "images/black.png";
+    private final String white = "images/white.png";
 
     private final String spring_background = "images/all_dirt.png";
 
@@ -1350,6 +1351,7 @@ public class AssetManager {
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));
 
     private final TextureRegion black_tex = new TextureRegion(new Texture(black));
+    private final TextureRegion white_tex = new TextureRegion(new Texture(white));
 
     public TextureRegion getSpringBackground() {
         return spring_background_tex;
@@ -1357,6 +1359,10 @@ public class AssetManager {
 
     public TextureRegion getBlackTexture() {
         return black_tex;
+    }
+
+    public TextureRegion getWhiteTexture() {
+        return white_tex;
     }
 
     // crops:

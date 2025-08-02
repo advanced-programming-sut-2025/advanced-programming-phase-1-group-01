@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
@@ -77,6 +79,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
+    private final TextureRegion highlightBoxLight = AssetManager.getAssetManager().getWhiteTexture();
+
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Actor miniMapActor = null;
@@ -441,6 +445,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            togglePixelDialog();
+        }
+
         /*
 
             g = cc, advance hour
@@ -523,6 +531,87 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         return tile != null && tile.isMovable();
     }
+
+
+    public void togglePixelDialog() {
+        if (!isPixelDialogVisible) {
+            pixelDialog = createPixelDialog(AssetManager.getAssetManager().getSkin());
+            pixelDialog.show(stage);
+            isPixelDialogVisible = true;
+        } else {
+            pixelDialog.hide();
+            isPixelDialogVisible = false;
+        }
+    }
+
+
+    public Dialog createPixelDialog(Skin skin) {
+        Dialog dialog = new Dialog("Pixel Grid", skin);
+
+
+        Table grid = createPixelGrid();
+        ScrollPane scrollPane = new ScrollPane(grid);
+
+        dialog.getContentTable().add(scrollPane).size(900, 1000);
+        return dialog;
+    }
+
+    public Table createPixelGrid() {
+        Table grid = new Table();
+
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int rowCount = tiles.size();
+        int colCount = tiles.get(0).size();
+
+        System.out.println("rowCount: " + rowCount);
+        System.out.println("colCount: " + colCount);
+
+        for (int row = rowCount - 1; row >= 0; row--) {
+            for (int col = 0; col < colCount; col++) {
+                boolean plantable = isPlantable(tiles.get(row).get(col));
+                TextureRegionDrawable drawable = plantable ? new TextureRegionDrawable(highlightBoxLight) : new TextureRegionDrawable(highlightBox);
+                ImageButton pixel = createPixelButton(drawable, row, col);
+                grid.add(pixel).size(10, 10).pad(0.5f);
+            }
+            grid.row();
+        }
+
+        return grid;
+    }
+
+
+
+    private boolean isPlantable(Tile tile) {
+        return (tile.getType() == TileType.GREENHOUSE || tile.getType() == TileType.GROUND);
+    }
+
+
+    public ImageButton createPixelButton(TextureRegionDrawable drawable, int row, int col) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = drawable.tint(Color.LIGHT_GRAY);
+        style.imageDown = drawable.tint(Color.DARK_GRAY);
+
+        ImageButton button = new ImageButton(style);
+
+        button.addListener(new ClickListener() {
+            boolean isSelected = false;
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isSelected = !isSelected;
+                if (isSelected) {
+                    button.getStyle().imageUp = drawable.tint(Color.BLUE);
+                } else {
+                    button.getStyle().imageUp = drawable.tint(Color.LIGHT_GRAY);
+                }
+
+                System.out.println("Clicked pixel at row: " + row + ", col: " + col);
+            }
+        });
+
+        return button;
+    }
+
 
 
     public void showMiniMap(Stage stage) {

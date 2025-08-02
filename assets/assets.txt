@@ -3584,6 +3584,7 @@ images/r_lake.png
 images/resized_mine.png
 images/tile_9_1_marked.png
 images/water.png
+images/white.png
 images/wood_fence.png
 images/wood_fence_16x16.png
 libgdx.png
