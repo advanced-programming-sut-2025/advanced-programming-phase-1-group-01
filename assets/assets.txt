@@ -3558,6 +3558,7 @@ images/artisans/Loom.png
 images/artisans/Mayonnaise_Machine.png
 images/artisans/Oil_Maker.png
 images/artisans/Preserves_Jar.png
+images/barn_fence_16x16.png
 images/black.png
 images/cabins/1_full.png
 images/cabins/1_top.png
@@ -3568,6 +3569,7 @@ images/cabins/3_top.png
 images/cabins/4_full.png
 images/cabins/4_top.png
 images/cabins/Cabins.png
+images/cage_fence_16x16.png
 images/circle.png
 images/clock.png
 images/fainting/resized_1-Photoroom.png

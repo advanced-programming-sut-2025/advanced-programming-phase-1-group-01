@@ -3,12 +3,10 @@ package com.stardew_valley.views;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +18,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.BarnFence;
+import com.stardew_valley.models.CageFence;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
@@ -66,6 +66,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Dialog pixelDialog;
     private boolean isPixelDialogVisible = false;
+
+    private Dialog buildAreaDialog;
+    private boolean isBuildAreaDialogVisible = false;
 
 
     private boolean isDialogShown = false;
@@ -458,8 +461,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            togglePixelDialog();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            toggleBuildArea();
         }
 
         /*
@@ -545,9 +548,65 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-    public void togglePixelDialog() {
+    public void toggleBuildArea() {
+        if (!isBuildAreaDialogVisible) {
+            buildAreaDialog = createDropdownDialog(AssetManager.getAssetManager().getSkin());
+            buildAreaDialog.show(stage);
+            isBuildAreaDialogVisible = true;
+        } else {
+            buildAreaDialog.hide();
+            isBuildAreaDialogVisible = false;
+        }
+    }
+
+    public Dialog createDropdownDialog(Skin skin) {
+        Dialog dialog = new Dialog("Select Item", skin);
+
+        SelectBox<String> selectBox = new SelectBox<>(skin);
+        selectBox.setItems("A", "B");
+
+        dialog.getContentTable().add(selectBox).pad(10).row();
+
+        dialog.button("Cancel", false);
+        dialog.button("OK", true);
+
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+
+        dialog = new Dialog(dialog.getTitleLabel().getText().toString(), skin) {
+            @Override
+            protected void result(Object object) {
+                if (Boolean.TRUE.equals(object)) {
+                    String selected = selectBox.getSelected();
+                    switch (selected) {
+                        case "A":
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(4, 4, "A");
+                        default:
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(6, 7, "B");
+                    }
+                } else {
+                    System.out.println("Selection cancelled");
+                }
+                isBuildAreaDialogVisible = false;
+            }
+        };
+
+        dialog.getContentTable().add(selectBox).pad(10).row();
+        dialog.button("Cancel", false);
+        dialog.button("OK", true);
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+
+        return dialog;
+    }
+
+
+
+    public void togglePixelDialog(int height, int width, String type) {
         if (!isPixelDialogVisible) {
-            pixelDialog = createPixelDialog(AssetManager.getAssetManager().getSkin());
+            pixelDialog = createPixelDialog(AssetManager.getAssetManager().getSkin(), height, width, type);
             pixelDialog.show(stage);
             isPixelDialogVisible = true;
         } else {
@@ -557,18 +616,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-    public Dialog createPixelDialog(Skin skin) {
+    public Dialog createPixelDialog(Skin skin, int height, int width, String type) {
         Dialog dialog = new Dialog("Pixel Grid", skin);
 
 
-        Table grid = createPixelGrid();
+        Table grid = createPixelGrid(height, width, type);
         ScrollPane scrollPane = new ScrollPane(grid);
 
         dialog.getContentTable().add(scrollPane).size(900, 1000);
         return dialog;
     }
 
-    public Table createPixelGrid() {
+    public Table createPixelGrid(int height, int width, String type) {
         Table grid = new Table();
 
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
@@ -580,9 +639,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         for (int row = rowCount - 1; row >= 0; row--) {
             for (int col = 0; col < colCount; col++) {
-                boolean plantable = isPlantable(tiles.get(row).get(col));
+                boolean plantable = isPlantableTile(row, col);
                 TextureRegionDrawable drawable = plantable ? new TextureRegionDrawable(highlightBoxLight) : new TextureRegionDrawable(highlightBox);
-                ImageButton pixel = createPixelButton(drawable, row, col);
+                ImageButton pixel = createPixelButton(drawable, row, col, height, width, type);
                 grid.add(pixel).size(10, 10).pad(0.5f);
             }
             grid.row();
@@ -591,14 +650,60 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         return grid;
     }
 
+    private void setObject(int row, int col, int height, int width, String type) {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
 
+        for (int r = row; r <= row + height; r++) {
+            for (int c = col; c <= col + width; c++) {
 
-    private boolean isPlantable(Tile tile) {
-        return (tile.getType() == TileType.GREENHOUSE || tile.getType() == TileType.GROUND);
+                boolean isTop = (r == row);
+                boolean isBottom = (r == row + height);
+                boolean isLeft = (c == col);
+                boolean isRight = (c == col + width);
+
+                if (isTop || isBottom || isLeft || isRight) {
+                    if (r >= 0 && r < tiles.size() && c >= 0 && c < tiles.get(r).size()) {
+                        Tile tile = tiles.get(r).get(c);
+                        System.out.println(r + " " + c);
+
+                        switch (type) {
+                            case "A":
+                                tile.setObject(new CageFence());
+                                tile.setMovable(false);
+                                break;
+                            default:
+                                tile.setObject(new BarnFence());
+                                tile.setMovable(false);
+                        }
+                    } else {
+                        System.out.println("Index out of bounds: r=" + r + " c=" + c);
+                    }
+                }
+            }
+        }
     }
 
 
-    public ImageButton createPixelButton(TextureRegionDrawable drawable, int row, int col) {
+
+    private boolean isPlantableArea(int row, int col, int height, int width) {
+        for (int r = row; r < height; r++) {
+            for (int c = col; c < width; c++) {
+                Tile tile = controller.getRepo().getCurrentGame().getFarm().getTiles().get(r).get(c);
+                if (!tile.isEmpty() || tile.getType() != TileType.GROUND) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isPlantableTile(int row, int col) {
+        Tile tile = controller.getRepo().getCurrentGame().getFarm().getTiles().get(row).get(col);
+        return tile.isEmpty() && tile.getType() == TileType.GROUND;
+    }
+
+
+    public ImageButton createPixelButton(TextureRegionDrawable drawable, int row, int col, int height, int width, String type) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.imageUp = drawable.tint(Color.LIGHT_GRAY);
         style.imageDown = drawable.tint(Color.DARK_GRAY);
@@ -606,18 +711,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         ImageButton button = new ImageButton(style);
 
         button.addListener(new ClickListener() {
-            boolean isSelected = false;
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                isSelected = !isSelected;
-                if (isSelected) {
-                    button.getStyle().imageUp = drawable.tint(Color.BLUE);
-                } else {
-                    button.getStyle().imageUp = drawable.tint(Color.LIGHT_GRAY);
+                if (isPlantableArea(row, col, height, width)) {
+                    System.out.println("can plant");
+                    setObject(row, col, height, width, type);
                 }
-
-                System.out.println("Clicked pixel at row: " + row + ", col: " + col);
+                pixelDialog.hide();
+                isPixelDialogVisible = false;
             }
         });
 

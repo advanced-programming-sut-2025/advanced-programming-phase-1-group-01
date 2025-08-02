@@ -23,6 +23,8 @@ public class AssetManager {
     private final String spring_background = "images/all_dirt.png";
 
     private final String wood_fence = "images/wood_fence_16x16.png";
+    private final String barn_fence = "images/barn_fence_16x16.png";
+    private final String cage_fence = "images/cage_fence_16x16.png";
 
     private final String house = "images/house.png";
 
@@ -365,6 +367,8 @@ public class AssetManager {
     private final TextureRegion npc_house_4_top_tex = new TextureRegion(new Texture(npc_house_4_top));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
+    private final Texture cage_fence_tex = new Texture(cage_fence);
+    private final Texture barn_fence_tex = new Texture(barn_fence);
 
     private final TextureRegion fainting_tex1 = new TextureRegion(new Texture(fainting_1));
     private final TextureRegion fainting_tex2 = new TextureRegion(new Texture(fainting_2));
@@ -1039,6 +1043,14 @@ public class AssetManager {
 
     public TextureRegion getWoodFence() {
         return wood_fence_tex;
+    }
+
+    public Texture getBarnFence() {
+        return barn_fence_tex;
+    }
+
+    public Texture getCageFence() {
+        return cage_fence_tex;
     }
 
     public TextureRegion getMine() {
