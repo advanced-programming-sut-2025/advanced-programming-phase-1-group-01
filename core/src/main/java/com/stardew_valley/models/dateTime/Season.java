@@ -2,6 +2,7 @@ package com.stardew_valley.models.dateTime;
 
 import com.stardew_valley.models.Random;
 import com.stardew_valley.models.farming.CropInfo;
+import com.stardew_valley.models.farming.SeedInfo;
 import com.stardew_valley.models.foraging.ForagingCrop;
 import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.weather.Weather;
@@ -81,5 +82,19 @@ public enum Season {
 
     public ForagingCropInfo getRandomForagingCrop() {
         return getForagingCrops().get(Random.rand(0, getForagingCrops().size() - 1));
+    }
+
+    public List<SeedInfo> getForagingSeeds() {
+        List<SeedInfo> result = new ArrayList<>();
+        for (SeedInfo seed : SeedInfo.values()) {
+            if (seed.getSeason() == this) {
+                result.add(seed);
+            }
+        }
+        return result;
+    }
+
+    public SeedInfo getRandomForagingSeed() {
+        return getForagingSeeds().get(Random.rand(0, getForagingCrops().size() - 1));
     }
 }

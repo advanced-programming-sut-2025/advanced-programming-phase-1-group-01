@@ -29,7 +29,7 @@ public class Axe extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position position = player.getPosition();
+        Position position = player.getTilesPosition();
         Tile tile = player.getCurrentMap().getTile(position);
 
         Item item = tile.getObject();

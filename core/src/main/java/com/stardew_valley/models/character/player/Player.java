@@ -102,6 +102,10 @@ public class Player extends Character {
         return position;
     }
 
+    public Position getTilesPosition() {
+        return new Position(position.x() / 16, position.y() / 16);
+    }
+
     public void setPosition(Position position) {
         this.x = position.x();
         this.y = position.y();

@@ -11,6 +11,7 @@ import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Crop;
 import com.stardew_valley.models.farming.Fruit;
 import com.stardew_valley.models.farming.Plant;
+import com.stardew_valley.models.foraging.Foraging;
 import com.stardew_valley.models.foraging.ForagingCrop;
 import org.w3c.dom.Text;
 
@@ -30,7 +31,7 @@ public class Scythe extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position appliedPosition = player.getPosition().applyDirection(direction);
+        Position appliedPosition = player.getTilesPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
 
         Item product = null;
@@ -43,9 +44,10 @@ public class Scythe extends Tool {
                 }
             }
             player.getInventory().addItem(product.getName(), 1);
-        } else if (tile.getObject() instanceof ForagingCrop foragingCrop) {
-            product = foragingCrop;
+        } else if (tile.getObject() instanceof Foraging foraging) {
+            product = foraging;
             tile.removeObject();
+            player.getInventory().addItem(product.getName(), 1);
         }
 
         if (product instanceof Fruit || (product instanceof Crop crop && !crop.getInfo().isOneTime())) {

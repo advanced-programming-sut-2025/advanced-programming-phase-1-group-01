@@ -9,13 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class AssetManager {
 
     private final Skin skin = new Skin(Gdx.files.internal("skin/NzSkin.json"));
-//    private final Skin skin = new Skin(Gdx.files.internal("skin3/craftacular-ui.json"));
-//    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/terra-mother-ui.json"));
+
+    private static AssetManager assetManager;
+
+    public static final float SCALE = 4f;
 
     private final Texture tempTex = new Texture("farming/crops/Broccoli.png");
 
-    private static AssetManager assetManager;
-    public static final float SCALE = 4f;
+    private final Texture PlowedTile = new Texture("farming/Plowed_Tile.png");
 
     private final String black = "images/black.png";
     private final String white = "images/white.png";
@@ -4332,5 +4333,9 @@ public class AssetManager {
 
     public Texture getTempTex() {
         return tempTex;
+    }
+
+    public Texture getPlowedTile() {
+        return PlowedTile;
     }
 }

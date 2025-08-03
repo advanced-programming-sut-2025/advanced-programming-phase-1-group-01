@@ -57,7 +57,7 @@ public class WateringCan extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position position = player.getPosition();
+        Position position = player.getTilesPosition();
         Position dirAppliedPosition = position.applyDirection(direction);
 
         Tile tile = inventory.getPlayer().getFarm().getTile(dirAppliedPosition);

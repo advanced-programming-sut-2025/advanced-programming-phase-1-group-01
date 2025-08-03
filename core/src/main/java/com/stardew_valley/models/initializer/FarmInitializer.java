@@ -8,7 +8,9 @@ import com.stardew_valley.models.character.NPC.NPCQuest;
 import com.stardew_valley.models.character.NPC.NPCQuestType;
 import com.stardew_valley.models.character.NPC.NPCType;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.foraging.ForagingManager;
 
 import java.util.ArrayList;
 import java.util.List;
