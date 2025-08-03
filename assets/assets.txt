@@ -816,7 +816,6 @@ farming/trees/Wild_Tree_stump_Fall.png
 farming/trees/Wild_Tree_stump_Spring.png
 farming/trees/Wild_Tree_stump_Winter.png
 farming/trees/Wood.png
-hs_err_pid17689.log
 images/PS4_Circle.png
 images/a_Abigail/tile_0_0.png
 images/a_Abigail/tile_0_1.png
@@ -3560,6 +3559,7 @@ images/artisans/Loom.png
 images/artisans/Mayonnaise_Machine.png
 images/artisans/Oil_Maker.png
 images/artisans/Preserves_Jar.png
+images/barn_fence_16x16.png
 images/black.png
 images/cabins/1_full.png
 images/cabins/1_top.png
@@ -3570,6 +3570,7 @@ images/cabins/3_top.png
 images/cabins/4_full.png
 images/cabins/4_top.png
 images/cabins/Cabins.png
+images/cage_fence_16x16.png
 images/circle.png
 images/clock.png
 images/fainting/resized_1-Photoroom.png
@@ -3586,6 +3587,7 @@ images/r_lake.png
 images/resized_mine.png
 images/tile_9_1_marked.png
 images/water.png
+images/white.png
 images/wood_fence.png
 images/wood_fence_16x16.png
 libgdx.png
