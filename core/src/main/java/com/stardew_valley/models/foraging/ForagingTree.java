@@ -24,8 +24,4 @@ public class ForagingTree extends Foraging implements Item, TreeSource {
         return info;
     }
 
-    @Override
-    public String getSymbol() {
-        return info.getSymbol();
-    }
 }

@@ -40,23 +40,22 @@ public class Scythe extends Tool {
             if (product instanceof Crop crop) {
                 crop.setPlanted(false);
                 if (crop.getInfo().isOneTime()) {
-                    tile.removeObject();
+                    if (inventory.hasCapacity()) tile.removeObject();
                 }
             }
             player.getInventory().addItem(product.getName(), 1);
         } else if (tile.getObject() instanceof Foraging foraging) {
             product = foraging;
-            tile.removeObject();
-            player.getInventory().addItem(product.getName(), 1);
+            if (player.getInventory().addItem(product.getName(), 1)) {
+                tile.removeObject();
+            }
         }
 
-        if (product instanceof Fruit || (product instanceof Crop crop && !crop.getInfo().isOneTime())) {
+        if (product instanceof Fruit || product instanceof Crop) {
             player.getAbilityService().getFarming().increaseXp(5);
-        } else if (product instanceof Crop crop && crop.getInfo().isOneTime()) {
-            player.getAbilityService().getFarming().increaseXp(5);
-            player.getAbilityService().getHiking().increaseXp(10);
+        } else if (product instanceof Foraging) {
+            player.getAbilityService().getForaging().increaseXp(10);
         }
-
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);

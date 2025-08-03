@@ -484,7 +484,6 @@ public class Player extends Character {
             case FORAGING -> abilityService.getForaging().increaseXp(10);
             case FISHING -> abilityService.getFishing().increaseXp(10);
             case MINING -> abilityService.getMining().increaseXp(10);
-            case HIKING -> abilityService.getHiking().increaseXp(10);
         }
     }
 

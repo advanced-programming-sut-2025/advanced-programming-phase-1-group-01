@@ -61,7 +61,7 @@ public class WateringCan extends Tool {
         Position dirAppliedPosition = position.applyDirection(direction);
 
         Tile tile = inventory.getPlayer().getFarm().getTile(dirAppliedPosition);
-        if (tile.getObject() instanceof Plant plant && !isEmpty()) {
+        if (tile.getObject() instanceof Plant plant && !this.isEmpty()) {
             plant.water();
             removeWater();
         }
@@ -81,7 +81,7 @@ public class WateringCan extends Tool {
     }
 
     public boolean isEmpty() {
-        return waterAmount == 0;
+        return waterAmount <= 0;
     }
 
     public int getCapacity() {

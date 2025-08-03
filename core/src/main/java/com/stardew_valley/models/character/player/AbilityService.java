@@ -2,7 +2,7 @@ package com.stardew_valley.models.character.player;
 
 // farming: every time harvest(animal-based or agricultural) we get 5 xp.
 // mining: every time we eliminate a rock for each one we get 10 xp.
-// hiking: every time we collect a foraging item we get 10 xp.
+// foraging: every time we collect a foraging item we get 10 xp.
 // fishing: every one we fish we get 5 xp.
 
 import com.stardew_valley.models.cooking.CookingRecipes;
@@ -12,17 +12,15 @@ public class AbilityService {
     private final Player player;
     private final Ability farming;
     private final Ability mining;
-    private final Ability hiking;
     private final Ability fishing;
     private final Ability foraging;
 
     public AbilityService(Player player) {
         this.player = player;
-        this.farming = new Ability(AbilityType.FARMING);
-        this.mining = new Ability(AbilityType.MINING);
-        this.hiking = new Ability(AbilityType.HIKING);
-        this.fishing = new Ability(AbilityType.FISHING);
-        this.foraging = new Ability(AbilityType.FORAGING);
+        this.farming = new Ability(this, AbilityType.FARMING);
+        this.mining = new Ability(this, AbilityType.MINING);
+        this.fishing = new Ability(this, AbilityType.FISHING);
+        this.foraging = new Ability(this, AbilityType.FORAGING);
     }
 
     public Ability getFarming() {
@@ -31,10 +29,6 @@ public class AbilityService {
 
     public Ability getMining() {
         return mining;
-    }
-
-    public Ability getHiking() {
-        return hiking;
     }
 
     public Ability getFishing() {

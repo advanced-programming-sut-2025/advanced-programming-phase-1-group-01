@@ -12,14 +12,14 @@ public enum Weather {
     RAINY(1.2) {
         @Override
         public void applyEffect(Game game) {
-            game.getFarmingManager().autoWaterAllPlants();
+//            game.getFarmingManager().autoWaterAllPlants();
         }
     },
     STORMY(0.5) {
         @Override
         public void applyEffect(Game game) {
             game.getWeatherManager().handleDailyThor();
-            game.getFarmingManager().autoWaterAllPlants();
+//            game.getFarmingManager().autoWaterAllPlants();
         }
     }, SNOWY(1) {
         @Override

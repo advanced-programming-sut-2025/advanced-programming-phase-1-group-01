@@ -3,6 +3,7 @@ package com.stardew_valley.views;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,14 +19,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.GameController;
-import com.stardew_valley.models.AssetManager;
-import com.stardew_valley.models.BarnFence;
-import com.stardew_valley.models.CageFence;
-import com.stardew_valley.models.Result;
+import com.stardew_valley.models.*;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.farming.Plant;
+import com.stardew_valley.models.farming.Seed;
+import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.tool.Tool;
 
@@ -193,9 +195,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 direction = Direction.DOWN_RIGHT;
 
 
-            if (player.getInventory().getEquippedSlot() != null &&
-                player.getInventory().getEquippedSlot().getItem() instanceof Tool tool) {
-                tool.use(direction);
+            Slot equippedSlot = player.getInventory().getEquippedSlot();
+            if (equippedSlot != null) {
+                if (equippedSlot.getItem() instanceof Tool tool) {
+                    tool.use(direction);
+                } else if (equippedSlot.getItem() instanceof Seed seed) {
+                    controller.getFarmingController().plant(seed.getName(), direction);
+                }
             }
             return true;
         }
@@ -265,11 +271,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
             for (Tile tile : row) {
                 if (!tile.isEmpty()) {
-                    Sprite objSprite = new Sprite(tile.getObject().getTexture());
+//                    Sprite objSprite = new Sprite(tile.getObject().getTexture());
 //                    objSprite.setSize(16, 16);
-//                    objSprite.setPosition(tile.getPosition().x() * 16, tile.getPosition().y() * 16);
+//                    batch.draw(objSprite, tile.getPosition().y() * 16, tile.getPosition().x() * 16);
+//                    objSprite.setRegionWidth(16);
+//                    objSprite.setPosition(tile.getPosition().y() * 16, tile.getPosition().x() * 16);
 //                    objSprite.draw(batch);
-                    batch.draw(objSprite, tile.getPosition().y() * 16, tile.getPosition().x() * 16, 16, 16);
+                    Texture texture = tile.getObject().getTexture();
+                    float aspectRatio = (float) texture.getHeight() / texture.getWidth();
+                    float width = 16f;
+                    float height = width * aspectRatio;
+
+                    if (tile.getObject() instanceof ForagingMineral) {
+                        batch.draw(texture, tile.getPosition().x() * 16, tile.getPosition().y() * 16, width, height);
+                    } else {
+                        batch.draw(texture, tile.getPosition().y() * 16, tile.getPosition().x() * 16, width, height);
+                    }
                 }
             }
         }
@@ -655,7 +672,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
     public void togglePixelDialog(int height, int width, String type) {
         if (!isPixelDialogVisible) {
             pixelDialog = createPixelDialog(AssetManager.getAssetManager().getSkin(), height, width, type);
@@ -736,7 +752,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
     private boolean isPlantableArea(int row, int col, int height, int width) {
         for (int r = row; r < height; r++) {
             for (int c = col; c < width; c++) {
@@ -777,7 +792,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         return button;
     }
-
 
 
     public void showMiniMap(Stage stage) {
@@ -828,21 +842,26 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
-
-
     private Color getColorForTileType(TileType type) {
         switch (type) {
-            case GROUND: return Color.GREEN;
-            case RIVER: return Color.BLACK;
-            case MINE: return Color.GRAY;
-            case GREENHOUSE: return Color.FOREST;
-            case COTTAGE: return Color.BROWN;
-            case WALL: return Color.DARK_GRAY;
-            case SALE_BUCKET: return Color.PINK;
-            case FENCE: return Color.BLUE;
-            default: return Color.LIGHT_GRAY;
+            case GROUND:
+                return Color.GREEN;
+            case RIVER:
+                return Color.BLACK;
+            case MINE:
+                return Color.GRAY;
+            case GREENHOUSE:
+                return Color.FOREST;
+            case COTTAGE:
+                return Color.BROWN;
+            case WALL:
+                return Color.DARK_GRAY;
+            case SALE_BUCKET:
+                return Color.PINK;
+            case FENCE:
+                return Color.BLUE;
+            default:
+                return Color.LIGHT_GRAY;
         }
     }
 

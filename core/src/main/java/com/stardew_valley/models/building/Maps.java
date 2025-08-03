@@ -77,7 +77,7 @@ public abstract class Maps {
                 if (game.isAnyoneHere(i, j)) {
                     chars.get(i-x).set(j-y, game.returnSymbol(i, j));
                 } else if (tiles.get(i).get(j).getObject() != null) {
-                    chars.get(i-x).set(j-y, tiles.get(i).get(j).getObject().getSymbol());
+//                    chars.get(i-x).set(j-y, tiles.get(i).get(j).getObject().getSymbol());
 //                    if (tiles.get(i).get(j).getObject().getSymbol().equals("\uD83C\uDF60")) {
 //                        Tile tile = tiles.get(i).get(j);
 //                        System.out.println(i + "" + j);

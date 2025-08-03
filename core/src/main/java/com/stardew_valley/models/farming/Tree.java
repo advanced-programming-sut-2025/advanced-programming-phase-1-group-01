@@ -48,7 +48,7 @@ public class Tree extends Plant {
             int currentLevelDays = growthStages[growthLevel - 1];
 
             if (daysInCurrentLevel >= currentLevelDays) {
-                growthLevel++;
+                incrementGrowthIfWatered();
             }
 
             daysInCurrentLevel++;
@@ -128,8 +128,4 @@ public class Tree extends Plant {
         return info.getLastStageTextureBySeason(currSeason);
     }
 
-    @Override
-    public String getSymbol() {
-        return null;
-    }
 }

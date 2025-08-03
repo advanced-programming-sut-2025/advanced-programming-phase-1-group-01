@@ -6,7 +6,8 @@ public class Ability {
     private int level;
     private int xp;
 
-    Ability(AbilityType abilityType) {
+    public Ability(AbilityService abilityService, AbilityType abilityType) {
+        this.abilityService = abilityService;
         this.abilityType = abilityType;
     }
 
@@ -54,6 +55,6 @@ public class Ability {
     public void incrementLevel() {
         level++;
         xp = 0;
-        abilityService.recipe(level,abilityType);
+        abilityService.recipe(level, abilityType);
     }
 }

@@ -25,11 +25,6 @@ public class ForagingCrop extends Foraging implements Item {
     }
 
     @Override
-    public String getSymbol() {
-        return null;
-    }
-
-    @Override
     public Texture getTexture() {
         return info.getTexture();
     }

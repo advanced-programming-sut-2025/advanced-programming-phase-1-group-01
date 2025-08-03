@@ -61,7 +61,7 @@ public class InventoryView extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (getSelectedSlot() != null) {
-                    Repository.getRepo().getCurrentUser().getPlayer().getInventory().removeSlot(getSelectedSlot());
+                    inventory.removeSlot(getSelectedSlot());
                     update();
                     setSelectedSlot(null);
                     resetLastHighlightedBackground();
@@ -86,7 +86,7 @@ public class InventoryView extends Window {
             }
         });
 
-        for (int i = 0; i < inventory.getCapacity(); i++) {
+        for (int i = 0; i < inventory.getCapacity() - 1; i++) {
             Stack slotStack = new Stack();
 
             Image background = new Image(skin.getDrawable("selectListBoard"));

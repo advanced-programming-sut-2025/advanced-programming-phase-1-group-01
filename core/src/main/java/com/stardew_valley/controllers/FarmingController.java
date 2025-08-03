@@ -1,5 +1,6 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.utils.Array;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
@@ -59,6 +60,9 @@ public class FarmingController extends Controller {
                 return fertilize(fertilizerName, direction);
             case HOW_MUCH_WATER:
                 return howMuchWater();
+            case CHEAT_PLOW_NEAR:
+                Position position = repo.getCurrentGame().getCurrentPlayer().getTilesPosition();
+                return cheatPlowNineTiles(position);
         }
         return new Result(false, "invalid command 88");
     }
@@ -81,7 +85,7 @@ public class FarmingController extends Controller {
         return new Result(true, farmingConstant.toString());
     }
 
-    private Result plant(String sourceName, Direction direction) {
+    public Result plant(String sourceName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlot(sourceName);
         Position appliedPosition = player.getTilesPosition().applyDirection(direction);
@@ -139,18 +143,18 @@ public class FarmingController extends Controller {
         }
 
         return new Result(true, """
-                Name: %s
-                Remaining Time to Fully Grown: %d
-                Growth Level: %d
-                Is Watered Today: %B
-                Quality: %s
-                Is Fertilized: %B""".formatted(
-                crop.getName(),
-                crop.getInfo().getTotalHarvestTime() - crop.getTotalGrownDays(),
-                crop.getGrowthLevel(),
-                crop.isWatered(),
-                crop.getQuality(),
-                crop.isFertilized()
+            Name: %s
+            Remaining Time to Fully Grown: %d
+            Growth Level: %d
+            Is Watered Today: %B
+            Quality: %s
+            Is Fertilized: %B""".formatted(
+            crop.getName(),
+            crop.getInfo().getTotalHarvestTime() - crop.getTotalGrownDays(),
+            crop.getGrowthLevel(),
+            crop.isWatered(),
+            crop.getQuality(),
+            crop.isFertilized()
         ));
     }
 
@@ -194,5 +198,21 @@ public class FarmingController extends Controller {
         }
 
         return new Result(true, String.valueOf(wateringCan.getWaterAmount()));
+    }
+
+    private Result cheatPlowNineTiles(Position position) {
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Array<Position> tilePositions = new Array<>();
+        tilePositions.add(position);
+
+        for (Direction dir : Direction.values()) {
+            tilePositions.add(position.applyDirection(dir));
+        }
+
+        for (Position pos : tilePositions) {
+            player.getFarm().getTile(pos).plow();
+        }
+
+        return new Result(true, "cheat done!");
     }
 }

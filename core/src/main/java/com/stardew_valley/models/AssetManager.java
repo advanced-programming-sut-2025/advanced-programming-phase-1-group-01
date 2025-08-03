@@ -1985,6 +1985,7 @@ public class AssetManager {
         new Texture("farming/crops/Hot_Pepper_Stage_2.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_3.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_4.png"),
+        new Texture("farming/crops/Hot_Pepper_Stage_4b.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_5.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_6.png"),
     };
@@ -2015,6 +2016,10 @@ public class AssetManager {
 
     public Texture getHotPepperStage6() {
         return Hot_Pepper_Stages[5];
+    }
+
+    public Texture getHotPepperStage7() {
+        return Hot_Pepper_Stages[6];
     }
 
     private final Texture Melon = new Texture("farming/crops/Melon.png");
@@ -2680,6 +2685,7 @@ public class AssetManager {
         new Texture("farming/crops/Grape_Stage_4.png"),
         new Texture("farming/crops/Grape_Stage_5.png"),
         new Texture("farming/crops/Grape_Stage_6.png"),
+        new Texture("farming/crops/Grape_Stage_7.png"),
     };
 
     public Texture getGrape() {
@@ -2708,6 +2714,10 @@ public class AssetManager {
 
     public Texture getGrapeStage6() {
         return Grape_Stages[5];
+    }
+
+    public Texture getGrapeStage7() {
+        return Grape_Stages[6];
     }
 
     private final Texture Pumpkin = new Texture("farming/crops/Pumpkin.png");

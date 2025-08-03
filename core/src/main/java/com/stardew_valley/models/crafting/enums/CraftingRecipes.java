@@ -53,4 +53,9 @@ public enum CraftingRecipes {
     public CraftingRecipe toRecipe() {
         return new CraftingRecipe(name, ingredients, ability, level, sellPrice);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -2,16 +2,17 @@ package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
-import com.stardew_valley.models.foraging.Foraging;
+import com.stardew_valley.models.building.TileObject;
 
-public class Seed extends Foraging implements Item {
-    private final SeedInfo info;
+public class Sapling implements TreeSource, TileObject, Item {
+    private final SaplingInfo info;
 
-    public Seed(SeedInfo info) {
+    public Sapling(SaplingInfo info) {
         this.info = info;
     }
 
-    public SeedInfo getInfo() {
+    @Override
+    public SaplingInfo getInfo() {
         return info;
     }
 
@@ -29,5 +30,4 @@ public class Seed extends Foraging implements Item {
     public Texture getTexture() {
         return info.getTexture();
     }
-
 }

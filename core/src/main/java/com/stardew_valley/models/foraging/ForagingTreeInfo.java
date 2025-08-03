@@ -44,10 +44,6 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
         return season;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
-
     public static ForagingTreeInfo fromString(String string) {
         for (ForagingTreeInfo foragingTreeInfo : values()) {
             if (foragingTreeInfo.name.equalsIgnoreCase(string)) {
@@ -59,9 +55,7 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
 
     @Override
     public String toString() {
-        return """
-                Name: %s
-                Season: %s""".formatted(name, season);
+        return name;
     }
 
     public ForagingTree toItem() {

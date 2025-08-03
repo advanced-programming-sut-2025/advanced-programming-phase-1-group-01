@@ -1,10 +1,8 @@
 package com.stardew_valley.models.farming;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.animal.ProductQuality;
 import com.stardew_valley.models.building.TileObject;
-import org.w3c.dom.Text;
 
 public abstract class Plant implements TileObject {
     protected boolean isWatered;
@@ -13,10 +11,12 @@ public abstract class Plant implements TileObject {
     protected Fertilizer fertilizer;
     protected final ProductQuality quality;
     protected boolean hasProduct;
+    protected boolean isRegrowing;
 
     protected Plant() {
         this.quality = ProductQuality.getRandomProductQuality();
         growthLevel = 1;
+        daysInCurrentLevel = 1;
     }
 
     public abstract FarmingEnum getInfo();
@@ -29,7 +29,7 @@ public abstract class Plant implements TileObject {
         return isWatered;
     }
 
-    public void resetIsWatered() {
+    public void resetWatered() {
         isWatered = false;
     }
 
@@ -64,6 +64,12 @@ public abstract class Plant implements TileObject {
     public abstract Item getProduct();
 
     public abstract String getName();
+
+    protected void incrementGrowthIfWatered() {
+        if (isWatered) {
+            growthLevel++;
+        }
+    }
 
     public abstract void growFull();
 }

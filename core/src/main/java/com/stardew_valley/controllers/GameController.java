@@ -186,4 +186,88 @@ public class GameController extends Controller {
     public DateTimeController getDateTimeController() {
         return this.dateTimeController;
     }
+
+    public EnergyController getEnergyController() {
+        return energyController;
+    }
+
+    public FarmingController getFarmingController() {
+        return farmingController;
+    }
+
+    public GameMenuController getGameMenuController() {
+        return gameMenuController;
+    }
+
+    public RelationshipController getRelationshipController() {
+        return relationshipController;
+    }
+
+    public ToolController getToolController() {
+        return toolController;
+    }
+
+    public WeatherController getWeatherController() {
+        return weatherController;
+    }
+
+    public MovementAndMapController getMovementAndMapController() {
+        return movementAndMapController;
+    }
+
+    public InventoryController getInventoryController() {
+        return inventoryController;
+    }
+
+    public ArtisanController getArtisanController() {
+        return artisanController;
+    }
+
+    public CookingController getCookingController() {
+        return cookingController;
+    }
+
+    public CraftingController getCraftingController() {
+        return craftingController;
+    }
+
+    public AnimalHusbandryController getAnimalHusbandryController() {
+        return animalHusbandryController;
+    }
+
+    public NPCController getNpcController() {
+        return npcController;
+    }
+
+    public SellController getSellController() {
+        return sellController;
+    }
+
+    public BlackSmithController getBlackSmithController() {
+        return blackSmithController;
+    }
+
+    public CarpenterController getCarpenterController() {
+        return carpenterController;
+    }
+
+    public FishShopController getFishShopController() {
+        return fishShopController;
+    }
+
+    public JojaMartController getJojaMartController() {
+        return jojaMartController;
+    }
+
+    public MarnieRanchController getMarnieRanchController() {
+        return marnieRanchController;
+    }
+
+    public TheStardropSaloonController getTheStardropSaloonController() {
+        return theStardropSaloonController;
+    }
+
+    public PierreGeneralStoreController getPierreGeneralStoreController() {
+        return pierreGeneralStoreController;
+    }
 }

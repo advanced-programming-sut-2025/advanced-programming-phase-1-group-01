@@ -816,6 +816,7 @@ farming/trees/Wild_Tree_stump_Fall.png
 farming/trees/Wild_Tree_stump_Spring.png
 farming/trees/Wild_Tree_stump_Winter.png
 farming/trees/Wood.png
+hs_err_pid17689.log
 images/PS4_Circle.png
 images/a_Abigail/tile_0_0.png
 images/a_Abigail/tile_0_1.png

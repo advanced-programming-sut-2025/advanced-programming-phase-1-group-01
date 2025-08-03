@@ -1,7 +1,6 @@
 package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.stardew_valley.models.enums.Emoji;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.dateTime.Season;
 
@@ -59,7 +58,7 @@ public class Crop extends Plant implements Item, Cloneable {
     }
 
     @Override
-    public void grow() { // this method should be called every day
+    public void grow() {
         int[] growthStages = info.getStages();
         int regrowthTime = info.getRegrowthTime();
 
@@ -67,26 +66,27 @@ public class Crop extends Plant implements Item, Cloneable {
             int currentLevelDays = growthStages[growthLevel - 1];
 
             if (daysInCurrentLevel >= currentLevelDays) {
-                growthLevel++;
+                incrementGrowthIfWatered();
+                if (isFullyGrown()) setHasProduct(true);
+                daysInCurrentLevel = 1;
+            } else {
+                daysInCurrentLevel++;
             }
-
-            daysInCurrentLevel++;
             return;
         }
 
-        if (info.isOneTime()) return;
-
-        if (hasProduct) return;
-
-        if (daysInCurrentLevel < regrowthTime) {
-            daysInCurrentLevel++;
-        } else {
-            daysInCurrentLevel = 0;
+        if (!info.isOneTime() && !hasProduct) {
+            if (daysInCurrentLevel < regrowthTime) {
+                daysInCurrentLevel++;
+            } else {
+                setHasProduct(true);
+                daysInCurrentLevel = 1;
+            }
         }
     }
 
     public boolean isFullyGrown() {
-        return growthLevel >= info.getStages().length;
+        return growthLevel > info.getStages().length;
     }
 
     public int getTotalGrownDays() {
@@ -103,15 +103,10 @@ public class Crop extends Plant implements Item, Cloneable {
 
     @Override
     public Texture getTexture() {
-         if (isPlanted) {
-             return info.getTextureByStage(growthLevel);
-         }
-         return info.getCropTexture();
-    }
-
-    @Override
-    public String getSymbol() {
-        return Emoji.CORN.getSymbol();
+        if (isPlanted) {
+            return info.getTextureByStage(growthLevel);
+        }
+        return info.getCropTexture();
     }
 
     public boolean isBecameGiant() {
@@ -136,22 +131,25 @@ public class Crop extends Plant implements Item, Cloneable {
 
     @Override
     public boolean hasProduct() {
-//        if (isFullyGrown() && info.isOneTime()) {
-//            return true;
-//        } else if (isFullyGrown() && daysInCurrentLevel < info.getRegrowthTime()) {
-//            return false;
-//        } else if (isFullyGrown() && daysInCurrentLevel >= info.getRegrowthTime()) {
-//            return true;
-//        }
-//        return false;
         return hasProduct;
+    }
+
+    private void setHasProduct(boolean hasProduct) {
+        this.hasProduct = hasProduct;
+        if (!info.isOneTime() && isFullyGrown()) {
+            if (hasProduct) {
+                growthLevel = info.getStages().length + 1;
+            } else {
+                growthLevel = info.getStages().length + 2;
+            }
+        }
     }
 
     @Override
     public Crop getProduct() {
         if (!hasProduct()) return null;
 
-        hasProduct = false;
+        setHasProduct(false);
         return this.clone();
     }
 

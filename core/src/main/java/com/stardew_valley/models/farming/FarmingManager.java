@@ -22,20 +22,15 @@ public class FarmingManager {
             for (Tile tile : row) {
                 TileObject tileObject = tile.getObject();
                 if (tileObject instanceof Plant plant) {
-                    plant.resetIsWatered();
+                    plant.resetWatered();
                 }
             }
         }
     }
 
     public void autoWaterAllPlants() {
-        for (List<Tile> row : game.getCurrentPlayer().getFarm().getTiles()) {
-            for (Tile tile : row) {
-                TileObject tileObject = tile.getObject();
-                if (tileObject instanceof Plant plant && !(tile.getBuilding() instanceof Greenhouse)) {
-                    plant.water();
-                }
-            }
+        for (Plant plant : game.getCurrentPlayer().getFarm().getPlantsToTilesMap().keySet()) {
+            plant.water();
         }
     }
 

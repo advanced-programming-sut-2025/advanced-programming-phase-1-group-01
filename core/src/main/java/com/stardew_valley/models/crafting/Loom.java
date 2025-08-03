@@ -1,7 +1,6 @@
 package com.stardew_valley.models.crafting;
 
 import com.stardew_valley.models.Item;
-import com.stardew_valley.models.enums.Emoji;
 
 import java.util.List;
 
@@ -37,8 +36,4 @@ public class Loom extends CraftingDevice {
         return 0;
     }
 
-    @Override
-    public String getSymbol() {
-        return Emoji.LOOM.getSymbol();
-    }
 }

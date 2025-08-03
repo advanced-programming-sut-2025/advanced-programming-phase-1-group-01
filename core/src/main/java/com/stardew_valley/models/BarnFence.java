@@ -6,11 +6,6 @@ import com.stardew_valley.models.building.TileObject;
 public class BarnFence implements TileObject {
 
     @Override
-    public String getSymbol() {
-        return "";
-    }
-
-    @Override
     public String getName() {
         return "";
     }
