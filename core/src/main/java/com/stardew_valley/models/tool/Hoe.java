@@ -1,5 +1,7 @@
 package com.stardew_valley.models.tool;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.character.player.Inventory;
@@ -13,7 +15,7 @@ public class Hoe extends Tool {
 
     public Hoe(Inventory inventory) {
         super(inventory);
-        name = "hoe";
+        name = "Hoe";
         type = HoeType.PRIMARY;
     }
 
@@ -25,7 +27,7 @@ public class Hoe extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position position = player.getPosition();
+        Position position = player.getTilesPosition();
         Position dirAppliedPosition = position.applyDirection(direction);
 
         Tile tile = inventory.getPlayer().getFarm().getTile(dirAppliedPosition);
@@ -47,5 +49,17 @@ public class Hoe extends Tool {
 
     public HoeType getType() {
         return type;
+    }
+
+    @Override
+    public Texture getTexture() {
+        AssetManager am = AssetManager.getAssetManager();
+        return switch (type) {
+            case PRIMARY -> am.getHoe();
+            case COPPER -> am.getCopperHoe();
+            case IRON -> am.getSteelHoe();
+            case GOLD -> am.getGoldHoe();
+            case IRIDIUM -> am.getIridiumHoe();
+        };
     }
 }

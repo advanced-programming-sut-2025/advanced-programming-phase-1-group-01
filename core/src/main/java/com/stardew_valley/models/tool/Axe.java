@@ -1,5 +1,7 @@
 package com.stardew_valley.models.tool;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
@@ -15,7 +17,7 @@ public class Axe extends Tool {
 
     public Axe(Inventory inventory) {
         super(inventory);
-        name = "axe";
+        name = "Axe";
         type = AxeType.PRIMARY;
     }
 
@@ -27,7 +29,7 @@ public class Axe extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position position = player.getPosition();
+        Position position = player.getTilesPosition();
         Tile tile = player.getCurrentMap().getTile(position);
 
         Item item = tile.getObject();
@@ -54,5 +56,17 @@ public class Axe extends Tool {
 
     public AxeType getType() {
         return type;
+    }
+
+    @Override
+    public Texture getTexture() {
+        AssetManager am = AssetManager.getAssetManager();
+        return switch (type) {
+            case PRIMARY -> am.getAxe();
+            case COPPER -> am.getCopperAxe();
+            case IRON -> am.getSteelAxe();
+            case GOLD -> am.getGoldAxe();
+            case IRIDIUM -> am.getIridiumAxe();
+        };
     }
 }

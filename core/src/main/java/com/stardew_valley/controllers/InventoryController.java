@@ -69,7 +69,8 @@ public class InventoryController extends Controller {
         StringBuilder resultMsg = new StringBuilder();
 
         for (Slot slot : inventory.getSlots()) {
-            resultMsg.append(slot.toString());
+            if (slot == null || slot.getItem() == null) continue;
+            resultMsg.append(slot);
             if (inventory.getSlots().indexOf(slot) != inventory.getSlots().size() - 1) {
                 resultMsg.append("\n");
             }

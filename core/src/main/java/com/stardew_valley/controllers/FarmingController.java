@@ -84,7 +84,7 @@ public class FarmingController extends Controller {
     private Result plant(String sourceName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlot(sourceName);
-        Position appliedPosition = player.getPosition().applyDirection(direction);
+        Position appliedPosition = player.getTilesPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
         Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
@@ -112,9 +112,10 @@ public class FarmingController extends Controller {
         Item source = slot.getItem();
         slot.removeQuantity(1);
 
-
-
         Plant plant = repo.getCurrentGame().getFarmingManager().plant(source, tile);
+        if (plant instanceof Crop crop) {
+            crop.setPlanted(true);
+        }
         if (plant != null) {
             tile.setObject(plant);
             return new Result(true, "%s planted in <%d, %d> successfully".formatted(plant.getName(), appliedPosition.x(), appliedPosition.y()));

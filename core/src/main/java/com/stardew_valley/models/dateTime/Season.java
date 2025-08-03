@@ -2,8 +2,12 @@ package com.stardew_valley.models.dateTime;
 
 import com.stardew_valley.models.Random;
 import com.stardew_valley.models.farming.CropInfo;
+import com.stardew_valley.models.farming.SeedInfo;
+import com.stardew_valley.models.foraging.ForagingCrop;
+import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.weather.Weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public enum Season {
@@ -41,28 +45,56 @@ public enum Season {
     }
 
     public List<CropInfo> getMixedSeeds() {
-//        return switch (this) {
-//            case SPRING -> List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
-//            case SUMMER -> List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
-//            case FALL -> List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
-//            case WINTER -> List.of(CropInfo.POWDERMELON);
-//            case SPECIAL -> List.of();
-//        };
-        switch (this) {
-            case SPRING:
-                return List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
-            case SUMMER:
-                return List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
-            case FALL:
-                return List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
-            case WINTER:
-                return List.of(CropInfo.POWDERMELON);
-            default:
-                return List.of();
-        }
+        return switch (this) {
+            case SPRING -> List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
+            case SUMMER -> List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
+            case FALL -> List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
+            case WINTER -> List.of(CropInfo.POWDERMELON);
+            case SPECIAL -> List.of();
+        };
+//        switch (this) {
+//            case SPRING:
+//                return List.of(CropInfo.CAULIFLOWER, CropInfo.PARSNIP, CropInfo.POTATO, CropInfo.BLUE_JAZZ, CropInfo.TULIP);
+//            case SUMMER:
+//                return List.of(CropInfo.CORN, CropInfo.HOT_PEPPER, CropInfo.RADISH, CropInfo.WHEAT, CropInfo.POPPY, CropInfo.SUNFLOWER, CropInfo.SUMMER_SPANGLE);
+//            case FALL:
+//                return List.of(CropInfo.ARTICHOKE, CropInfo.CORN, CropInfo.EGGPLANT, CropInfo.PUMPKIN, CropInfo.SUNFLOWER, CropInfo.FAIRY_ROSE);
+//            case WINTER:
+//                return List.of(CropInfo.POWDERMELON);
+//            default:
+//                return List.of();
+//        }
     }
 
     public CropInfo getRandomMixedSeed() {
         return getMixedSeeds().get(Random.rand(0, getMixedSeeds().size() - 1));
+    }
+
+    public List<ForagingCropInfo> getForagingCrops() {
+        List<ForagingCropInfo> result = new ArrayList<>();
+        for (ForagingCropInfo crop : ForagingCropInfo.values()) {
+            if (crop.getSeason() == this) {
+                result.add(crop);
+            }
+        }
+        return result;
+    }
+
+    public ForagingCropInfo getRandomForagingCrop() {
+        return getForagingCrops().get(Random.rand(0, getForagingCrops().size() - 1));
+    }
+
+    public List<SeedInfo> getForagingSeeds() {
+        List<SeedInfo> result = new ArrayList<>();
+        for (SeedInfo seed : SeedInfo.values()) {
+            if (seed.getSeason() == this) {
+                result.add(seed);
+            }
+        }
+        return result;
+    }
+
+    public SeedInfo getRandomForagingSeed() {
+        return getForagingSeeds().get(Random.rand(0, getForagingCrops().size() - 1));
     }
 }

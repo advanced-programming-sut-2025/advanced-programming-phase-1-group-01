@@ -1,7 +1,6 @@
 package com.stardew_valley.models.foraging;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 
 public class ForagingCrop extends Foraging implements Item {
@@ -27,11 +26,11 @@ public class ForagingCrop extends Foraging implements Item {
 
     @Override
     public String getSymbol() {
-        return info.getSymbol();
+        return null;
     }
 
     @Override
     public Texture getTexture() {
-        return AssetManager.getAssetManager().defaultTexture();
+        return info.getTexture();
     }
 }

@@ -1,39 +1,37 @@
 package com.stardew_valley.views;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
-import com.stardew_valley.controllers.FarmingController;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.BarnFence;
+import com.stardew_valley.models.CageFence;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
-import com.stardew_valley.models.character.player.IncompleteMovement;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.initializer.FarmInitializer;
+import com.stardew_valley.models.tool.Tool;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
 
 public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
@@ -68,26 +66,27 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Dialog terminalDialog;
     private TextField textField;
 
+    private Dialog pixelDialog;
+    private boolean isPixelDialogVisible = false;
+
+    private Dialog buildAreaDialog;
+    private boolean isBuildAreaDialogVisible = false;
+
 
     private boolean isDialogShown = false;
 
-
-
     private final TextureRegion highlightBox = AssetManager.getAssetManager().getBlackTexture();
+    private final TextureRegion highlightBoxLight = AssetManager.getAssetManager().getWhiteTexture();
+
     private final DateTimeView dateTimeView;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Actor miniMapActor = null;
 
-
-
     private final static int TILE_SIZE = 16;
-
 
     private final float speed = 200f;
 
-
-    private final EnergyView energyView;
-
+    private final InventoryView inventoryView;
 
     public GameView(GameController controller) {
         this.controller = controller;
@@ -96,14 +95,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
-        this.energyView = new EnergyView(player);
+        this.inventoryView = new InventoryView();
     }
 
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(multiplexer);
+
         createDialog();
+
+        stage.addActor(inventoryView);
     }
 
     @Override
@@ -117,8 +123,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.begin();
         drawWorld();
         dateTimeView.update();
-        energyView.updateEnergy();
-        energyView.render(delta);
+        inventoryView.update();
         batch.end();
 
         stage.act(delta);
@@ -137,6 +142,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
+        if (i == Input.Keys.ESCAPE) {
+            inventoryView.setVisible(!inventoryView.isVisible());
+            return true;
+        }
+
         return false;
     }
 
@@ -151,7 +161,44 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT) {
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mousePos);
+
+            float dx = mousePos.x - player.getX();
+            float dy = mousePos.y - player.getY();
+
+            Direction direction;
+
+            float angle = (float) Math.atan2(dy, dx);
+            float degree = (float) Math.toDegrees(angle);
+            if (degree < 0) degree += 360;
+
+            if (degree >= 337.5 || degree < 22.5)
+                direction = Direction.RIGHT;
+            else if (degree >= 22.5 && degree < 67.5)
+                direction = Direction.UP_RIGHT;
+            else if (degree >= 67.5 && degree < 112.5)
+                direction = Direction.UP;
+            else if (degree >= 112.5 && degree < 157.5)
+                direction = Direction.UP_LEFT;
+            else if (degree >= 157.5 && degree < 202.5)
+                direction = Direction.LEFT;
+            else if (degree >= 202.5 && degree < 247.5)
+                direction = Direction.DOWN_LEFT;
+            else if (degree >= 247.5 && degree < 292.5)
+                direction = Direction.DOWN;
+            else // (degree >= 292.5 && degree < 337.5)
+                direction = Direction.DOWN_RIGHT;
+
+
+            if (player.getInventory().getEquippedSlot() != null &&
+                player.getInventory().getEquippedSlot().getItem() instanceof Tool tool) {
+                tool.use(direction);
+            }
+            return true;
+        }
         return false;
     }
 
@@ -189,8 +236,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawDividingFences();
 
-        drawPlayer();
-
         drawHouseTop();
 
         drawNPCs();
@@ -198,11 +243,41 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 //        drawTileHighlights();
 
         //printTileTypeCounts();
+
+        drawPlowedTiles();
+
+        drawTileObjects();
+
+        drawPlayer();
+    }
+
+    private void drawPlowedTiles() {
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                if (tile.isEmpty() && tile.isPlowed()) {
+                    batch.draw(AssetManager.getAssetManager().getPlowedTile(), tile.getPosition().y() * 16, tile.getPosition().x() * 16);
+                }
+            }
+        }
+    }
+
+    private void drawTileObjects() {
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                if (!tile.isEmpty()) {
+                    Sprite objSprite = new Sprite(tile.getObject().getTexture());
+//                    objSprite.setSize(16, 16);
+//                    objSprite.setPosition(tile.getPosition().x() * 16, tile.getPosition().y() * 16);
+//                    objSprite.draw(batch);
+                    batch.draw(objSprite, tile.getPosition().y() * 16, tile.getPosition().x() * 16, 16, 16);
+                }
+            }
+        }
     }
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        //System.out.println((int)(player.getX() / 16) + " " + (int)(player.getY() / 16));
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -223,7 +298,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.draw(harveyDownTexture, harveyX, harveyY);
     }
 
-    private void drawBuilding () {
+    private void drawBuilding() {
         for (int i = 0; i < 4; i++) {
             int mineX = getTilePixel(FarmInitializer.getMineStartingPointX() + FarmInitializer.getAdditionalX(i));
             int mineY = getTilePixel(FarmInitializer.getMineStartingPointY() + FarmInitializer.getAdditionalY(i) - 1);
@@ -262,7 +337,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         int harveyX = getTilePixel(FarmInitializer.getHarveyCottageStartingPointX());
         int harveyY = getTilePixel(FarmInitializer.getHarveyCottageStartingPointY());
         batch.draw(harveyHouseTexture, harveyX, harveyY);
-
 
 
     }
@@ -414,8 +488,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
     private int getTilePixel(int tileCol) {
         return tileCol * TILE_SIZE;
     }
@@ -441,6 +513,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            toggleBuildArea();
+        }
+
         /*
 
             g = cc, advance hour
@@ -463,7 +539,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 miniMapActor = null;
             }
         }
-
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             controller.getRepo().getCurrentGame().getTimeManager().getNow().advanceHour();
@@ -516,13 +591,193 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private boolean canMoveTo(float x, float y) {
-        int tileX = (int)(x / 16);
-        int tileY = (int)(y / 16);
+        int tileX = (int) (x / 16);
+        int tileY = (int) (y / 16);
 
         Tile tile = controller.getRepo().getCurrentGame().getFarm().getTile(tileX, tileY);
 
         return tile != null && tile.isMovable();
     }
+
+
+    public void toggleBuildArea() {
+        if (!isBuildAreaDialogVisible) {
+            buildAreaDialog = createDropdownDialog(AssetManager.getAssetManager().getSkin());
+            buildAreaDialog.show(stage);
+            isBuildAreaDialogVisible = true;
+        } else {
+            buildAreaDialog.hide();
+            isBuildAreaDialogVisible = false;
+        }
+    }
+
+    public Dialog createDropdownDialog(Skin skin) {
+        Dialog dialog = new Dialog("Select Item", skin);
+
+        SelectBox<String> selectBox = new SelectBox<>(skin);
+        selectBox.setItems("A", "B");
+
+        dialog.getContentTable().add(selectBox).pad(10).row();
+
+        dialog.button("Cancel", false);
+        dialog.button("OK", true);
+
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+
+        dialog = new Dialog(dialog.getTitleLabel().getText().toString(), skin) {
+            @Override
+            protected void result(Object object) {
+                if (Boolean.TRUE.equals(object)) {
+                    String selected = selectBox.getSelected();
+                    switch (selected) {
+                        case "A":
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(4, 4, "A");
+                        default:
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(6, 7, "B");
+                    }
+                } else {
+                    System.out.println("Selection cancelled");
+                }
+                isBuildAreaDialogVisible = false;
+            }
+        };
+
+        dialog.getContentTable().add(selectBox).pad(10).row();
+        dialog.button("Cancel", false);
+        dialog.button("OK", true);
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+
+        return dialog;
+    }
+
+
+
+    public void togglePixelDialog(int height, int width, String type) {
+        if (!isPixelDialogVisible) {
+            pixelDialog = createPixelDialog(AssetManager.getAssetManager().getSkin(), height, width, type);
+            pixelDialog.show(stage);
+            isPixelDialogVisible = true;
+        } else {
+            pixelDialog.hide();
+            isPixelDialogVisible = false;
+        }
+    }
+
+
+    public Dialog createPixelDialog(Skin skin, int height, int width, String type) {
+        Dialog dialog = new Dialog("Pixel Grid", skin);
+
+
+        Table grid = createPixelGrid(height, width, type);
+        ScrollPane scrollPane = new ScrollPane(grid);
+
+        dialog.getContentTable().add(scrollPane).size(900, 1000);
+        return dialog;
+    }
+
+    public Table createPixelGrid(int height, int width, String type) {
+        Table grid = new Table();
+
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int rowCount = tiles.size();
+        int colCount = tiles.get(0).size();
+
+        System.out.println("rowCount: " + rowCount);
+        System.out.println("colCount: " + colCount);
+
+        for (int row = rowCount - 1; row >= 0; row--) {
+            for (int col = 0; col < colCount; col++) {
+                boolean plantable = isPlantableTile(row, col);
+                TextureRegionDrawable drawable = plantable ? new TextureRegionDrawable(highlightBoxLight) : new TextureRegionDrawable(highlightBox);
+                ImageButton pixel = createPixelButton(drawable, row, col, height, width, type);
+                grid.add(pixel).size(10, 10).pad(0.5f);
+            }
+            grid.row();
+        }
+
+        return grid;
+    }
+
+    private void setObject(int row, int col, int height, int width, String type) {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+
+        for (int r = row; r <= row + height; r++) {
+            for (int c = col; c <= col + width; c++) {
+
+                boolean isTop = (r == row);
+                boolean isBottom = (r == row + height);
+                boolean isLeft = (c == col);
+                boolean isRight = (c == col + width);
+
+                if (isTop || isBottom || isLeft || isRight) {
+                    if (r >= 0 && r < tiles.size() && c >= 0 && c < tiles.get(r).size()) {
+                        Tile tile = tiles.get(r).get(c);
+                        System.out.println(r + " " + c);
+
+                        switch (type) {
+                            case "A":
+                                tile.setObject(new CageFence());
+                                tile.setMovable(false);
+                                break;
+                            default:
+                                tile.setObject(new BarnFence());
+                                tile.setMovable(false);
+                        }
+                    } else {
+                        System.out.println("Index out of bounds: r=" + r + " c=" + c);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    private boolean isPlantableArea(int row, int col, int height, int width) {
+        for (int r = row; r < height; r++) {
+            for (int c = col; c < width; c++) {
+                Tile tile = controller.getRepo().getCurrentGame().getFarm().getTiles().get(r).get(c);
+                if (!tile.isEmpty() || tile.getType() != TileType.GROUND) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isPlantableTile(int row, int col) {
+        Tile tile = controller.getRepo().getCurrentGame().getFarm().getTiles().get(row).get(col);
+        return tile.isEmpty() && tile.getType() == TileType.GROUND;
+    }
+
+
+    public ImageButton createPixelButton(TextureRegionDrawable drawable, int row, int col, int height, int width, String type) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = drawable.tint(Color.LIGHT_GRAY);
+        style.imageDown = drawable.tint(Color.DARK_GRAY);
+
+        ImageButton button = new ImageButton(style);
+
+        button.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (isPlantableArea(row, col, height, width)) {
+                    System.out.println("can plant");
+                    setObject(row, col, height, width, type);
+                }
+                pixelDialog.hide();
+                isPixelDialogVisible = false;
+            }
+        });
+
+        return button;
+    }
+
 
 
     public void showMiniMap(Stage stage) {
@@ -545,13 +800,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
 
-                int playerTileX = (int)player.getX() / 16;
-                int playerTileY = (int)player.getY() / 16;
+                int playerTileX = (int) player.getX() / 16;
+                int playerTileY = (int) player.getY() / 16;
 
                 shapeRenderer.setColor(Color.RED);
                 float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
                 float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
-                shapeRenderer.circle(centerX, centerY, (int)(tileSize * 3));
+                shapeRenderer.circle(centerX, centerY, (int) (tileSize * 3));
 
                 shapeRenderer.end();
                 batch.begin();
@@ -608,7 +863,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         terminalDialog.setModal(true);
 
         textField = new TextField("", skin);
-        terminalDialog.getContentTable().add(textField).width(200).pad(10);
+        terminalDialog.getContentTable().add(textField).width(500).pad(10);
 
         terminalDialog.row();
         terminalDialog.button("Ok", true).pad(10);
@@ -630,7 +885,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void handleInput(String input) {
-        System.out.println("handleInput: " + input);
+        Result result = controller.handleCommand(input);
+        System.out.println("[" + result.success() + "] " + result.message());
     }
 
 }

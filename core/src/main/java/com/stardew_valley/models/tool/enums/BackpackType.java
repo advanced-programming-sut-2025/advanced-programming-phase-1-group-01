@@ -1,20 +1,15 @@
 package com.stardew_valley.models.tool.enums;
 
 public enum BackpackType {
-    SMALL(12), BIG(24), DELUXE(Double.POSITIVE_INFINITY);
+    SMALL(12), BIG(24), DELUXE(200);
 
+    private int capacity;
 
-    private double capacity;
-
-
-    public static final int INFINITE_CAPACITY = -1;
-
-    BackpackType(double capacity) {
+    BackpackType(int capacity) {
         this.capacity = capacity;
     }
 
-    public double getCapacity() {
-
+    public int getCapacity() {
         return capacity;
     }
 }

@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.building.TileObject;
+import com.stardew_valley.models.foraging.Foraging;
 
-public class Seed implements Item, TileObject {
+public class Seed extends Foraging implements Item, TileObject {
     private final SeedInfo info;
 
     public Seed(SeedInfo info) {

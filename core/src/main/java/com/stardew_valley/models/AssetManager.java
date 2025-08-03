@@ -9,19 +9,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class AssetManager {
 
     private final Skin skin = new Skin(Gdx.files.internal("skin/NzSkin.json"));
-//    private final Skin skin = new Skin(Gdx.files.internal("skin3/craftacular-ui.json"));
-//    private final Skin skin = new Skin(Gdx.files.internal("skin_temp/terra-mother-ui.json"));
+
+    private static AssetManager assetManager;
+
+    public static final float SCALE = 4f;
 
     private final Texture tempTex = new Texture("farming/crops/Broccoli.png");
 
-    private static AssetManager assetManager;
-    public static final float SCALE = 4f;
+    private final Texture PlowedTile = new Texture("farming/Plowed_Tile.png");
 
     private final String black = "images/black.png";
+    private final String white = "images/white.png";
 
     private final String spring_background = "images/all_dirt.png";
 
     private final String wood_fence = "images/wood_fence_16x16.png";
+    private final String barn_fence = "images/barn_fence_16x16.png";
+    private final String cage_fence = "images/cage_fence_16x16.png";
 
     private final String house = "images/house.png";
 
@@ -364,13 +368,14 @@ public class AssetManager {
     private final TextureRegion npc_house_4_top_tex = new TextureRegion(new Texture(npc_house_4_top));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
+    private final Texture cage_fence_tex = new Texture(cage_fence);
+    private final Texture barn_fence_tex = new Texture(barn_fence);
 
     private final TextureRegion fainting_tex1 = new TextureRegion(new Texture(fainting_1));
     private final TextureRegion fainting_tex2 = new TextureRegion(new Texture(fainting_2));
     private final TextureRegion fainting_tex3 = new TextureRegion(new Texture(fainting_3));
     private final TextureRegion fainting_tex4 = new TextureRegion(new Texture(fainting_4));
     private final TextureRegion fainting_tex5 = new TextureRegion(new Texture(fainting_5));
-
 
 
     private final TextureRegion sheep_down_0_tex = new TextureRegion(new Texture(sheep_down_0));
@@ -1041,6 +1046,14 @@ public class AssetManager {
         return wood_fence_tex;
     }
 
+    public Texture getBarnFence() {
+        return barn_fence_tex;
+    }
+
+    public Texture getCageFence() {
+        return cage_fence_tex;
+    }
+
     public TextureRegion getMine() {
         return mine_tex;
     }
@@ -1107,7 +1120,7 @@ public class AssetManager {
     }
 
 
-        public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
+    public Animation<TextureRegion> get_Alex_0_walking_right_animation() {
         return alex_0_walking_right_animation;
     }
 
@@ -1350,6 +1363,7 @@ public class AssetManager {
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));
 
     private final TextureRegion black_tex = new TextureRegion(new Texture(black));
+    private final TextureRegion white_tex = new TextureRegion(new Texture(white));
 
     public TextureRegion getSpringBackground() {
         return spring_background_tex;
@@ -1357,6 +1371,10 @@ public class AssetManager {
 
     public TextureRegion getBlackTexture() {
         return black_tex;
+    }
+
+    public TextureRegion getWhiteTexture() {
+        return white_tex;
     }
 
     // crops:
@@ -1552,31 +1570,31 @@ public class AssetManager {
     }
 
     public Texture getGreenBeanStage2() {
-        return Green_Bean_Stages[1];
+        return Green_Bean_Stages[0];
     }
 
     public Texture getGreenBeanStage3() {
-        return Green_Bean_Stages[2];
+        return Green_Bean_Stages[1];
     }
 
     public Texture getGreenBeanStage4() {
-        return Green_Bean_Stages[3];
+        return Green_Bean_Stages[2];
     }
 
     public Texture getGreenBeanStage5() {
-        return Green_Bean_Stages[4];
+        return Green_Bean_Stages[3];
     }
 
     public Texture getGreenBeanStage6() {
-        return Green_Bean_Stages[5];
+        return Green_Bean_Stages[4];
     }
 
     public Texture getGreenBeanStage7() {
-        return Green_Bean_Stages[6];
+        return Green_Bean_Stages[5];
     }
 
     public Texture getGreenBeanStage8() {
-        return Green_Bean_Stages[7];
+        return Green_Bean_Stages[6];
     }
 
     private final Texture Kale = new Texture("farming/crops/Kale.png");
@@ -4127,6 +4145,7 @@ public class AssetManager {
         return Coal;
     }
 
+    // tools:
     private final Texture Hoe = new Texture("tools/Hoe.png");
     private final Texture CopperHoe = new Texture("tools/Copper_Hoe.png");
     private final Texture SteelHoe = new Texture("tools/Steel_Hoe.png");
@@ -4156,6 +4175,12 @@ public class AssetManager {
     private final Texture FiberglassRod = new Texture("tools/Fiberglass_Rod.png");
     private final Texture BambooPole = new Texture("tools/Bamboo_Pole.png");
     private final Texture AdvancedIridiumRod = new Texture("tools/Advanced_Iridium_Rod.png");
+
+    private final Texture TrashCan = new Texture("tools/Trash_Can.png");
+    private final Texture TrashCanCopper = new Texture("tools/Trash_Can_Copper.png");
+    private final Texture TrashCanSteel = new Texture("tools/Trash_Can_Steel.png");
+    private final Texture TrashCanGold = new Texture("tools/Trash_Can_Gold.png");
+    private final Texture TrashCanIridium = new Texture("tools/Trash_Can_Iridium.png");
 
     private final Texture Scythe = new Texture("tools/Scythe.png");
 
@@ -4263,6 +4288,26 @@ public class AssetManager {
         return AdvancedIridiumRod;
     }
 
+    public Texture getTrashCan() {
+        return TrashCan;
+    }
+
+    public Texture getTrashCanCopper() {
+        return TrashCanCopper;
+    }
+
+    public Texture getTrashCanSteel() {
+        return TrashCanSteel;
+    }
+
+    public Texture getTrashCanGold() {
+        return TrashCanGold;
+    }
+
+    public Texture getTrashCanIridium() {
+        return TrashCanIridium;
+    }
+
     public Texture getScythe() {
         return Scythe;
     }
@@ -4292,5 +4337,9 @@ public class AssetManager {
 
     public Texture getTempTex() {
         return tempTex;
+    }
+
+    public Texture getPlowedTile() {
+        return PlowedTile;
     }
 }

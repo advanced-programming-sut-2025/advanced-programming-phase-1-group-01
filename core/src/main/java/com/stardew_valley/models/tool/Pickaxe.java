@@ -1,5 +1,7 @@
 package com.stardew_valley.models.tool;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
@@ -17,7 +19,7 @@ public class Pickaxe extends Tool {
 
     public Pickaxe(Inventory inventory) {
         super(inventory);
-        name = "pickaxe";
+        name = "Pickaxe";
         type = PickaxeType.PRIMARY;
     }
 
@@ -29,7 +31,7 @@ public class Pickaxe extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position position = player.getPosition();
+        Position position = player.getTilesPosition();
         Position appliedPosition = position.applyDirection(direction);
 
         Tile tile = player.getCurrentMap().getTile(appliedPosition);
@@ -56,5 +58,17 @@ public class Pickaxe extends Tool {
 
     public PickaxeType getType() {
         return type;
+    }
+
+    @Override
+    public Texture getTexture() {
+        AssetManager am = AssetManager.getAssetManager();
+        return switch (type) {
+            case PRIMARY -> am.getPickaxe();
+            case COPPER -> am.getCopperPickaxe();
+            case IRON -> am.getSteelPickaxe();
+            case GOLD -> am.getGoldPickaxe();
+            case IRIDIUM -> am.getIridiumPickaxe();
+        };
     }
 }

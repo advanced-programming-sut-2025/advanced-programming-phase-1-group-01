@@ -5,7 +5,7 @@ public enum Direction {
 
     public static Direction fromString(String string) {
         for (Direction direction : values()) {
-            if (direction.toString().equals(string)) {
+            if (direction.toString().equalsIgnoreCase(string)) {
                 return direction;
             }
         }
