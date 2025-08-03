@@ -1,5 +1,7 @@
 package com.stardew_valley.models.foraging;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.building.TileObject;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.Emoji;
@@ -60,5 +62,9 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
 
     public ForagingTree toItem() {
         return new ForagingTree(this);
+    }
+
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().defaultTexture();
     }
 }

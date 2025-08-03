@@ -73,7 +73,7 @@ public class AbilityService {
 
             case FORAGING:
                 if (newLevel == 1) {
-                    player.addCraftingRecipe(CraftingRecipes.CHARCOAL_KLIN.toRecipe());
+                    player.addCraftingRecipe(CraftingRecipes.CHARCOAL_KILN.toRecipe());
                 } else if (newLevel == 2) {
                     player.addCookingRecipe(CookingRecipes.VEGETABLE_MEDLEY.toRecipe());
                 } else if (newLevel == 3) {
@@ -89,7 +89,7 @@ public class AbilityService {
                 } else if (newLevel == 2) {
                     player.addCookingRecipe(CookingRecipes.DISH_O_THE_SEA.toRecipe());
                 } else if (newLevel == 3) {
-                    player.addCookingRecipe(CookingRecipes.SEAFORM_PUDDING.toRecipe());
+                    player.addCookingRecipe(CookingRecipes.SEAFOAM_PUDDING.toRecipe());
                 }
                 break;
 

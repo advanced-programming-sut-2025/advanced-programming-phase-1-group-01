@@ -12,6 +12,9 @@ import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.data.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainMenuView extends View {
     private Stage stage;
     private Skin skin;
@@ -39,6 +42,13 @@ public class MainMenuView extends View {
         logoutButton = new TextButton("Logout", skin);
         exitButton = new TextButton("Exit", skin);
         messageLabel = new Label("", skin);
+        Map<String,User> users = controller.getRepo().getUsers();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<String,User> entry : users.entrySet()) {
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append(", ");
+        }
+        messageLabel.setText(stringBuilder.toString());
 
         User user = controller.getRepo().getCurrentUser();
         String imagePath = user.getAvatarPath();

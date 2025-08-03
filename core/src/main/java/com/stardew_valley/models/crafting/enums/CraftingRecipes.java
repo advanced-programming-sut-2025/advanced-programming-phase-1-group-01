@@ -13,7 +13,7 @@ public enum CraftingRecipes {
     QUALITY_SPRINKLER("Quality Sprinkler", Map.of("Iron bar", 1, "Gold bar", 1), "Farming", 2, 0),
     IRIDIUM_SPRINKLER("Iridium Sprinkler", Map.of("gold bar", 1, "iridium bar", 1), "Farming", 3, 0),
 
-    CHARCOAL_KLIN("Charcoal Klin", Map.of("wood", 20, "Copper bar", 2), "Foraging", 1, 0),
+    CHARCOAL_KILN("Charcoal Kiln", Map.of("wood", 20, "Copper bar", 2), "Foraging", 1, 0),
     FURNACE("Furnace", Map.of("Copper ore", 20, "Stone", 25), "-", 0, 0),
 
     SCARECROW("Scarecrow", Map.of("wood", 50, "coal", 1, "Fiber", 20), "-", 0, 0),
@@ -37,6 +37,7 @@ public enum CraftingRecipes {
     public final String ability;
     public final int level;
     public final int sellPrice;
+    public final String path;
 
     CraftingRecipes(String name, Map<String, Integer> ingredients, String ability, int level, int sellPrice) {
         this.name = name;
@@ -44,6 +45,7 @@ public enum CraftingRecipes {
         this.ability = ability;
         this.level = level;
         this.sellPrice = sellPrice;
+        this.path = "crafting/" + name.replace(" ", "_") + ".png";
     }
 
     public String getName() {
@@ -51,7 +53,7 @@ public enum CraftingRecipes {
     }
 
     public CraftingRecipe toRecipe() {
-        return new CraftingRecipe(name, ingredients, ability, level, sellPrice);
+        return new CraftingRecipe(name, ingredients, ability, level, sellPrice, path);
     }
 
     @Override
