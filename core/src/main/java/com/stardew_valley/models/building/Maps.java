@@ -49,7 +49,7 @@ public abstract class Maps {
     }
 
     public Tile getTile(Position position) {
-        return tiles.get(position.x()).get(position.y());
+        return tiles.get(position.y()).get(position.x());
     }
 
     public List<List<Tile>> getTiles() {

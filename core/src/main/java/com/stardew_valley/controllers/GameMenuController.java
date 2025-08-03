@@ -126,6 +126,7 @@ public class GameMenuController extends Controller {
             player.setFarm(farm);
             player.setCurrentMap(farm);
         }
+        game.getForagingManager().prepareNewDayForaging();
 
         Main.getMain().setScreen(new GameView(new GameController(repo)));
     }

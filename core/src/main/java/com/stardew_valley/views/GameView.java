@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -21,6 +22,7 @@ import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.initializer.FarmInitializer;
+import com.stardew_valley.models.tool.Tool;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -107,9 +109,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.begin();
         drawWorld();
         dateTimeView.update();
+        inventoryView.update();
         batch.end();
 
-        inventoryView.update();
         stage.act(delta);
         stage.draw();
     }
@@ -130,6 +132,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             inventoryView.setVisible(!inventoryView.isVisible());
             return true;
         }
+
         return false;
     }
 
@@ -144,7 +147,44 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT) {
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mousePos);
+
+            float dx = mousePos.x - player.getX();
+            float dy = mousePos.y - player.getY();
+
+            Direction direction;
+
+            float angle = (float) Math.atan2(dy, dx);
+            float degree = (float) Math.toDegrees(angle);
+            if (degree < 0) degree += 360;
+
+            if (degree >= 337.5 || degree < 22.5)
+                direction = Direction.RIGHT;
+            else if (degree >= 22.5 && degree < 67.5)
+                direction = Direction.UP_RIGHT;
+            else if (degree >= 67.5 && degree < 112.5)
+                direction = Direction.UP;
+            else if (degree >= 112.5 && degree < 157.5)
+                direction = Direction.UP_LEFT;
+            else if (degree >= 157.5 && degree < 202.5)
+                direction = Direction.LEFT;
+            else if (degree >= 202.5 && degree < 247.5)
+                direction = Direction.DOWN_LEFT;
+            else if (degree >= 247.5 && degree < 292.5)
+                direction = Direction.DOWN;
+            else // (degree >= 292.5 && degree < 337.5)
+                direction = Direction.DOWN_RIGHT;
+
+
+            if (player.getInventory().getEquippedSlot() != null &&
+                player.getInventory().getEquippedSlot().getItem() instanceof Tool tool) {
+                tool.use(direction);
+            }
+            return true;
+        }
         return false;
     }
 
@@ -190,9 +230,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         //printTileTypeCounts();
 
+        drawPlowedTiles();
+
         drawTileObjects();
 
         drawPlayer();
+    }
+
+    private void drawPlowedTiles() {
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                if (tile.isEmpty() && tile.isPlowed()) {
+                    batch.draw(AssetManager.getAssetManager().getPlowedTile(), tile.getPosition().y() * 16, tile.getPosition().x() * 16);
+                }
+            }
+        }
     }
 
     private void drawTileObjects() {
@@ -618,7 +670,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         terminalDialog.setModal(true);
 
         textField = new TextField("", skin);
-        terminalDialog.getContentTable().add(textField).width(200).pad(10);
+        terminalDialog.getContentTable().add(textField).width(500).pad(10);
 
         terminalDialog.row();
         terminalDialog.button("Ok", true).pad(10);

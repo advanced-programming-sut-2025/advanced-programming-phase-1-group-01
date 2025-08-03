@@ -90,4 +90,8 @@ public enum ForagingCropInfo implements FarmingEnum {
     public Texture getTexture() {
         return texture;
     }
+
+    public ForagingCrop toItem() {
+        return new ForagingCrop(this);
+    }
 }

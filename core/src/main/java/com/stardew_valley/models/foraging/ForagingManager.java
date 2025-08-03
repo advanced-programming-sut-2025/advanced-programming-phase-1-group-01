@@ -25,16 +25,14 @@ public class ForagingManager {
                 if (!tile.isMovable() || tile.getType() != TileType.GROUND) continue;
                 int prob = RANDOM.nextInt(100);
                 if (prob == 0) {
-                    prob = RANDOM.nextInt(2);
-                    if (prob == 0) {
-                        Season currSeason = game.getTimeManager().getNow().getSeason();
-                        tile.setObject(new ForagingCrop(currSeason.getRandomForagingCrop()));
-                        System.out.println(tile.getPosition().x() + " " + tile.getPosition().y() + " " + "FC");
+                    Season currSeason = game.getTimeManager().getNow().getSeason();
+                    if (tile.isPlowed()) {
+//                        game.getFarmingManager().plant(new Seed(SeedInfo.randomForagingSeed()), tile);
+                        tile.setObject(new Seed(currSeason.getRandomForagingSeed()));
                     } else {
-                        if (tile.isPlowed())
-                            game.getFarmingManager().plant(new Seed(SeedInfo.randomForagingSeed()), tile);
+                        tile.setObject(new ForagingCrop(currSeason.getRandomForagingCrop()));
+//                        System.out.println(tile.getPosition().x() + " " + tile.getPosition().y() + " " + "FC");
                     }
-                    tile.setMovable(false);
                 }
             }
         }

@@ -31,7 +31,7 @@ public class Pickaxe extends Tool {
     @Override
     public void use(Direction direction) {
         Player player = inventory.getPlayer();
-        Position position = player.getPosition();
+        Position position = player.getTilesPosition();
         Position appliedPosition = position.applyDirection(direction);
 
         Tile tile = player.getCurrentMap().getTile(appliedPosition);

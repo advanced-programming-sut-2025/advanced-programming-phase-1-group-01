@@ -6,6 +6,7 @@ avatars/avatar5.png
 avatars/avatar6.png
 avatars/avatar7.png
 avatars/avatar8.png
+farming/Plowed_Tile.png
 farming/crops/Amaranth.png
 farming/crops/Amaranth_Seeds.png
 farming/crops/Amaranth_Stage_1.png

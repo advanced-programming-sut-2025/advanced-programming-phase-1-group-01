@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class GameMenuView extends View {
     private Stage stage;
     private Skin skin;
@@ -37,7 +36,7 @@ public class GameMenuView extends View {
         this.skin = AssetManager.getAssetManager().getSkin();
 
         numOfPlayers = new SelectBox<>(skin);
-        numOfPlayers.setItems("2","3","4");
+        numOfPlayers.setItems("2", "3", "4");
         players = new ArrayList<>();
         playersLabel = new ArrayList<>();
         startGame = new TextButton("Start Game", skin);
@@ -77,7 +76,7 @@ public class GameMenuView extends View {
         startGame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.startGame(messageLabel,players);
+                controller.startGame(messageLabel, players);
             }
         });
 

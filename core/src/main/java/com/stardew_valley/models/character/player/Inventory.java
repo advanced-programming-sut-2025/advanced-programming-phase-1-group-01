@@ -11,6 +11,8 @@ import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.farming.*;
+import com.stardew_valley.models.foraging.ForagingCrop;
+import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.foraging.ForagingTreeInfo;
 import com.stardew_valley.models.shop.enums.*;
 import com.stardew_valley.models.ingredients.QuestItemType;
@@ -67,7 +69,7 @@ public class Inventory {
         itemName = itemName.toLowerCase().trim();
 
         for (Slot slot : slots) {
-            if (slot.getItem().getName().toLowerCase().trim().equals(itemName)) {
+            if (slot.getItem() != null && slot.getItem().getName().trim().equalsIgnoreCase(itemName)) {
                 slot.addQuantity(quantity);
                 return true;
             }
@@ -155,10 +157,31 @@ public class Inventory {
             case "mayonnaise" -> new CraftedProducts(AllCraftedProductsType.MAYONNAISE);
             case "cloth" -> new CraftedProducts(AllCraftedProductsType.CLOTH);
 
-
-
-
             default -> {
+
+                for (SeedInfo seedInfo : SeedInfo.values()) {
+                    if (seedInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield seedInfo.toItem();
+                    }
+                }
+
+                for (ForagingTreeInfo foragingTreeInfo : ForagingTreeInfo.values()) {
+                    if (foragingTreeInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield foragingTreeInfo.toItem();
+                    }
+                }
+
+                for (CropInfo cropInfo : CropInfo.values()) {
+                    if (cropInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield cropInfo.toItem();
+                    }
+                }
+
+                for (ForagingCropInfo foragingCropInfo : ForagingCropInfo.values()) {
+                    if (foragingCropInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield foragingCropInfo.toItem();
+                    }
+                }
 
                 for (QuestItemType QuestItem : QuestItemType.values()) {
                     if (QuestItem.getName().equalsIgnoreCase(itemName)) {
@@ -217,24 +240,6 @@ public class Inventory {
                 for (PierreGeneralStoreProducts product : PierreGeneralStoreProducts.values()) {
                     if (product.getName().equalsIgnoreCase(itemName)) {
                         yield product.toItem();
-                    }
-                }
-
-                for (SeedInfo seedInfo : SeedInfo.values()) {
-                    if (seedInfo.getName().equalsIgnoreCase(itemName)) {
-                        yield seedInfo.toItem();
-                    }
-                }
-
-                for (ForagingTreeInfo foragingTreeInfo : ForagingTreeInfo.values()) {
-                    if (foragingTreeInfo.getName().equalsIgnoreCase(itemName)) {
-                        yield foragingTreeInfo.toItem();
-                    }
-                }
-
-                for (CropInfo cropInfo : CropInfo.values()) {
-                    if (cropInfo.getName().equalsIgnoreCase(itemName)) {
-                        yield cropInfo.toItem();
                     }
                 }
 
