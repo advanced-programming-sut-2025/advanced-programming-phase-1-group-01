@@ -186,4 +186,8 @@ public class GameController extends Controller {
     public DateTimeController getDateTimeController() {
         return this.dateTimeController;
     }
+
+    public EnergyController getEnergyController() {
+        return this.energyController;
+    }
 }

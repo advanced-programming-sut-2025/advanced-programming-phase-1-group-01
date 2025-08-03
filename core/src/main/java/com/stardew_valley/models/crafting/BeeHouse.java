@@ -38,5 +38,10 @@ public class BeeHouse extends CraftingDevice {
     public String getSymbol() {
         return Emoji.BEE_HOUSE.getSymbol();
     }
+
+    @Override
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().defaultTexture();
+    }
 }
 

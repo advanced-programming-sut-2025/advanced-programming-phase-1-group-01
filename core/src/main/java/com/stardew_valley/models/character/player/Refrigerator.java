@@ -46,4 +46,8 @@ public class Refrigerator {
     public boolean refrigerateHasCapacity() {
         return items.size() < 10;
     }
+
+    public Map<Item, Integer> getItems() {
+        return items;
+    }
 }

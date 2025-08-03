@@ -1,5 +1,7 @@
 package com.stardew_valley.models.crafting;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.enums.Emoji;
 
@@ -35,5 +37,10 @@ public class Dehydrator extends CraftingDevice {
     @Override
     public String getSymbol() {
         return Emoji.DEHYDRATOR.getSymbol();
+    }
+
+    @Override
+    public Texture getTexture() {
+        return AssetManager.getAssetManager().defaultTexture();
     }
 }

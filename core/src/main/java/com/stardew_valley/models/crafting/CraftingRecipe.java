@@ -1,10 +1,12 @@
 package com.stardew_valley.models.crafting;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.stardew_valley.models.Item;
 
 import java.util.Map;
 
-public record CraftingRecipe(String name, Map<String, Integer> ingredients, String ability, int level, int sellPrice) implements Item {
+public record CraftingRecipe(String name, Map<String, Integer> ingredients, String ability, int level, int sellPrice, String path) implements Item {
     @Override
     public String getName() {
         return name;
@@ -13,5 +15,10 @@ public record CraftingRecipe(String name, Map<String, Integer> ingredients, Stri
     @Override
     public int getPrice() {
         return -1;
+    }
+
+    public Image getImage() {
+        Texture texture = new Texture(path);
+        return new Image(texture);
     }
 }

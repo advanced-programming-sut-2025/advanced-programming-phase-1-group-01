@@ -3,7 +3,7 @@ package com.stardew_valley.models.cooking;
 import java.util.Map;
 
 public enum CookingRecipes {
-    FRIED_EGG("Fried egg", Map.of("egg", 1), null, 50, 35, "Starter"),
+    FRIED_EGG("Fried Egg", Map.of("egg", 1), null, 50, 35, "Starter"),
 
     BAKED_FISH("Baked Fish", Map.of("Sardine", 1, "Salmon", 1, "wheat", 1), null, 75, 100, "Starter"),
 
@@ -43,9 +43,9 @@ public enum CookingRecipes {
 
     SURVIVAL_BURGER("Survival Burger", Map.of("bread", 1, "carrot", 1, "eggplant", 1), "Foraging (5 hours)", 125, 180, "Foraging level 3"),
 
-    DISH_O_THE_SEA("Dish O' the Sea", Map.of("sardine", 2, "hash browns", 1), "Fishing (5 hours)", 150, 220, "Fishing level 2"),
+    DISH_O_THE_SEA("Dish O' The Sea", Map.of("sardine", 2, "hash browns", 1), "Fishing (5 hours)", 150, 220, "Fishing level 2"),
 
-    SEAFORM_PUDDING("Seaform Pudding", Map.of("Flounder", 1, "midnight carp", 1), "Fishing (10 hours)", 175, 300, "Fishing level 3"),
+    SEAFOAM_PUDDING("Seafoam Pudding", Map.of("Flounder", 1, "midnight carp", 1), "Fishing (10 hours)", 175, 300, "Fishing level 3"),
 
     MINERS_TREAT("Miner's Treat", Map.of("carrot", 2, "sugar", 1, "milk", 1), "Mining (5 hours)", 125, 200, "Mining level 1");
 
@@ -55,6 +55,7 @@ public enum CookingRecipes {
     private final int energy;
     private final int sellPrice;
     private final String source;
+    private final String path;
 
     CookingRecipes(String name, Map<String, Integer> ingredients, String buff, int energy, int sellPrice, String source) {
         this.name = name;
@@ -63,6 +64,7 @@ public enum CookingRecipes {
         this.energy = energy;
         this.sellPrice = sellPrice;
         this.source = source;
+        this.path = "cooking/" + name.replace(" ", "_") + ".png";
     }
 
     public String getName() {
@@ -70,6 +72,6 @@ public enum CookingRecipes {
     }
 
     public CookingRecipe toRecipe() {
-        return new CookingRecipe(name, ingredients, buff, energy, sellPrice, source);
+        return new CookingRecipe(name, ingredients, buff, energy, sellPrice, source,path);
     }
 }
