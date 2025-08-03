@@ -86,7 +86,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 200f;
 
 
-
+    private final EnergyView energyView;
 
 
     public GameView(GameController controller) {
@@ -96,6 +96,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
+        this.energyView = new EnergyView(player);
     }
 
     @Override
@@ -116,6 +117,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.begin();
         drawWorld();
         dateTimeView.update();
+        energyView.updateEnergy();
+        energyView.render(delta);
         batch.end();
 
         stage.act(delta);

@@ -14,10 +14,10 @@ public abstract class View implements Screen {
     @Override
     public void render(float v) {
         ScreenUtils.clear(0, 0, 0, 1);
-        Main.getBatch().begin();
+        //Main.getBatch().begin();
         getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         getStage().draw();
-        Main.getBatch().end();
+        //Main.getBatch().end();
     }
 
     public abstract Stage getStage();

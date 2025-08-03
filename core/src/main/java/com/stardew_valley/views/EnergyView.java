@@ -1,33 +1,62 @@
 package com.stardew_valley.views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.stardew_valley.controllers.EnergyController;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.character.player.Player;
 
-public class EnergyView extends View {
-    private Stage stage;
-    private Skin skin;
+public class EnergyView {
 
-    private EnergyController controller;
+    private final Player player;
+    private final Stage stage;
+    private Image heartImage;
+    private Label energyLabel;
+    private final Texture[] heartTextures;
 
-    public EnergyView(EnergyController controller) {
-        this.controller = controller;
-        skin = AssetManager.getAssetManager().getSkin();
+    public EnergyView(Player player) {
+        this.player = player;
+        this.stage = new Stage(new ScreenViewport());
+
+        heartTextures = new Texture[11];
+        for (int i = 0; i <= 10; i++) {
+            heartTextures[i] = new Texture("energy/" + i + ".png");
+        }
+        energyLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        energyLabel.setPosition(1570, 1030);
+        energyLabel.setColor(Color.RED);
+
+        heartImage = new Image(new TextureRegionDrawable(heartTextures[10]));
+        heartImage.setPosition(1670, 1020);
+        heartImage.setScale(2f,2f);
+
+        stage.addActor(energyLabel);
+        stage.addActor(heartImage);
     }
 
-    @Override
-    public void handleInput() {
+    public void updateEnergy() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            player.getEnergy().consume(2.31f);
+        }
+        int energy = (int) player.getEnergy().getAmount();
+        int heartIndex = (int) ((energy / 200f) * 10);
+        if (heartIndex < 0) heartIndex = 0;
+        if (heartIndex > 10) heartIndex = 10;
 
+        heartImage.setDrawable(new TextureRegionDrawable(heartTextures[heartIndex]));
+
+        energyLabel.setText(String.format("%.1f", player.getEnergy().getAmount()));
     }
 
-    @Override
-    public Stage getStage() {
-        return stage;
-    }
-
-    @Override
-    public void show() {
-
+    public void render(float delta) {
+        stage.act(delta);
+        stage.draw();
     }
 }
+
