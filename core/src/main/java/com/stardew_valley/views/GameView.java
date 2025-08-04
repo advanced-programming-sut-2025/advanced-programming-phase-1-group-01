@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
@@ -23,11 +25,17 @@ import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
+import com.stardew_valley.models.character.NPC.NPC;
+import com.stardew_valley.models.character.NPC.NPCQuest;
+import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.tool.Tool;
+import com.stardew_valley.models.weather.Weather;
+
 import java.util.Random;
 
 import java.util.ArrayList;
@@ -64,6 +72,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion abigailHouseTopTexture = AssetManager.getAssetManager().getNpcHouse2Top();
     private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
     private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
+
+    private final List<NPC> npcs;
 
     private float globalDelta = 0f;
 
@@ -103,6 +113,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
+        npcs = controller.getRepo().getCurrentGame().getFarm().getNPCs();
         player.setAnimals(animals);
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
@@ -221,9 +232,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 System.out.println(tileX + " " + tileY);
                 if (animal.getPosition().x() == tileY && animal.getPosition().y() == tileX) {
                     showAnimalActionDialog(stage, AssetManager.getAssetManager().getSkin(), animal);
+                    return true;
                 }
             }
+            for (NPC npc : npcs) {
+                System.out.println(npc.getPosition().x() + " " + npc.getPosition().y());
+                if (npc.isInsidePlusIcon(worldCoords.x, worldCoords.y)) {
+                    showNpcActionDialog(stage, AssetManager.getAssetManager().getSkin(), npc);
+                }
+                if (npc.isInsideChatIcon(worldCoords.x, worldCoords.y) && !npc.getMessage().isEmpty()) {
+                    showSimpleDialog(stage, AssetManager.getAssetManager().getSkin(), "NPC Answer", npc.getMessage());
+                }
+            }
+
+
         }
+
         return false;
     }
 
@@ -315,21 +339,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void drawNPCs() {
-        int sebastianX = getTilePixel(FarmInitializer.getSebastianStartingPointX());
-        int sebastianY = getTilePixel(FarmInitializer.getSebastianStartingPointY());
-        batch.draw(sebastianLeftTexture, sebastianX, sebastianY);
-
-        int abigailX = getTilePixel(FarmInitializer.getAbigailStartingPointX());
-        int abigailY = getTilePixel(FarmInitializer.getAbigailStartingPointY());
-        batch.draw(abigailRightTexture, abigailX, abigailY);
-
-        int leahX = getTilePixel(FarmInitializer.getLeahStartingPointX());
-        int leahY = getTilePixel(FarmInitializer.getLeahStartingPointY());
-        batch.draw(leahUpTexture, leahX, leahY);
-
-        int harveyX = getTilePixel(FarmInitializer.getHarveyStartingPointX());
-        int harveyY = getTilePixel(FarmInitializer.getHarveyStartingPointY());
-        batch.draw(harveyDownTexture, harveyX, harveyY);
+        for (NPC npc : npcs) {
+            npc.draw(batch);
+        }
     }
 
     private void drawBuilding() {
@@ -940,6 +952,128 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
+    public void showNpcActionDialog(Stage stage, Skin skin, NPC npc) {
+        Dialog dialog = new Dialog("NPC" + npc.getType().name() + " Interaction", skin);
+        dialog.setModal(true);
+        dialog.setMovable(true);
+        dialog.setResizable(false);
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(10).width(300).height(80);
+
+
+        String[] actions = {
+            "Chat",
+            "Give Gift",
+            "View Quests"
+        };
+
+        for (String action : actions) {
+            TextButton actionButton = new TextButton(action, skin, "default");
+            actionButton.getLabel().setFontScale(1.1f);
+
+            actionButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    handleNpcAction(action, npc);
+                    dialog.hide();
+                }
+            });
+
+            content.add(actionButton).row();
+        }
+
+        Label friendshipLabel = new Label(
+            "Friendship Level:" + npc.getFriendshipLevel(),
+            skin
+        );
+        friendshipLabel.setFontScale(1.2f);
+        content.add(friendshipLabel).center().colspan(1).row();
+
+        TextButton closeButton = new TextButton("Close", skin);
+        closeButton.getLabel().setFontScale(1.1f);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        dialog.getButtonTable().add(closeButton).pad(20).width(200).height(80);
+
+        dialog.show(stage);
+        dialog.setSize(800, 800);
+        dialog.setPosition(
+            (stage.getWidth() - dialog.getWidth()) / 2f,
+            (stage.getHeight() - dialog.getHeight()) / 2f
+        );
+    }
+
+
+    private void handleNpcAction(String action, NPC npc) {
+        switch (action.toLowerCase()) {
+            case "chat":
+                handleTalkNpc(npc);
+                break;
+            case "give gift":
+                npc.handleGifting(player);
+                break;
+            case "view quests":
+                showQuestDialog(stage, AssetManager.getAssetManager().getSkin(), npc, player);
+                break;
+        }
+    }
+
+
+    private void handleTalkNpc(NPC npc) {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Talk to " + npc.getType().name(), skin);
+
+        final TextField messageField = new TextField("", skin);
+        messageField.setMessageText("Say something...");
+
+        TextButton okButton = new TextButton("OK", skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String message = messageField.getText();
+                sendMessageToNpc(npc, message);
+                dialog.hide();
+            }
+        });
+
+
+        TextButton cancelButton = new TextButton("Cancel", skin);
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+
+        Table content = new Table();
+        content.pad(10);
+        content.add(messageField).width(250).padBottom(10).row();
+        content.add(okButton).pad(5);
+        content.add(cancelButton).pad(5);
+
+        dialog.getContentTable().add(content);
+        dialog.show(stage);
+    }
+
+
+    private void sendMessageToNpc(NPC npc, String message) {
+        System.out.println("Sending message: " + message);
+        int hour = controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour();
+        Season season = controller.getRepo().getCurrentGame().getTimeManager().getNow().getSeason();
+        Weather weather = controller.getRepo().getCurrentGame().getWeatherManager().getTodayWeather();
+        npc.setMessage(npc.talkWithPlayer(player, message, season, weather, hour));
+        System.out.println("Sent message: " + npc.getMessage());
+
+    }
+
+
 
 
     private void handleAnimalAction(String action, Animal animal) {
@@ -1211,6 +1345,79 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Result result = controller.handleCommand(input);
         System.out.println("[" + result.success() + "] " + result.message());
     }
+
+    public void showSimpleDialog(Stage stage, Skin skin, String title, String message) {
+        Dialog dialog = new Dialog(title, skin);
+
+        Label label = new Label(message, skin);
+        label.setWrap(true);
+        label.setAlignment(Align.center);
+
+
+        float maxWidth = Gdx.graphics.getWidth() * 0.6f;
+        label.setWidth(maxWidth);
+
+        dialog.getContentTable().add(label).width(maxWidth).pad(20);
+
+        dialog.button("Ok", true);
+
+        dialog.show(stage);
+    }
+
+    public void showQuestDialog(Stage stage, Skin skin, NPC npc, Player player) {
+        Dialog dialog = new Dialog("Quests", skin);
+        Table content = dialog.getContentTable();
+        float maxWidth = Gdx.graphics.getWidth() * 0.7f;
+
+        List<NPCQuest> quests = npc.getQuests();
+        if (quests == null || quests.isEmpty()) {
+            content.add(new Label("This NPC has no quests.", skin)).pad(20);
+        } else {
+            for (NPCQuest quest : quests) {
+                Table questRow = new Table();
+
+                String questInfo = "• " + quest.getQuestType() +
+
+                    " [" +
+                    (quest.isActive() ? "Active" : "Inactive") +
+                    " / " +
+                    (quest.isCompleted() ? "Completed" : "Not Completed") +
+                    " / " +
+                    (quest.getOwner() == null ? "No Owner" : "Has Owner") +
+                    "]";
+
+                Label label = new Label(questInfo, skin);
+                label.setWrap(true);
+                label.setWidth(maxWidth * 0.6f);
+                questRow.add(label).width(maxWidth * 0.6f).left().pad(10);
+
+
+                if (NPCVillage.canFinishQuest(player, quest.getQuestType().getMissionNumber(), npcs)) {
+                    TextButton finishButton = new TextButton("Complete", skin);
+                    finishButton.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            if (NPCVillage.finishQuest(player, quest.getQuestType().getMissionNumber(), npcs).equals("done")) {
+                                npc.handleFinishingQuest();
+                                System.out.println("Quest completed: " + quest.getQuestType());
+                                dialog.hide();
+                            }
+                        }
+                    });
+                    questRow.add(finishButton).right().pad(10);
+                }
+
+                content.add(questRow).width(maxWidth).row();
+            }
+        }
+
+        dialog.button("Close", false);
+        dialog.show(stage);
+    }
+
+
+
+
 
 }
 

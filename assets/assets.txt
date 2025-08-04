@@ -3633,6 +3633,7 @@ images/cabins/4_full.png
 images/cabins/4_top.png
 images/cabins/Cabins.png
 images/cage_fence_16x16.png
+images/chat_16x16.png
 images/circle.png
 images/clock.png
 images/fainting/resized_1-Photoroom.png
@@ -3646,6 +3647,7 @@ images/house_top.png
 images/lake.png
 images/lake_water.png
 images/map_1.png
+images/plus_16x16.png
 images/r_lake.png
 images/resized_mine.png
 images/tile_9_1_marked.png
