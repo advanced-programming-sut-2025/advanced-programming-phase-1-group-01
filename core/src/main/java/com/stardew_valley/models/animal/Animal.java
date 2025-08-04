@@ -391,7 +391,10 @@ public class Animal extends Character implements TileObject {
         return distance < 16 * 16 * 25 * 2;
     }
 
-    public void sellAnimal() {}
+    public void sellAnimal() {
+        owner.increaseCoins(calculateSellPrice());
+        owner.getAnimals().remove(this);
+    }
 
     public void moveToOwner() {
         if (isMovingToOwner) return;

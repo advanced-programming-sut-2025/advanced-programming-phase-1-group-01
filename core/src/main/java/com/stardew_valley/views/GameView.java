@@ -212,7 +212,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return true;
         }
 
-        if (button == Input.Keys.RIGHT) {
+        if (button == 1) {
             Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
             int tileX = (int)(worldCoords.x / TILE_SIZE);
             int tileY = (int)(worldCoords.y / TILE_SIZE);
@@ -893,7 +893,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             "Pet",
             "Release from Cage",
             "Sell",
-            "Collect Products"
         };
 
         for (String action : actions) {

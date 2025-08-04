@@ -305,21 +305,22 @@ public class CookingView extends View {
             float x = startX + col * cellWidth;
             float y = startY - (row + 1) * cellHeight;
 
-            Image image = new Image(entry.getKey().getTextureImage());
-            image.setBounds(x, y, 30f, 30f);
-
-            refrigeratorItemImages.add(image);
-            stage.addActor(image);
-            i++;
-
-            Label.LabelStyle labelStyle = new Label.LabelStyle();
-            labelStyle.font = new BitmapFont();
-            Label quantityLabel = new Label(String.valueOf(entry.getValue()), labelStyle);
-
-            quantityLabel.setFontScale(1.2f);
-            quantityLabel.setPosition(x + 10, y);
-            inventoryItemCount.add(quantityLabel);
-            stage.addActor(quantityLabel);
+            //CHECK
+//            Image image = new Image(entry.getKey().getTextureImage());
+//            image.setBounds(x, y, 30f, 30f);
+//
+//            refrigeratorItemImages.add(image);
+//            stage.addActor(image);
+//            i++;
+//
+//            Label.LabelStyle labelStyle = new Label.LabelStyle();
+//            labelStyle.font = new BitmapFont();
+//            Label quantityLabel = new Label(String.valueOf(entry.getValue()), labelStyle);
+//
+//            quantityLabel.setFontScale(1.2f);
+//            quantityLabel.setPosition(x + 10, y);
+//            inventoryItemCount.add(quantityLabel);
+//            stage.addActor(quantityLabel);
         }
     }
 
@@ -352,20 +353,22 @@ public class CookingView extends View {
             float x = startX + col * cellWidth;
             float y = startY - (row + 1) * cellHeight;
 
-            Image image = new Image(CookingRecipes.BREAD.toRecipe().getTextureImage());
-            image.setBounds(x, y, 30f, 30f);
+            //CHECK
 
-            refrigeratorItemImages.add(image);
-            stage.addActor(image);
-
-            Label.LabelStyle labelStyle = new Label.LabelStyle();
-            labelStyle.font = new BitmapFont();
-            Label quantityLabel = new Label(String.valueOf(slot.getQuantity()), labelStyle);
-
-            quantityLabel.setFontScale(1.2f);
-            quantityLabel.setPosition(x + 10, y);
-            refrigeratorItemCount.add(quantityLabel);
-            stage.addActor(quantityLabel);
+//            Image image = new Image(CookingRecipes.BREAD.toRecipe().getTextureImage());
+//            image.setBounds(x, y, 30f, 30f);
+//
+//            refrigeratorItemImages.add(image);
+//            stage.addActor(image);
+//
+//            Label.LabelStyle labelStyle = new Label.LabelStyle();
+//            labelStyle.font = new BitmapFont();
+//            Label quantityLabel = new Label(String.valueOf(slot.getQuantity()), labelStyle);
+//
+//            quantityLabel.setFontScale(1.2f);
+//            quantityLabel.setPosition(x + 10, y);
+//            refrigeratorItemCount.add(quantityLabel);
+//            stage.addActor(quantityLabel);
         }
     }
 
