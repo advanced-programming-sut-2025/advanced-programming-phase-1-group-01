@@ -38,7 +38,7 @@ public class ForagingManager {
                 }
 
                 if (tile.getType() == TileType.MINE) {
-                    int prob = RANDOM.nextInt(10);
+                    int prob = RANDOM.nextInt(30);
                     if (prob == 0) {
                         tile.setObject(new ForagingMineral(ForagingMineralInfo.randomForagingMineral()));
                         tile.setMovable(false);

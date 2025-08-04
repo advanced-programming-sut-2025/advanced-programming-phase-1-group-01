@@ -5,6 +5,7 @@ import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
@@ -92,23 +93,23 @@ public class FarmingController extends Controller {
         Tile tile = player.getFarm().getTile(appliedPosition);
         Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
-        if (tile == null) {
+        if (tile == null || !tile.isEmpty() || !tile.isMovable()) {
             return new Result(false, "incorrect tile");
         } else if (slot == null) {
             return new Result(false, "source not found");
-        } else if (!tile.isPlowed()) {
+        } else if (!tile.isPlowed() && tile.getType() != TileType.GREENHOUSE) {
             return new Result(false, "tile is not plowed");
         }
 
         if (slot.getItem() instanceof Seed seed) {
             CropInfo cropInfo = CropInfo.fromSeed(seed);
-            if (!cropInfo.getSeasons().contains(currSeason) && !cropInfo.getSeasons().contains(Season.SPECIAL)) {
+            if (!cropInfo.getSeasons().contains(currSeason) && tile.getType() != TileType.GREENHOUSE) {
                 return new Result(false, "you can't plant this crop in this season");
             }
         } else if (slot.getItem() instanceof TreeSource treeSource) {
             TreeInfo treeInfo = TreeInfo.fromTreeSource(treeSource);
             assert treeInfo != null;
-            if (!treeInfo.getSeason().equals(Season.SPECIAL) && treeInfo.getSeason().equals(currSeason)) {
+            if (treeInfo.getSeason() != Season.SPECIAL && treeInfo.getSeason() != currSeason) {
                 return new Result(false, "you can't plant this tree in this season");
             }
         }
@@ -200,7 +201,7 @@ public class FarmingController extends Controller {
         return new Result(true, String.valueOf(wateringCan.getWaterAmount()));
     }
 
-    private Result cheatPlowNineTiles(Position position) {
+    public Result cheatPlowNineTiles(Position position) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Array<Position> tilePositions = new Array<>();
         tilePositions.add(position);
@@ -210,7 +211,8 @@ public class FarmingController extends Controller {
         }
 
         for (Position pos : tilePositions) {
-            player.getFarm().getTile(pos).plow();
+            Tile tile = player.getFarm().getTile(pos);
+            if (tile.isMovable() && tile.isEmpty()) tile.plow();
         }
 
         return new Result(true, "cheat done!");

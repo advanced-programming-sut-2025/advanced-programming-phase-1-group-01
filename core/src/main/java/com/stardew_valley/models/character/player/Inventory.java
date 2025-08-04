@@ -198,6 +198,18 @@ public class Inventory {
                     }
                 }
 
+                for (SaplingInfo saplingInfo : SaplingInfo.values()) {
+                    if (saplingInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield saplingInfo.toItem();
+                    }
+                }
+
+                for (FruitInfo fruitInfo : FruitInfo.values()) {
+                    if (fruitInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield fruitInfo.toItem();
+                    }
+                }
+
                 for (QuestItemType QuestItem : QuestItemType.values()) {
                     if (QuestItem.getName().equalsIgnoreCase(itemName)) {
                         yield QuestItem.toItem();

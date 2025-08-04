@@ -28,8 +28,7 @@ public class Seed extends Foraging implements Item {
 
     @Override
     public Texture getTexture() {
-        //return info.getTexture();
-        return AssetManager.getAssetManager().defaultTexture();
+        return info.getTexture();
     }
 
 }

@@ -111,7 +111,7 @@ public enum CropInfo implements FarmingEnum {
         4, AssetManager.getAssetManager().getUnmilledRiceStage4(),
         5, AssetManager.getAssetManager().getUnmilledRiceStage5()
     )),
-    BLUEBERRY("Blueberry", SeedInfo.BLUEBERRY_SEEDS, new int[]{1, 3, 3, 4, 2}, 13, false, 4, 50, true, 25, List.of(Season.SPRING), false, AssetManager.getAssetManager().getBlueberry(), Map.of(
+    BLUEBERRY("Blueberry", SeedInfo.BLUEBERRY_SEEDS, new int[]{1, 3, 3, 4, 2}, 13, false, 4, 50, true, 25, List.of(Season.SUMMER), false, AssetManager.getAssetManager().getBlueberry(), Map.of(
         1, AssetManager.getAssetManager().getBlueberryStage1(),
         2, AssetManager.getAssetManager().getBlueberryStage2(),
         3, AssetManager.getAssetManager().getBlueberryStage3(),
@@ -201,7 +201,7 @@ public enum CropInfo implements FarmingEnum {
         6, AssetManager.getAssetManager().getSummerSquashStage6(),
         7, AssetManager.getAssetManager().getSummerSquashStage7()
     )),
-    SUNFLOWER("Sunflower", SeedInfo.SUNFLOWER_SEEDS, new int[]{1, 2, 3, 2}, 8, true, -1, 80, true, 45, List.of(Season.SUMMER), false, AssetManager.getAssetManager().getSunflower(), Map.of(
+    SUNFLOWER("Sunflower", SeedInfo.SUNFLOWER_SEEDS, new int[]{1, 2, 3, 2}, 8, true, -1, 80, true, 45, List.of(Season.SUMMER, Season.FALL), false, AssetManager.getAssetManager().getSunflower(), Map.of(
         1, AssetManager.getAssetManager().getSunflowerStage1(),
         2, AssetManager.getAssetManager().getSunflowerStage2(),
         3, AssetManager.getAssetManager().getSunflowerStage3(),

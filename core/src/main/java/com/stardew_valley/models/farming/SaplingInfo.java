@@ -2,6 +2,7 @@ package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.Item;
 
 public enum SaplingInfo implements FarmingEnum{
     APRICOT_SAPLING("Apricot Sapling", AssetManager.getAssetManager().getApricotSapling()),
@@ -34,5 +35,9 @@ public enum SaplingInfo implements FarmingEnum{
     @Override
     public String toString() {
         return name;
+    }
+
+    public Item toItem() {
+        return new Sapling(this);
     }
 }

@@ -330,6 +330,10 @@ public enum TreeInfo implements FarmingEnum {
         };
     }
 
+    public Texture getFruitedTexture() {
+        return lastStageTextures.get("Fruit");
+    }
+
     public Texture getLightningTexture() {
         return lightningTexture;
     }

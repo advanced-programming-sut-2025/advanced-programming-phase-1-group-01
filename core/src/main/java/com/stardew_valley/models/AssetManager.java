@@ -3858,9 +3858,14 @@ public class AssetManager {
         return WinterRoot;
     }
 
-    // foraging trees(including: Acorn, Maple Seed, Pine Cone, Mahogany Seed, Mushroom Tree Seed) have already been made
+    // foraging trees(including: Maple Seed, Pine Cone, Mahogany Seed, Mushroom Tree Seed) have already been made
+    private final Texture Acorn = new Texture("farming/trees/Acorn.png");
 
-    // foraging seeds:
+    public Texture getAcorn() {
+        return Acorn;
+    }
+
+          // foraging seeds:
     private final Texture JazzSeeds = new Texture("farming/crops/Jazz_Seeds.png");
     private final Texture CarrotSeeds = new Texture("farming/crops/Carrot_Seeds.png");
     private final Texture CauliflowerSeeds = new Texture("farming/crops/Cauliflower_Seeds.png");
