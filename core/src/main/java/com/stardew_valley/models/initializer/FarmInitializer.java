@@ -482,12 +482,12 @@ public class FarmInitializer {
                 boolean isBorderX = (x == xStart || x == xEnd);
                 boolean isBorderY = (y == yStart || y == yEnd);
 
-                TileType type = (isBorderX || isBorderY) ? TileType.FENCE : TileType.RIVER;
+                TileType type = (isBorderX || isBorderY) ? /*TileType.FENCE*/TileType.RIVER : TileType.RIVER;
 
                 tiles.get(y).set(x, new Tile.Builder()
                     .setPosition(new Position(x, y))
                     .setType(type)
-                    .setMovable(type != TileType.FENCE) //*
+                    .setMovable(/*type != TileType.FENCE*/false) //*
                     .build());
             }
         }

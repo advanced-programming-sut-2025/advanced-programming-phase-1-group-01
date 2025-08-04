@@ -1993,6 +1993,7 @@ public class AssetManager {
         new Texture("farming/crops/Hot_Pepper_Stage_2.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_3.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_4.png"),
+        new Texture("farming/crops/Hot_Pepper_Stage_4b.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_5.png"),
         new Texture("farming/crops/Hot_Pepper_Stage_6.png"),
     };
@@ -2023,6 +2024,10 @@ public class AssetManager {
 
     public Texture getHotPepperStage6() {
         return Hot_Pepper_Stages[5];
+    }
+
+    public Texture getHotPepperStage7() {
+        return Hot_Pepper_Stages[6];
     }
 
     private final Texture Melon = new Texture("farming/crops/Melon.png");
@@ -2688,6 +2693,7 @@ public class AssetManager {
         new Texture("farming/crops/Grape_Stage_4.png"),
         new Texture("farming/crops/Grape_Stage_5.png"),
         new Texture("farming/crops/Grape_Stage_6.png"),
+        new Texture("farming/crops/Grape_Stage_7.png"),
     };
 
     public Texture getGrape() {
@@ -2716,6 +2722,10 @@ public class AssetManager {
 
     public Texture getGrapeStage6() {
         return Grape_Stages[5];
+    }
+
+    public Texture getGrapeStage7() {
+        return Grape_Stages[6];
     }
 
     private final Texture Pumpkin = new Texture("farming/crops/Pumpkin.png");
@@ -3856,9 +3866,14 @@ public class AssetManager {
         return WinterRoot;
     }
 
-    // foraging trees(including: Acorn, Maple Seed, Pine Cone, Mahogany Seed, Mushroom Tree Seed) have already been made
+    // foraging trees(including: Maple Seed, Pine Cone, Mahogany Seed, Mushroom Tree Seed) have already been made
+    private final Texture Acorn = new Texture("farming/trees/Acorn.png");
 
-    // foraging seeds:
+    public Texture getAcorn() {
+        return Acorn;
+    }
+
+          // foraging seeds:
     private final Texture JazzSeeds = new Texture("farming/crops/Jazz_Seeds.png");
     private final Texture CarrotSeeds = new Texture("farming/crops/Carrot_Seeds.png");
     private final Texture CauliflowerSeeds = new Texture("farming/crops/Cauliflower_Seeds.png");

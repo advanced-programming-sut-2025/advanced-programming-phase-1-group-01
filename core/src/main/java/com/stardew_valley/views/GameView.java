@@ -3,6 +3,7 @@ package com.stardew_valley.views;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,20 +16,26 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
-import com.stardew_valley.models.*;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
+import com.stardew_valley.models.*;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.farming.Seed;
+import com.stardew_valley.models.farming.Tree;
+import com.stardew_valley.models.farming.TreeSource;
+import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.tool.Tool;
 import java.util.Random;
@@ -165,6 +172,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             inventoryView.setVisible(!inventoryView.isVisible());
             return true;
         }
+        if (i == Input.Keys.NUM_0) {
+            controller.getFarmingController().cheatPlowNineTiles(player.getTilesPosition());
+        }
 
         return false;
     }
@@ -212,9 +222,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 direction = Direction.DOWN_RIGHT;
 
 
-            if (player.getInventory().getEquippedSlot() != null &&
-                player.getInventory().getEquippedSlot().getItem() instanceof Tool tool) {
-                tool.use(direction);
+            Slot equippedSlot = player.getInventory().getEquippedSlot();
+            if (equippedSlot != null) {
+                if (equippedSlot.getItem() instanceof Tool tool) {
+                    tool.use(direction);
+                } else if (equippedSlot.getItem() instanceof Seed seed) {
+                    controller.getFarmingController().plant(seed.getName(), direction);
+                } else if (equippedSlot.getItem() instanceof TreeSource treeSource) {
+                    controller.getFarmingController().plant(treeSource.getInfo().getName(), direction);
+                }
             }
             return true;
         }
@@ -280,11 +296,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawPlowedTiles();
 
-        drawTileObjects();
+        drawTileObjectsExceptTrees();
 
         drawAnimals();
 
         drawPlayer();
+
+        drawTrees();
     }
 
     private void drawPlowedTiles() {
@@ -297,16 +315,46 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
-    private void drawTileObjects() {
+    private void drawTileObjectsExceptTrees() {
         for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
             for (Tile tile : row) {
-                if (!tile.isEmpty()) {
-                    Sprite objSprite = new Sprite(tile.getObject().getTexture());
-//                    objSprite.setSize(16, 16);
-//                    objSprite.setPosition(tile.getPosition().x() * 16, tile.getPosition().y() * 16);
-//                    objSprite.draw(batch);
-                    batch.draw(objSprite, tile.getPosition().y() * 16, tile.getPosition().x() * 16, 16, 16);
+                if (!tile.isEmpty() && !(tile.getObject() instanceof Tree)) {
+                    Texture texture = tile.getObject().getTexture();
+                    float aspectRatio = (float) texture.getHeight() / texture.getWidth();
+                    float width = 16f;
+                    float height = width * aspectRatio;
+
+                    if (tile.getObject() instanceof ForagingMineral) {
+                        batch.draw(texture, tile.getPosition().x() * 16, tile.getPosition().y() * 16, width, height);
+                    } else {
+                        batch.draw(texture, tile.getPosition().y() * 16, tile.getPosition().x() * 16, width, height);
+                    }
                 }
+            }
+        }
+    }
+
+    private void drawTrees() {
+        List<Tile> treeTiles = new ArrayList<>();
+        for (List<Tile> row : controller.getRepo().getCurrentGame().getFarm().getTiles()) {
+            for (Tile tile : row) {
+                if (!tile.isEmpty() && tile.getObject() instanceof Tree) {
+                    treeTiles.add(tile);
+                }
+            }
+        }
+
+        for (int i = treeTiles.size() - 1; i >= 0; i--) {
+            Tile tile = treeTiles.get(i);
+            Texture texture = tile.getObject().getTexture();
+            float aspectRatio = (float) texture.getHeight() / texture.getWidth();
+            float width = 28f;
+            float height = width * aspectRatio;
+
+            if (tile.getObject() instanceof ForagingMineral) {
+                batch.draw(texture, tile.getPosition().x() * 16, tile.getPosition().y() * 16, width, height);
+            } else {
+                batch.draw(texture, tile.getPosition().y() * 16, tile.getPosition().x() * 16, width, height);
             }
         }
     }
@@ -725,7 +773,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
     public void togglePixelDialog(int height, int width, String type) {
         if (!isPixelDialogVisible) {
             pixelDialog = createPixelDialog(AssetManager.getAssetManager().getSkin(), height, width, type);
@@ -806,7 +853,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
     private boolean isPlantableArea(int row, int col, int height, int width) {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
         int maxRows = tiles.size();
@@ -824,10 +870,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 }
             }
         }
-
         return true;
     }
-
 
     private boolean isPlantableTile(int row, int col) {
         Tile tile = controller.getRepo().getCurrentGame().getFarm().getTiles().get(row).get(col);
@@ -835,7 +879,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-    public ImageButton createPixelButton(TextureRegionDrawable drawable, int row, int col, int height, int width, String type) {
+    public ImageButton createPixelButton(TextureRegionDrawable drawable, int row, int col, int height,
+                                         int width, String type) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.imageUp = drawable.tint(Color.LIGHT_GRAY);
         style.imageDown = drawable.tint(Color.DARK_GRAY);
@@ -857,7 +902,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         return button;
     }
-
 
 
     public void showMiniMap(Stage stage) {
@@ -1177,10 +1221,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 return AnimalInfo.DUCK;
         }
     }
-
-
-
-
 
 
     private Color getColorForTileType(TileType type) {

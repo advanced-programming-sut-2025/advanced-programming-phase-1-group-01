@@ -2,6 +2,7 @@ package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.Item;
 
 public enum FruitInfo implements FarmingEnum {
     APRICOT("Apricot", 59, true, 38, AssetManager.getAssetManager().getApricot()),
@@ -52,5 +53,9 @@ public enum FruitInfo implements FarmingEnum {
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public Item toItem() {
+        return new Fruit(this);
     }
 }

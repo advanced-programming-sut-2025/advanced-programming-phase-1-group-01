@@ -237,11 +237,6 @@ public class Animal extends Character implements TileObject {
     }
 
     @Override
-    public String getSymbol() {
-        return "";
-    }
-
-    @Override
     public String getName() {
         return "";
     }

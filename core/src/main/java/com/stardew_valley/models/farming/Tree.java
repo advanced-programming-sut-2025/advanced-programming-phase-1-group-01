@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
+import com.stardew_valley.models.foraging.ForagingMineral;
+import com.stardew_valley.models.foraging.ForagingMineralInfo;
 
 public class Tree extends Plant {
     private final TreeInfo info;
     private TreeState state;
     private TreeSource source;
-    private Fruit fruit;
     private boolean isAttackedByCrow;
 
     public Tree(TreeSource source) {
@@ -43,30 +44,33 @@ public class Tree extends Plant {
     public void grow() { // this method should be called every day
         int[] growthStages = info.getStages();
         int fruitHarvestCycle = info.getFruitHarvestCycle();
+        Season currSeason = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason();
 
         if (!isFullyGrown()) {
             int currentLevelDays = growthStages[growthLevel - 1];
 
             if (daysInCurrentLevel >= currentLevelDays) {
-                growthLevel++;
+                incrementGrowthIfWatered();
+                if (isFullyGrown() && currSeason == info.getSeason()) hasProduct = true;
+                daysInCurrentLevel = 1;
+            } else {
+                daysInCurrentLevel++;
             }
-
-            daysInCurrentLevel++;
             return;
         }
 
-        if (hasProduct) return;
-
-        if (daysInCurrentLevel < fruitHarvestCycle) {
-            daysInCurrentLevel++;
-        } else {
-            hasProduct = true;
-            daysInCurrentLevel = 0;
+        if (!hasProduct && currSeason == info.getSeason()) {
+            if (daysInCurrentLevel < fruitHarvestCycle) {
+                daysInCurrentLevel++;
+            } else {
+                hasProduct = true;
+                daysInCurrentLevel = 1;
+            }
         }
     }
 
     public boolean isFullyGrown() {
-        return growthLevel >= info.getStages().length;
+        return growthLevel > info.getStages().length;
     }
 
     @Override
@@ -77,12 +81,12 @@ public class Tree extends Plant {
     @Override
     public Item getProduct() {
         if (state == TreeState.BURNT) {
-//            return new Coal();
+            return new ForagingMineral(ForagingMineralInfo.COAL);
         }
 
         if (!hasProduct || isAttackedByCrow) return null;
         hasProduct = false;
-        return fruit;
+        return new Fruit(info.getFruitInfo());
     }
 
     @Override
@@ -120,16 +124,14 @@ public class Tree extends Plant {
 
     @Override
     public Texture getTexture() {
-        // FIXME : incomplete
         if (growthLevel < 5) {
             return info.getTextureByStage(growthLevel);
         }
         Season currSeason = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason();
+        if (hasProduct && info.getSeason() != Season.SPECIAL) {
+            return info.getFruitedTexture();
+        }
         return info.getLastStageTextureBySeason(currSeason);
     }
 
-    @Override
-    public String getSymbol() {
-        return null;
-    }
 }

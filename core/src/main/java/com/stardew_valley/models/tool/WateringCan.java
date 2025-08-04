@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
@@ -61,9 +62,11 @@ public class WateringCan extends Tool {
         Position dirAppliedPosition = position.applyDirection(direction);
 
         Tile tile = inventory.getPlayer().getFarm().getTile(dirAppliedPosition);
-        if (tile.getObject() instanceof Plant plant && !isEmpty()) {
+        if (tile.getObject() instanceof Plant plant && !this.isEmpty()) {
+            if (!plant.isWatered()) removeWater();
             plant.water();
-            removeWater();
+        } else if (tile.getType() == TileType.RIVER) {
+            this.fillCan();
         }
 
         double energyCost = getEffectiveEnergyCost();
@@ -81,7 +84,7 @@ public class WateringCan extends Tool {
     }
 
     public boolean isEmpty() {
-        return waterAmount == 0;
+        return waterAmount <= 0;
     }
 
     public int getCapacity() {

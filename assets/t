@@ -1,4 +1,4 @@
-private final Texture MysticTree = new Texture("farming/trees/MysticTree.png");
+private final Texture ysticTree = new Texture("farming/trees/MysticTree.png");
     private final Texture MysticTreeSeed = new Texture("farming/trees/MysticTree_Seed.png");
     private final Texture MysticTreeStage1 = new Texture("farming/trees/MysticTree_Stage_1.png");
     private final Texture MysticTreeStage2 = new Texture("farming/trees/MysticTree_Stage_2.png");

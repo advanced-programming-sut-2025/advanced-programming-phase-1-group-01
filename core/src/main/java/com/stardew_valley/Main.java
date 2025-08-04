@@ -3,6 +3,7 @@ package com.stardew_valley;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.stardew_valley.controllers.*;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
@@ -104,6 +105,8 @@ public class Main extends Game {
         for (Player player : playerList) {
             player.setFarm(farm);
             player.setCurrentMap(farm);
+            if (player.getUser().getUsername().equals("4"))
+                player.getGame().getTimeManager().prepareForNewDay();
         }
         game.getForagingManager().prepareNewDayForaging();
     }

@@ -1,7 +1,5 @@
 package com.stardew_valley.models.ingredients;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.building.TileObject;
 import com.stardew_valley.models.enums.StoneType;
@@ -23,13 +21,4 @@ public class Stone implements TileObject, Item {
         return 0;
     }
 
-    @Override
-    public String getSymbol() {
-        return type.getSymbol();
-    }
-
-    @Override
-    public Texture getTexture() {
-        return AssetManager.getAssetManager().defaultTexture();
-    }
 }

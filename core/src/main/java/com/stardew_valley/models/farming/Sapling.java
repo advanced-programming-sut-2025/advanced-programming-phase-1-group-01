@@ -1,16 +1,18 @@
-package com.stardew_valley.models.foraging;
+package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
+import com.stardew_valley.models.building.TileObject;
 
-public class ForagingCrop extends Foraging implements Item {
-    private final ForagingCropInfo info;
+public class Sapling implements TreeSource, TileObject, Item {
+    private final SaplingInfo info;
 
-    public ForagingCrop(ForagingCropInfo info) {
+    public Sapling(SaplingInfo info) {
         this.info = info;
     }
 
-    public ForagingCropInfo getInfo() {
+    @Override
+    public SaplingInfo getInfo() {
         return info;
     }
 

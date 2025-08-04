@@ -126,7 +126,7 @@ public class InventoryController extends Controller {
     }
 
     private Result cheatCoins(String command) {
-        String countStr = extractValue(command,"add","dollars");
+        String countStr = extractValue(command, "add", "dollars");
         int count = Integer.parseInt(countStr);
         repo.getCurrentGame().getCurrentPlayer().increaseCoins(count);
         return new Result(true, "coins have been added to your balance: " + count);
@@ -150,7 +150,7 @@ public class InventoryController extends Controller {
         }
 
         inventory.addItem(itemName, itemCount);
-        return new Result(true, "Added " + itemCount + "x " + itemName + " to inventory.");
+        return new Result(true, "Added x" + itemCount + " " + itemName + " to inventory.");
     }
 
     private Result showCoin() {

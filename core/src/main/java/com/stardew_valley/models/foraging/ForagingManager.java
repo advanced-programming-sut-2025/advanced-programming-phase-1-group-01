@@ -22,19 +22,29 @@ public class ForagingManager {
     public void prepareNewDayForaging() {
         for (List<Tile> row : game.getFarm().getTiles()) {
             for (Tile tile : row) {
-                if (!tile.isMovable() || tile.getType() != TileType.GROUND) continue;
-                int prob = RANDOM.nextInt(100);
-                if (prob == 0) {
-                    Season currSeason = game.getTimeManager().getNow().getSeason();
-                    if (tile.isPlowed()) {
+                if (!tile.isEmpty()) continue;
+                if (tile.isMovable() && tile.getType() == TileType.GROUND) {
+                    int prob = RANDOM.nextInt(100);
+                    if (prob == 0) {
+                        Season currSeason = game.getTimeManager().getNow().getSeason();
+                        if (tile.isPlowed()) {
 //                        game.getFarmingManager().plant(new Seed(SeedInfo.randomForagingSeed()), tile);
-                        tile.setObject(new Seed(currSeason.getRandomForagingSeed()));
-                    } else {
-                        tile.setObject(new ForagingCrop(currSeason.getRandomForagingCrop()));
+                            tile.setObject(new Seed(currSeason.getRandomForagingSeed()));
+                        } else {
+                            tile.setObject(new ForagingCrop(currSeason.getRandomForagingCrop()));
 //                        System.out.println(tile.getPosition().x() + " " + tile.getPosition().y() + " " + "FC");
+                        }
+                    }
+                }
+
+                if (tile.getType() == TileType.MINE) {
+                    int prob = RANDOM.nextInt(30);
+                    if (prob == 0) {
+                        tile.setObject(new ForagingMineral(ForagingMineralInfo.randomForagingMineral()));
+                        tile.setMovable(false);
                     }
                 }
             }
+            }
         }
     }
-}
