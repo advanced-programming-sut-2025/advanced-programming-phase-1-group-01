@@ -21,11 +21,13 @@ import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.character.player.Refrigerator;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.cooking.CookingRecipe;
 import com.stardew_valley.models.cooking.CookingRecipes;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 public class CookingView extends View {
 
@@ -88,14 +90,14 @@ public class CookingView extends View {
         foodSelection = new SelectBox<>(skin);
         Array<String> recipeNames = new Array<>();
         for (CookingRecipes r : CookingRecipes.values()) {
-            recipeNames.add(r.name());
+            recipeNames.add(r.name().replace("_", " "));
         }
         foodSelection.setItems(recipeNames);
         putButton = new TextButton("Put", skin);
         pickButton = new TextButton("Pick", skin);
         itemTextField = new TextField("item?", skin);
         itemCountTextField = new TextField("how?", skin);
-        messageLabel = new Label("hi amirreza", skin);
+        messageLabel = new Label("", skin);
     }
 
     @Override
@@ -133,21 +135,21 @@ public class CookingView extends View {
         putButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.put(messageLabel, itemTextField.getMessageText(), itemCountTextField.getMessageText());
+                controller.put(messageLabel,itemTextField.getMessageText(),itemCountTextField.getMessageText());
             }
         });
 
         pickButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.pick(messageLabel, itemTextField.getMessageText(), itemCountTextField.getMessageText());
+                controller.pick(messageLabel,itemTextField.getMessageText(),itemCountTextField.getMessageText());
             }
         });
 
         cookButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.cook(messageLabel, foodSelection.getSelected());
+                controller.cook(messageLabel,foodSelection.getSelected());
             }
         });
     }
@@ -161,7 +163,8 @@ public class CookingView extends View {
         if (!isPressedRecipes) {
             showRecipesUI();
             showRecipes();
-        } else {
+        }
+        else {
             backgroundImage.remove();
             recipesImage.remove();
             foodSelection.remove();
@@ -175,9 +178,10 @@ public class CookingView extends View {
     private void toggleFridgeAndInventory() {
         if (!isPressedRefrigerator) {
             showFridgeInventoryUI();
-            //showRefrigeratorItems();
-            //showInventoryItems();
-        } else {
+            showRefrigeratorItems();
+            showInventoryItems();
+        }
+        else {
             hideFridgeInventoryUI();
             clearRefrigeratorItems();
             clearInventoryItems();
@@ -186,14 +190,14 @@ public class CookingView extends View {
     }
 
     private void showRecipesUI() {
-        backgroundImage.setScale(6f, 5f);
+        backgroundImage.setScale(6f,5f);
         backgroundImage.setPosition(600, 250);
         stage.addActor(backgroundImage);
 
         foodSelection.setPosition(870, 460);
         stage.addActor(foodSelection);
 
-        cookButton.setPosition(870, 330);
+        cookButton.setPosition(870,330);
         stage.addActor(cookButton);
 
         recipesImage.setPosition(650, 580);
@@ -207,7 +211,7 @@ public class CookingView extends View {
     }
 
     private void showFridgeInventoryUI() {
-        backgroundImage.setScale(6f, 7.5f);
+        backgroundImage.setScale(6f,7.5f);
         backgroundImage.setPosition(600, 100);
         stage.addActor(backgroundImage);
 
@@ -260,16 +264,16 @@ public class CookingView extends View {
         float startY = 600;
 
         int columns = 8;
-        //Set<CookingRecipe> recipes = controller.getRepo().getCurrentGame().getCurrentPlayer().getCookingRecipes();
+        Set<CookingRecipe> recipes = controller.getRepo().getCurrentGame().getCurrentPlayer().getCookingRecipes();
         int index = 0;
-        for (CookingRecipes recipe : CookingRecipes.values()) {
+        for (CookingRecipe recipe : recipes) {
             int col = index % columns;
             int row = index / columns;
 
             float x = startX + col * cellWidth;
             float y = startY + (2 - row) * cellHeight;
 
-            Image cellImage = recipe.toRecipe().getImage();
+            Image cellImage = recipe.getImage();
             cellImage.setPosition(x, y);
             stage.addActor(cellImage);
             recipeItemImages.add(cellImage);
@@ -288,7 +292,7 @@ public class CookingView extends View {
         clearRefrigeratorItems();
 
         Refrigerator refrigerator = controller.getRepo().getCurrentGame().getCurrentPlayer().getRefrigerator();
-        Map<Item, Integer> items = refrigerator.getItems();
+        Map<Item,Integer> items = refrigerator.getItems();
         float startX = 680f;
         float startY = 933f;
         float cellWidth = 40f;
@@ -296,7 +300,7 @@ public class CookingView extends View {
 
         int cols = 14;
         int i = 0;
-        for (Map.Entry<Item, Integer> entry : items.entrySet()) {
+        for (Map.Entry<Item,Integer> entry : items.entrySet()) {
             int col = i % cols;
             int row = i / cols;
 
@@ -350,7 +354,7 @@ public class CookingView extends View {
             float x = startX + col * cellWidth;
             float y = startY - (row + 1) * cellHeight;
 
-            Image image = new Image(CookingRecipes.BREAD.toRecipe().getTexture());
+            Image image = new Image(slot.getItem().getTexture());
             image.setBounds(x, y, 30f, 30f);
 
             refrigeratorItemImages.add(image);

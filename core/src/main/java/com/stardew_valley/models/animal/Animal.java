@@ -1,15 +1,25 @@
 package com.stardew_valley.models.animal;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
+import com.stardew_valley.models.building.TileObject;
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Emoji;
 import com.stardew_valley.models.Random;
 
-public class Animal extends Character {
+public class Animal extends Character implements TileObject {
     protected final AnimalInfo animalInfo;
-    protected final String name;
+    protected String name;
     protected Player owner;
     protected Position position;
     protected Direction direction;
@@ -21,6 +31,30 @@ public class Animal extends Character {
     protected AnimalProductType animalProductType;
     protected int periodicDay = 0;
     protected int friendshipLevel = 0;
+    protected float x;
+    protected float y;
+
+    private boolean isBeingFed = false;
+    private float stateTime = 0f;
+    private Texture hayTexture = null;
+
+    private boolean isBeingPetted = false;
+    private float pettingStateTime = 0f;
+    private float pettingOffsetY = 0f;
+
+    private float globalStateTime = 0f;
+
+    private boolean isMovingToOwner = false;
+
+    private float moveStateTime = 0f;
+    private final float moveDuration = 2f;
+
+    private float moveStartX, moveStartY;
+    private float moveTargetX, moveTargetY;
+
+
+
+
 
 
     public Animal(AnimalInfo animalInfo,String name, Player owner, AnimalHouse shelter) {
@@ -29,6 +63,16 @@ public class Animal extends Character {
         this.shelter = shelter;
         this.position = findAPlace(shelter);
         this.name = name;
+    }
+
+    public Animal(AnimalInfo animalInfo, Player owner, Position position, float x, float y) {
+        this.animalInfo = animalInfo;
+        this.owner = owner;
+        this.direction = Direction.LEFT;
+        this.position = position;
+        this.x = x;
+        this.y = y;
+        setProduct(AnimalProductType.EGG);
     }
 
     public AnimalProductType getAnimalProductType() {
@@ -94,9 +138,18 @@ public class Animal extends Character {
         }
     }
 
+
+
     public void feedByHay() {
-        isHungry = false;
+        if (isBeingFed) return;
+
+        hayTexture = AssetManager.getAssetManager().getHay().getTexture();
+        stateTime = 0f;
+        isBeingFed = true;
     }
+
+
+
 
     public boolean hasAnyProduct() {
         return hasProduct;
@@ -182,4 +235,194 @@ public class Animal extends Character {
                 && position.y() >= shelter.getTopLeftCorner().y()
                 && position.y() <= shelter.getBottomRightCorner().y();
     }
+
+    @Override
+    public String getSymbol() {
+        return "";
+    }
+
+    @Override
+    public String getName() {
+        return "";
+    }
+
+    @Override
+    public int getPrice() {
+        return 0;
+    }
+
+    @Override
+    public Texture getTexture() {
+        float frameTime = isMovingToOwner ? globalStateTime : 0f;
+
+        switch (animalInfo) {
+            case COW:
+                return AssetManager.getAssetManager()
+                    .getCowLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            case RABBIT:
+                return AssetManager.getAssetManager()
+                    .getRabbitLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            case HEN:
+                return AssetManager.getAssetManager()
+                    .getHenLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            case DUCK:
+                return AssetManager.getAssetManager()
+                    .getDuckLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            case SHEEP:
+                return AssetManager.getAssetManager()
+                    .getSheepLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            case PIG:
+                return AssetManager.getAssetManager()
+                    .getPigLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            case DINOSAUR:
+                return AssetManager.getAssetManager()
+                    .getDinoLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+
+            default:
+                return AssetManager.getAssetManager()
+                    .getgoatLeftAnimation()
+                    .getKeyFrame(frameTime)
+                    .getTexture();
+        }
+    }
+
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void update(float delta) {
+        globalStateTime += delta;
+        if (isBeingFed) {
+            stateTime += delta;
+
+            if (stateTime >= 2f) {
+                isBeingFed = false;
+                isHungry = false;
+            }
+        }
+
+        if (isBeingPetted) {
+            pettingStateTime += delta;
+
+            float duration = 0.5f;
+            float progress = pettingStateTime / duration;
+            pettingOffsetY = (float)(Math.sin(progress * Math.PI) * 10);
+
+            if (pettingStateTime >= duration) {
+                isBeingPetted = false;
+                hasBeenPetted = true;
+                pettingOffsetY = 0f;
+            }
+        }
+
+        if (isMovingToOwner) {
+            moveStateTime += delta;
+
+            float progress = Math.min(moveStateTime / moveDuration, 1f);
+            float newX = moveStartX + (moveTargetX - moveStartX) * progress;
+            float newY = moveStartY + (moveTargetY - moveStartY) * progress;
+
+            setX(newX);
+            setY(newY);
+
+            if (moveStateTime >= moveDuration) {
+                isMovingToOwner = false;
+            }
+        }
+    }
+
+    public void draw(Batch batch) {
+        float drawX = getY();
+        float drawY = getX() + pettingOffsetY;
+
+        batch.draw(getTexture(), drawX, drawY);
+
+        if (isBeingFed && hayTexture != null) {
+            float alpha = Math.max(0, 1 - (stateTime / 2f));
+
+            Color oldColor = new Color(batch.getColor());
+            batch.setColor(1f, 1f, 1f, alpha);
+
+            float hayX = getX();
+            float hayY = getY() - 16;
+            batch.draw(hayTexture, hayY, hayX, 10, 10);
+
+            batch.setColor(oldColor);
+        }
+    }
+
+    public void handlePetting() {
+        if (isBeingPetted || hasBeenPetted) return;
+
+        isBeingPetted = true;
+        pettingStateTime = 0f;
+        pettingOffsetY = 0f;
+    }
+
+
+
+    public boolean isNearPlayer() {
+        float distance = (owner.getX() - getY())*((owner.getX() - getY())) + (owner.getY() - getX())*((owner.getY() - getX()));
+        return distance < 16 * 16 * 25 * 2;
+    }
+
+    public void sellAnimal() {
+        owner.increaseCoins(calculateSellPrice());
+        owner.getAnimals().remove(this);
+    }
+
+    public void moveToOwner() {
+        if (isMovingToOwner) return;
+
+        isMovingToOwner = true;
+        moveStateTime = 0f;
+
+        moveStartX = getX();
+        moveStartY = getY();
+
+        moveTargetX = owner.getY();
+        moveTargetY = owner.getX();
+    }
+
+    public void setX(float x) {
+        position = new Position((int)(x / 16), (int)(y / 16));
+        this.x = x;
+    }
+
+
+    public void setY(float y) {
+        position = new Position((int)(x / 16), (int)(y / 16));
+        this.y = y;
+    }
+
+    public boolean isPetted() {
+        return hasBeenPetted;
+    }
+
+
 }

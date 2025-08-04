@@ -2,15 +2,13 @@ package com.stardew_valley.models.character.player;
 
 public class Energy {
     private double amount;
-    private double maxEnergy;
-    public static final double MAX_ENERGY = 200;
-    public static final double INITIAL_ENERGY_AMOUNT = MAX_ENERGY;
+    private double MAX_ENERGY = 200;
     private boolean hasPassedOut = false;
+    private boolean isUnlimited = false;
     private boolean shoudBeFull = false;
 
     public Energy() {
-        this.amount = INITIAL_ENERGY_AMOUNT;
-        maxEnergy = MAX_ENERGY;
+        this.amount = MAX_ENERGY;
     }
 
     public double getAmount() {
@@ -38,11 +36,12 @@ public class Energy {
     }
 
     public void fillEnergy() {
-        this.amount = maxEnergy;
+        this.amount = MAX_ENERGY;
     }
 
     public void fillEnergyPassedOut() {
-        this.amount = maxEnergy * 0.75;
+
+        this.amount = (MAX_ENERGY * 0.75);
     }
 
     public void passOut() {
@@ -58,20 +57,28 @@ public class Energy {
         this.hasPassedOut = hasPassedOut;
     }
 
-    public double getMaxEnergy() {
-        return maxEnergy;
+    public void setMaxEnergy(double maxEnergy) {
+        this.MAX_ENERGY = maxEnergy;
     }
 
-    public void setMaxEnergy(double maxEnergy) {
-        this.maxEnergy = maxEnergy;
+    public double getMaxEnergy() {
+        return MAX_ENERGY;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(amount);
+        return String.format("%.1f", amount);
     }
 
     public void changeShoudBeFull(boolean shoudBeFull) {
         this.shoudBeFull = shoudBeFull;
+    }
+
+    public boolean isUnlimited() {
+        return isUnlimited;
+    }
+
+    public void setUnlimited(boolean unlimited) {
+        isUnlimited = unlimited;
     }
 }

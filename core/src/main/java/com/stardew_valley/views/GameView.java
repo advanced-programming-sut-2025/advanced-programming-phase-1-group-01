@@ -4,7 +4,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -18,12 +20,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
+import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
+import com.stardew_valley.models.animal.Animal;
+import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
@@ -31,6 +38,7 @@ import com.stardew_valley.models.farming.TreeSource;
 import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.tool.Tool;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -67,6 +75,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
     private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
 
+    private float globalDelta = 0f;
+
     private Dialog terminalDialog;
     private TextField textField;
 
@@ -75,6 +85,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Dialog buildAreaDialog;
     private boolean isBuildAreaDialogVisible = false;
+
+    private boolean isAnimalDialogVisible = false;
+    private Dialog animalDialog;
 
 
     private boolean isDialogShown = false;
@@ -91,15 +104,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 200f;
 
     private final InventoryView inventoryView;
+    private final EnergyView energyView;
+
+    private final List<Area> areas = new ArrayList<>();
+    private final List<Animal> animals = new ArrayList<>();
 
     public GameView(GameController controller) {
         this.controller = controller;
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
+        player.setAnimals(animals);
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryView = new InventoryView();
+        this.energyView = new EnergyView(player);
     }
 
     @Override
@@ -118,6 +137,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void render(float delta) {
+        globalDelta = delta;
         updateGame(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
@@ -127,6 +147,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.begin();
         drawWorld();
         dateTimeView.update();
+        energyView.updateEnergy();
+        energyView.render(delta);
         inventoryView.update();
         batch.end();
 
@@ -212,6 +234,19 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             }
             return true;
         }
+
+        if (button == 1) {
+            Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
+            int tileX = (int)(worldCoords.x / TILE_SIZE);
+            int tileY = (int)(worldCoords.y / TILE_SIZE);
+            for (Animal animal : animals) {
+                System.out.println(animal.getPosition().x() + " " + animal.getPosition().y());
+                System.out.println(tileX + " " + tileY);
+                if (animal.getPosition().x() == tileY && animal.getPosition().y() == tileX) {
+                    showAnimalActionDialog(stage, AssetManager.getAssetManager().getSkin(), animal);
+                }
+            }
+        }
         return false;
     }
 
@@ -253,6 +288,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawNPCs();
 
+        drawShippingBin();
+
 //        drawTileHighlights();
 
         //printTileTypeCounts();
@@ -260,6 +297,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawPlowedTiles();
 
         drawTileObjectsExceptTrees();
+
+        drawAnimals();
 
         drawPlayer();
 
@@ -320,9 +359,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private void drawAnimals() {
+        for (Animal animal : animals) {
+            animal.update(globalDelta);
+            animal.draw(batch);
+        }
+    }
+
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -471,6 +517,25 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private float stateTime = 0f;
+    private void drawShippingBin() {
+        stateTime += Gdx.graphics.getDeltaTime();
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+        Animation<TextureRegion> animation = AssetManager.getAssetManager().getShippingBinAnimation();
+        TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
+        for (int col = 0; col < numCols; col++) {
+            for (int row = 0; row < numRows; row++) {
+                Tile tile = tiles.get(row).get(col);
+                if (tile.getType() == TileType.SHIPPING_BIN) {
+                    batch.draw(currentFrame, getTilePixel(col), getTilePixel(row), 32f, 32f);
+                }
+            }
+        }
+    }
+
 
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
@@ -562,6 +627,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             toggleBuildArea();
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            handleAnimalDialogToggle(stage, AssetManager.getAssetManager().getSkin());
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            showAnimalProductDialog();
+        }
+
         /*
 
             g = cc, advance hour
@@ -590,7 +663,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+        if (player.getEnergy().hasPassedOut()) {
             player.setFainting(true);
         }
 
@@ -678,10 +751,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     switch (selected) {
                         case "A":
                             if (!isPixelDialogVisible)
-                                togglePixelDialog(4, 4, "A");
+                                togglePixelDialog(6, 7, "A");
                         default:
                             if (!isPixelDialogVisible)
-                                togglePixelDialog(6, 7, "B");
+                                togglePixelDialog(4, 4, "B");
                     }
                 } else {
                     System.out.println("Selection cancelled");
@@ -781,9 +854,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
     private boolean isPlantableArea(int row, int col, int height, int width) {
-        for (int r = row; r < height; r++) {
-            for (int c = col; c < width; c++) {
-                Tile tile = controller.getRepo().getCurrentGame().getFarm().getTiles().get(r).get(c);
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int maxRows = tiles.size();
+        int maxCols = tiles.get(0).size();
+
+        if (row < 0 || col < 0 || row + height > maxRows || col + width > maxCols) {
+            return false;
+        }
+
+        for (int r = row; r < row + height; r++) {
+            for (int c = col; c < col + width; c++) {
+                Tile tile = tiles.get(r).get(c);
                 if (!tile.isEmpty() || tile.getType() != TileType.GROUND) {
                     return false;
                 }
@@ -811,8 +892,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (isPlantableArea(row, col, height, width)) {
-                    System.out.println("can plant");
                     setObject(row, col, height, width, type);
+                    areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
                 }
                 pixelDialog.hide();
                 isPixelDialogVisible = false;
@@ -870,27 +951,288 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         stage.addActor(miniMapActor);
     }
 
+    public void showAnimalActionDialog(Stage stage, Skin skin, Animal animal) {
+        Dialog dialog = new Dialog("Animal Actions", skin);
+        dialog.setModal(true);
+        dialog.setMovable(true);
+        dialog.setResizable(false);
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(8).width(300).height(80);
+
+        String[] actions = {
+            "Feed",
+            "Pet",
+            "Release from Cage",
+            "Sell",
+        };
+
+        for (String action : actions) {
+            TextButton actionButton = new TextButton(action, skin, "default");
+            actionButton.getLabel().setFontScale(1f);
+
+            actionButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    handleAnimalAction(action, animal);
+                    System.out.println("Action performed: " + action);
+                }
+            });
+
+            content.add(actionButton).row();
+        }
+
+        Label infoLabel = new Label(
+            "Friendship Level: " + animal.getFriendshipLevel() + "\n" +
+                "Has Product: " + (animal.hasAnyProduct() ? "Yes" : "No") + "\n" +
+                "Has Been Petted: " + (animal.isPetted() ? "Yes" : "No"),
+            skin
+        );
+        infoLabel.setFontScale(1.1f);
+        content.add(infoLabel).colspan(1).center().row();
+
+        TextButton closeButton = new TextButton("Close", skin);
+        closeButton.getLabel().setFontScale(1.1f);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        dialog.getButtonTable().add(closeButton).pad(20).width(200).height(80);
+
+        dialog.show(stage);
+
+        dialog.setSize(800, 800);
+        dialog.setPosition(
+            (stage.getWidth() - dialog.getWidth()) / 2f,
+            (stage.getHeight() - dialog.getHeight()) / 2f
+        );
+    }
+
+
+
+
+    private void handleAnimalAction(String action, Animal animal) {
+        switch (action.toLowerCase()) {
+            case "feed":
+                handleFeedAnimal(animal);
+                break;
+            case "pet":
+                handlePetAnimal(animal);
+                break;
+            case "release from cage":
+                handleReleaseAnimal(animal);
+                break;
+            case "sell":
+                handleSellAnimal(animal);
+                break;
+            case "collect products":
+                handleCollectAnimalProduct(animal);
+                break;
+        }
+    }
+
+    private void handleFeedAnimal(Animal animal) {
+        animal.feedByHay();
+        System.out.println("Feeding animal: 1");
+    }
+
+    private void handlePetAnimal(Animal animal) {
+        animal.handlePetting();
+    }
+
+    private void handleReleaseAnimal(Animal animal) {
+        if (animal.isNearPlayer()) {
+            animal.moveToOwner();
+            System.out.println("Released animal: 2");
+        }
+    }
+
+    private void handleSellAnimal(Animal animal) {
+        animal.sellAnimal();
+    }
+
+    private void handleCollectAnimalProduct(Animal animal) {
+        animal.collectProduct();
+    }
+
+
+
+
+
+
+
+
+    public void createAnimalDialog(final Stage stage, Skin skin) {
+        animalDialog = new Dialog("Add Animal", skin);
+
+        final SelectBox<String> animalSelectBox = new SelectBox<>(skin);
+        animalSelectBox.setItems("cow", "rabbit", "hen", "goat", "sheep", "dinosaur", "duck", "pig");
+
+        TextButton okButton = new TextButton("OK", skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String selectedAnimal = animalSelectBox.getSelected();
+                if (checkAreaValidation(selectedAnimal)) {
+                    addAnimalToArea(selectedAnimal);
+                }
+                animalDialog.hide();
+                isAnimalDialogVisible = false;
+            }
+        });
+
+        animalDialog.getContentTable().add(animalSelectBox).padBottom(10).row();
+        animalDialog.getContentTable().add(okButton);
+        animalDialog.setSize(300, 200);
+        animalDialog.setModal(true);
+        animalDialog.setMovable(true);
+    }
+
+    public void handleAnimalDialogToggle(Stage stage, Skin skin) {
+        if (!isAnimalDialogVisible) {
+            if (animalDialog == null) {
+                createAnimalDialog(stage, skin);
+            }
+            stage.addActor(animalDialog);
+            animalDialog.show(stage);
+            isAnimalDialogVisible = true;
+        } else {
+            animalDialog.hide();
+            isAnimalDialogVisible = false;
+        }
+    }
+
+    public boolean checkAreaValidation(String animalType) {
+        switch (animalType) {
+            case "cow": case "sheep": case "goat": case "dinosaur": case "pig":
+                for (Area area : areas) {
+                    if (area.type().equals(AreaType.BARN)) return true;
+                }
+                return false;
+            default:
+                for (Area area : areas) {
+                    if (area.type().equals(AreaType.CAGE)) return true;
+                }
+                return false;
+        }
+    }
+
+    private void showAnimalProductDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Animal Products", skin);
+        dialog.getContentTable().defaults().pad(10);
+
+        boolean hasAnyProduct = false;
+
+        Table productList = new Table();
+
+        for (Animal animal : player.getAnimals()) {
+            if (animal.hasAnyProduct()) {
+                hasAnyProduct = true;
+
+                String info = animal.getAnimalInfo().name();
+                String product = animal.getAnimalProductType().toString();
+                int x = (int)(animal.getX() / 16);
+                int y = (int)(animal.getY() / 16);
+
+                Label label = new Label(
+                    info + " | " + product + " | (" + x + "," + y + ")",
+                    skin
+                );
+
+                TextButton getButton = new TextButton("Get", skin);
+                getButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        animal.collectProduct();
+                        label.setText(info + " | Collected");
+                        getButton.setDisabled(true);
+                    }
+                });
+
+                productList.add(label).left().padRight(10);
+                productList.add(getButton).right();
+                productList.row();
+            }
+        }
+
+        if (!hasAnyProduct) {
+            productList.add(new Label("No products available", skin));
+        }
+
+        ScrollPane scrollPane = new ScrollPane(productList, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+
+        dialog.getContentTable().add(scrollPane).width(700).height(450);
+        dialog.row();
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+
+    public void addAnimalToArea(String animalType) {
+        boolean isBarnAnimal = switch (animalType) {
+            case "cow", "sheep", "goat", "dinosaur", "pig" -> true;
+            default -> false;
+        };
+
+        AreaType targetAreaType = isBarnAnimal ? AreaType.BARN : AreaType.CAGE;
+
+        for (Area area : areas) {
+            if (area.type().equals(targetAreaType)) {
+                Position pos = getRandomInnerPosition(area);
+                Animal animal = new Animal(getAnimalInfo(animalType), player, pos, pos.x() * 16, pos.y() * 16);
+                animals.add(animal);
+                return;
+            }
+        }
+    }
+
+    private Position getRandomInnerPosition(Area area) {
+        Random random = new Random();
+        int x = area.row() + 1 + random.nextInt(area.height() - 2);
+        int y = area.col() + 1 + random.nextInt(area.width() - 2);
+        return new Position(x, y);
+    }
+
+
+    private AnimalInfo getAnimalInfo(String animalType) {
+        switch (animalType) {
+            case "cow":
+                return AnimalInfo.COW;
+            case "sheep":
+                return AnimalInfo.SHEEP;
+            case "goat":
+                return AnimalInfo.GOAT;
+            case "dinosaur":
+                return AnimalInfo.DINOSAUR;
+            case "pig":
+                return AnimalInfo.PIG;
+            case "rabbit":
+                return AnimalInfo.RABBIT;
+            case "hen":
+                return AnimalInfo.HEN;
+            default:
+                return AnimalInfo.DUCK;
+        }
+    }
+
 
     private Color getColorForTileType(TileType type) {
         switch (type) {
-            case GROUND:
-                return Color.GREEN;
-            case RIVER:
-                return Color.BLACK;
-            case MINE:
-                return Color.GRAY;
-            case GREENHOUSE:
-                return Color.FOREST;
-            case COTTAGE:
-                return Color.BROWN;
-            case WALL:
-                return Color.DARK_GRAY;
-            case SALE_BUCKET:
-                return Color.PINK;
-            case FENCE:
-                return Color.BLUE;
-            default:
-                return Color.LIGHT_GRAY;
+            case GROUND: return Color.GREEN;
+            case RIVER: return Color.BLACK;
+            case MINE: return Color.GRAY;
+            case GREENHOUSE: return Color.FOREST;
+            case COTTAGE: return Color.BROWN;
+            case WALL: return Color.DARK_GRAY;
+            case FENCE: return Color.BLUE;
+            default: return Color.LIGHT_GRAY;
         }
     }
 

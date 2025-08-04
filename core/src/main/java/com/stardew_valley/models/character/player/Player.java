@@ -13,6 +13,7 @@ import com.stardew_valley.models.cooking.CookingRecipe;
 import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
+import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.Color;
 import com.stardew_valley.models.enums.Direction;
@@ -56,6 +57,8 @@ public class Player extends Character {
     private float stateTime = 0f;
     private boolean isMoving = false;
 
+    List<Animal> animals;
+
     private final float totalFaintingTime = 2f;
     private float faintingTime = 0f;
     private boolean whileFainting = false;
@@ -77,7 +80,7 @@ public class Player extends Character {
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
         cookingRecipes = new HashSet<>();
-        initializeCookingRecipes();
+        initializeRecipes();
     }
 
     public Player(Game game, User user) {
@@ -95,7 +98,7 @@ public class Player extends Character {
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
         cookingRecipes = new HashSet<>();
-        initializeCookingRecipes();
+        initializeRecipes();
     }
 
     public Position getPosition() {
@@ -276,10 +279,13 @@ public class Player extends Character {
         return cookingRecipes;
     }
 
-    public void initializeCookingRecipes() {
+    public void initializeRecipes() {
         addCookingRecipe(CookingRecipes.FRIED_EGG.toRecipe());
         addCookingRecipe(CookingRecipes.BAKED_FISH.toRecipe());
         addCookingRecipe(CookingRecipes.SALAD.toRecipe());
+        addCraftingRecipe(CraftingRecipes.BEE_HOUSE.toRecipe());
+        addCraftingRecipe(CraftingRecipes.KEG.toRecipe());
+        addCraftingRecipe(CraftingRecipes.LOOM.toRecipe());
     }
 
     public void addCookingRecipe(CookingRecipe recipe) {
@@ -924,5 +930,13 @@ public class Player extends Character {
 
     public void setFainting(boolean fainting) {
         whileFainting = fainting;
+    }
+
+    public void setAnimals(List<Animal> animals) {
+        this.animals = animals;
+    }
+
+    public List<Animal> getAnimals() {
+        return animals;
     }
 }

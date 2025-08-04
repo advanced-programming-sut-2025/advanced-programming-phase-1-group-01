@@ -3641,6 +3641,7 @@ images/fainting/resized_2-Photoroom.png
 images/fainting/resized_3-Photoroom.png
 images/fainting/resized_4-Photoroom.png
 images/fainting/resized_5-Photoroom.png
+images/hay.png
 images/house.png
 images/house_top.png
 images/lake.png
@@ -3716,6 +3717,21 @@ mineral/Star_Shards.png
 mineral/Thunder_Egg.png
 mineral/Tigerseye.png
 mineral/Topaz.png
+shipping bin/1.png
+shipping bin/10.png
+shipping bin/11.png
+shipping bin/12.png
+shipping bin/13.png
+shipping bin/14.png
+shipping bin/15.png
+shipping bin/2.png
+shipping bin/3.png
+shipping bin/4.png
+shipping bin/5.png
+shipping bin/6.png
+shipping bin/7.png
+shipping bin/8.png
+shipping bin/9.png
 skin/04B_30__.fnt
 skin/NzSkin.atlas
 skin/NzSkin.json

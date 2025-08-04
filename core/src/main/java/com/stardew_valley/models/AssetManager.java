@@ -56,6 +56,8 @@ public class AssetManager {
     private final String npc_house_4_full = "images/cabins/4_full.png";
     private final String npc_house_4_top = "images/cabins/4_top.png";
 
+    private final String hay = "images/hay.png";
+
 
     private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
     private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
@@ -366,6 +368,8 @@ public class AssetManager {
 
     private final TextureRegion npc_house_4_full_tex = new TextureRegion(new Texture(npc_house_4_full));
     private final TextureRegion npc_house_4_top_tex = new TextureRegion(new Texture(npc_house_4_top));
+
+    private final TextureRegion hay_tex = new TextureRegion(new Texture(hay));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
     private final Texture cage_fence_tex = new Texture(cage_fence);
@@ -1117,6 +1121,10 @@ public class AssetManager {
 
     public TextureRegion getNpcHouse4Top() {
         return npc_house_4_top_tex;
+    }
+
+    public TextureRegion getHay() {
+        return hay_tex;
     }
 
 
@@ -4337,6 +4345,28 @@ public class AssetManager {
 
     public Texture defaultTexture() {
         return Hoe;
+    }
+
+    private final TextureRegion[] texturesShippingBin = new TextureRegion[] {
+        new TextureRegion(new Texture("shipping bin/1.png")),
+        new TextureRegion(new Texture("shipping bin/2.png")),
+        new TextureRegion(new Texture("shipping bin/3.png")),
+        new TextureRegion(new Texture("shipping bin/4.png")),
+        new TextureRegion(new Texture("shipping bin/5.png")),
+        new TextureRegion(new Texture("shipping bin/6.png")),
+        new TextureRegion(new Texture("shipping bin/7.png")),
+        new TextureRegion(new Texture("shipping bin/8.png")),
+        new TextureRegion(new Texture("shipping bin/9.png")),
+        new TextureRegion(new Texture("shipping bin/10.png")),
+        new TextureRegion(new Texture("shipping bin/11.png")),
+        new TextureRegion(new Texture("shipping bin/12.png")),
+        new TextureRegion(new Texture("shipping bin/13.png")),
+        new TextureRegion(new Texture("shipping bin/14.png")),
+        new TextureRegion(new Texture("shipping bin/15.png")),
+    };
+
+    public Animation<TextureRegion> getShippingBinAnimation() {
+        return new Animation<TextureRegion>(0.1f, texturesShippingBin);
     }
 
     public static AssetManager getAssetManager() {
