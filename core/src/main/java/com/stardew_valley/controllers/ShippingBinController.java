@@ -13,8 +13,8 @@ import com.stardew_valley.models.enums.commands.SellCommands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SellController extends Controller {
-    SellController(Repository repo) {
+public class ShippingBinController extends Controller {
+    ShippingBinController(Repository repo) {
         super(repo);
     }
 

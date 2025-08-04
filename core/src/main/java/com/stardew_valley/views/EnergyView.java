@@ -16,8 +16,8 @@ public class EnergyView {
 
     private final Player player;
     private final Stage stage;
-    private Image heartImage;
-    private Label energyLabel;
+    private final Image heartImage;
+    private final Label energyLabel;
     private final Texture[] heartTextures;
 
     public EnergyView(Player player) {
@@ -41,17 +41,22 @@ public class EnergyView {
     }
 
     public void updateEnergy() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
             player.getEnergy().consume(2.31f);
         }
         int energy = (int) player.getEnergy().getAmount();
-        int heartIndex = (int) ((energy / 200f) * 10);
+        double maxEnergy = player.getEnergy().getMaxEnergy();
+        int heartIndex = (int) ((energy / maxEnergy) * 10);
         if (heartIndex < 0) heartIndex = 0;
         if (heartIndex > 10) heartIndex = 10;
 
         heartImage.setDrawable(new TextureRegionDrawable(heartTextures[heartIndex]));
 
-        energyLabel.setText(String.format("%.1f", player.getEnergy().getAmount()));
+        energyLabel.setText(player.getEnergy().toString());
+        if (player.getEnergy().isUnlimited()) {
+            energyLabel.setPosition(1500,1030);
+            energyLabel.setText("unlimited!");
+        }
     }
 
     public void render(float delta) {

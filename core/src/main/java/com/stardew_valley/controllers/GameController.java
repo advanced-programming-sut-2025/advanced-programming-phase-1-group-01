@@ -27,7 +27,7 @@ public class GameController extends Controller {
     private final CraftingController craftingController;
     private final AnimalHusbandryController animalHusbandryController;
     private final NPCController npcController;
-    private final SellController sellController;
+    private final ShippingBinController sellController;
     private final BlackSmithController blackSmithController;
     private final CarpenterController carpenterController;
     private final FishShopController fishShopController;
@@ -52,7 +52,7 @@ public class GameController extends Controller {
         craftingController = new CraftingController(repo);
         animalHusbandryController = new AnimalHusbandryController(repo);
         npcController = new NPCController(repo);
-        sellController = new SellController(repo);
+        sellController = new ShippingBinController(repo);
         blackSmithController = new BlackSmithController(repo);
         carpenterController = new CarpenterController(repo);
         fishShopController = new FishShopController(repo);

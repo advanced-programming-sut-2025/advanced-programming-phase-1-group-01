@@ -3,6 +3,7 @@ package com.stardew_valley.views;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
+import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.*;
 import com.stardew_valley.models.animal.Animal;
@@ -24,6 +26,7 @@ import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.initializer.FarmInitializer;
@@ -94,6 +97,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 200f;
 
     private final InventoryView inventoryView;
+    private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
@@ -107,6 +111,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryView = new InventoryView();
+        this.energyView = new EnergyView(player);
     }
 
     @Override
@@ -135,6 +140,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.begin();
         drawWorld();
         dateTimeView.update();
+        energyView.updateEnergy();
+        energyView.render(delta);
         inventoryView.update();
         batch.end();
 
@@ -264,6 +271,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawHouseTop();
 
         drawNPCs();
+
+        drawShippingBin();
 
 //        drawTileHighlights();
 
@@ -460,6 +469,25 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private float stateTime = 0f;
+    private void drawShippingBin() {
+        stateTime += Gdx.graphics.getDeltaTime();
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+        Animation<TextureRegion> animation = AssetManager.getAssetManager().getShippingBinAnimation();
+        TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
+        for (int col = 0; col < numCols; col++) {
+            for (int row = 0; row < numRows; row++) {
+                Tile tile = tiles.get(row).get(col);
+                if (tile.getType() == TileType.SHIPPING_BIN) {
+                    batch.draw(currentFrame, getTilePixel(col), getTilePixel(row), 32f, 32f);
+                }
+            }
+        }
+    }
+
 
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
@@ -587,7 +615,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+        if (player.getEnergy().hasPassedOut()) {
             player.setFainting(true);
         }
 
@@ -1163,7 +1191,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             case GREENHOUSE: return Color.FOREST;
             case COTTAGE: return Color.BROWN;
             case WALL: return Color.DARK_GRAY;
-            case SALE_BUCKET: return Color.PINK;
             case FENCE: return Color.BLUE;
             default: return Color.LIGHT_GRAY;
         }

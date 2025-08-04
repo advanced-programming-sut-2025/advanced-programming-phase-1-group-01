@@ -21,11 +21,13 @@ import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.character.player.Refrigerator;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.cooking.CookingRecipe;
 import com.stardew_valley.models.cooking.CookingRecipes;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 public class CookingView extends View {
 
@@ -88,14 +90,14 @@ public class CookingView extends View {
         foodSelection = new SelectBox<>(skin);
         Array<String> recipeNames = new Array<>();
         for (CookingRecipes r : CookingRecipes.values()) {
-            recipeNames.add(r.name());
+            recipeNames.add(r.name().replace("_", " "));
         }
         foodSelection.setItems(recipeNames);
         putButton = new TextButton("Put", skin);
         pickButton = new TextButton("Pick", skin);
         itemTextField = new TextField("item?", skin);
         itemCountTextField = new TextField("how?", skin);
-        messageLabel = new Label("hi amirreza", skin);
+        messageLabel = new Label("", skin);
     }
 
     @Override
@@ -176,8 +178,8 @@ public class CookingView extends View {
     private void toggleFridgeAndInventory() {
         if (!isPressedRefrigerator) {
             showFridgeInventoryUI();
-            //showRefrigeratorItems();
-            //showInventoryItems();
+            showRefrigeratorItems();
+            showInventoryItems();
         }
         else {
             hideFridgeInventoryUI();
@@ -262,16 +264,16 @@ public class CookingView extends View {
         float startY = 600;
 
         int columns = 8;
-        //Set<CookingRecipe> recipes = controller.getRepo().getCurrentGame().getCurrentPlayer().getCookingRecipes();
+        Set<CookingRecipe> recipes = controller.getRepo().getCurrentGame().getCurrentPlayer().getCookingRecipes();
         int index = 0;
-        for (CookingRecipes recipe : CookingRecipes.values()) {
+        for (CookingRecipe recipe : recipes) {
             int col = index % columns;
             int row = index / columns;
 
             float x = startX + col * cellWidth;
             float y = startY + (2 - row) * cellHeight;
 
-            Image cellImage = recipe.toRecipe().getImage();
+            Image cellImage = recipe.getImage();
             cellImage.setPosition(x, y);
             stage.addActor(cellImage);
             recipeItemImages.add(cellImage);
@@ -305,22 +307,21 @@ public class CookingView extends View {
             float x = startX + col * cellWidth;
             float y = startY - (row + 1) * cellHeight;
 
-            //CHECK
-//            Image image = new Image(entry.getKey().getTextureImage());
-//            image.setBounds(x, y, 30f, 30f);
-//
-//            refrigeratorItemImages.add(image);
-//            stage.addActor(image);
-//            i++;
-//
-//            Label.LabelStyle labelStyle = new Label.LabelStyle();
-//            labelStyle.font = new BitmapFont();
-//            Label quantityLabel = new Label(String.valueOf(entry.getValue()), labelStyle);
-//
-//            quantityLabel.setFontScale(1.2f);
-//            quantityLabel.setPosition(x + 10, y);
-//            inventoryItemCount.add(quantityLabel);
-//            stage.addActor(quantityLabel);
+            Image image = new Image(entry.getKey().getTexture());
+            image.setBounds(x, y, 30f, 30f);
+
+            refrigeratorItemImages.add(image);
+            stage.addActor(image);
+            i++;
+
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = new BitmapFont();
+            Label quantityLabel = new Label(String.valueOf(entry.getValue()), labelStyle);
+
+            quantityLabel.setFontScale(1.2f);
+            quantityLabel.setPosition(x + 10, y);
+            inventoryItemCount.add(quantityLabel);
+            stage.addActor(quantityLabel);
         }
     }
 
@@ -353,22 +354,20 @@ public class CookingView extends View {
             float x = startX + col * cellWidth;
             float y = startY - (row + 1) * cellHeight;
 
-            //CHECK
+            Image image = new Image(slot.getItem().getTexture());
+            image.setBounds(x, y, 30f, 30f);
 
-//            Image image = new Image(CookingRecipes.BREAD.toRecipe().getTextureImage());
-//            image.setBounds(x, y, 30f, 30f);
-//
-//            refrigeratorItemImages.add(image);
-//            stage.addActor(image);
-//
-//            Label.LabelStyle labelStyle = new Label.LabelStyle();
-//            labelStyle.font = new BitmapFont();
-//            Label quantityLabel = new Label(String.valueOf(slot.getQuantity()), labelStyle);
-//
-//            quantityLabel.setFontScale(1.2f);
-//            quantityLabel.setPosition(x + 10, y);
-//            refrigeratorItemCount.add(quantityLabel);
-//            stage.addActor(quantityLabel);
+            refrigeratorItemImages.add(image);
+            stage.addActor(image);
+
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = new BitmapFont();
+            Label quantityLabel = new Label(String.valueOf(slot.getQuantity()), labelStyle);
+
+            quantityLabel.setFontScale(1.2f);
+            quantityLabel.setPosition(x + 10, y);
+            refrigeratorItemCount.add(quantityLabel);
+            stage.addActor(quantityLabel);
         }
     }
 

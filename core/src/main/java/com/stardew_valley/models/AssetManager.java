@@ -4332,6 +4332,28 @@ public class AssetManager {
         return Hoe;
     }
 
+    private final TextureRegion[] texturesShippingBin = new TextureRegion[] {
+        new TextureRegion(new Texture("shipping bin/1.png")),
+        new TextureRegion(new Texture("shipping bin/2.png")),
+        new TextureRegion(new Texture("shipping bin/3.png")),
+        new TextureRegion(new Texture("shipping bin/4.png")),
+        new TextureRegion(new Texture("shipping bin/5.png")),
+        new TextureRegion(new Texture("shipping bin/6.png")),
+        new TextureRegion(new Texture("shipping bin/7.png")),
+        new TextureRegion(new Texture("shipping bin/8.png")),
+        new TextureRegion(new Texture("shipping bin/9.png")),
+        new TextureRegion(new Texture("shipping bin/10.png")),
+        new TextureRegion(new Texture("shipping bin/11.png")),
+        new TextureRegion(new Texture("shipping bin/12.png")),
+        new TextureRegion(new Texture("shipping bin/13.png")),
+        new TextureRegion(new Texture("shipping bin/14.png")),
+        new TextureRegion(new Texture("shipping bin/15.png")),
+    };
+
+    public Animation<TextureRegion> getShippingBinAnimation() {
+        return new Animation<TextureRegion>(0.1f, texturesShippingBin);
+    }
+
     public static AssetManager getAssetManager() {
         if (assetManager == null) {
             assetManager = new AssetManager();

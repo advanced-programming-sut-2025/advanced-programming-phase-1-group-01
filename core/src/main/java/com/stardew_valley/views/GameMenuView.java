@@ -24,6 +24,7 @@ public class GameMenuView extends View {
     private SelectBox<String> numOfPlayers;
     private List<TextField> players;
     private List<Label> playersLabel;
+    private List<SelectBox<String>> playersMap;
     private TextButton startGame;
     private TextButton nextTurn;
     private TextButton backButton;
@@ -39,11 +40,11 @@ public class GameMenuView extends View {
         numOfPlayers.setItems("2", "3", "4");
         players = new ArrayList<>();
         playersLabel = new ArrayList<>();
+        playersMap = new ArrayList<>();
         startGame = new TextButton("Start Game", skin);
         nextTurn = new TextButton("Next Turn", skin);
         backButton = new TextButton("Back", skin);
         messageLabel = new Label("", skin);
-
     }
 
     @Override
@@ -117,16 +118,21 @@ public class GameMenuView extends View {
 
         players.clear();
         playersLabel.clear();
+        playersMap.clear();
 
         for (int i = 1; i <= count; i++) {
             Label label = new Label("Player " + i + " Username:", skin);
             TextField textField = new TextField("", skin);
+            SelectBox<String> selectBox = new SelectBox<>(skin);
+            selectBox.setItems("Map1", "Map2", "Map3");
             players.add(textField);
             playersLabel.add(label);
+            playersMap.add(selectBox);
 
             table.row();
             table.add(label).pad(5);
             table.add(textField).width(200).pad(5);
+            table.add(selectBox).width(200).pad(5);
         }
     }
 }
