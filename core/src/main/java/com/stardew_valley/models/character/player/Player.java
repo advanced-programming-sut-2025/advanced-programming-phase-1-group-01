@@ -56,6 +56,8 @@ public class Player extends Character {
     private float stateTime = 0f;
     private boolean isMoving = false;
 
+    List<Animal> animals;
+
     private final float totalFaintingTime = 2f;
     private float faintingTime = 0f;
     private boolean whileFainting = false;
@@ -925,5 +927,13 @@ public class Player extends Character {
 
     public void setFainting(boolean fainting) {
         whileFainting = fainting;
+    }
+
+    public void setAnimals(List<Animal> animals) {
+        this.animals = animals;
+    }
+
+    public List<Animal> getAnimals() {
+        return animals;
     }
 }
