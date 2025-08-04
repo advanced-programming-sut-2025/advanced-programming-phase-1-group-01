@@ -78,6 +78,11 @@ public class FarmInitializer {
             lakeInitializer(i);
             greenhouseInitializer(i);
         }
+
+        shippingBinInitializer(1);
+        shippingBinInitializer(3);
+        shippingBinInitializer(5);
+        shippingBinInitializer(7);
     }
 
     private static void npcsHouseInitializer() {
@@ -488,6 +493,31 @@ public class FarmInitializer {
         }
     }
 
+    private static void shippingBinInitializer(int landId) {
+
+        int row = landId / 3;
+        int col = landId % 3;
+
+        int centerX = col * 75 + 37;
+        int centerY = row * 75 + 37;
+
+        addShippingBinsAround(centerX, centerY);
+    }
+
+    private static void addShippingBinsAround(int x, int y) {
+        setShippingBinTile(x, y - 36);
+        setShippingBinTile(x, y + 37);
+        setShippingBinTile(x - 36, y);
+        setShippingBinTile(x + 36, y);
+    }
+
+    private static void setShippingBinTile(int x, int y) {
+        tiles.get(y).set(x, new Tile.Builder()
+            .setPosition(new Position(x, y))
+            .setType(TileType.SHIPPING_BIN)
+            .setMovable(false)
+            .build());
+    }
 
 
 

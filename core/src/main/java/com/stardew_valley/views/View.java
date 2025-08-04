@@ -44,6 +44,8 @@ public abstract class View implements Screen {
 
     @Override
     public void dispose() {
-
+        if (getStage() != null) {
+            getStage().dispose();
+        }
     }
 }

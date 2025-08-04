@@ -54,7 +54,7 @@ public class CraftingView extends View {
         recipeItemImages = new ArrayList<>();
         Array<String> recipeNames = new Array<>();
         for (CraftingRecipes r : CraftingRecipes.values()) {
-            recipeNames.add(r.name());
+            recipeNames.add(r.name().replace("_", " "));
         }
         craftSelection = new SelectBox<>(skin);
         craftSelection.setItems(recipeNames);
@@ -147,19 +147,26 @@ public class CraftingView extends View {
 
         int columns = 8;
 
-        //Set<CraftingRecipe> recipes = controller.getRepo().getCurrentGame().getCurrentPlayer().getCraftingRecipes();
+        Set<CraftingRecipe> recipes = controller.getRepo().getCurrentGame().getCurrentPlayer().getCraftingRecipes();
         int index = 0;
-        for (CraftingRecipes recipe : CraftingRecipes.values()) {
+        for (CraftingRecipe recipe : recipes) {
             int col = index % columns;
             int row = index / columns;
 
             float x = startX + col * cellWidth;
             float y = startY + (2 - row) * cellHeight;
 
-            Image cellImage = recipe.toRecipe().getImage();
+            Image cellImage = recipe.getImage();
             cellImage.setPosition(x, y);
 
-            if (isSmall(recipe)) {
+            CraftingRecipes matched = null;
+            for (CraftingRecipes r : CraftingRecipes.values()) {
+                if (r.getName().equalsIgnoreCase(recipe.getName())) {
+                    matched = r;
+                }
+            }
+
+            if (isSmall(matched)) {
                 cellImage.setScale(1.2f, 1.2f);
             }
 

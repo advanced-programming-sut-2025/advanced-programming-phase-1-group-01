@@ -97,8 +97,8 @@ public class SignUpMenuController extends Controller {
         String confirmPassword = data.get(2);
         String nickname = data.get(3);
         String email = data.get(4);
-        String gender = data.get(5);
-        String securityQuestion = data.get(6);
+        String genderStr = data.get(5);
+        String securityQuestionStr = data.get(6);
         String answer = data.get(7);
 
         if (username.isEmpty()) {
@@ -157,8 +157,24 @@ public class SignUpMenuController extends Controller {
             return;
         }
 
+        SecurityQuestion securityQuestion = null;
+        for (SecurityQuestion q : SecurityQuestion.values()) {
+            if (q.getQuestion().equals(securityQuestionStr)) {
+                securityQuestion = q;
+                break;
+            }
+        }
+
+        Gender gender = null;
+        if (Gender.MALE.name().equals(genderStr)) {
+            gender = Gender.MALE;
+        }
+        else  {
+            gender = Gender.FEMALE;
+        }
+
         String path = getRandomAvatarPath();
-        User user = new User(username, password, nickname, email, Gender.MALE, SecurityQuestion.QUESTION1, answer,path);
+        User user = new User(username, password, nickname, email, gender, securityQuestion, answer,path);
 
         repo.addUser(user);
         messageLabel.setText("User successfully registered!");

@@ -47,6 +47,7 @@ public class EnergyController extends Controller {
         String[] commandParts = command.split(" ");
         String valueStr = commandParts[3];
         int value = Integer.parseInt(valueStr);
+        energy.setHasPassedOut(false);
         energy.setAmount(value);
 
         return new Result(true, "Sets the energy to a specified value");
@@ -54,7 +55,9 @@ public class EnergyController extends Controller {
 
     private Result cheatEnergyUnlimited() {
         Energy energy = repo.getCurrentGame().getCurrentPlayer().getEnergy();
-        energy.setAmount(Double.POSITIVE_INFINITY);
+        energy.setAmount(Float.POSITIVE_INFINITY);
+        energy.setHasPassedOut(false);
+        energy.setUnlimited(true);
         return new Result(true, "Sets the energy to a unlimited value");
     }
 }

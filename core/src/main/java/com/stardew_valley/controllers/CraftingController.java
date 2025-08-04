@@ -47,16 +47,12 @@ public class CraftingController extends Controller {
             return new Result(false, "invalid command");
         }
 
-//        switch (matchedCommand) {
-//            case SHOW_RECIPE:
-//                return showRecipe();
-//            case CRAFT:
-//                return craft(command);
-//            case CHEAT_ADD_RECIPE:
-//                return cheatAddRecipe(command);
-//            case PLACE_ITEM:
-//                return placeItem(command);
-//        }
+        switch (matchedCommand) {
+            case CHEAT_ADD_RECIPE:
+                return cheatAddRecipe(command);
+            case PLACE_ITEM:
+                return placeItem(command);
+        }
         return null;
     }
 
@@ -93,7 +89,7 @@ public class CraftingController extends Controller {
 
             Slot inventorySlot = inventory.getSlot(materialName);
             if (inventorySlot == null) {
-                messageLabel.setText(materialName + "Slot not found.");
+                messageLabel.setText(materialName + " slot not found.");
                 return;
             }
             int itemCount = inventorySlot.getQuantity();
@@ -119,7 +115,7 @@ public class CraftingController extends Controller {
     }
 
     private Result cheatAddRecipe(String command) {
-        String recipeName = "mas";
+        String recipeName = extractValue(command,"-r",null);
 
         Player player = repo.getCurrentUser().getPlayer();
 
@@ -184,5 +180,24 @@ public class CraftingController extends Controller {
         slot.removeQuantity(1);
 
         return new Result(true, item.getName() + " placed successfully at (" + directionPosition.x() + ", " + directionPosition.y() + ").");
+    }
+
+    private String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 }

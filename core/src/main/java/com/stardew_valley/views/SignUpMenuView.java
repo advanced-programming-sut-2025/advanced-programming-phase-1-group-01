@@ -26,8 +26,8 @@ public class SignUpMenuView extends View {
     private TextField confirmPassword;
     private TextField nickname;
     private TextField email;
-    private SelectBox<Gender> gender;
-    private SelectBox<SecurityQuestion> securityQuestion;
+    private SelectBox<String> gender;
+    private SelectBox<String> securityQuestion;
     private TextField answer;
     private TextButton signupButton;
     private TextButton loginButton;
@@ -51,9 +51,9 @@ public class SignUpMenuView extends View {
         nickname = new TextField("", skin);
         email = new TextField("", skin);
         gender = new SelectBox<>(skin);
-        gender.setItems(Gender.values());
+        gender.setItems(Gender.MALE.name(), Gender.FEMALE.name());
         securityQuestion = new SelectBox<>(skin);
-        securityQuestion.setItems(SecurityQuestion.values());
+        securityQuestion.setItems(SecurityQuestion.QUESTION1.getQuestion(),SecurityQuestion.QUESTION2.getQuestion(),SecurityQuestion.QUESTION3.getQuestion());
         answer = new TextField("", skin);
         signupButton = new TextButton("Sign Up", skin);
         loginButton = new TextButton("Login", skin);
@@ -119,7 +119,7 @@ public class SignUpMenuView extends View {
                 data.add(nickname.getText());
                 data.add(email.getText());
                 data.add(gender.getSelected().toString());
-                data.add(securityQuestion.getSelected().getQuestion());
+                data.add(securityQuestion.getSelected());
                 data.add(answer.getText());
 
                 controller.register(data,messageLabel);

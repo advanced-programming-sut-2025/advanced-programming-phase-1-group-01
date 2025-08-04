@@ -42,11 +42,11 @@ public class CookingController extends Controller {
             return new Result(false, "invalid command");
         }
 
-//        switch (matchedCommand) {
+        switch (matchedCommand) {
+            case CHEAT_ADD_RECIPE:
+                return cheatAddRecipe(command);
 //            case SHOW_RECIPE:
 //                return showRecipe();
-//            case CHEAT_ADD_RECIPE:
-//                return cheatAddRecipe(command);
 //            case PUT_REFRIGERATOR:
 //                return putRefrigerator(command);
 //            case PICK_REFRIGERATOR:
@@ -55,12 +55,12 @@ public class CookingController extends Controller {
 //                return cookingPrepare(command);
 //            case EAT:
 //                return eat(command);
-//        }
+        }
         return null;
     }
 
     private Result cheatAddRecipe(String command) {
-        String recipeName = "ali";
+        String recipeName = extractValue(command,"-r",null);
 
         Player player = repo.getCurrentUser().getPlayer();
 
@@ -91,7 +91,15 @@ public class CookingController extends Controller {
     }
 
     public void put(Label messageLabel, String itemStr, String count) {
-        int itemCount = Integer.parseInt(count);
+        int itemCount;
+
+        try {
+            itemCount = Integer.parseInt(count);
+        }
+        catch (NumberFormatException e) {
+            messageLabel.setText("please enter an integer");
+            return;
+        }
 
         Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
@@ -120,7 +128,15 @@ public class CookingController extends Controller {
     }
 
     public void pick(Label messageLabel, String itemStr, String count) {
-        int itemCount = Integer.parseInt(count);
+        int itemCount;
+
+        try {
+            itemCount = Integer.parseInt(count);
+        }
+        catch (NumberFormatException e) {
+            messageLabel.setText("please enter an integer");
+            return;
+        }
 
         Player player = repo.getCurrentUser().getPlayer();
         Refrigerator refrigerator = player.getRefrigerator();
@@ -183,7 +199,7 @@ public class CookingController extends Controller {
             Slot slot = inventory.getSlot(materialName);
 
             if (slot == null) {
-                messageLabel.setText("Slot not found.");
+                messageLabel.setText(materialName + " slot not found.");
                 return;
             }
 
@@ -269,5 +285,24 @@ public class CookingController extends Controller {
 
 
         return new Result(true, "This " + foodName + " has been eaten.");
+    }
+
+    private String extractValue(String command, String startFlag, String endFlag) {
+        String patternString;
+
+        if (endFlag != null) {
+            patternString = startFlag + " (.*?) " + endFlag;
+        } else {
+            patternString = startFlag + " (.*)";
+        }
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(command);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return null;
     }
 }
