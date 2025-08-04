@@ -1,5 +1,8 @@
 package com.stardew_valley.models.dateTime;
 
+import com.stardew_valley.models.Game;
+import com.stardew_valley.models.character.NPC.NPC;
+
 import java.util.List;
 
 public class DateTime implements Cloneable {
@@ -43,6 +46,7 @@ public class DateTime implements Cloneable {
         day++;
         advanceWeekDay();
         timeManager.prepareForNewDay();
+        timeManager.getGame().getFarm().getNPCs().forEach(NPC::advanceDayCounter);
 
         if (day >= MAX_DAY_OF_SEASON) {
             day = 0;
@@ -193,6 +197,7 @@ public class DateTime implements Cloneable {
             this.hour = hour;
             return this;
         }
+
 
         public TimeManager getTimeManager() {
             return timeManager;

@@ -27,6 +27,9 @@ public class AssetManager {
     private final String barn_fence = "images/barn_fence_16x16.png";
     private final String cage_fence = "images/cage_fence_16x16.png";
 
+    private final String chat_icon = "images/chat_16x16.png";
+    private final String plus_icon = "images/plus_16x16.png";
+
     private final String house = "images/house.png";
 
     private final String mine = "images/resized_mine.png";
@@ -374,6 +377,10 @@ public class AssetManager {
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
     private final Texture cage_fence_tex = new Texture(cage_fence);
     private final Texture barn_fence_tex = new Texture(barn_fence);
+
+    private final Texture plus_tex = new Texture(plus_icon);
+    private final Texture chat_tex = new Texture(chat_icon);
+
 
     private final TextureRegion fainting_tex1 = new TextureRegion(new Texture(fainting_1));
     private final TextureRegion fainting_tex2 = new TextureRegion(new Texture(fainting_2));
@@ -1052,6 +1059,14 @@ public class AssetManager {
 
     public Texture getBarnFence() {
         return barn_fence_tex;
+    }
+
+    public Texture getPlus() {
+        return plus_tex;
+    }
+
+    public Texture getChat() {
+        return chat_tex;
     }
 
     public Texture getCageFence() {
