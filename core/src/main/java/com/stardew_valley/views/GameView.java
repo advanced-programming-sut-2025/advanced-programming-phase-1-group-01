@@ -1365,7 +1365,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             case GREENHOUSE: return Color.FOREST;
             case COTTAGE: return Color.BROWN;
             case WALL: return Color.DARK_GRAY;
-            case SALE_BUCKET: return Color.PINK;
+            //case SALE_BUCKET: return Color.PINK;
             case FENCE: return Color.BLUE;
             default: return Color.LIGHT_GRAY;
         }
