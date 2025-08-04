@@ -55,6 +55,8 @@ public class AssetManager {
     private final String npc_house_4_full = "images/cabins/4_full.png";
     private final String npc_house_4_top = "images/cabins/4_top.png";
 
+    private final String hay = "images/hay.png";
+
 
     private final String fainting_1 = "images/fainting/resized_1-Photoroom.png";
     private final String fainting_2 = "images/fainting/resized_2-Photoroom.png";
@@ -365,6 +367,8 @@ public class AssetManager {
 
     private final TextureRegion npc_house_4_full_tex = new TextureRegion(new Texture(npc_house_4_full));
     private final TextureRegion npc_house_4_top_tex = new TextureRegion(new Texture(npc_house_4_top));
+
+    private final TextureRegion hay_tex = new TextureRegion(new Texture(hay));
 
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
     private final Texture cage_fence_tex = new Texture(cage_fence);
@@ -1116,6 +1120,10 @@ public class AssetManager {
 
     public TextureRegion getNpcHouse4Top() {
         return npc_house_4_top_tex;
+    }
+
+    public TextureRegion getHay() {
+        return hay_tex;
     }
 
 
