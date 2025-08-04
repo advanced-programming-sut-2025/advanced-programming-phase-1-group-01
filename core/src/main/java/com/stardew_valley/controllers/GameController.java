@@ -27,7 +27,7 @@ public class GameController extends Controller {
     private final CraftingController craftingController;
     private final AnimalHusbandryController animalHusbandryController;
     private final NPCController npcController;
-    private final ShippingBinController sellController;
+    private final ShippingBinController shippingBinController;
     private final BlackSmithController blackSmithController;
     private final CarpenterController carpenterController;
     private final FishShopController fishShopController;
@@ -52,7 +52,7 @@ public class GameController extends Controller {
         craftingController = new CraftingController(repo);
         animalHusbandryController = new AnimalHusbandryController(repo);
         npcController = new NPCController(repo);
-        sellController = new ShippingBinController(repo);
+        shippingBinController = new ShippingBinController(repo);
         blackSmithController = new BlackSmithController(repo);
         carpenterController = new CarpenterController(repo);
         fishShopController = new FishShopController(repo);
@@ -154,7 +154,7 @@ public class GameController extends Controller {
         } else if (matchedCommand instanceof NPCCommands) {
             return npcController.handleCommand(commandLine);
         } else if (matchedCommand instanceof SellCommands) {
-            return sellController.handleCommand(commandLine);
+            return shippingBinController.handleCommand(commandLine);
         } else if (matchedCommand instanceof CookingCommands) {
             return cookingController.handleCommand(commandLine);
         } else if (matchedCommand instanceof CraftingCommands) {
@@ -239,8 +239,8 @@ public class GameController extends Controller {
         return npcController;
     }
 
-    public SellController getSellController() {
-        return sellController;
+    public ShippingBinController getShippingBinController() {
+        return shippingBinController;
     }
 
     public BlackSmithController getBlackSmithController() {
