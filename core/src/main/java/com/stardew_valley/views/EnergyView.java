@@ -41,7 +41,7 @@ public class EnergyView {
     }
 
     public void updateEnergy() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
             player.getEnergy().consume(2.31f);
         }
         int energy = (int) player.getEnergy().getAmount();

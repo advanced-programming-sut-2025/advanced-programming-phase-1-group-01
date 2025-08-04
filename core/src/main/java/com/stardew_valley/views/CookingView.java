@@ -21,7 +21,6 @@ import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.character.player.Refrigerator;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.cooking.CookingRecipe;
 import com.stardew_valley.models.cooking.CookingRecipes;
 
 import java.util.List;

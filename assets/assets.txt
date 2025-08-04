@@ -3640,6 +3640,7 @@ images/fainting/resized_2-Photoroom.png
 images/fainting/resized_3-Photoroom.png
 images/fainting/resized_4-Photoroom.png
 images/fainting/resized_5-Photoroom.png
+images/hay.png
 images/house.png
 images/house_top.png
 images/lake.png
