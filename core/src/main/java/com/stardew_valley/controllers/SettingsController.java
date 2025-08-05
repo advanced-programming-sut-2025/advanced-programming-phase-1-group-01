@@ -26,5 +26,6 @@ public class SettingsController extends Controller {
         repo.setCurrentUser(nextPlayer.getUser());
         repo.getCurrentGame().setCurrentPlayer(nextPlayer);
         Main.getMain().setScreen(new GameView(new GameController(repo)));
+        //hi
     }
 }
