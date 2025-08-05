@@ -4477,7 +4477,7 @@ public class AssetManager {
     };
 
     public Animation<TextureRegion> getShippingBinAnimation() {
-        return new Animation<TextureRegion>(0.1f, texturesShippingBin);
+        return new Animation<TextureRegion>(0.2f, texturesShippingBin);
     }
 
     public Texture getShippingBin() {
