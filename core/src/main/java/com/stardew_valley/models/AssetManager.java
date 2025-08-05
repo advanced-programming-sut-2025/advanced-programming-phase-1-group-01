@@ -27,6 +27,24 @@ public class AssetManager {
     private final String barn_fence = "images/barn_fence_16x16.png";
     private final String cage_fence = "images/cage_fence_16x16.png";
 
+    private final String black_rect = "images/dark_rect_1.png";
+    private final String light_rect = "images/light_rect_1.png";
+
+    private final String done = "images/done_16x16.png";
+
+    private final String bee_house = "images/artisans/Bee_House.png";
+    private final String charcoal_kiln = "images/artisans/Charcoal_Kiln.png";
+    private final String cheese_press = "images/artisans/Cheese_Press.png";
+    private final String dehydrator = "images/artisans/Dehydrator.png";
+    private final String fish_smoker = "images/artisans/Fish_Smoker.png";
+    private final String furnace = "images/artisans/Furnace.png";
+    private final String keg = "images/artisans/Keg.png";
+    private final String loom = "images/artisans/Loom.png";
+    private final String mayonnaise_machine = "images/artisans/Mayonnaise_Machine.png";
+    private final String oil_maker = "images/artisans/Oil_Maker.png";
+    private final String preserves_jar = "images/artisans/Preserves_Jar.png";
+
+
     private final String chat_icon = "images/chat_16x16.png";
     private final String plus_icon = "images/plus_16x16.png";
 
@@ -377,6 +395,24 @@ public class AssetManager {
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
     private final Texture cage_fence_tex = new Texture(cage_fence);
     private final Texture barn_fence_tex = new Texture(barn_fence);
+
+    private final TextureRegion black_rect_tex = new TextureRegion(new Texture(black_rect));
+    private final TextureRegion light_rect_tex = new TextureRegion(new Texture(light_rect));
+
+    private final TextureRegion done_tex = new TextureRegion(new Texture(done));
+
+    private final TextureRegion bee_house_tex = new TextureRegion(new Texture(bee_house));
+    private final TextureRegion charcoal_kiln_tex = new TextureRegion(new Texture(charcoal_kiln));
+    private final TextureRegion cheese_press_tex = new TextureRegion(new Texture(cheese_press));
+    private final TextureRegion dehydrator_tex = new TextureRegion(new Texture(dehydrator));
+    private final TextureRegion fish_smoker_tex = new TextureRegion(new Texture(fish_smoker));
+    private final TextureRegion furnace_tex = new TextureRegion(new Texture(furnace));
+    private final TextureRegion keg_tex = new TextureRegion(new Texture(keg));
+    private final TextureRegion loom_tex = new TextureRegion(new Texture(loom));
+    private final TextureRegion mayonnaise_machine_tex = new TextureRegion(new Texture(mayonnaise_machine));
+    private final TextureRegion oil_maker_tex = new TextureRegion(new Texture(oil_maker));
+    private final TextureRegion preserves_jar_tex = new TextureRegion(new Texture(preserves_jar));
+
 
     private final Texture plus_tex = new Texture(plus_icon);
     private final Texture chat_tex = new Texture(chat_icon);
@@ -1060,6 +1096,66 @@ public class AssetManager {
     public Texture getBarnFence() {
         return barn_fence_tex;
     }
+
+
+    public TextureRegion getBlackRect() {
+        return black_rect_tex;
+    }
+
+    public TextureRegion getLightRect() {
+        return light_rect_tex;
+    }
+
+    public TextureRegion getDone() {
+        return done_tex;
+    }
+
+
+    public TextureRegion getBeeHouse() {
+        return bee_house_tex;
+    }
+
+    public TextureRegion getCharcoalKiln() {
+        return charcoal_kiln_tex;
+    }
+
+    public TextureRegion getCheesePress() {
+        return cheese_press_tex;
+    }
+
+    public TextureRegion getDehydrator() {
+        return dehydrator_tex;
+    }
+
+    public TextureRegion getFishSmoker() {
+        return fish_smoker_tex;
+    }
+
+    public TextureRegion getFurnace() {
+        return furnace_tex;
+    }
+
+    public TextureRegion getKeg() {
+        return keg_tex;
+    }
+
+    public TextureRegion getLoom() {
+        return loom_tex;
+    }
+
+    public TextureRegion getMayonnaiseMachine() {
+        return mayonnaise_machine_tex;
+    }
+
+    public TextureRegion getOilMaker() {
+        return oil_maker_tex;
+    }
+
+    public TextureRegion getPreservesJar() {
+        return preserves_jar_tex;
+    }
+
+
 
     public Texture getPlus() {
         return plus_tex;
