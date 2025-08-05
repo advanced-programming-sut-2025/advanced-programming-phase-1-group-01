@@ -16,7 +16,7 @@ import com.stardew_valley.models.tool.enums.BackpackType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryView extends Window {
+public class InventoryView extends GameWindow {
     private final Table slotTable;
     private final List<Stack> slotStacks;
     private final ScrollPane scrollPane;
@@ -26,7 +26,6 @@ public class InventoryView extends Window {
     private Image trashCan;
     private TextButton equipSlotButton;
     private Label slotInfoLabel;
-
     private final Inventory inventory;
 
     public InventoryView() {
@@ -48,13 +47,8 @@ public class InventoryView extends Window {
 
         equipSlotButton.setVisible(false);
 
-        this.setSize(900, 600);
-        this.setPosition(Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
-        this.setMovable(true);
-        this.setVisible(false);
-
         mainTable.add(scrollPane).expand().fill().padTop(30);
-        this.add(mainTable).size(700, 450).padBottom(40);
+        this.add(mainTable).size(700, 450).padBottom(40).padLeft(20);
         trashCan = new Image(AssetManager.getAssetManager().getTrashCan());
 
         trashCan.addListener(new ClickListener() {
@@ -72,7 +66,7 @@ public class InventoryView extends Window {
         this.row();
         this.add(slotInfoLabel);
         equipSlotButton.getLabel().setScale(0.2f);
-        this.add(equipSlotButton).size(150, 80)/*.padBottom(100)*/;
+        this.add(equipSlotButton).size(150, 80).padRight(30);
         equipSlotButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -111,6 +105,7 @@ public class InventoryView extends Window {
         return scrollPane;
     }
 
+    @Override
     public void update() {
         scrollPane.setScrollingDisabled(true, inventory.getCapacity() == BackpackType.SMALL.getCapacity() || inventory.getCapacity() == BackpackType.BIG.getCapacity());
 
@@ -174,5 +169,6 @@ public class InventoryView extends Window {
     public void resetLastHighlightedBackground() {
         lastHighlightedBackground.setColor(1, 1, 1, 1);
         equipSlotButton.setVisible(false);
+        slotInfoLabel.setText("");
     }
 }

@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -22,8 +21,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
-import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
+import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -36,7 +35,6 @@ import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
@@ -114,13 +112,23 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private final float speed = 200f;
 
-    private final InventoryView inventoryView;
+    private final WindowManager inventoryMenu;
+    private final GameWindow inventoryView;
+    private final SkillsView skillsView;
+    private final SocialView socialView;
+    private final GameWindow miniMapView;
+    private final SettingsView settingsView;
+
+    private final FriendshipView friendshipView;
+    private final TextButton friendshipsButton;
+
     private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
 
     public GameView(GameController controller) {
+        stage = new Stage(new ScreenViewport());
         this.controller = controller;
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -129,14 +137,19 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         player.setAnimals(animals);
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
+        this.inventoryMenu = new WindowManager(stage);
         this.inventoryView = new InventoryView();
+        this.skillsView = new SkillsView();
+        this.socialView = new SocialView();
+        this.miniMapView = new MiniMapView();
+        this.settingsView = new SettingsView(controller.getSettingsController());
+        friendshipView = new FriendshipView(player.getRelationService());
+        friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
         this.energyView = new EnergyView(player);
     }
 
     @Override
     public void show() {
-        stage = new Stage(new ScreenViewport());
-
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
@@ -144,7 +157,24 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         createDialog();
 
-        stage.addActor(inventoryView);
+        inventoryMenu.addWindow("Inventory", inventoryView);
+        inventoryMenu.addWindow("Skills", skillsView);
+        inventoryMenu.addWindow("Social", socialView);
+        inventoryMenu.addWindow("Map", miniMapView);
+        inventoryMenu.addWindow("Settings", settingsView);
+        inventoryMenu.showWindow(inventoryView);
+
+        stage.addActor(friendshipView);
+        friendshipsButton.setSize(150, 80);
+        friendshipsButton.getLabel().setFontScale(0.8f);
+        friendshipsButton.setPosition(Gdx.graphics.getWidth() - 170, 20);
+        stage.addActor(friendshipsButton);
+        friendshipsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                friendshipView.setVisible(!friendshipView.isVisible());
+            }
+        });
     }
 
     @Override
@@ -161,7 +191,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dateTimeView.update();
         energyView.updateEnergy();
         energyView.render(delta);
-        inventoryView.update();
+        inventoryMenu.update();
+        friendshipView.update();
         batch.end();
 
         stage.act(delta);
@@ -181,7 +212,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {
-            inventoryView.setVisible(!inventoryView.isVisible());
+            inventoryMenu.setVisible(!inventoryMenu.isVisible());
             return true;
         }
         if (i == Input.Keys.NUM_0) {
@@ -309,11 +340,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawDividingFences();
 
-        drawHouseTop();
-
         drawNPCs();
-
-        drawShippingBin();
 
 //        drawTileHighlights();
 
@@ -323,11 +350,27 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawTileObjectsExceptTrees();
 
+
         drawAnimals();
 
         drawPlayer();
 
+        drawEquippedTool();
+
+        drawShippingBin();
+
+        drawHouseTop();
+
         drawTrees();
+    }
+
+    private void drawEquippedTool() {
+        if (player.getInventory().getEquippedSlot() == null) return;
+        Tool tool = (player.getInventory().getEquippedSlot().getItem() instanceof Tool) ? (Tool) player.getInventory().getEquippedSlot().getItem() : null;
+
+        if (tool != null) {
+            batch.draw(tool.getTexture(), player.getX() + 7, player.getY()  + 5, 14, 14);
+        }
     }
 
     private void drawPlowedTiles() {

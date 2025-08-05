@@ -620,7 +620,7 @@ public class RelationshipController extends Controller {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Map<Integer, Trade> pendingTradesMap = new HashMap<>();
 
-        for (Trading trading : currentPlayer.getRelationService().getTradingships().values()) {
+        for (Trading trading : currentPlayer.getRelationService().getTradings().values()) {
             Map<Integer, Trade> pendingTrades = trading.getPendingTrades(); // فرض: map از id به Trade
             pendingTradesMap.putAll(pendingTrades);
         }
@@ -655,7 +655,7 @@ public class RelationshipController extends Controller {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Map<Integer, Trade> allTradesMap = new HashMap<>();
 
-        for (Trading trading : currentPlayer.getRelationService().getTradingships().values()) {
+        for (Trading trading : currentPlayer.getRelationService().getTradings().values()) {
             Map<Integer, Trade> trades = trading.getAllTrades();
             if (trades != null) {
                 allTradesMap.putAll(trades);
@@ -701,7 +701,7 @@ public class RelationshipController extends Controller {
         Trade foundTrade = null;
         Character tradePartner = null;
 
-        for (Map.Entry<Character, Trading> entry : currentPlayer.getRelationService().getTradingships().entrySet()) {
+        for (Map.Entry<Character, Trading> entry : currentPlayer.getRelationService().getTradings().entrySet()) {
             Trade trade = entry.getValue().getPendingTrade(id);
             if (trade != null && trade.getReceiver().equals(currentPlayer)) {
                 foundTrade = trade;

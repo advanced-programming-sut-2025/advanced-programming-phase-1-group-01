@@ -12,16 +12,15 @@ public class RelationshipService {
     private final Map<Character, Friendship> friendships;
     private Marriage marriage;
     private final Map<Character, Relationship> relationships;
-    private final Map<Character, Trading> tradingships;
+    private final Map<Character, Trading> tradings;
     private User partner;
-
 
     public RelationshipService(Character character) {
         this.partner = null;
         this.character = character;
         this.friendships = new LinkedHashMap<>();
         this.relationships = new LinkedHashMap<>();
-        this.tradingships = new LinkedHashMap<>();
+        this.tradings = new LinkedHashMap<>();
     }
 
     public Map<Character, Relationship> getRelationships() {
@@ -36,7 +35,7 @@ public class RelationshipService {
         return relationships.containsKey(character);
     }
 
-    public void marry(Player partner) {
+    public void marry(Player partner) throws GaysMarriageException {
         if (marriage != null) return;
         marriage = new Marriage((Player) character, partner);
         if (!partner.getRelationService().isMarried()) {
@@ -67,24 +66,24 @@ public class RelationshipService {
     }
 
     public void addTrader(Character friend) {
-        tradingships.putIfAbsent(friend, new Trading((Player) character, (Player) friend));
+        tradings.putIfAbsent(friend, new Trading((Player) character, (Player) friend));
         if (!friend.getRelationService().haveTradeWith(character)) {
             friend.getRelationService().addTrader(character);
         }
     }
 
     public Trading getTrading(Character friend) {
-        if (tradingships.containsKey(friend)) return tradingships.get(friend);
+        if (tradings.containsKey(friend)) return tradings.get(friend);
         addTrader(friend);
-        return tradingships.get(friend);
+        return tradings.get(friend);
     }
 
     public boolean haveTradeWith(Character trader) {
-        return tradingships.containsKey(trader);
+        return tradings.containsKey(trader);
     }
 
-    public Map<Character, Trading> getTradingships() {
-        return tradingships;
+    public Map<Character, Trading> getTradings() {
+        return tradings;
     }
 
     public Map<Character, Friendship> getFriendships() {

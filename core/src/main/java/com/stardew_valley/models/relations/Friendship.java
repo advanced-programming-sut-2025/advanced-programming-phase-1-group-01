@@ -80,7 +80,7 @@ public class Friendship extends Relationship {
     }
 
     public void addGift(Player sender, Player receiver, Item item, int amount, DateTime now) {
-        Gift gift = new GiftBuilder()
+        Gift gift = new Gift.Builder()
                 .setSender(sender)
                 .setReceiver(receiver)
                 .setItem(item)
