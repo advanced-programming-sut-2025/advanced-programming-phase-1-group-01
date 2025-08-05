@@ -19,7 +19,9 @@ import java.util.List;
 
 import static com.stardew_valley.models.Game.PLAYERS_STARTING_POSITION;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class Main extends Game {
     private static Main main;
     private static SpriteBatch batch;
@@ -108,6 +110,7 @@ public class Main extends Game {
             if (player.getUser().getUsername().equals("4"))
                 player.getGame().getTimeManager().prepareForNewDay();
         }
+        farm.getTile(31, 75).setMovable(true);
         game.getForagingManager().prepareNewDayForaging();
     }
 }

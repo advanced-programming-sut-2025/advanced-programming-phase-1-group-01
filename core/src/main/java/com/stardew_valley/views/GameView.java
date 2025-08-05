@@ -122,6 +122,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final FriendshipView friendshipView;
     private final TextButton friendshipsButton;
 
+    private final GiftView giftView;
+
+    private final NotificationsView notificationsView;
+
     private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
@@ -145,6 +149,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.settingsView = new SettingsView(controller.getSettingsController());
         friendshipView = new FriendshipView(player.getRelationService());
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
+        giftView = new GiftView();
+        notificationsView = new NotificationsView();
         this.energyView = new EnergyView(player);
     }
 
@@ -175,6 +181,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 friendshipView.setVisible(!friendshipView.isVisible());
             }
         });
+
+        stage.addActor(notificationsView);
     }
 
     @Override
@@ -193,6 +201,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         energyView.render(delta);
         inventoryMenu.update();
         friendshipView.update();
+//        notificationsView.update();
         batch.end();
 
         stage.act(delta);
@@ -436,7 +445,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawPlayer() {
         batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
