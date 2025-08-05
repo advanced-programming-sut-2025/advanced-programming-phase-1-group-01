@@ -70,4 +70,41 @@ public class Gift {
     public int getGiftXp() {
         return (rate - 3) * 30 + 15;
     }
+
+    public static class Builder {
+        private Player sender;
+        private Player receiver;
+        private Item item;
+        private int amount;
+        private DateTime sentTime;
+
+        public Gift.Builder setSender(Player sender) {
+            this.sender = sender;
+            return this;
+        }
+
+        public Gift.Builder setReceiver(Player receiver) {
+            this.receiver = receiver;
+            return this;
+        }
+
+        public Gift.Builder setItem(Item item) {
+            this.item = item;
+            return this;
+        }
+
+        public Gift.Builder setAmount(int amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public Gift.Builder setSentTime(DateTime sentTime) {
+            this.sentTime = sentTime;
+            return this;
+        }
+
+        public Gift build() {
+            return new Gift(sender, receiver, item, amount, sentTime);
+        }
+    }
 }

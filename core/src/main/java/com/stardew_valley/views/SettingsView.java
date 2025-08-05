@@ -1,22 +1,40 @@
 package com.stardew_valley.views;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.AssetManager;
 
-public class SettingsView extends Window {
+public class SettingsView extends GameWindow {
+    private Table table;
+    private TextButton nextTurnButton;
 
-    public SettingsView() {
+    private final SettingsController controller;
+
+    public SettingsView(SettingsController controller) {
         super("Settings", AssetManager.getAssetManager().getSkin(), "Letter");
 
-        Skin skin = AssetManager.getAssetManager().getSkin();
+        this.controller = controller;
+        table = new Table(getSkin());
+        nextTurnButton = new TextButton("Next Turn", getSkin());
 
-        // DO NOT MODIFY
-        this.setSize(900, 600);
-        this.setPosition(Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
-        this.setMovable(true);
-        this.setVisible(false);
-        // DO NOT MODIFY
+        nextTurnButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SettingsView.this.controller.nextTurn();
+            }
+        });
+
+        table.add(nextTurnButton);
+        table.setFillParent(true);
+        table.center();
+        addActor(table);
+    }
+
+    @Override
+    public void update() {
+
     }
 }

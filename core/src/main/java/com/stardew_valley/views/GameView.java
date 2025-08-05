@@ -13,12 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.GameController;
+import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -100,11 +102,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 200f;
 
     private final WindowManager inventoryMenu;
-    private final InventoryView inventoryView;
+    private final GameWindow inventoryView;
     private final SkillsView skillsView;
     private final SocialView socialView;
-    private final MiniMapView miniMapView;
+    private final GameWindow miniMapView;
     private final SettingsView settingsView;
+
+    private final FriendshipView friendshipView;
+    private final TextButton friendshipsButton;
 
     private final EnergyView energyView;
 
@@ -125,7 +130,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.skillsView = new SkillsView();
         this.socialView = new SocialView();
         this.miniMapView = new MiniMapView();
-        this.settingsView = new SettingsView();
+        this.settingsView = new SettingsView(controller.getSettingsController());
+        friendshipView = new FriendshipView(player.getRelationService());
+        friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
         this.energyView = new EnergyView(player);
     }
 
@@ -144,6 +151,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.addWindow("Map", miniMapView);
         inventoryMenu.addWindow("Settings", settingsView);
         inventoryMenu.showWindow(inventoryView);
+
+        stage.addActor(friendshipView);
+        friendshipsButton.setSize(150, 80);
+        friendshipsButton.getLabel().setFontScale(0.8f);
+        friendshipsButton.setPosition(Gdx.graphics.getWidth() - 170, 20);
+        stage.addActor(friendshipsButton);
+        friendshipsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                friendshipView.setVisible(!friendshipView.isVisible());
+            }
+        });
     }
 
     @Override
@@ -160,7 +179,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dateTimeView.update();
         energyView.updateEnergy();
         energyView.render(delta);
-        inventoryView.update();
+        inventoryMenu.update();
+        friendshipView.update();
         batch.end();
 
         stage.act(delta);
@@ -305,15 +325,27 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawTileObjectsExceptTrees();
 
-        drawShippingBin();
 
         drawAnimals();
 
         drawPlayer();
 
+        drawEquippedTool();
+
+        drawShippingBin();
+
         drawHouseTop();
 
         drawTrees();
+    }
+
+    private void drawEquippedTool() {
+        if (player.getInventory().getEquippedSlot() == null) return;
+        Tool tool = (player.getInventory().getEquippedSlot().getItem() instanceof Tool) ? (Tool) player.getInventory().getEquippedSlot().getItem() : null;
+
+        if (tool != null) {
+            batch.draw(tool.getTexture(), player.getX() + 7, player.getY()  + 5, 14, 14);
+        }
     }
 
     private void drawPlowedTiles() {

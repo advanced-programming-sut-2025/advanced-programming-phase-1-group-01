@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WindowManager extends Group {
-    private final Map<String, Window> windows = new HashMap<>();
+    private final Map<String, GameWindow> windows = new HashMap<>();
     private Window currentWindow = null;
 
     private final ButtonGroup<TextButton> buttonGroup;
@@ -93,7 +93,7 @@ public class WindowManager extends Group {
         this.addActor(buttonBar);
     }
 
-    public void addWindow(String name, Window window) {
+    public void addWindow(String name, GameWindow window) {
         windows.put(name, window);
         window.setVisible(false);
         this.addActor(window);
@@ -122,6 +122,12 @@ public class WindowManager extends Group {
         if (currentWindow != null) {
             currentWindow.setVisible(false);
             currentWindow = null;
+        }
+    }
+
+    public void update() {
+        for (GameWindow window : windows.values()) {
+            window.update();
         }
     }
 }

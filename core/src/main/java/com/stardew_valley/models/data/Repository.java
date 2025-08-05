@@ -1,5 +1,6 @@
 package com.stardew_valley.models.data;
 
+import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.Game;
 import com.stardew_valley.models.enums.commands.View;
 

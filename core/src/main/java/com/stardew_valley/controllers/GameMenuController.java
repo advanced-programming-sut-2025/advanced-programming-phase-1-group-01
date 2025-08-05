@@ -132,7 +132,7 @@ public class GameMenuController extends Controller {
     }
 
     public void nextTurn(Label messageLabel) {
-        messageLabel.setText("Sik baba!");
+
     }
 
     public void back(Label messageLabel) {
