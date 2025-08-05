@@ -4384,6 +4384,42 @@ public class AssetManager {
         return new Animation<TextureRegion>(0.1f, texturesShippingBin);
     }
 
+    public Texture getShippingBin() {
+        return new Texture("shipping bin/1.png");
+    }
+
+    public Texture getFarmingAbility() {
+        return new Texture("ability/Farming.png");
+    }
+
+    public Texture getFishingAbility() {
+        return new Texture("ability/Fishing.png");
+    }
+
+    public Texture getForagingAbility() {
+        return new Texture("ability/Foraging.png");
+    }
+
+    public Texture getMiningAbility() {
+        return new Texture("ability/Mining.png");
+    }
+
+    public Texture getRedIcon() {
+        return new Texture("ability/redIcon.png");
+    }
+
+    public Texture getYellowIcon() {
+        return new Texture("ability/yellowIcon.png");
+    }
+
+    public Texture getEmptyRedIcon() {
+        return new Texture("ability/emptyRedIcon.png");
+    }
+
+    public Texture getEmptyYellowIcon() {
+        return new Texture("ability/emptyYellowIcon.png");
+    }
+
     public static AssetManager getAssetManager() {
         if (assetManager == null) {
             assetManager = new AssetManager();

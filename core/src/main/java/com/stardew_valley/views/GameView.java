@@ -56,7 +56,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private final GameController controller;
     private final OrthographicCamera camera;
-    private final Player player;
+    private Player player;
     private final Batch batch;
     private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
@@ -119,6 +119,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final GameWindow miniMapView;
     private final SettingsView settingsView;
 
+    private final ShippingBinView shippingBinView;
+
     private final FriendshipView friendshipView;
     private final TextButton friendshipsButton;
 
@@ -138,6 +140,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryMenu = new WindowManager(stage);
+        this.shippingBinView = new ShippingBinView();
         this.inventoryView = new InventoryView();
         this.skillsView = new SkillsView();
         this.socialView = new SocialView();
@@ -163,6 +166,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.addWindow("Map", miniMapView);
         inventoryMenu.addWindow("Settings", settingsView);
         inventoryMenu.showWindow(inventoryView);
+
+        stage.addActor(shippingBinView);
 
         stage.addActor(friendshipView);
         friendshipsButton.setSize(150, 80);
@@ -592,6 +597,48 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private boolean isDialogOpen = false;
+    private ShippingBinView currentShippingView;
+
+    private void checkPlayerNearShippingBin() {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+        float playerX = player.getPosition().x();
+        float playerY = player.getPosition().y();
+        float maxDistance = 32f;
+
+        boolean foundNearby = false;
+
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                Tile tile = tiles.get(row).get(col);
+                if (tile.getType() == TileType.SHIPPING_BIN) {
+                    float tileX = col * TILE_SIZE;
+                    float tileY = row * TILE_SIZE;
+                    float dx = playerX - tileX;
+                    float dy = playerY - tileY;
+                    float distance = (float) Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        foundNearby = true;
+                        if (!isDialogOpen) {
+                            shippingBinView.setVisible(true);
+                            isDialogOpen = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (foundNearby) break;
+        }
+
+        if (!foundNearby && isDialogOpen) {
+            shippingBinView.setVisible(false);
+            isDialogOpen = false;
+        }
+    }
 
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
@@ -666,6 +713,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void updateGame(float delta) {
         controller.getRepo().getCurrentGame().getCurrentPlayer().updateStateTime(delta);
         handleMovement(delta);
+        checkPlayerNearShippingBin();
     }
 
     public void handleMovement(float delta) {

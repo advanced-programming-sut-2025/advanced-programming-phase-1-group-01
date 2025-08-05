@@ -1,8 +1,11 @@
 package com.stardew_valley.controllers;
 
+import com.stardew_valley.Main;
 import com.stardew_valley.models.Result;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.views.GameView;
 
 import java.util.List;
 
@@ -17,10 +20,12 @@ public class SettingsController extends Controller {
     }
 
     public void nextTurn() {
-        List<User> users = repo.getUsers().values().stream().toList();
-        int currIndex = users.indexOf(repo.getCurrentUser());
-        int nextIndex = (currIndex + 1) % users.size();
-        repo.setCurrentUser(users.get(nextIndex));
-        repo.getCurrentGame().setCurrentPlayer(users.get(nextIndex).getPlayer());
+        List<Player> players = repo.getCurrentGame().getPlayers();
+        int currIndex = players.indexOf(repo.getCurrentUser().getPlayer());
+        int nextIndex = (currIndex + 1) % players.size();
+        Player nextPlayer = players.get(nextIndex);
+        repo.setCurrentUser(nextPlayer.getUser());
+        repo.getCurrentGame().setCurrentPlayer(nextPlayer);
+        Main.getMain().setScreen(new GameView(new GameController(Repository.getRepo())));
     }
 }
