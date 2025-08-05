@@ -25,6 +25,7 @@ import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
+import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
@@ -623,12 +624,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
+        Energy energy = player.getEnergy();
+        double consumeAmount = 1.0 / 14.4;
+
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             float nextX = player.getX() + speed * delta;
             if (canMoveTo(nextX, player.getY())) {
                 player.setX(nextX);
                 player.setDirection(Direction.RIGHT);
                 moving = true;
+                energy.consume(consumeAmount);
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -637,6 +642,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 player.setX(nextX);
                 player.setDirection(Direction.LEFT);
                 moving = true;
+                energy.consume(consumeAmount);
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -645,6 +651,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 player.setY(nextY);
                 player.setDirection(Direction.UP);
                 moving = true;
+                energy.consume(consumeAmount);
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
@@ -653,6 +660,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 player.setY(nextY);
                 player.setDirection(Direction.DOWN);
                 moving = true;
+                energy.consume(consumeAmount);
             }
         }
 
