@@ -4,7 +4,6 @@ import com.stardew_valley.Main;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
-import com.stardew_valley.models.data.User;
 import com.stardew_valley.views.GameView;
 
 import java.util.List;
@@ -26,6 +25,6 @@ public class SettingsController extends Controller {
         Player nextPlayer = players.get(nextIndex);
         repo.setCurrentUser(nextPlayer.getUser());
         repo.getCurrentGame().setCurrentPlayer(nextPlayer);
-        Main.getMain().setScreen(new GameView(new GameController(Repository.getRepo())));
+        Main.getMain().setScreen(new GameView(new GameController(repo)));
     }
 }

@@ -622,8 +622,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private boolean isDialogOpen = false;
-    private ShippingBinView currentShippingView;
-
     private void checkPlayerNearShippingBin() {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
         int numRows = tiles.size();
