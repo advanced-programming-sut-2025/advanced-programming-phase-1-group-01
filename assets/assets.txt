@@ -1,3 +1,11 @@
+ability/Farming.png
+ability/Fishing.png
+ability/Foraging.png
+ability/Mining.png
+ability/emptyRedIcon.png
+ability/emptyYellowIcon.png
+ability/redIcon.png
+ability/yellowIcon.png
 avatars/avatar1.png
 avatars/avatar2.png
 avatars/avatar3.png

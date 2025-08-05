@@ -9,9 +9,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.controllers.LoginMenuController;
 import com.stardew_valley.controllers.SignUpMenuController;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.data.User;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 
 public class LoginMenuView extends View {
@@ -88,7 +91,7 @@ public class LoginMenuView extends View {
         forgetPassword.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //controller.forgetPassword(messageLabel);
+                handleForgetPassword();
             }
         });
 
@@ -112,4 +115,54 @@ public class LoginMenuView extends View {
         return stage;
     }
 
+    public void promptForForgetPassword(String securityQuestion, Consumer<String> onSubmit) {
+        final Label questionLabel = new Label(securityQuestion, skin);
+        final TextField answerField = new TextField("", skin);
+        answerField.setMessageText("Answer to security question");
+
+        Dialog dialog = new Dialog("Forgot Password", skin) {
+            @Override
+            protected void result(Object object) {
+                boolean okPressed = Boolean.TRUE.equals(object);
+                if (okPressed) {
+                    String answer = answerField.getText().trim();
+                    onSubmit.accept(answer);
+                }
+                this.hide();
+                Gdx.input.setInputProcessor(stage);
+            }
+        };
+
+        dialog.getContentTable().pad(10);
+        dialog.getContentTable().add(questionLabel).left().padBottom(5).row();
+        dialog.getContentTable().add(answerField).width(300).padBottom(10).row();
+
+        dialog.button("OK", true);
+        dialog.button("Cancel", false);
+
+        dialog.show(stage);
+    }
+
+    public void handleForgetPassword() {
+        if (username.getText().isEmpty()) {
+            messageLabel.setText("Please enter your username");
+            return;
+        }
+
+        if (controller.getRepo().getUserByUsername(username.getText()) == null) {
+            messageLabel.setText("Username not found");
+            return;
+        }
+        User user = controller.getRepo().getUserByUsername(username.getText());
+        String securityQuestion = user.getSecurityQuestion().getQuestion();
+
+        promptForForgetPassword(securityQuestion, answer -> {
+            if (!user.getSecurityAnswer().equals(answer)) {
+                    messageLabel.setText("Wrong answer");
+            }
+            else {
+                messageLabel.setText("Your password is: " + user.getPassword());
+            }
+        });
+    }
 }
