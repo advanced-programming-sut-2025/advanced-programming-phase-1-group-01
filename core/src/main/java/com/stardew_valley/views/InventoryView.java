@@ -26,7 +26,6 @@ public class InventoryView extends Window {
     private Image trashCan;
     private TextButton equipSlotButton;
     private Label slotInfoLabel;
-
     private final Inventory inventory;
 
     public InventoryView() {

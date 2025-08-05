@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -16,11 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
-import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
@@ -29,7 +26,6 @@ import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
@@ -103,13 +99,20 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private final float speed = 200f;
 
+    private final WindowManager inventoryMenu;
     private final InventoryView inventoryView;
+    private final SkillsView skillsView;
+    private final SocialView socialView;
+    private final MiniMapView miniMapView;
+    private final SettingsView settingsView;
+
     private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
 
     public GameView(GameController controller) {
+        stage = new Stage(new ScreenViewport());
         this.controller = controller;
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -117,14 +120,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         player.setAnimals(animals);
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
+        this.inventoryMenu = new WindowManager(stage);
         this.inventoryView = new InventoryView();
+        this.skillsView = new SkillsView();
+        this.socialView = new SocialView();
+        this.miniMapView = new MiniMapView();
+        this.settingsView = new SettingsView();
         this.energyView = new EnergyView(player);
     }
 
     @Override
     public void show() {
-        stage = new Stage(new ScreenViewport());
-
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
@@ -132,7 +138,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         createDialog();
 
-        stage.addActor(inventoryView);
+        inventoryMenu.addWindow("Inventory", inventoryView);
+        inventoryMenu.addWindow("Skills", skillsView);
+        inventoryMenu.addWindow("Social", socialView);
+        inventoryMenu.addWindow("Map", miniMapView);
+        inventoryMenu.addWindow("Settings", settingsView);
+        inventoryMenu.showWindow(inventoryView);
     }
 
     @Override
@@ -169,7 +180,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {
-            inventoryView.setVisible(!inventoryView.isVisible());
+            inventoryMenu.setVisible(!inventoryMenu.isVisible());
             return true;
         }
         if (i == Input.Keys.NUM_0) {
@@ -284,11 +295,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawDividingFences();
 
-        drawHouseTop();
-
         drawNPCs();
-
-        drawShippingBin();
 
 //        drawTileHighlights();
 
@@ -298,9 +305,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawTileObjectsExceptTrees();
 
+        drawShippingBin();
+
         drawAnimals();
 
         drawPlayer();
+
+        drawHouseTop();
 
         drawTrees();
     }
