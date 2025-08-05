@@ -56,6 +56,8 @@ public class Player extends Character {
     private final List<Integer> tommorrowMoney = new ArrayList<>();
     private float stateTime = 0f;
     private boolean isMoving = false;
+    private final List<Artisan> artisans = new ArrayList<>();
+    private int artisanId = 0;
 
     List<Animal> animals;
 
@@ -938,5 +940,17 @@ public class Player extends Character {
 
     public List<Animal> getAnimals() {
         return animals;
+    }
+
+    public List<Artisan> getArtisans() {
+        return artisans;
+    }
+
+    public void addArtisan(Artisan artisan) {
+        artisans.add(artisan);
+    }
+
+    public int getArtisanId() {
+        return artisanId++;
     }
 }

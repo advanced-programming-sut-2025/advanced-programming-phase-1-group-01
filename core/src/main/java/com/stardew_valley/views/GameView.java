@@ -37,6 +37,8 @@ import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
+import com.stardew_valley.models.enums.ArtisanStatus;
+import com.stardew_valley.models.enums.ArtisanType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
@@ -267,6 +269,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     showSimpleDialog(stage, AssetManager.getAssetManager().getSkin(), "NPC Answer", npc.getMessage());
                 }
             }
+            for (Artisan artisan : player.getArtisans()) {
+                if (artisan.isArtisanClicked(worldCoords.x, worldCoords.y)) {
+                    showArtisanDialog(stage, AssetManager.getAssetManager().getSkin(), artisan);
+                }
+                if (artisan.isDoneClicked(worldCoords.x, worldCoords.y)) {
+                    artisan.finish();
+                }
+            }
 
 
         }
@@ -312,6 +322,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawNPCs();
 
+        drawArtisan();
+
         drawShippingBin();
 
 //        drawTileHighlights();
@@ -355,6 +367,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
             }
+        }
+    }
+
+    private void drawArtisan() {
+        for (Artisan artisan : player.getArtisans()) {
+            artisan.draw(batch);
         }
     }
 
@@ -745,7 +763,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Dialog dialog = new Dialog("Select Item", skin);
 
         SelectBox<String> selectBox = new SelectBox<>(skin);
-        selectBox.setItems("A", "B");
+        selectBox.setItems(
+            "A",
+            "B",
+            "Bee House",
+            "Charcoal Kiln",
+            "Cheese Press",
+            "Dehydrator",
+            "Fish Smoker",
+            "Furnace",
+            "Keg",
+            "Loom",
+            "Mayonnaise Machine",
+            "Oil Maker",
+            "Preserves Jar"
+        );
 
         dialog.getContentTable().add(selectBox).pad(10).row();
 
@@ -764,9 +796,29 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         case "A":
                             if (!isPixelDialogVisible)
                                 togglePixelDialog(6, 7, "A");
-                        default:
+                            break;
+                        case "B":
                             if (!isPixelDialogVisible)
                                 togglePixelDialog(4, 4, "B");
+                            break;
+                        case "Bee House":
+                        case "Charcoal Kiln":
+                        case "Cheese Press":
+                        case "Dehydrator":
+                        case "Fish Smoker":
+                        case "Furnace":
+                        case "Keg":
+                        case "Loom":
+                        case "Mayonnaise Machine":
+                        case "Oil Maker":
+                        case "Preserves Jar":
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(3, 6, selected);
+                            break;
+                        default:
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(1, 1, "Unknown");
+                            break;
                     }
                 } else {
                     System.out.println("Selection cancelled");
@@ -903,10 +955,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (isPlantableArea(row, col, height, width)) {
-                    setObject(row, col, height, width, type);
-                    areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
+                if (type.equals("A") || type.equals("B")) {
+                    if (isPlantableArea(row, col, height, width)) {
+                        setObject(row, col, height, width, type);
+                        areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
+                    }
+                } else {
+                    createArtisan(row, col, type);
                 }
+
                 pixelDialog.hide();
                 isPixelDialogVisible = false;
             }
@@ -914,6 +971,26 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         return button;
     }
+
+    public void createArtisan(int row, int col, String type) {
+        int height = 3;
+        int width = 6;
+
+        player.addArtisan(new Artisan(col * 16, row * 16, ArtisanType.fromString(type), controller.getRepo()));
+
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+
+        for (int r = row; r <= row + height; r++) {
+            for (int c = col; c <= col + width; c++) {
+                Tile tile = tiles.get(r).get(c);
+                tile.setMovable(false);
+            }
+        }
+
+
+
+    }
+
 
 
     public void showMiniMap(Stage stage) {
@@ -1413,6 +1490,88 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Result result = controller.handleCommand(input);
         System.out.println("[" + result.success() + "] " + result.message());
     }
+
+    public void showArtisanDialog(Stage stage, Skin skin, Artisan artisan) {
+        Dialog dialog = new Dialog("Artisan Info", skin);
+
+        Table content = dialog.getContentTable();
+
+        Label descriptionLabel = new Label("This device can produce: " + String.join(", ", artisan.getItems()), skin);
+        descriptionLabel.setWrap(true);
+        descriptionLabel.setAlignment(Align.center);
+
+        float maxWidth = Gdx.graphics.getWidth() * 0.6f;
+        descriptionLabel.setWidth(maxWidth);
+        content.add(descriptionLabel).width(maxWidth).pad(10);
+        content.row();
+
+
+        if (artisan.getStatus() == ArtisanStatus.WORKING) {
+            String productInfo = "Product: " + artisan.getWorkingProduct();
+            String timeInfo = "Time left (h): " + (artisan.getHoursLeft());
+
+            Label productLabel = new Label(productInfo, skin);
+            productLabel.setAlignment(Align.center);
+            content.add(productLabel).pad(5);
+            content.row();
+
+            Label timeLabel = new Label(timeInfo, skin);
+            timeLabel.setAlignment(Align.center);
+            content.add(timeLabel).pad(5);
+            content.row();
+        }
+
+
+        TextButton useButton = new TextButton("Use", skin);
+        useButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+                showSelectItemDialog(stage, skin, artisan);
+            }
+        });
+
+        dialog.button("Close", true);
+
+        dialog.show(stage);
+    }
+
+    public void showSelectItemDialog(Stage stage, Skin skin, Artisan artisan) {
+        Dialog dialog = new Dialog("Select Item", skin);
+
+        Table content = dialog.getContentTable();
+
+
+        SelectBox<String> selectBox = new SelectBox<>(skin);
+        selectBox.setItems(artisan.getItems().toArray(new String[0]));
+        content.add(selectBox).width(Gdx.graphics.getWidth() * 0.6f).pad(10);
+        content.row();
+
+
+        TextButton okButton = new TextButton("OK", skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String selectedItem = selectBox.getSelected();
+                //onItemSelected(selectedItem);
+                dialog.hide();
+            }
+        });
+
+        TextButton closeButton = new TextButton("Close", skin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        dialog.getButtonTable().add(okButton).pad(10);
+        dialog.getButtonTable().add(closeButton).pad(10);
+
+        dialog.show(stage);
+    }
+
 
     public void showSimpleDialog(Stage stage, Skin skin, String title, String message) {
         Dialog dialog = new Dialog(title, skin);

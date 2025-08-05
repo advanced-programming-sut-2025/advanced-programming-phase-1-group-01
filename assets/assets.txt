@@ -3636,6 +3636,8 @@ images/cage_fence_16x16.png
 images/chat_16x16.png
 images/circle.png
 images/clock.png
+images/dark_rect_1.png
+images/done_16x16.png
 images/fainting/resized_1-Photoroom.png
 images/fainting/resized_2-Photoroom.png
 images/fainting/resized_3-Photoroom.png
@@ -3646,6 +3648,7 @@ images/house.png
 images/house_top.png
 images/lake.png
 images/lake_water.png
+images/light_rect_1.png
 images/map_1.png
 images/plus_16x16.png
 images/r_lake.png
