@@ -13,6 +13,7 @@ import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.farming.*;
 import com.stardew_valley.models.foraging.ForagingCrop;
 import com.stardew_valley.models.foraging.ForagingCropInfo;
+import com.stardew_valley.models.foraging.ForagingMineralInfo;
 import com.stardew_valley.models.foraging.ForagingTreeInfo;
 import com.stardew_valley.models.shop.enums.*;
 import com.stardew_valley.models.ingredients.QuestItemType;
@@ -30,7 +31,7 @@ public class Inventory {
 
     public Inventory(Player player) {
         this.player = player;
-        capacity = BackpackType.DELUXE.getCapacity();
+        capacity = BackpackType.SMALL.getCapacity();
         slots = new ArrayList<>();
         slots.add(new Slot(this, "trash can", 1));
         slots.add(new Slot(this, "scythe", 1));
@@ -47,7 +48,7 @@ public class Inventory {
         itemName = itemName.toLowerCase().trim();
 
         for (Slot slot : slots) {
-            if (slot.getItem().getName().toLowerCase().trim().equals(itemName)) {
+            if (slot.getItem().getName().trim().equalsIgnoreCase(itemName)) {
                 if (slot.getQuantity() > 0) {
                     return slot;
                 } else {
@@ -65,6 +66,14 @@ public class Inventory {
         slots.remove(slot);
     }
 
+    public void removeItem(String itemName) {
+        for (Slot slot : slots) {
+            if (slot.getItem().getName().equalsIgnoreCase(itemName)) {
+                removeSlot(slot);
+            }
+        }
+    }
+
     public boolean addItem(String itemName, int quantity) {
         itemName = itemName.toLowerCase().trim();
 
@@ -75,7 +84,7 @@ public class Inventory {
             }
         }
 
-        if (slots.size() < capacity) {
+        if (hasCapacity()) {
             slots.add(new Slot(this, itemName, quantity));
             return true;
         }
@@ -92,7 +101,7 @@ public class Inventory {
     }
 
     public boolean hasCapacity() {
-        return slots.size() <= capacity;
+        return slots.size() < capacity;
     }
 
     public void setCapacity(int capacity) {
@@ -180,6 +189,24 @@ public class Inventory {
                 for (ForagingCropInfo foragingCropInfo : ForagingCropInfo.values()) {
                     if (foragingCropInfo.getName().equalsIgnoreCase(itemName)) {
                         yield foragingCropInfo.toItem();
+                    }
+                }
+
+                for (ForagingMineralInfo foragingMineralInfo : ForagingMineralInfo.values()) {
+                    if (foragingMineralInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield foragingMineralInfo.toItem();
+                    }
+                }
+
+                for (SaplingInfo saplingInfo : SaplingInfo.values()) {
+                    if (saplingInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield saplingInfo.toItem();
+                    }
+                }
+
+                for (FruitInfo fruitInfo : FruitInfo.values()) {
+                    if (fruitInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield fruitInfo.toItem();
                     }
                 }
 

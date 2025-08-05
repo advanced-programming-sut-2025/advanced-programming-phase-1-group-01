@@ -24,7 +24,6 @@ public class Fruit implements Item, Drawable {
 
     @Override
     public Texture getTexture() {
-        return AssetManager.getAssetManager().defaultTexture();
-        //return info.getTexture();
+        return info.getTexture();
     }
 }

@@ -98,7 +98,85 @@ public class NPCVillage extends Maps {
         return listedQuests.toString();
     }
 
-    public String finishQuest(Player player, int index) {
+    public static boolean canFinishQuest(Player player, int index, List<NPC> NPCs) {
+        NPCQuest quest = null;
+        NPC npc = null;
+
+        outer:
+        for (NPC Npc : NPCs) {
+            for (NPCQuest npcQuest : Npc.getQuests()) {
+                if (npcQuest.getQuestType().getMissionNumber() == index) {
+                    quest = npcQuest;
+                    npc = Npc;
+                    break outer;
+                }
+            }
+        }
+
+        if (quest == null) return false;
+        if (!quest.isActive()) return false;
+
+        if (quest.getOwner() == null) {
+            if (quest.getQuestType().getMissionNumber() % 3 != 1) {
+                return false;
+            }
+        } else {
+            if (quest.getOwner().equals(player)) return false;
+        }
+
+
+        NPCQuestType questType = quest.getQuestType();
+        switch (questType) {
+            case SEBASTIAN_1 -> {
+                if (!player.hasEnoughItem("iron bar", 50)) return false;
+            }
+            case SEBASTIAN_2, ABIGAIL_2 -> {
+                if (!player.hasEnoughItem("pumpkin", 1)) return false;
+            }
+            case SEBASTIAN_3 -> {
+                if (!player.hasEnoughItem("stone", 150)) return false;
+            }
+            case ABIGAIL_1 -> {
+                if (!player.hasEnoughItem("gold bar", 1)) return false;
+            }
+            case ABIGAIL_3 -> {
+                if (!player.hasEnoughItem("wheat", 50)) return false;
+            }
+            case LEAH_1 -> {
+                if (!player.hasEnoughItem("hard wood", 10)) return false;
+            }
+            case LEAH_2, HARVEY_2 -> {
+                if (!player.hasEnoughItem("salmon", 1)) return false;
+            }
+            case LEAH_3 -> {
+                if (!player.hasEnoughItem("normal wood", 200)) return false;
+            }
+            case ROBIN_1 -> {
+                if (!player.hasEnoughItem("normal wood", 80)) return false;
+            }
+            case ROBIN_2 -> {
+                if (!player.hasEnoughItem("iron bar", 10)) return false;
+            }
+            case ROBIN_3 -> {
+                if (!player.hasEnoughItem("normal wood", 1000)) return false;
+            }
+            case HARVEY_1 -> {
+                if (
+                    !player.hasEnoughItem("corn", 12) &&
+                        !player.hasEnoughItem("potato", 12) &&
+                        !player.hasEnoughItem("garlic", 12)
+                ) return false;
+            }
+            case HARVEY_3 -> {
+                if (!player.hasEnoughItem("wine", 1)) return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    public static String finishQuest(Player player, int index, List<NPC> NPCs) {
         NPCQuest quest = null;
         NPC npc = null;
         outer:
@@ -117,9 +195,10 @@ public class NPCVillage extends Maps {
             if (quest.getQuestType().getMissionNumber() % 3 != 1) {
                 return "You are not the owner of this quest";
             }
+        } else {
+            if (quest.getOwner().equals(player)) return "You are the owner of this quest";
         }
-//        if (!quest.getOwner().equals(player)) return "You are not the owner of this quest";
-        if (!player.isNearTo(npc.getPosition())) return "You are not near the npc";
+        //if (!player.isNearTo(npc.getPosition())) return "You are not near the npc";
         NPCQuestType questType = quest.getQuestType();
         switch (questType) {
             case SEBASTIAN_1 -> {
@@ -239,6 +318,6 @@ public class NPCVillage extends Maps {
         }
 
         quest.completeQuest();
-        return "Quest completed successfully";
+        return "done";
     }
 }

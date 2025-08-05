@@ -1,7 +1,7 @@
 package com.stardew_valley.models.tool.enums;
 
 public enum BackpackType {
-    SMALL(12), BIG(24), DELUXE(200);
+    SMALL(13), BIG(25), DELUXE(200);
 
     private int capacity;
 

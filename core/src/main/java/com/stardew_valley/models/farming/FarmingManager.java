@@ -5,6 +5,7 @@ import com.stardew_valley.models.Item;
 import com.stardew_valley.models.building.Greenhouse;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileObject;
+import com.stardew_valley.models.building.TileType;
 
 import java.util.List;
 import java.util.Map;
@@ -22,19 +23,17 @@ public class FarmingManager {
             for (Tile tile : row) {
                 TileObject tileObject = tile.getObject();
                 if (tileObject instanceof Plant plant) {
-                    plant.resetIsWatered();
+                    plant.resetWatered();
                 }
             }
         }
     }
 
     public void autoWaterAllPlants() {
-        for (List<Tile> row : game.getCurrentPlayer().getFarm().getTiles()) {
-            for (Tile tile : row) {
-                TileObject tileObject = tile.getObject();
-                if (tileObject instanceof Plant plant && !(tile.getBuilding() instanceof Greenhouse)) {
-                    plant.water();
-                }
+        Map<Plant, Tile> map = game.getCurrentPlayer().getFarm().getPlantsToTilesMap();
+        for (Plant plant : map.keySet()) {
+            if (map.get(plant).getType() != TileType.GREENHOUSE) {
+                plant.water();
             }
         }
     }
@@ -52,6 +51,7 @@ public class FarmingManager {
                 plant = new Crop((Seed) source);
             } else if (source instanceof TreeSource) {
                 plant = new Tree((TreeSource) source);
+                tile.setMovable(false);
             } else {
                 return null;
             }

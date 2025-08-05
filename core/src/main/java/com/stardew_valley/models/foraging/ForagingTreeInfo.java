@@ -10,20 +10,20 @@ import com.stardew_valley.models.farming.FarmingEnum;
 import java.util.Random;
 
 public enum ForagingTreeInfo implements TileObject, FarmingEnum {
-    ACORNS("Acorns", Season.SPECIAL, Emoji.DECIDUOUS_TREE.getSymbol()),
-    MAPLE_SEEDS("Maple Seeds", Season.SPECIAL, "🍁"),
-    PINE_CONES("Pine Cones", Season.SPECIAL, "🌲"),
-    MAHOGANY_SEEDS("Mahogany Seeds", Season.SPECIAL, "🌴"),
-    MUSHROOMS_TREE_SEEDS("Mushroom Tree Seeds", Season.SPECIAL, "🍄"),;
+    ACORNS("Acorns", Season.SPECIAL, AssetManager.getAssetManager().getAcorn()),
+    MAPLE_SEEDS("Maple Seeds", Season.SPECIAL, AssetManager.getAssetManager().getMapleSeed()),
+    PINE_CONES("Pine Cones", Season.SPECIAL, AssetManager.getAssetManager().getPineCone()),
+    MAHOGANY_SEEDS("Mahogany Seeds", Season.SPECIAL, AssetManager.getAssetManager().getMahoganySeed()),
+    MUSHROOMS_TREE_SEEDS("Mushroom Tree Seeds", Season.SPECIAL, AssetManager.getAssetManager().getMushroomTreeSeed()),;
 
     private final String name;
     private final Season season;
-    private final String symbol;
+    private final Texture texture;
 
-    ForagingTreeInfo(String name, Season season, String symbol) {
+    ForagingTreeInfo(String name, Season season, Texture texture) {
         this.name = name;
         this.season = season;
-        this.symbol = symbol;
+        this.texture = texture;
     }
 
     private static final Random RANDOM = new Random();
@@ -46,10 +46,6 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
         return season;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
-
     public static ForagingTreeInfo fromString(String string) {
         for (ForagingTreeInfo foragingTreeInfo : values()) {
             if (foragingTreeInfo.name.equalsIgnoreCase(string)) {
@@ -61,9 +57,7 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
 
     @Override
     public String toString() {
-        return """
-                Name: %s
-                Season: %s""".formatted(name, season);
+        return name;
     }
 
     public ForagingTree toItem() {

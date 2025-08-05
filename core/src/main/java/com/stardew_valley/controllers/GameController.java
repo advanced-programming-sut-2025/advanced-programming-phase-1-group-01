@@ -27,7 +27,7 @@ public class GameController extends Controller {
     private final CraftingController craftingController;
     private final AnimalHusbandryController animalHusbandryController;
     private final NPCController npcController;
-    private final ShippingBinController sellController;
+    private final ShippingBinController shippingBinController;
     private final BlackSmithController blackSmithController;
     private final CarpenterController carpenterController;
     private final FishShopController fishShopController;
@@ -52,7 +52,7 @@ public class GameController extends Controller {
         craftingController = new CraftingController(repo);
         animalHusbandryController = new AnimalHusbandryController(repo);
         npcController = new NPCController(repo);
-        sellController = new ShippingBinController(repo);
+        shippingBinController = new ShippingBinController(repo);
         blackSmithController = new BlackSmithController(repo);
         carpenterController = new CarpenterController(repo);
         fishShopController = new FishShopController(repo);
@@ -154,7 +154,7 @@ public class GameController extends Controller {
         } else if (matchedCommand instanceof NPCCommands) {
             return npcController.handleCommand(commandLine);
         } else if (matchedCommand instanceof SellCommands) {
-            return sellController.handleCommand(commandLine);
+            return shippingBinController.handleCommand(commandLine);
         } else if (matchedCommand instanceof CookingCommands) {
             return cookingController.handleCommand(commandLine);
         } else if (matchedCommand instanceof CraftingCommands) {
@@ -188,6 +188,86 @@ public class GameController extends Controller {
     }
 
     public EnergyController getEnergyController() {
-        return this.energyController;
+        return energyController;
+    }
+
+    public FarmingController getFarmingController() {
+        return farmingController;
+    }
+
+    public GameMenuController getGameMenuController() {
+        return gameMenuController;
+    }
+
+    public RelationshipController getRelationshipController() {
+        return relationshipController;
+    }
+
+    public ToolController getToolController() {
+        return toolController;
+    }
+
+    public WeatherController getWeatherController() {
+        return weatherController;
+    }
+
+    public MovementAndMapController getMovementAndMapController() {
+        return movementAndMapController;
+    }
+
+    public InventoryController getInventoryController() {
+        return inventoryController;
+    }
+
+    public ArtisanController getArtisanController() {
+        return artisanController;
+    }
+
+    public CookingController getCookingController() {
+        return cookingController;
+    }
+
+    public CraftingController getCraftingController() {
+        return craftingController;
+    }
+
+    public AnimalHusbandryController getAnimalHusbandryController() {
+        return animalHusbandryController;
+    }
+
+    public NPCController getNpcController() {
+        return npcController;
+    }
+
+    public ShippingBinController getShippingBinController() {
+        return shippingBinController;
+    }
+
+    public BlackSmithController getBlackSmithController() {
+        return blackSmithController;
+    }
+
+    public CarpenterController getCarpenterController() {
+        return carpenterController;
+    }
+
+    public FishShopController getFishShopController() {
+        return fishShopController;
+    }
+
+    public JojaMartController getJojaMartController() {
+        return jojaMartController;
+    }
+
+    public MarnieRanchController getMarnieRanchController() {
+        return marnieRanchController;
+    }
+
+    public TheStardropSaloonController getTheStardropSaloonController() {
+        return theStardropSaloonController;
+    }
+
+    public PierreGeneralStoreController getPierreGeneralStoreController() {
+        return pierreGeneralStoreController;
     }
 }

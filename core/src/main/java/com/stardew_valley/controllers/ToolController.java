@@ -101,7 +101,7 @@ public class ToolController extends Controller {
             return new Result(false, "not a tool equipped");
         }
 
-            tool.use(direction);
+        tool.use(direction);
         return new Result(true, "tool used successfully");
     }
 }

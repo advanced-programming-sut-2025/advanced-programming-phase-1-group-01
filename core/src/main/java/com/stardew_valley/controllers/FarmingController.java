@@ -1,9 +1,11 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.utils.Array;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
@@ -59,6 +61,9 @@ public class FarmingController extends Controller {
                 return fertilize(fertilizerName, direction);
             case HOW_MUCH_WATER:
                 return howMuchWater();
+            case CHEAT_PLOW_NEAR:
+                Position position = repo.getCurrentGame().getCurrentPlayer().getTilesPosition();
+                return cheatPlowNineTiles(position);
         }
         return new Result(false, "invalid command 88");
     }
@@ -81,30 +86,30 @@ public class FarmingController extends Controller {
         return new Result(true, farmingConstant.toString());
     }
 
-    private Result plant(String sourceName, Direction direction) {
+    public Result plant(String sourceName, Direction direction) {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlot(sourceName);
         Position appliedPosition = player.getTilesPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
         Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
-        if (tile == null) {
+        if (tile == null || !tile.isEmpty() || !tile.isMovable()) {
             return new Result(false, "incorrect tile");
         } else if (slot == null) {
             return new Result(false, "source not found");
-        } else if (!tile.isPlowed()) {
+        } else if (!tile.isPlowed() && tile.getType() != TileType.GREENHOUSE) {
             return new Result(false, "tile is not plowed");
         }
 
         if (slot.getItem() instanceof Seed seed) {
             CropInfo cropInfo = CropInfo.fromSeed(seed);
-            if (!cropInfo.getSeasons().contains(currSeason) && !cropInfo.getSeasons().contains(Season.SPECIAL)) {
+            if (!cropInfo.getSeasons().contains(currSeason) && tile.getType() != TileType.GREENHOUSE) {
                 return new Result(false, "you can't plant this crop in this season");
             }
         } else if (slot.getItem() instanceof TreeSource treeSource) {
             TreeInfo treeInfo = TreeInfo.fromTreeSource(treeSource);
             assert treeInfo != null;
-            if (!treeInfo.getSeason().equals(Season.SPECIAL) && treeInfo.getSeason().equals(currSeason)) {
+            if (treeInfo.getSeason() != Season.SPECIAL && treeInfo.getSeason() != currSeason) {
                 return new Result(false, "you can't plant this tree in this season");
             }
         }
@@ -139,18 +144,18 @@ public class FarmingController extends Controller {
         }
 
         return new Result(true, """
-                Name: %s
-                Remaining Time to Fully Grown: %d
-                Growth Level: %d
-                Is Watered Today: %B
-                Quality: %s
-                Is Fertilized: %B""".formatted(
-                crop.getName(),
-                crop.getInfo().getTotalHarvestTime() - crop.getTotalGrownDays(),
-                crop.getGrowthLevel(),
-                crop.isWatered(),
-                crop.getQuality(),
-                crop.isFertilized()
+            Name: %s
+            Remaining Time to Fully Grown: %d
+            Growth Level: %d
+            Is Watered Today: %B
+            Quality: %s
+            Is Fertilized: %B""".formatted(
+            crop.getName(),
+            crop.getInfo().getTotalHarvestTime() - crop.getTotalGrownDays(),
+            crop.getGrowthLevel(),
+            crop.isWatered(),
+            crop.getQuality(),
+            crop.isFertilized()
         ));
     }
 
@@ -194,5 +199,22 @@ public class FarmingController extends Controller {
         }
 
         return new Result(true, String.valueOf(wateringCan.getWaterAmount()));
+    }
+
+    public Result cheatPlowNineTiles(Position position) {
+        Player player = repo.getCurrentGame().getCurrentPlayer();
+        Array<Position> tilePositions = new Array<>();
+        tilePositions.add(position);
+
+        for (Direction dir : Direction.values()) {
+            tilePositions.add(position.applyDirection(dir));
+        }
+
+        for (Position pos : tilePositions) {
+            Tile tile = player.getFarm().getTile(pos);
+            if (tile.isMovable() && tile.isEmpty()) tile.plow();
+        }
+
+        return new Result(true, "cheat done!");
     }
 }

@@ -3,9 +3,9 @@ package com.stardew_valley.models.building;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Size;
 
-// no season dependence to plant
+// no season dependence to plant(done)
 // no need to scarecrow
-// crucial water even in rainy weather
+// crucial water even in rainy weather(done)
 // local water repository in northern wall
 // thor doesn't affect products
 // giant products can't grow

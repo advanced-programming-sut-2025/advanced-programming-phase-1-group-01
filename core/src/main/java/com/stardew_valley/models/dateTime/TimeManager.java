@@ -92,11 +92,11 @@ public class TimeManager {
             game.getDelayedPaymentSystem().processSalesForPlayer(player);
         }
 
+        game.getForagingManager().prepareNewDayForaging();
+        game.getFarmingManager().growAllPlants();
+        game.getFarmingManager().resetAllPlantsWatered();
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
-        game.getForagingManager().prepareNewDayForaging();
-        game.getFarmingManager().resetAllPlantsWatered();
-        game.getFarmingManager().growAllPlants();
 
         game.getBlacksmith().resetDailyStock();
         game.getJojaMart().resetDailyStock();

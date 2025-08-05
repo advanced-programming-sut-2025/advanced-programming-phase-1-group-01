@@ -2,6 +2,7 @@ package com.stardew_valley.models.farming;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.foraging.ForagingTreeInfo;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Random;
 
 public enum TreeInfo implements FarmingEnum {
-    APRICOT_TREE("Apricot Tree", null/*"Apricot Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APRICOT, 1, Season.SPRING, Map.of(
+    APRICOT_TREE("Apricot Tree", SaplingInfo.APRICOT_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.APRICOT, 1, Season.SPRING, Map.of(
         1, AssetManager.getAssetManager().getApricotStage1(),
         2, AssetManager.getAssetManager().getApricotStage2(),
         3, AssetManager.getAssetManager().getApricotStage3(),
@@ -22,7 +23,7 @@ public enum TreeInfo implements FarmingEnum {
         "Winter", AssetManager.getAssetManager().getApricotStage5Winter(),
         "Fruit", AssetManager.getAssetManager().getApricotStage5Fruit()
     ), AssetManager.getAssetManager().getApricotTreeLightning(), null),
-    CHERRY_TREE("Cherry Tree", null/*"Cherry Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.CHERRY, 1, Season.SPRING, Map.of(
+    CHERRY_TREE("Cherry Tree", SaplingInfo.CHERRY_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.CHERRY, 1, Season.SPRING, Map.of(
         1, AssetManager.getAssetManager().getCherryStage1(),
         2, AssetManager.getAssetManager().getCherryStage2(),
         3, AssetManager.getAssetManager().getCherryStage3(),
@@ -35,7 +36,7 @@ public enum TreeInfo implements FarmingEnum {
         "Fruit", AssetManager.getAssetManager().getCherryStage5Fruit()
     ), AssetManager.getAssetManager().getCherryTreeLightning(), null),
 
-    BANANA_TREE("Banana Tree", null/*"Banana Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.BANANA, 1, Season.SUMMER, Map.of(
+    BANANA_TREE("Banana Tree", SaplingInfo.BANANA_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.BANANA, 1, Season.SUMMER, Map.of(
         1, AssetManager.getAssetManager().getBananaStage1(),
         2, AssetManager.getAssetManager().getBananaStage2(),
         3, AssetManager.getAssetManager().getBananaStage3(),
@@ -48,7 +49,7 @@ public enum TreeInfo implements FarmingEnum {
         "Fruit", AssetManager.getAssetManager().getBananaStage5Fruit()
     ), AssetManager.getAssetManager().getBananaTreeLightning(), null),
 
-    MANGO_TREE("Mango Tree", null/*"Mango Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MANGO, 1, Season.SUMMER, Map.of(
+    MANGO_TREE("Mango Tree", SaplingInfo.MANGO_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.MANGO, 1, Season.SUMMER, Map.of(
         1, AssetManager.getAssetManager().getMangoStage1(),
         2, AssetManager.getAssetManager().getMangoStage2(),
         3, AssetManager.getAssetManager().getMangoStage3(),
@@ -61,7 +62,7 @@ public enum TreeInfo implements FarmingEnum {
         "Fruit", AssetManager.getAssetManager().getMangoStage5Fruit()
     ), AssetManager.getAssetManager().getMangoTreeLightning(), null),
 
-    ORANGE_TREE("Orange Tree", null/*"Orange Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.ORANGE, 1, Season.SUMMER, Map.of(
+    ORANGE_TREE("Orange Tree", SaplingInfo.ORANGE_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.ORANGE, 1, Season.SUMMER, Map.of(
         1, AssetManager.getAssetManager().getOrangeStage1(),
         2, AssetManager.getAssetManager().getOrangeStage2(),
         3, AssetManager.getAssetManager().getOrangeStage3(),
@@ -74,7 +75,7 @@ public enum TreeInfo implements FarmingEnum {
         "Fruit", AssetManager.getAssetManager().getOrangeStage5Fruit()
     ), AssetManager.getAssetManager().getOrangeTreeLightning(), null),
 
-    PEACH_TREE("Peach Tree", null/*"Peach Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.PEACH, 1, Season.SUMMER, Map.of(
+    PEACH_TREE("Peach Tree", SaplingInfo.PEACH_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.PEACH, 1, Season.SUMMER, Map.of(
         1, AssetManager.getAssetManager().getPeachStage1(),
         2, AssetManager.getAssetManager().getPeachStage2(),
         3, AssetManager.getAssetManager().getPeachStage3(),
@@ -87,7 +88,7 @@ public enum TreeInfo implements FarmingEnum {
         "Fruit", AssetManager.getAssetManager().getPeachStage5Fruit()
     ), AssetManager.getAssetManager().getPeachTreeLightning(), null),
 
-    APPLE_TREE("Apple Tree", null/*"Apple Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.APPLE, 1, Season.FALL, Map.of(
+    APPLE_TREE("Apple Tree", SaplingInfo.APPLE_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.APPLE, 1, Season.FALL, Map.of(
         1, AssetManager.getAssetManager().getAppleStage1(),
         2, AssetManager.getAssetManager().getAppleStage2(),
         3, AssetManager.getAssetManager().getAppleStage3(),
@@ -100,7 +101,7 @@ public enum TreeInfo implements FarmingEnum {
         "Fruit", AssetManager.getAssetManager().getAppleStage5Fruit()
     ), AssetManager.getAssetManager().getAppleTreeLightning(), null),
 
-    POMEGRANATE_TREE("Pomegranate Tree", null/*"Pomegranate Sapling"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.POMEGRANATE, 1, Season.FALL, Map.of(
+    POMEGRANATE_TREE("Pomegranate Tree", SaplingInfo.POMEGRANATE_SAPLING, new int[]{7, 7, 7, 7}, 28, FruitInfo.POMEGRANATE, 1, Season.FALL, Map.of(
         1, AssetManager.getAssetManager().getPomegranateStage1(),
         2, AssetManager.getAssetManager().getPomegranateStage2(),
         3, AssetManager.getAssetManager().getPomegranateStage3(),
@@ -200,7 +201,7 @@ public enum TreeInfo implements FarmingEnum {
             "Winter", AssetManager.getAssetManager().getMushroomTreeStump()
         )),
 
-    MYSTIC_TREE("Mystic Tree", null/*"Mystic Tree Seeds"*/, new int[]{7, 7, 7, 7}, 28, FruitInfo.MYSTIC_SYRUP, 7, Season.SPECIAL, Map.of(
+    MYSTIC_TREE("Mystic Tree", CraftingRecipes.MYSTIC_TREE_SEED, new int[]{7, 7, 7, 7}, 28, FruitInfo.MYSTIC_SYRUP, 7, Season.SPECIAL, Map.of(
         1, AssetManager.getAssetManager().getMysticTreeStage1(),
         2, AssetManager.getAssetManager().getMysticTreeStage2(),
         3, AssetManager.getAssetManager().getMysticTreeStage3(),
@@ -219,7 +220,7 @@ public enum TreeInfo implements FarmingEnum {
         ));
 
     private final String name;
-    private final FarmingEnum source;
+    private final Enum<?> source;
     private final int[] stages;
     private final int totalHarvestTime;
     private final FruitInfo fruitInfo;
@@ -230,7 +231,7 @@ public enum TreeInfo implements FarmingEnum {
     private final Texture lightningTexture;
     private final Map<String, Texture> stumpTextures;
 
-    TreeInfo(String name, FarmingEnum source, int[] stages, int totalHarvestTime, FruitInfo fruitInfo, int fruitHarvestCycle, Season season, Map<Integer, Texture> stagesTextures, Map<String, Texture> lastStageTextures, Texture lightningTexture, Map<String, Texture> stumpTextures) {
+    TreeInfo(String name, Enum<?> source, int[] stages, int totalHarvestTime, FruitInfo fruitInfo, int fruitHarvestCycle, Season season, Map<Integer, Texture> stagesTextures, Map<String, Texture> lastStageTextures, Texture lightningTexture, Map<String, Texture> stumpTextures) {
         this.name = name;
         this.source = source;
         this.stages = stages;
@@ -255,7 +256,7 @@ public enum TreeInfo implements FarmingEnum {
         return name;
     }
 
-    public FarmingEnum getSource() {
+    public Enum<?> getSource() {
         return source;
     }
 
@@ -309,7 +310,7 @@ public enum TreeInfo implements FarmingEnum {
             Fruit Base Sell Price: %d
             Is Fruit Edible: %B
             Fruit Energy: %d
-            Season: %s""".formatted(name, source.getName(), Arrays.toString(stages), totalHarvestTime, fruitInfo.getName(), fruitHarvestCycle, fruitInfo.getBaseSellPrice(), fruitInfo.isEdible(), fruitInfo.getEnergy(), season);
+            Season: %s""".formatted(name, source.name(), Arrays.toString(stages), totalHarvestTime, fruitInfo.getName(), fruitHarvestCycle, fruitInfo.getBaseSellPrice(), fruitInfo.isEdible(), fruitInfo.getEnergy(), season);
     }
 
     public Texture getTextureByStage(int stage) {
@@ -327,6 +328,10 @@ public enum TreeInfo implements FarmingEnum {
             case FALL -> lastStageTextures.get("Fall");
             case WINTER -> lastStageTextures.get("Winter");
         };
+    }
+
+    public Texture getFruitedTexture() {
+        return lastStageTextures.get("Fruit");
     }
 
     public Texture getLightningTexture() {
