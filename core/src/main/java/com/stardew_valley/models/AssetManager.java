@@ -4524,60 +4524,234 @@ public class AssetManager {
         return new Texture("relationship/heart.png");
     }
 
+    private final Texture blackSmithOut = new Texture("shopping/blacksmith_out.png");
+    private final Texture blackSmithIn = new Texture("shopping/blacksmith_in.png");
+
+    private final Texture carpenterIn = new Texture("shopping/carpenter_in.png");
+    private final Texture carpenterOut = new Texture("shopping/carpenter_out.png");
+
+    private final Texture fishShopOut = new Texture("shopping/fishshop_out.png");
+    private final Texture fishShopIn = new Texture("shopping/fishshop_in.png");
+
+    private final Texture jojamartIn = new Texture("shopping/jojamart_in.png");
+    private final Texture jojamartOut = new Texture("shopping/jojamart_out.png");
+
+    private final Texture pierrIn = new Texture("shopping/pierr_in.png");
+    private final Texture pierrOut = new Texture("shopping/pierr_out.png");
+
+    private final Texture ranchIn = new Texture("shopping/ranch_in.png");
+    private final Texture ranchOut = new Texture("shopping/ranch_out.png");
+
+    private final Texture saloonIn = new Texture("shopping/saloon_in.png");
+    private final Texture saloonOut = new Texture("shopping/saloon_out.png");
+
     public Texture getBlackSmithOut() {
-        return new Texture("shopping/blacksmith_out.png");
+        return blackSmithOut;
     }
 
     public Texture getBlackSmithIn() {
-        return new Texture("shopping/blacksmith_in.png");
+        return blackSmithIn;
     }
 
     public Texture getCarpenterIn() {
-        return new Texture("shopping/carpenter_in.png");
+        return carpenterIn;
     }
 
     public Texture getCarpenterOut() {
-        return new Texture("shopping/carpenter_out.png");
+        return carpenterOut;
     }
 
     public Texture getFishShopOut() {
-        return new Texture("shopping/fishshop_out.png");
+        return fishShopOut;
     }
 
     public Texture getFishShopIn() {
-        return new Texture("shopping/fishshop_in.png");
+        return fishShopIn;
     }
 
     public Texture getJojamartIn() {
-        return new Texture("shopping/jojamart_in.png");
+        return jojamartIn;
     }
 
     public Texture getJojamartOut() {
-        return new Texture("shopping/jojamart_out.png");
+        return jojamartOut;
     }
 
     public Texture getPierrIn() {
-        return new Texture("shopping/pierr_in.png");
+        return pierrIn;
     }
 
     public Texture getPierrOut() {
-        return new Texture("shopping/pierr_out.png");
+        return pierrOut;
     }
 
     public Texture getRanchIn() {
-        return new Texture("shopping/ranch_in.png");
+        return ranchIn;
     }
 
     public Texture getRanchOut() {
-        return new Texture("shopping/ranch_out.png");
+        return ranchOut;
     }
 
     public Texture getSaloonIn() {
-        return new Texture("shopping/saloon_in.png");
+        return saloonIn;
     }
 
     public Texture getSaloonOut() {
-        return new Texture("shopping/saloon_out.png");
+        return saloonOut;
+    }
+
+    private final Texture egg = new Texture("items/egg.png");
+    private final Texture bigEgg = new Texture("items/largeegg.png");
+    private final Texture duckEgg = new Texture("items/duckegg.png");
+    private final Texture duckFeather = new Texture("items/duckfeather.png");
+    private final Texture rabbitWool = new Texture("items/rabbitwool.png");
+    private final Texture rabbitLeg = new Texture("items/rabbitleg.png");
+    private final Texture dinosaurEgg = new Texture("items/dinosauregg.png");
+    private final Texture milk = new Texture("items/milk.png");
+    private final Texture bigMilk = new Texture("items/bigmilk.png");
+    private final Texture goatMilk = new Texture("items/goatmilk.png");
+    private final Texture bigGoatMilk = new Texture("items/largegoatmilk.png");
+    private final Texture sheepWool = new Texture("items/sheepwool.png");
+    private final Texture truffle = new Texture("items/truffle.png");
+
+    public Texture getEgg() {
+        return egg;
+    }
+
+    public Texture getBigEgg() {
+        return bigEgg;
+    }
+
+    public Texture getDuckEgg() {
+        return duckEgg;
+    }
+
+    public Texture getDuckFeather() {
+        return duckFeather;
+    }
+
+    public Texture getRabbitWool() {
+        return rabbitWool;
+    }
+
+    public Texture getRabbitLeg() {
+        return rabbitLeg;
+    }
+
+    public Texture getDinosaurEgg() {
+        return dinosaurEgg;
+    }
+
+    public Texture getMilk() {
+        return milk;
+    }
+
+    public Texture getBigMilk() {
+        return bigMilk;
+    }
+
+    public Texture getGoatMilk() {
+        return goatMilk;
+    }
+
+    public Texture getBigGoatMilk() {
+        return bigGoatMilk;
+    }
+
+    public Texture getSheepWool() {
+        return sheepWool;
+    }
+
+    public Texture getTruffle() {
+        return truffle;
+    }
+
+    private final Texture wheatFlour = new Texture("items/wheatflour.png");
+    private final Texture sugar = new Texture("items/sugar.png");
+    private final Texture cheese = new Texture("items/cheese.png");
+    private final Texture rice = new Texture("items/rice.png");
+    private final Texture fiber = new Texture("items/fiber.png");
+    private final Texture coffee = new Texture("items/coffee.png");
+    private final Texture hashBrowns = new Texture("items/hashbrowns.png");
+    private final Texture copperOre = new Texture("items/copperore.png");
+    private final Texture ironOre = new Texture("items/ironore.png");
+    private final Texture goldOre = new Texture("items/goldore.png");
+    private final Texture copperBar = new Texture("items/copperbar.png");
+    private final Texture ironBar = new Texture("items/ironbar.png");
+    private final Texture goldBar = new Texture("items/goldbar.png");
+    private final Texture iridiumBar = new Texture("items/iridiumbar.png");
+    private final Texture iridiumOre = new Texture("items/iridiumore.png");
+    private final Texture wood = new Texture("items/wood.png");
+    private final Texture stone = new Texture("items/stone.png");
+
+    public Texture getWheatFlour() {
+        return wheatFlour;
+    }
+
+    public Texture getSugar() {
+        return sugar;
+    }
+
+    public Texture getCheese() {
+        return cheese;
+    }
+
+    public Texture getRice() {
+        return rice;
+    }
+
+    public Texture getFiber() {
+        return fiber;
+    }
+
+    public Texture getCoffee() {
+        return coffee;
+    }
+
+    public Texture getHashBrowns() {
+        return hashBrowns;
+    }
+
+
+    public Texture getCopperOre() {
+        return copperOre;
+    }
+
+    public Texture getIronOre() {
+        return ironOre;
+    }
+
+    public Texture getGoldOre() {
+        return goldOre;
+    }
+
+    public Texture getCopperBar() {
+        return copperBar;
+    }
+
+    public Texture getIronBar() {
+        return ironBar;
+    }
+
+    public Texture getGoldBar() {
+        return goldBar;
+    }
+
+    public Texture getIridiumBar() {
+        return iridiumBar;
+    }
+
+    public Texture getIridiumOre() {
+        return iridiumOre;
+    }
+
+    public Texture getWood() {
+        return wood;
+    }
+
+    public Texture getStone() {
+        return stone;
     }
 
     public static AssetManager getAssetManager() {
