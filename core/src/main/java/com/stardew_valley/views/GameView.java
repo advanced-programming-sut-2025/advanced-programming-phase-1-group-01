@@ -129,6 +129,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final FriendshipView friendshipView;
     private final TextButton friendshipsButton;
 
+    private final GiftView giftView;
+
+    private final NotificationsView notificationsView;
+
     private Image backgroundImage;
     private Image heartImage;
     private Label messageLabel;
@@ -157,6 +161,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.settingsView = new SettingsView(controller.getSettingsController());
         friendshipView = new FriendshipView(player.getRelationService());
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
+        giftView = new GiftView();
+        notificationsView = new NotificationsView();
         this.energyView = new EnergyView(player);
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
@@ -197,6 +203,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         heartImage.setVisible(false);
 
         stage.addActor(heartImage);
+
+        stage.addActor(notificationsView);
     }
 
     @Override
@@ -215,6 +223,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         energyView.render(delta);
         inventoryMenu.update();
         friendshipView.update();
+//        notificationsView.update();
         batch.end();
 
         stage.act(delta);
