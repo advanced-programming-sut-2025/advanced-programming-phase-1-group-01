@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -30,9 +31,12 @@ import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCQuest;
 import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Energy;
+import com.stardew_valley.models.character.player.MarriageRequest;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.ArtisanStatus;
 import com.stardew_valley.models.enums.ArtisanType;
@@ -42,6 +46,7 @@ import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
 import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
+import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
 
@@ -128,6 +133,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private final NotificationsView notificationsView;
 
+    private Image backgroundImage;
+    private Image heartImage;
+    private Label messageLabel;
+
     private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
@@ -155,6 +164,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         giftView = new GiftView(stage);
         notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
+        heartImage = new Image(AssetManager.getAssetManager().getHeart());
+        backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
+        messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
     }
 
     @Override
@@ -185,6 +197,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 friendshipView.setVisible(!friendshipView.isVisible());
             }
         });
+
+        heartImage.setSize(64, 64);
+        heartImage.setVisible(false);
+
+        stage.addActor(heartImage);
+
+        stage.addActor(notificationsView);
     }
 
     @Override
@@ -381,8 +400,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawPlayers();
 
         drawEquippedTool();
-
-        drawShippingBin();
 
         drawHouseTop();
 
@@ -665,6 +682,212 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    public void hug() {
+        boolean isNear = false;
+        Player anotherPlayer = null;
+
+        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
+            if (player == friend) continue;
+            if (player.isNearTo(friend)) {
+                isNear = true;
+                anotherPlayer = friend;
+                break;
+            }
+        }
+
+        if (!isNear) {
+            showMessage("you should be near to another player!");
+            return;
+        }
+
+        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+
+        if (friendship.getLevel() < 2) {
+            showMessage("you don't have enough level!");
+            return;
+        }
+
+        DateTime currentTime = controller.getRepo().getCurrentGame().getTimeManager().getNow();
+
+        if (friendship.getLastHugDay() != currentTime.getDay()) {
+            friendship.setLastHugDay(currentTime.getDay());
+            friendship.increaseXp(Friendship.HUG_XP);
+        }
+
+        int worldX = player.getPosition().x();
+        int worldY = player.getPosition().y();
+
+        Vector3 screenPos = camera.project(new Vector3(worldX, worldY, 0));
+
+        heartImage.setPosition(screenPos.x - 20, screenPos.y + 60);
+        heartImage.getColor().a = 1f;
+        heartImage.setVisible(true);
+        heartImage.clearActions();
+
+        heartImage.addAction(Actions.sequence(
+            Actions.delay(0.2f),
+            Actions.parallel(
+                Actions.moveBy(0, 50, 1f),
+                Actions.fadeOut(1.5f)
+            ),
+            Actions.run(() -> heartImage.setVisible(false))
+        ));
+
+        showMessage("you hugged each other!");
+
+    }
+
+    private void marriage() {
+        boolean isNear = false;
+        Player anotherPlayer = null;
+
+        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
+            if (player == friend) continue;
+            if (player.isNearTo(friend)) {
+                isNear = true;
+                anotherPlayer = friend;
+                break;
+            }
+        }
+
+        if (!isNear) {
+            showMessage("you should be near to another player!");
+            return;
+        }
+
+        if (player.getGender() == Gender.FEMALE) {
+            showMessage("you are girl and you can't request marriage");
+            return;
+        }
+
+        if (anotherPlayer.getGender() == Gender.MALE) {
+            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
+            return;
+        }
+
+        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+        if (friendship.getLevel() != 3) {
+            showMessage("you don't have enough level!");
+            return;
+        }
+
+        if (player.getInventory().getSlot("ring") == null) {
+            showMessage("you don't have ring in your inventory");
+            return;
+        }
+        //send message
+        MarriageRequest request = new MarriageRequest(player.getUser());
+        anotherPlayer.addMarriageRequest(request);
+        showMessage("your request sent to " + anotherPlayer.getUser().getNickname());
+    }
+
+    private Window marriageRequestsWindow = null;
+    private boolean isNpressed = false;
+    private void showMarriageRequestsWindow(Player currentPlayer) {
+        if (!isNpressed) {
+            marriageRequestsWindow = new Window("Marriage Requests", AssetManager.getAssetManager().getSkin());
+            marriageRequestsWindow.setSize(1000, 600);
+            marriageRequestsWindow.setPosition(500,300);
+            marriageRequestsWindow.setModal(true);
+            marriageRequestsWindow.setMovable(true);
+
+            for (MarriageRequest request : currentPlayer.getMarriageRequests()) {
+                Table marriageRequestsTable = new Table();
+                Label label = new Label(request.getFrom().getNickname() + " wants to marry you", AssetManager.getAssetManager().getSkin());
+                TextButton acceptBtn = new TextButton("accept", AssetManager.getAssetManager().getSkin());
+                TextButton rejectBtn = new TextButton("reject", AssetManager.getAssetManager().getSkin());
+                acceptBtn.setSize(80,80);
+                rejectBtn.setSize(80,80);
+
+                Player anotherPlayer = request.getFrom().getPlayer();
+                Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+
+                acceptBtn.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        currentPlayer.removeMarriageRequest(request);
+                        showMessage("you married with " + request.getFrom().getNickname());
+                        friendship.setLevel(4);
+                        anotherPlayer.getInventory().getSlot("ring").removeQuantity(1);
+                        currentPlayer.getInventory().getSlot("ring").addQuantity(1);
+
+                        currentPlayer.getRelationService().marry(anotherPlayer);
+                        currentPlayer.updateOfMarriage(anotherPlayer);
+                        marriageRequestsWindow.remove();
+                        isNpressed = false;
+                    }
+                });
+
+                rejectBtn.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        currentPlayer.removeMarriageRequest(request);
+                        showMessage("you rejected the request");
+                        friendship.setLevel(0);
+                        friendship.setXp(0);
+                        double energy = anotherPlayer.getEnergy().getMaxEnergy();
+                        anotherPlayer.getEnergy().setMaxEnergy(energy / 2);
+                        anotherPlayer.getEnergy().setAmount(Math.min(100, energy));
+                        anotherPlayer.setEnergyHalved(true);
+                        marriageRequestsWindow.remove();
+                        isNpressed = false;
+                    }
+                });
+
+                marriageRequestsTable.add(label).pad(20);
+                marriageRequestsTable.add(acceptBtn).pad(20);
+                marriageRequestsTable.add(rejectBtn).pad(20);
+
+                marriageRequestsWindow.add(marriageRequestsTable);
+            }
+
+            stage.addActor(marriageRequestsWindow);
+            isNpressed = true;
+
+        } else {
+            if (marriageRequestsWindow != null) {
+                marriageRequestsWindow.remove();
+            }
+            isNpressed = false;
+        }
+    }
+
+    private void showMessage(String text) {
+        messageLabel.setText(text);
+        messageLabel.setFontScale(0.8f);
+        messageLabel.pack();
+
+        messageLabel.setPosition(
+            (Gdx.graphics.getWidth() - messageLabel.getWidth()) / 2f,
+            43
+        );
+
+        backgroundImage.setSize(messageLabel.getWidth() + 30, messageLabel.getHeight() + 20);
+        backgroundImage.setPosition(
+            messageLabel.getX() - 15,
+            messageLabel.getY() - 10
+        );
+
+        messageLabel.clearActions();
+        backgroundImage.clearActions();
+
+        if (!stage.getActors().contains(backgroundImage, true))
+            stage.addActor(backgroundImage);
+
+        if (!stage.getActors().contains(messageLabel, true))
+            stage.addActor(messageLabel);
+
+        messageLabel.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.removeActor()
+        ));
+
+        backgroundImage.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.removeActor()
+        ));
+    }
+
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
 
@@ -794,6 +1017,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (player.getEnergy().hasPassedOut()) {
             player.setFainting(true);
+            controller.getSettingsController().nextTurn();
         }
 
         if (player.isFainting()) {
@@ -838,6 +1062,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 moving = true;
                 energy.consume(consumeAmount);
             }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            hug();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            marriage();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+            showMarriageRequestsWindow(player);
         }
 
         player.setMoving(moving);

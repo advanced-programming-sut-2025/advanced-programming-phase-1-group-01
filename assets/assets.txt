@@ -3666,6 +3666,40 @@ images/water.png
 images/white.png
 images/wood_fence.png
 images/wood_fence_16x16.png
+items/acorn.png
+items/bigmilk.png
+items/cheese.png
+items/coal.png
+items/coffee.png
+items/copper bar.png
+items/copperbar.png
+items/copperore.png
+items/dinosauregg.png
+items/duckegg.png
+items/duckfeather.png
+items/egg.png
+items/fiber.png
+items/goatmilk.png
+items/goldbar.png
+items/goldore.png
+items/hashbrowns.png
+items/iridiumbar.png
+items/iridiumore.png
+items/ironbar.png
+items/ironore.png
+items/largeegg.png
+items/largegoatmilk.png
+items/milk.png
+items/oil.png
+items/rabbitleg.png
+items/rabbitwool.png
+items/rice.png
+items/sheepwool.png
+items/stone.png
+items/sugar.png
+items/truffle.png
+items/wheatflour.png
+items/wood.png
 libgdx.png
 mineral/Aerinite.png
 mineral/Alamite.png
@@ -3729,6 +3763,8 @@ mineral/Star_Shards.png
 mineral/Thunder_Egg.png
 mineral/Tigerseye.png
 mineral/Topaz.png
+relationship/heart.png
+relationship/messageBackground.png
 shipping bin/1.png
 shipping bin/10.png
 shipping bin/11.png
@@ -3744,6 +3780,20 @@ shipping bin/6.png
 shipping bin/7.png
 shipping bin/8.png
 shipping bin/9.png
+shopping/blacksmith_in.png
+shopping/blacksmith_out.png
+shopping/carpenter_in.png
+shopping/carpenter_out.png
+shopping/fishshop_in.png
+shopping/fishshop_out.png
+shopping/jojamart_in.png
+shopping/jojamart_out.png
+shopping/pierr_in.png
+shopping/pierr_out.png
+shopping/ranch_in.png
+shopping/ranch_out.png
+shopping/saloon_in.png
+shopping/saloon_out.png
 skin/04B_30__.fnt
 skin/NzSkin.atlas
 skin/NzSkin.json

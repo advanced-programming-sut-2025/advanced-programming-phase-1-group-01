@@ -7,6 +7,8 @@ import com.stardew_valley.models.animal.AnimalProductType;
 import com.stardew_valley.models.animal.ProductQuality;
 import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.cooking.FoodsEnum;
+import com.stardew_valley.models.cooking.IngredientItem;
+import com.stardew_valley.models.cooking.IngredientItems;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
@@ -139,6 +141,12 @@ public class Inventory {
             case "rabbit wool" -> new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
             case "rabbit leg" -> new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
             case "dinosaur egg" -> new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
+            case "milk" -> new AnimalProduct(AnimalProductType.MILK, ProductQuality.getRandomProductQuality());
+            case "big milk" -> new AnimalProduct(AnimalProductType.BIG_MILK, ProductQuality.getRandomProductQuality());
+            case "goat milk" -> new AnimalProduct(AnimalProductType.GOAT_MILK, ProductQuality.getRandomProductQuality());
+            case "big goat milk" -> new AnimalProduct(AnimalProductType.BIG_GOAT_MILK, ProductQuality.getRandomProductQuality());
+            case "sheep wool" -> new AnimalProduct(AnimalProductType.SHEEP_WOOL, ProductQuality.getRandomProductQuality());
+            case "truffle" -> new AnimalProduct(AnimalProductType.TRUFFLE, ProductQuality.getRandomProductQuality());
             case "honey" -> new CraftedProducts(AllCraftedProductsType.HONEY);
             case "cheese" -> new CraftedProducts(AllCraftedProductsType.CHEESE);
             case "goat cheese" -> new CraftedProducts(AllCraftedProductsType.GOAT_CHEESE);
@@ -267,6 +275,12 @@ public class Inventory {
                 for (PierreGeneralStoreProducts product : PierreGeneralStoreProducts.values()) {
                     if (product.getName().equalsIgnoreCase(itemName)) {
                         yield product.toItem();
+                    }
+                }
+
+                for (IngredientItems item : IngredientItems.values()) {
+                    if (item.getName().equalsIgnoreCase(itemName)) {
+                        yield item.toItem();
                     }
                 }
 
