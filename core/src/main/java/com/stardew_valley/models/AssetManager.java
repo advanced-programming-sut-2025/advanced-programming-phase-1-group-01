@@ -360,6 +360,27 @@ public class AssetManager {
     private final String alex_0_walking_down_3 = "images/a_alex/tile_0_3.png";
 
 
+    private final String emily_0_walking_right_0 = "images/a_emily/tile_1_0.png";
+    private final String emily_0_walking_right_1 = "images/a_emily/tile_1_1.png";
+    private final String emily_0_walking_right_2 = "images/a_emily/tile_1_2.png";
+    private final String emily_0_walking_right_3 = "images/a_emily/tile_1_3.png";
+
+    private final String emily_0_walking_left_0 = "images/a_emily/tile_3_0.png";
+    private final String emily_0_walking_left_1 = "images/a_emily/tile_3_1.png";
+    private final String emily_0_walking_left_2 = "images/a_emily/tile_3_2.png";
+    private final String emily_0_walking_left_3 = "images/a_emily/tile_3_3.png";
+
+    private final String emily_0_walking_up_0 = "images/a_emily/tile_2_0.png";
+    private final String emily_0_walking_up_1 = "images/a_emily/tile_2_1.png";
+    private final String emily_0_walking_up_2 = "images/a_emily/tile_2_2.png";
+    private final String emily_0_walking_up_3 = "images/a_emily/tile_2_3.png";
+
+    private final String emily_0_walking_down_0 = "images/a_emily/tile_0_0.png";
+    private final String emily_0_walking_down_1 = "images/a_emily/tile_0_1.png";
+    private final String emily_0_walking_down_2 = "images/a_emily/tile_0_2.png";
+    private final String emily_0_walking_down_3 = "images/a_emily/tile_0_3.png";
+
+
     private final TextureRegion house_tex = new TextureRegion(new Texture(house));
 
 
@@ -698,6 +719,27 @@ public class AssetManager {
     private final TextureRegion alex_0_walking_down_3_tex = new TextureRegion(new Texture(alex_0_walking_down_3));
 
 
+    private final TextureRegion emily_0_walking_right_0_tex = new TextureRegion(new Texture(emily_0_walking_right_0));
+    private final TextureRegion emily_0_walking_right_1_tex = new TextureRegion(new Texture(emily_0_walking_right_1));
+    private final TextureRegion emily_0_walking_right_2_tex = new TextureRegion(new Texture(emily_0_walking_right_2));
+    private final TextureRegion emily_0_walking_right_3_tex = new TextureRegion(new Texture(emily_0_walking_right_3));
+
+    private final TextureRegion emily_0_walking_left_0_tex = new TextureRegion(new Texture(emily_0_walking_left_0));
+    private final TextureRegion emily_0_walking_left_1_tex = new TextureRegion(new Texture(emily_0_walking_left_1));
+    private final TextureRegion emily_0_walking_left_2_tex = new TextureRegion(new Texture(emily_0_walking_left_2));
+    private final TextureRegion emily_0_walking_left_3_tex = new TextureRegion(new Texture(emily_0_walking_left_3));
+
+    private final TextureRegion emily_0_walking_up_0_tex = new TextureRegion(new Texture(emily_0_walking_up_0));
+    private final TextureRegion emily_0_walking_up_1_tex = new TextureRegion(new Texture(emily_0_walking_up_1));
+    private final TextureRegion emily_0_walking_up_2_tex = new TextureRegion(new Texture(emily_0_walking_up_2));
+    private final TextureRegion emily_0_walking_up_3_tex = new TextureRegion(new Texture(emily_0_walking_up_3));
+
+    private final TextureRegion emily_0_walking_down_0_tex = new TextureRegion(new Texture(emily_0_walking_down_0));
+    private final TextureRegion emily_0_walking_down_1_tex = new TextureRegion(new Texture(emily_0_walking_down_1));
+    private final TextureRegion emily_0_walking_down_2_tex = new TextureRegion(new Texture(emily_0_walking_down_2));
+    private final TextureRegion emily_0_walking_down_3_tex = new TextureRegion(new Texture(emily_0_walking_down_3));
+
+
     private final Animation<TextureRegion> alex_0_walking_right_animation = new Animation<>(0.1f,
         alex_0_walking_right_0_tex,
         alex_0_walking_right_1_tex,
@@ -725,6 +767,37 @@ public class AssetManager {
         alex_0_walking_down_2_tex,
         alex_0_walking_down_3_tex
     );
+
+
+
+    private final Animation<TextureRegion> emily_0_walking_right_animation = new Animation<>(0.1f,
+        emily_0_walking_right_0_tex,
+        emily_0_walking_right_1_tex,
+        emily_0_walking_right_2_tex,
+        emily_0_walking_right_3_tex
+    );
+
+    private final Animation<TextureRegion> emily_0_walking_left_animation = new Animation<>(0.1f,
+        emily_0_walking_left_0_tex,
+        emily_0_walking_left_1_tex,
+        emily_0_walking_left_2_tex,
+        emily_0_walking_left_3_tex
+    );
+
+    private final Animation<TextureRegion> emily_0_walking_up_animation = new Animation<>(0.1f,
+        emily_0_walking_up_0_tex,
+        emily_0_walking_up_1_tex,
+        emily_0_walking_up_2_tex,
+        emily_0_walking_up_3_tex
+    );
+
+    private final Animation<TextureRegion> emily_0_walking_down_animation = new Animation<>(0.1f,
+        emily_0_walking_down_0_tex,
+        emily_0_walking_down_1_tex,
+        emily_0_walking_down_2_tex,
+        emily_0_walking_down_3_tex
+    );
+
 
 
     private final Animation<TextureRegion> sheep_up_animation = new Animation<>(0.1f,
