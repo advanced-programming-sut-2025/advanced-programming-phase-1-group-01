@@ -4516,6 +4516,70 @@ public class AssetManager {
         return new Texture("ability/emptyYellowIcon.png");
     }
 
+    public Texture getBackgroundMessage() {
+        return new Texture("relationship/messageBackground.png");
+    }
+
+    public Texture getHeart() {
+        return new Texture("relationship/heart.png");
+    }
+
+    public Texture getBlackSmithOut() {
+        return new Texture("shopping/blacksmith_out.png");
+    }
+
+    public Texture getBlackSmithIn() {
+        return new Texture("shopping/blacksmith_in.png");
+    }
+
+    public Texture getCarpenterIn() {
+        return new Texture("shopping/carpenter_in.png");
+    }
+
+    public Texture getCarpenterOut() {
+        return new Texture("shopping/carpenter_out.png");
+    }
+
+    public Texture getFishShopOut() {
+        return new Texture("shopping/fishshop_out.png");
+    }
+
+    public Texture getFishShopIn() {
+        return new Texture("shopping/fishshop_in.png");
+    }
+
+    public Texture getJojamartIn() {
+        return new Texture("shopping/jojamart_in.png");
+    }
+
+    public Texture getJojamartOut() {
+        return new Texture("shopping/jojamart_out.png");
+    }
+
+    public Texture getPierrIn() {
+        return new Texture("shopping/pierr_in.png");
+    }
+
+    public Texture getPierrOut() {
+        return new Texture("shopping/pierr_out.png");
+    }
+
+    public Texture getRanchIn() {
+        return new Texture("shopping/ranch_in.png");
+    }
+
+    public Texture getRanchOut() {
+        return new Texture("shopping/ranch_out.png");
+    }
+
+    public Texture getSaloonIn() {
+        return new Texture("shopping/saloon_in.png");
+    }
+
+    public Texture getSaloonOut() {
+        return new Texture("shopping/saloon_out.png");
+    }
+
     public static AssetManager getAssetManager() {
         if (assetManager == null) {
             assetManager = new AssetManager();

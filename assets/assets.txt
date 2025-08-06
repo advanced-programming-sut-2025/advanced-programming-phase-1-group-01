@@ -3730,6 +3730,8 @@ mineral/Star_Shards.png
 mineral/Thunder_Egg.png
 mineral/Tigerseye.png
 mineral/Topaz.png
+relationship/heart.png
+relationship/messageBackground.png
 shipping bin/1.png
 shipping bin/10.png
 shipping bin/11.png
@@ -3745,6 +3747,20 @@ shipping bin/6.png
 shipping bin/7.png
 shipping bin/8.png
 shipping bin/9.png
+shopping/blacksmith_in.png
+shopping/blacksmith_out.png
+shopping/carpenter_in.png
+shopping/carpenter_out.png
+shopping/fishshop_in.png
+shopping/fishshop_out.png
+shopping/jojamart_in.png
+shopping/jojamart_out.png
+shopping/pierr_in.png
+shopping/pierr_out.png
+shopping/ranch_in.png
+shopping/ranch_out.png
+shopping/saloon_in.png
+shopping/saloon_out.png
 skin/04B_30__.fnt
 skin/NzSkin.atlas
 skin/NzSkin.json

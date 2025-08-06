@@ -32,7 +32,7 @@ public class Game {
     private final ForagingManager foragingManager;
     private NPCVillage npcVillage;
 //    private Maps currentMap;
-    private int currentIndex = 1;
+    private int currentIndex = 0;
     private DelayedPaymentSystem delayedPaymentSystem = new DelayedPaymentSystem();
     private final Farm farm;
 
@@ -257,6 +257,14 @@ public class Game {
             playerPositions.put(player, pos);
             player.setPosition(pos);
         }
+    }
+
+    public void nextIndex() {
+        currentIndex++;
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
     }
 
 }

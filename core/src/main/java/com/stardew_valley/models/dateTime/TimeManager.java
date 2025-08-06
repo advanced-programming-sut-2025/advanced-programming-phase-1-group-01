@@ -120,10 +120,9 @@ public class TimeManager {
             }
 
             if (player.isEnergyHalved()) {
-                player.getEnergy().setMaxEnergy(player.getEnergy().getMaxEnergy() / 2);
+                player.increaseHalvedEnergy();
             }
 
-            player.increaseHalvedEnergy();
             for (UnripeProduct unripeProduct: player.getUnripeProducts()) {
                 unripeProduct.advanceHourCounter();
             }
