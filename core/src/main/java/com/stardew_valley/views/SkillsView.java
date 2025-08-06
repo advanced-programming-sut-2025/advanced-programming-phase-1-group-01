@@ -1,14 +1,12 @@
 package com.stardew_valley.views;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.player.AbilityService;
 import com.stardew_valley.models.character.player.AbilityType;
-import com.stardew_valley.models.character.player.Player;
 
 public class SkillsView extends GameWindow {
     private Skin skin;
@@ -22,8 +20,8 @@ public class SkillsView extends GameWindow {
     private Label miningAbilityLabel;
     private Image miningAbilityImage;
 
-    public SkillsView() {
-        super("Skills", AssetManager.getAssetManager().getSkin(), "Letter");
+    public SkillsView(Stage stage) {
+        super("Skills", AssetManager.getAssetManager().getSkin(), "Letter", stage);
         skin = AssetManager.getAssetManager().getSkin();
         abilityService = repo.getCurrentGame().getCurrentPlayer().getAbilityService();
 

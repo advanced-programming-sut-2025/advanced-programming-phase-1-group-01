@@ -17,13 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
-import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
-import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -36,7 +33,6 @@ import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.ArtisanStatus;
 import com.stardew_valley.models.enums.ArtisanType;
@@ -148,16 +144,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryMenu = new WindowManager(stage);
-        this.shippingBinView = new ShippingBinView();
-        this.inventoryView = new InventoryView();
-        this.skillsView = new SkillsView();
-        this.socialView = new SocialView();
-        this.miniMapView = new MiniMapView();
-        this.settingsView = new SettingsView(controller.getSettingsController());
-        friendshipView = new FriendshipView(player.getRelationService());
+        this.shippingBinView = new ShippingBinView(stage);
+        this.inventoryView = new InventoryView(stage);
+        this.skillsView = new SkillsView(stage);
+        this.socialView = new SocialView(stage);
+        this.miniMapView = new MiniMapView(stage);
+        this.settingsView = new SettingsView(controller.getSettingsController(), stage);
+        friendshipView = new FriendshipView(player.getRelationService(), stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
-        giftView = new GiftView();
-        notificationsView = new NotificationsView();
+        giftView = new GiftView(stage);
+        notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
     }
 
@@ -179,7 +175,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         stage.addActor(shippingBinView);
 
-        stage.addActor(friendshipView);
         friendshipsButton.setSize(150, 80);
         friendshipsButton.getLabel().setFontScale(0.8f);
         friendshipsButton.setPosition(Gdx.graphics.getWidth() - 170, 20);
@@ -190,8 +185,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 friendshipView.setVisible(!friendshipView.isVisible());
             }
         });
-
-        stage.addActor(notificationsView);
     }
 
     @Override
@@ -210,7 +203,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         energyView.render(delta);
         inventoryMenu.update();
         friendshipView.update();
-//        notificationsView.update();
+        notificationsView.update();
+        giftView.update();
         batch.end();
 
         stage.act(delta);
@@ -382,10 +376,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawTileObjectsExceptTrees();
 
-
         drawAnimals();
 
-        drawPlayer();
+        drawPlayers();
 
         drawEquippedTool();
 
@@ -472,9 +465,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
-    private void drawPlayer() {
-        batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+    private void drawPlayers() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers())
+            batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {

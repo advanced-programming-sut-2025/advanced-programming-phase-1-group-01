@@ -6,6 +6,6 @@ public record MessageEntry(Player sender, String message) {
 
     @Override
     public String toString() {
-        return sender.getUser().getNickname() + ": " + message;
+        return sender.getUser().getUsername() + ": " + message;
     }
 }

@@ -1,8 +1,8 @@
 package com.stardew_valley.views;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -28,8 +28,8 @@ public class InventoryView extends GameWindow {
     private Label slotInfoLabel;
     private final Inventory inventory;
 
-    public InventoryView() {
-        super("Inventory", AssetManager.getAssetManager().getSkin(), "Letter");
+    public InventoryView(Stage stage) {
+        super("Inventory", AssetManager.getAssetManager().getSkin(), "Letter", stage);
 
         Skin skin = AssetManager.getAssetManager().getSkin();
         this.inventory = Repository.getRepo().getCurrentUser().getPlayer().getInventory();
