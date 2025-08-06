@@ -44,9 +44,9 @@ public class Main extends Game {
         //setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
         //setScreen(new GameMenuView(new GameMenuController(Repository.getRepo())));
         //setScreen(new TempLogin(new Repository()));
-        setScreen(new CookingView(new CookingController(Repository.getRepo())));
+        //setScreen(new CookingView(new CookingController(Repository.getRepo())));
         //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
-        //setScreen(new GameView(new GameController(Repository.getRepo())));
+        setScreen(new GameView(new GameController(Repository.getRepo())));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class Main extends Game {
     public void user() {
         if (Repository.getRepo().getUserByUsername("1") == null) {
             String path = "avatars/avatar1.png";
-            User user = new User("1", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            User user = new User("1", "a", "a", "a", Gender.FEMALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
             Repository.getRepo().setCurrentUser(user);

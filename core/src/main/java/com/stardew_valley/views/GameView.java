@@ -222,6 +222,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         energyView.updateEnergy();
         energyView.render(delta);
         inventoryMenu.update();
+        skillsView.update();
         friendshipView.update();
 //        notificationsView.update();
         batch.end();
