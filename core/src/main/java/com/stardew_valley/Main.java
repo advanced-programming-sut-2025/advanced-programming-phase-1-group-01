@@ -3,7 +3,6 @@ package com.stardew_valley;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.stardew_valley.controllers.*;
-import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
@@ -17,9 +16,11 @@ import com.stardew_valley.views.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.stardew_valley.models.Game.PLAYERS_STARTING_POSITION;
+import static com.stardew_valley.models.Game.PLAYER1_STARTING_POSITION;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class Main extends Game {
     private static Main main;
     private static SpriteBatch batch;
@@ -98,7 +99,7 @@ public class Main extends Game {
         Repository.getRepo().addGame(game);
         Repository.getRepo().setCurrentGame(game);
         Repository.getRepo().getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));
-        Repository.getRepo().getCurrentUser().getPlayer().setPosition(PLAYERS_STARTING_POSITION);
+        Repository.getRepo().getCurrentUser().getPlayer().setPosition(PLAYER1_STARTING_POSITION);
 
         Farm farm = FarmInitializer.initializeFarm();
 
@@ -108,6 +109,7 @@ public class Main extends Game {
             if (player.getUser().getUsername().equals("4"))
                 player.getGame().getTimeManager().prepareForNewDay();
         }
+        farm.getTile(31, 75).setMovable(true);
         game.getForagingManager().prepareNewDayForaging();
     }
 }

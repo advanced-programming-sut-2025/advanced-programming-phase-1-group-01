@@ -1,7 +1,9 @@
 package com.stardew_valley.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.NPC.NPC;
@@ -15,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class FriendshipView extends GameWindow {
-    private final List<Table> friendshipRows;
     private final Table friendshipTable;
 
     private final RelationshipService relationshipService;
@@ -23,12 +24,6 @@ public class FriendshipView extends GameWindow {
     public FriendshipView(RelationshipService relationshipService) {
         super("Friendships", AssetManager.getAssetManager().getSkin(), "Letter");
 
-        this.setSize(900, 600);
-        this.setPosition(Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
-        this.setMovable(true);
-        this.setVisible(false);
-
-        friendshipRows = new ArrayList<>();
         friendshipTable = new Table(getSkin());
 
         add(friendshipTable).expand().fill().padTop(30);
@@ -60,6 +55,14 @@ public class FriendshipView extends GameWindow {
             ProgressBar levelXpBar = new ProgressBar(0, friendship.getMaxXp(), 1, false, getSkin());
             levelXpBar.setValue(friendship.getXp());
             TextButton giftButton = new TextButton("Gift", getSkin());
+
+            giftButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    setVisible(false);
+
+                }
+            });
 
             giftButton.getLabel().setFontScale(0.9f);
 

@@ -219,7 +219,11 @@ public class Player extends Character {
     }
 
     public void readNotification(MessageEntry notification) {
-        notifications.put(notification, true);
+        for (Map.Entry<MessageEntry, Boolean> entry : notifications.entrySet()) {
+            if (entry.getKey() == notification) {
+                entry.setValue(true);
+            }
+        }
     }
 
     public void readAllNotifications() {
@@ -231,7 +235,7 @@ public class Player extends Character {
     }
 
     public boolean isNearTo(Player p) {
-        return Math.abs(p.getPosition().x() - position.x()) <= 1 && Math.abs(p.getPosition().y() - position.y()) <= 1;
+        return Math.abs(p.getPosition().x() - position.x()) <= 32 && Math.abs(p.getPosition().y() - position.y()) <= 32;
     }
 
     public boolean isNearTo(Position position) {
@@ -426,8 +430,8 @@ public class Player extends Character {
         return null;
     }
 
-    public void setEnergyHalved() {
-        isEnergyHalved = true;
+    public void setEnergyHalved(boolean energyHalved) {
+        this.isEnergyHalved = energyHalved;
     }
 
     public boolean isEnergyHalved() {
@@ -437,7 +441,8 @@ public class Player extends Character {
     public void increaseHalvedEnergy() {
         halvedEnergyCounter++;
         if (halvedEnergyCounter >= 7) {
-            setEnergyHalved();
+            setEnergyHalved(false);
+            energy.setMaxEnergy(energy.getMaxEnergy() * 2);
             halvedEnergyCounter = 0;
         }
     }
@@ -930,5 +935,19 @@ public class Player extends Character {
 
     public int getArtisanId() {
         return artisanId++;
+    }
+
+    private List<MarriageRequest> marriageRequests = new ArrayList<>();
+
+    public void addMarriageRequest(MarriageRequest request) {
+        marriageRequests.add(request);
+    }
+
+    public List<MarriageRequest> getMarriageRequests() {
+        return marriageRequests;
+    }
+
+    public void removeMarriageRequest(MarriageRequest request) {
+        marriageRequests.remove(request);
     }
 }

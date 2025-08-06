@@ -1,5 +1,6 @@
 package com.stardew_valley.models;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.stardew_valley.models.animal.Animal;
@@ -18,16 +19,20 @@ import com.stardew_valley.models.weather.WeatherManager;
 import com.stardew_valley.models.shop.DelayedPaymentSystem;
 
 public class Game {
-    public final static Position PLAYERS_STARTING_POSITION = new Position(80, 1280);
+    public final static Position PLAYER1_STARTING_POSITION = new Position(80, 1280);
+    public final static Position PLAYER2_FINISHED_POSITION = new Position(2480, 1280);
+    public final static Position PLAYER3_FINISHED_POSITION = new Position(1280, 80);
+    public final static Position PLAYER4_FINISHED_POSITION = new Position(1280, 2480);
     private Player currentPlayer;
     private final List<Player> players;
+    private final HashMap<Player, Position> playerPositions;
     private final TimeManager timeManager;
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
     private final ForagingManager foragingManager;
     private NPCVillage npcVillage;
 //    private Maps currentMap;
-    private int currentIndex = 1;
+    private int currentIndex = 0;
     private DelayedPaymentSystem delayedPaymentSystem = new DelayedPaymentSystem();
     private final Farm farm;
 
@@ -51,6 +56,8 @@ public class Game {
         farmingManager = new FarmingManager(this);
         foragingManager = new ForagingManager(this);
         farm = FarmInitializer.initializeFarm();
+        playerPositions = new HashMap<>();
+        initializePosition(players.size());
     }
 
 
@@ -133,7 +140,7 @@ public class Game {
     private void initializeGame(List<Player> players) {
         for (Player player : players) {
 //            player.setFarm(FarmInitializer.initializeFarm(3, 5)); FIXME : Phony
-            player.setPosition(PLAYERS_STARTING_POSITION);
+            player.setPosition(PLAYER1_STARTING_POSITION);
         }
         setNpcVillage(VillageInitializer.initializeVillage(players));
     }
@@ -164,7 +171,7 @@ public class Game {
         Maps map = getMapById(id);
         if (map != null) {
             currentPlayer.setCurrentMap(getMapById(id));
-            currentPlayer.setPosition(new Position(PLAYERS_STARTING_POSITION.x() + 1, PLAYERS_STARTING_POSITION.y()));
+            currentPlayer.setPosition(new Position(PLAYER1_STARTING_POSITION.x() + 1, PLAYER1_STARTING_POSITION.y()));
             return "You are now there";
         } else return "invalid map ID";
     }
@@ -225,4 +232,39 @@ public class Game {
     public Farm getFarm() {
         return farm;
     }
+
+    private void initializePosition(int numOfPlayers) {
+
+        for (int i = 0; i < numOfPlayers; i++) {
+            Player player = players.get(i);
+            Position pos;
+            switch (i) {
+                case 0:
+                    pos = PLAYER1_STARTING_POSITION;
+                    break;
+                case 1:
+                    pos = PLAYER2_FINISHED_POSITION;
+                    break;
+                case 2:
+                    pos = PLAYER3_FINISHED_POSITION;
+                    break;
+                case 3:
+                    pos = PLAYER4_FINISHED_POSITION;
+                    break;
+                default:
+                    pos = PLAYER1_STARTING_POSITION;
+            }
+            playerPositions.put(player, pos);
+            player.setPosition(pos);
+        }
+    }
+
+    public void nextIndex() {
+        currentIndex++;
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
 }

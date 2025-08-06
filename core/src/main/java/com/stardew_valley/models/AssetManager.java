@@ -4550,7 +4550,107 @@ public class AssetManager {
     };
 
     public Animation<TextureRegion> getShippingBinAnimation() {
-        return new Animation<TextureRegion>(0.1f, texturesShippingBin);
+        return new Animation<TextureRegion>(0.2f, texturesShippingBin);
+    }
+
+    public Texture getShippingBin() {
+        return new Texture("shipping bin/1.png");
+    }
+
+    public Texture getFarmingAbility() {
+        return new Texture("ability/Farming.png");
+    }
+
+    public Texture getFishingAbility() {
+        return new Texture("ability/Fishing.png");
+    }
+
+    public Texture getForagingAbility() {
+        return new Texture("ability/Foraging.png");
+    }
+
+    public Texture getMiningAbility() {
+        return new Texture("ability/Mining.png");
+    }
+
+    public Texture getRedIcon() {
+        return new Texture("ability/redIcon.png");
+    }
+
+    public Texture getYellowIcon() {
+        return new Texture("ability/yellowIcon.png");
+    }
+
+    public Texture getEmptyRedIcon() {
+        return new Texture("ability/emptyRedIcon.png");
+    }
+
+    public Texture getEmptyYellowIcon() {
+        return new Texture("ability/emptyYellowIcon.png");
+    }
+
+    public Texture getBackgroundMessage() {
+        return new Texture("relationship/messageBackground.png");
+    }
+
+    public Texture getHeart() {
+        return new Texture("relationship/heart.png");
+    }
+
+    public Texture getBlackSmithOut() {
+        return new Texture("shopping/blacksmith_out.png");
+    }
+
+    public Texture getBlackSmithIn() {
+        return new Texture("shopping/blacksmith_in.png");
+    }
+
+    public Texture getCarpenterIn() {
+        return new Texture("shopping/carpenter_in.png");
+    }
+
+    public Texture getCarpenterOut() {
+        return new Texture("shopping/carpenter_out.png");
+    }
+
+    public Texture getFishShopOut() {
+        return new Texture("shopping/fishshop_out.png");
+    }
+
+    public Texture getFishShopIn() {
+        return new Texture("shopping/fishshop_in.png");
+    }
+
+    public Texture getJojamartIn() {
+        return new Texture("shopping/jojamart_in.png");
+    }
+
+    public Texture getJojamartOut() {
+        return new Texture("shopping/jojamart_out.png");
+    }
+
+    public Texture getPierrIn() {
+        return new Texture("shopping/pierr_in.png");
+    }
+
+    public Texture getPierrOut() {
+        return new Texture("shopping/pierr_out.png");
+    }
+
+    public Texture getRanchIn() {
+        return new Texture("shopping/ranch_in.png");
+    }
+
+    public Texture getRanchOut() {
+        return new Texture("shopping/ranch_out.png");
+    }
+
+    public Texture getSaloonIn() {
+        return new Texture("shopping/saloon_in.png");
+    }
+
+    public Texture getSaloonOut() {
+        return new Texture("shopping/saloon_out.png");
     }
 
     public static AssetManager getAssetManager() {

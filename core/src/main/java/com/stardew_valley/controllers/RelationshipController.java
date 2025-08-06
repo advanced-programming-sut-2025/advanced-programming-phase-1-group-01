@@ -427,7 +427,7 @@ public class RelationshipController extends Controller {
             friendship.setXp(0);
             double energy = friend.getEnergy().getMaxEnergy();
             friend.getEnergy().setMaxEnergy(energy / 2);
-            currentPlayer.setEnergyHalved();
+            currentPlayer.setEnergyHalved(true);
             return new Result(true, currentPlayer + "reject" + friend.getUser().getUsername() + "request for marriage");
         } else if (respond.equals("accept")) {
             friendship.setLevel(4);
