@@ -40,6 +40,7 @@ public class Inventory {
         slots.add(new Slot(this, "hoe", 1));
         slots.add(new Slot(this, "pickaxe", 1));
     }
+
     public List<Slot> getSlots() {
         List<Slot> result = new ArrayList<>(slots);
         result.remove(0);
@@ -61,7 +62,6 @@ public class Inventory {
 
         return null;
     }
-
 
 
     public void removeSlot(Slot slot) {
@@ -137,15 +137,22 @@ public class Inventory {
             case "egg" -> new AnimalProduct(AnimalProductType.EGG, ProductQuality.getRandomProductQuality());
             case "big egg" -> new AnimalProduct(AnimalProductType.BIG_EGG, ProductQuality.getRandomProductQuality());
             case "duck egg" -> new AnimalProduct(AnimalProductType.DUCK_EGG, ProductQuality.getRandomProductQuality());
-            case "duck feather" -> new AnimalProduct(AnimalProductType.DUCK_FEATHER, ProductQuality.getRandomProductQuality());
-            case "rabbit wool" -> new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
-            case "rabbit leg" -> new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
-            case "dinosaur egg" -> new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
+            case "duck feather" ->
+                new AnimalProduct(AnimalProductType.DUCK_FEATHER, ProductQuality.getRandomProductQuality());
+            case "rabbit wool" ->
+                new AnimalProduct(AnimalProductType.RABBIT_WOOL, ProductQuality.getRandomProductQuality());
+            case "rabbit leg" ->
+                new AnimalProduct(AnimalProductType.RABBIT_LEG, ProductQuality.getRandomProductQuality());
+            case "dinosaur egg" ->
+                new AnimalProduct(AnimalProductType.DINOSAUR_EGG, ProductQuality.getRandomProductQuality());
             case "milk" -> new AnimalProduct(AnimalProductType.MILK, ProductQuality.getRandomProductQuality());
             case "big milk" -> new AnimalProduct(AnimalProductType.BIG_MILK, ProductQuality.getRandomProductQuality());
-            case "goat milk" -> new AnimalProduct(AnimalProductType.GOAT_MILK, ProductQuality.getRandomProductQuality());
-            case "big goat milk" -> new AnimalProduct(AnimalProductType.BIG_GOAT_MILK, ProductQuality.getRandomProductQuality());
-            case "sheep wool" -> new AnimalProduct(AnimalProductType.SHEEP_WOOL, ProductQuality.getRandomProductQuality());
+            case "goat milk" ->
+                new AnimalProduct(AnimalProductType.GOAT_MILK, ProductQuality.getRandomProductQuality());
+            case "big goat milk" ->
+                new AnimalProduct(AnimalProductType.BIG_GOAT_MILK, ProductQuality.getRandomProductQuality());
+            case "sheep wool" ->
+                new AnimalProduct(AnimalProductType.SHEEP_WOOL, ProductQuality.getRandomProductQuality());
             case "truffle" -> new AnimalProduct(AnimalProductType.TRUFFLE, ProductQuality.getRandomProductQuality());
             case "honey" -> new CraftedProducts(AllCraftedProductsType.HONEY);
             case "cheese" -> new CraftedProducts(AllCraftedProductsType.CHEESE);
@@ -218,9 +225,9 @@ public class Inventory {
                     }
                 }
 
-                for (QuestItemType QuestItem : QuestItemType.values()) {
-                    if (QuestItem.getName().equalsIgnoreCase(itemName)) {
-                        yield QuestItem.toItem();
+                for (IngredientItems item : IngredientItems.values()) {
+                    if (item.getName().equalsIgnoreCase(itemName)) {
+                        yield item.toItem();
                     }
                 }
 
@@ -278,9 +285,9 @@ public class Inventory {
                     }
                 }
 
-                for (IngredientItems item : IngredientItems.values()) {
-                    if (item.getName().equalsIgnoreCase(itemName)) {
-                        yield item.toItem();
+                for (QuestItemType QuestItem : QuestItemType.values()) {
+                    if (QuestItem.getName().equalsIgnoreCase(itemName)) {
+                        yield QuestItem.toItem();
                     }
                 }
 

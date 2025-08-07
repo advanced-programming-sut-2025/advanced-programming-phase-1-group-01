@@ -220,7 +220,7 @@ public class RelationshipController extends Controller {
         return new Result(true, "you hugged each other!");
     }
 
-    private Result gift(String username, String itemName, int amount) {
+    public Result gift(String username, String itemName, int amount) {
         Player sender = repo.getCurrentGame().getCurrentPlayer();
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");

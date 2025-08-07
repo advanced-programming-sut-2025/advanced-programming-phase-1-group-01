@@ -28,10 +28,12 @@ public class FriendshipView extends GameWindow {
 
     private final Table friendshipTable;
 
+    private final GiftView giftView;
     private final RelationshipService   relationshipService;
 
-    public FriendshipView(RelationshipService relationshipService, Stage stage) {
+    public FriendshipView(RelationshipService relationshipService, Stage stage, GiftView giftView) {
         super("Friendships", AssetManager.getAssetManager().getSkin(), "Letter", stage);
+        this.giftView = giftView;
 
         friendshipsRows = new ArrayList<>();
         friendNameLabels = new ArrayList<>();
@@ -93,6 +95,8 @@ public class FriendshipView extends GameWindow {
                  @Override
                  public void clicked (InputEvent event, float x, float y) {
                     setVisible(false);
+                    giftView.setVisible(true);
+                    giftView.setFriend(player);
                  }
             });
 

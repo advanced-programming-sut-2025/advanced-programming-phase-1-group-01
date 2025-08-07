@@ -1,9 +1,12 @@
 package com.stardew_valley.views;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.stardew_valley.models.AssetManager;
@@ -27,6 +30,9 @@ public class InventoryView extends GameWindow {
     private TextButton equipSlotButton;
     private Label slotInfoLabel;
     private final Inventory inventory;
+
+    private GiftView giftView;
+    private boolean isPickingGift;
 
     public InventoryView(Stage stage) {
         super("Inventory", AssetManager.getAssetManager().getSkin(), "Letter", stage);
@@ -67,15 +73,23 @@ public class InventoryView extends GameWindow {
         this.add(slotInfoLabel);
         equipSlotButton.getLabel().setScale(0.2f);
         this.add(equipSlotButton).size(150, 80).padRight(30);
+
         equipSlotButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if ("equip".equals(equipSlotButton.getLabel().getText().toString())) {
-                    inventory.setEquippedSlot(selectedSlot);
-                    equipSlotButton.getLabel().setText("unequip");
-                } else if ("unequip".equals(equipSlotButton.getLabel().getText().toString())) {
-                    inventory.setEquippedSlot(null);
-                    equipSlotButton.getLabel().setText("equip");
+                if (isPickingGift) {
+                    giftView.setGiftItem(selectedSlot.getItem());
+                    setPickingGift(false);
+                    setVisible(false);
+                    giftView.setVisible(true);
+                } else {
+                    if ("equip".equals(equipSlotButton.getLabel().getText().toString())) {
+                        inventory.setEquippedSlot(selectedSlot);
+                        equipSlotButton.getLabel().setText("unequip");
+                    } else if ("unequip".equals(equipSlotButton.getLabel().getText().toString())) {
+                        inventory.setEquippedSlot(null);
+                        equipSlotButton.getLabel().setText("equip");
+                    }
                 }
             }
         });
@@ -126,6 +140,9 @@ public class InventoryView extends GameWindow {
                 public void clicked(InputEvent event, float x, float y) {
                     selectedSlot = slot;
                     highlightSlot(background);
+
+                    if (isPickingGift) return;
+
                     if (inventory.getEquippedSlot() != slot) {
                         equipSlotButton.getLabel().setText("equip");
                     } else {
@@ -153,7 +170,7 @@ public class InventoryView extends GameWindow {
             resetLastHighlightedBackground();
         }
 
-        background.setColor(1, 1, 0.5f, 1); // یه رنگ زرد کمرنگ
+        background.setColor(1, 1, 0.5f, 1);
         lastHighlightedBackground = background;
         equipSlotButton.setVisible(true);
     }
@@ -170,5 +187,25 @@ public class InventoryView extends GameWindow {
         lastHighlightedBackground.setColor(1, 1, 1, 1);
         equipSlotButton.setVisible(false);
         slotInfoLabel.setText("");
+    }
+
+    public void setPickingGift(boolean pickingGift) {
+        isPickingGift = pickingGift;
+
+        if (isPickingGift) {
+            equipSlotButton.getLabel().setText("select");
+        } else {
+            equipSlotButton.getLabel().setText("equip");
+            selectedSlot = null;
+            resetLastHighlightedBackground();
+        }
+    }
+
+    public boolean isPickingGift() {
+        return isPickingGift;
+    }
+
+    public void setGiftView(GiftView giftView) {
+        this.giftView = giftView;
     }
 }
