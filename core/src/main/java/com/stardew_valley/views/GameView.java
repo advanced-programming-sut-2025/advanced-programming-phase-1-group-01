@@ -21,6 +21,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
@@ -49,7 +51,10 @@ import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
+import com.stardew_valley.network.GameClient;
+import com.stardew_valley.network.Network;
 
+import java.io.IOException;
 import java.util.Random;
 
 import java.util.ArrayList;
@@ -142,7 +147,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
 
-    public GameView(GameController controller) {
+
+    //^ Network
+    private GameClient client;
+
+
+
+    public GameView(GameController controller) throws IOException {
         stage = new Stage(new ScreenViewport());
         this.controller = controller;
         this.camera = new OrthographicCamera();
@@ -167,6 +178,38 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        client = new GameClient(this);
+        client.connect("127.0.0.1");
+        player.setId(client.getPlayerId());
+        client.addListener(new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof Network.MovePlayer moveUpdate) {
+                    receiveUpdate(moveUpdate);
+                }
+            }
+        });
+    }
+
+    public void receiveUpdate(Network.MovePlayer moveUpdate) {
+        Player player = controller.getRepo().getCurrentGame().getPlayers()
+            .stream()
+            .filter(p -> p.getId() == moveUpdate.playerId)
+            .findFirst()
+            .orElse(null);
+
+        if (player != null) {
+            player.setX(moveUpdate.x);
+            player.setY(moveUpdate.y);
+        } else {
+            System.out.println("Player with ID " + moveUpdate.playerId + " not found!");
+        }
+    }
+
+
+
+    public void updatePlayerPosition(float x, float y) {
+        client.sendMove(x, y);
     }
 
     @Override
@@ -210,7 +253,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     @Override
     public void render(float delta) {
         globalDelta = delta;
-        updateGame(delta);
+        try {
+            updateGame(delta);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.zoom = 0.5f;
@@ -960,13 +1007,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.draw(background, 0, 0);
     }
 
-    public void updateGame(float delta) {
+    public void updateGame(float delta) throws IOException {
         controller.getRepo().getCurrentGame().getCurrentPlayer().updateStateTime(delta);
         handleMovement(delta);
         checkPlayerNearShippingBin();
     }
 
-    public void handleMovement(float delta) {
+    public void handleMovement(float delta) throws IOException {
         boolean moving = false;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
@@ -1064,6 +1111,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 energy.consume(consumeAmount);
             }
         }
+
+        updatePlayerPosition(player.getX(), player.getY());
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             hug();

@@ -7,6 +7,7 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.views.GameView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SettingsController extends Controller {
@@ -18,7 +19,7 @@ public class SettingsController extends Controller {
     public Result handleCommand(String commandLine) {
         return null;
     }
-    public void nextTurn() {
+    public void nextTurn() throws IOException {
         Game game = repo.getCurrentGame();
         game.nextIndex();
         List<Player> players = game.getPlayers();

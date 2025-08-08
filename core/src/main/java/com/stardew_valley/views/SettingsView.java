@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.AssetManager;
 
+import java.io.IOException;
+
 public class SettingsView extends GameWindow {
     private Table table;
     private TextButton nextTurnButton;
@@ -23,7 +25,11 @@ public class SettingsView extends GameWindow {
         nextTurnButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SettingsView.this.controller.nextTurn();
+                try {
+                    SettingsView.this.controller.nextTurn();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

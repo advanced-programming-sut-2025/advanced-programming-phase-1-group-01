@@ -13,6 +13,7 @@ import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.initializer.VillageInitializer;
 import com.stardew_valley.views.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,11 @@ public class Main extends Game {
         //setScreen(new TempLogin(new Repository()));
         //setScreen(new CookingView(new CookingController(Repository.getRepo())));
         //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
-        setScreen(new GameView(new GameController(Repository.getRepo())));
+        try {
+            setScreen(new GameView(new GameController(Repository.getRepo())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

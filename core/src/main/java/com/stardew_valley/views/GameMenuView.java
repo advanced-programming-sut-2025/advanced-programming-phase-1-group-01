@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.models.AssetManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,11 @@ public class GameMenuView extends View {
         startGame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.startGame(messageLabel, players);
+                try {
+                    controller.startGame(messageLabel, players);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

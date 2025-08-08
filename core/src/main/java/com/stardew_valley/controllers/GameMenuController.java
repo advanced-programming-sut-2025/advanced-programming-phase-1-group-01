@@ -16,6 +16,7 @@ import com.stardew_valley.models.initializer.VillageInitializer;
 import com.stardew_valley.views.GameView;
 import com.stardew_valley.views.MainMenuView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +79,7 @@ public class GameMenuController extends Controller {
         return null;
     }
 
-    public void startGame(Label messageLabel, List<TextField> players) {
+    public void startGame(Label messageLabel, List<TextField> players) throws IOException {
         Set<String> playerSet = new HashSet();
         playerSet.add(repo.getCurrentUser().getUsername());
 
