@@ -220,11 +220,7 @@ public class Player extends Character {
     }
 
     public void readNotification(MessageEntry notification) {
-        for (Map.Entry<MessageEntry, Boolean> entry : notifications.entrySet()) {
-            if (entry.getKey() == notification) {
-                entry.setValue(true);
-            }
-        }
+        notifications.put(notification, true);
     }
 
     public void readAllNotifications() {

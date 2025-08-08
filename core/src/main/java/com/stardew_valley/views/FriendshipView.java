@@ -2,8 +2,11 @@ package com.stardew_valley.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.NPC.NPC;
@@ -17,13 +20,24 @@ import java.util.List;
 import java.util.Map;
 
 public class FriendshipView extends GameWindow {
+    private List<Table> friendshipsRows;
+    private List<Label> friendNameLabels;
+    private List<Label> friendshipLevelLabels;
+    private List<ProgressBar> levelXpBars;
+    private List<TextButton> giftButtons;
+
     private final Table friendshipTable;
 
-    private final RelationshipService relationshipService;
+    private final RelationshipService   relationshipService;
 
-    public FriendshipView(RelationshipService relationshipService) {
-        super("Friendships", AssetManager.getAssetManager().getSkin(), "Letter");
+    public FriendshipView(RelationshipService relationshipService, Stage stage) {
+        super("Friendships", AssetManager.getAssetManager().getSkin(), "Letter", stage);
 
+        friendshipsRows = new ArrayList<>();
+        friendNameLabels = new ArrayList<>();
+        friendshipLevelLabels = new ArrayList<>();
+        levelXpBars = new ArrayList<>();
+        giftButtons = new ArrayList<>();
         friendshipTable = new Table(getSkin());
 
         add(friendshipTable).expand().fill().padTop(30);
@@ -32,52 +46,58 @@ public class FriendshipView extends GameWindow {
 
         setVisible(false);
 
+        for (int i = 0; i < 3; i++) {
+            friendNameLabels.add(new Label("", getSkin()));
+            friendshipLevelLabels.add(new Label("", getSkin()));
+            levelXpBars.add(new ProgressBar(0, 100, 1, false, getSkin()));
+            TextButton giftButton = new TextButton("Gift", getSkin());
+            giftButtons.add(giftButton);
+
+            giftButton.getLabel().setFontScale(0.9f);
+
+            Table friendshipRow = new Table(getSkin());
+            friendshipRow.add(friendNameLabels.get(i)).left().padRight(30);
+            friendshipRow.add(friendshipLevelLabels.get(i)).left().padRight(30);
+            friendshipRow.add(levelXpBars.get(i)).width(200).left().padRight(30);
+            friendshipRow.add(giftButtons.get(i)).size(100, 60).fill();
+
+            friendshipsRows.add(friendshipRow);
+        }
+
         // temp code
-        relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-        relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
-        relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+        if (repo.getCurrentUser().getUsername().equals("1"))
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
+//        relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+//        relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
     }
 
     @Override
     public void update() {
-        friendshipTable.clear();
+        this.clear();
 
-        for (Map.Entry<Character, Friendship> friendshipEntry : relationshipService.getFriendships().entrySet()) {
-            Table friendshipRow = new Table(getSkin());
+        Map<Character, Friendship> friendships = relationshipService.getFriendships();
+        List<Character> friends = new ArrayList<>(friendships.keySet());
 
-            if (friendshipEntry.getKey() instanceof NPC) continue;
+        for (int i = 0; i < Math.min(friendships.size(), 3); i++) {
+            if (friends.get(i) instanceof NPC) continue;
 
-            Player player = (Player) friendshipEntry.getKey();
-            Friendship friendship = friendshipEntry.getValue();
+            Player player = (Player) friends.get(i);
+            Friendship friendship = friendships.get(friends.get(i));
 
-            Label friendName = new Label("Friend: " + player.getUser().getUsername(), getSkin());
-            Label friendshipLevel = new Label("Level: " + Integer.toString(friendship.getLevel()), getSkin());
-            ProgressBar levelXpBar = new ProgressBar(0, friendship.getMaxXp(), 1, false, getSkin());
-            levelXpBar.setValue(friendship.getXp());
-            TextButton giftButton = new TextButton("Gift", getSkin());
+            friendNameLabels.get(i).setText("Friend: " + player.getUser().getUsername());
+            friendshipLevelLabels.get(i).setText("Level: " + friendship.getLevel());
+            levelXpBars.get(i).setRange(0, friendship.getMaxXp());
+            levelXpBars.get(i).setValue(friendship.getXp());
 
-            giftButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
+            giftButtons.get(i).addListener(new ClickListener() {
+                 @Override
+                 public void clicked (InputEvent event, float x, float y) {
                     setVisible(false);
-
-                }
+                 }
             });
 
-            giftButton.getLabel().setFontScale(0.9f);
-
-            friendshipRow.add(friendName).left().padRight(30);
-            friendshipRow.add(friendshipLevel).left().padRight(30);
-            friendshipRow.add(levelXpBar).width(200).left().padRight(30);
-            friendshipRow.add(giftButton).size(100, 60).fill();
-
-            friendshipTable.add(friendshipRow).pad(10);
-            friendshipTable.row();
-        }
-
-        if (relationshipService.getFriendships().isEmpty()) {
-            Label noFriendsLabel = new Label("YOU HAVE NO FRIENDS!", getSkin());
-            friendshipTable.add(noFriendsLabel).center();
+            add(friendshipsRows.get(i)).fill().expand();
+            row();
         }
     }
 }

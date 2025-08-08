@@ -45,13 +45,14 @@ public class Main extends Game {
         //setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
         //setScreen(new GameMenuView(new GameMenuController(Repository.getRepo())));
         //setScreen(new TempLogin(new Repository()));
-        //setScreen(new CookingView(new CookingController(Repository.getRepo())));
+        setScreen(new CookingView(new CookingController(Repository.getRepo())));
         //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
         try {
             setScreen(new GameView(new GameController(Repository.getRepo())));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        //setScreen(new GameView(new GameController(Repository.getRepo())));
     }
 
     @Override

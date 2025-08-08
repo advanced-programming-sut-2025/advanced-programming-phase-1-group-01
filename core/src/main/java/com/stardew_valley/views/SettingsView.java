@@ -1,6 +1,7 @@
 package com.stardew_valley.views;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -15,8 +16,8 @@ public class SettingsView extends GameWindow {
 
     private final SettingsController controller;
 
-    public SettingsView(SettingsController controller) {
-        super("Settings", AssetManager.getAssetManager().getSkin(), "Letter");
+    public SettingsView(SettingsController controller, Stage stage) {
+        super("Settings", AssetManager.getAssetManager().getSkin(), "Letter", stage);
 
         this.controller = controller;
         table = new Table(getSkin());
