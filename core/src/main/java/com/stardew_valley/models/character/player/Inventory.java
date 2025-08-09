@@ -13,6 +13,7 @@ import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.farming.*;
+import com.stardew_valley.models.fish.FishInfo;
 import com.stardew_valley.models.foraging.ForagingCrop;
 import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.foraging.ForagingMineralInfo;
@@ -21,6 +22,7 @@ import com.stardew_valley.models.shop.enums.*;
 import com.stardew_valley.models.ingredients.QuestItemType;
 import com.stardew_valley.models.tool.*;
 import com.stardew_valley.models.tool.enums.BackpackType;
+import com.stardew_valley.models.tool.enums.FishingPoleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +116,7 @@ public class Inventory {
         return switch (itemName.trim().toLowerCase()) {
             case "axe" -> new Axe(this);
             case "backpack" -> new Backpack(this);
-            case "fishing pole" -> new FishingPole(this);
+//            case "fishing pole" -> new FishingPole(this);
             case "hoe" -> new Hoe(this);
             case "milk pail" -> new MilkPail(this);
             case "pickaxe" -> new Pickaxe(this);
@@ -182,6 +184,18 @@ public class Inventory {
             case "cloth" -> new CraftedProducts(AllCraftedProductsType.CLOTH);
 
             default -> {
+
+                for (FishingPoleInfo poleInfo : FishingPoleInfo.values()) {
+                    if (poleInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield poleInfo.toItem();
+                    }
+                }
+
+                for (FishInfo fishInfo : FishInfo.values()) {
+                    if (fishInfo.getName().equalsIgnoreCase(itemName)) {
+                        yield fishInfo.toItem();
+                    }
+                }
 
                 for (SeedInfo seedInfo : SeedInfo.values()) {
                     if (seedInfo.getName().equalsIgnoreCase(itemName)) {

@@ -163,7 +163,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.settingsView = new SettingsView(controller.getSettingsController(), stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
         giftView = new GiftView(controller.getRelationshipController(), stage, inventoryView);
-        friendshipView = new FriendshipView(player.getRelationService(), stage, giftView);
+        friendshipView = new FriendshipView(controller.getRelationshipController(), player.getRelationService(), stage, giftView);
         notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
@@ -196,6 +196,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 friendshipView.setVisible(!friendshipView.isVisible());
+                if (!friendshipView.isVisible()) stage.setKeyboardFocus(null);
             }
         });
 
@@ -970,6 +971,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     public void handleMovement(float delta) {
+        if (friendshipView.isVisible()) return;
+
         boolean moving = false;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {

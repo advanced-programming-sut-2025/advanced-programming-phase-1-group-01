@@ -65,6 +65,6 @@ public enum ForagingTreeInfo implements TileObject, FarmingEnum {
     }
 
     public Texture getTexture() {
-        return AssetManager.getAssetManager().defaultTexture();
+        return texture;
     }
 }

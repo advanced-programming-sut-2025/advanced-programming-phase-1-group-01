@@ -5,8 +5,4 @@ import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.building.TileObject;
 
 public abstract class Foraging implements TileObject {
-    @Override
-    public Texture getTexture() {
-        return AssetManager.getAssetManager().defaultTexture();
-    }
 }
