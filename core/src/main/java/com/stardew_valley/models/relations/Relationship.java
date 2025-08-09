@@ -52,7 +52,8 @@ public abstract class Relationship {
     public void decrementLevel() {
         // here some stuff should be checked
         level--;
-        xp = getMaxXp() ;
+        if (level >= 0) xp = getMaxXp();
+        if (level < 0) level = 0;
     }
 
     public void flower() {

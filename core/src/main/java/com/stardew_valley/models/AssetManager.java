@@ -4527,8 +4527,105 @@ public class AssetManager {
         return Shear;
     }
 
-    public Texture defaultTexture() {
-        return Hoe;
+    private final Texture Salmon = new Texture("fish/Salmon.png");
+    private final Texture Sardine = new Texture("fish/Sardine.png");
+    private final Texture Shad = new Texture("fish/Shad.png");
+    private final Texture BlueDiscus = new Texture("fish/Blue_Discus.png");
+    private final Texture MidnightCarp = new Texture("fish/Midnight_Carp.png");
+    private final Texture Squid = new Texture("fish/Squid.png");
+    private final Texture Tuna = new Texture("fish/Tuna.png");
+    private final Texture Perch = new Texture("fish/Perch.png");
+    private final Texture Flounder = new Texture("fish/Flounder.png");
+    private final Texture Lionfish = new Texture("fish/Lionfish.png");
+    private final Texture Herring = new Texture("fish/Herring.png");
+    private final Texture Ghostfish = new Texture("fish/Ghostfish.png");
+    private final Texture Tilapia = new Texture("fish/Tilapia.png");
+    private final Texture Dorado = new Texture("fish/Dorado.png");
+    private final Texture Sunfish = new Texture("fish/Sunfish.png");
+    private final Texture RainbowTrout = new Texture("fish/Rainbow_Trout.png");
+    private final Texture Legend = new Texture("fish/Legend.png");
+    private final Texture Glacierfish = new Texture("fish/Glacierfish.png");
+    private final Texture Angler = new Texture("fish/Angler.png");
+    private final Texture Crimsonfish = new Texture("fish/Crimsonfish.png");
+
+    public Texture getSalmon() {
+        return Salmon;
+    }
+
+    public Texture getSardine() {
+        return Sardine;
+    }
+
+    public Texture getShad() {
+        return Shad;
+    }
+
+    public Texture getBlueDiscus() {
+        return BlueDiscus;
+    }
+
+    public Texture getMidnightCarp() {
+        return MidnightCarp;
+    }
+
+    public Texture getSquid() {
+        return Squid;
+    }
+
+    public Texture getTuna() {
+        return Tuna;
+    }
+
+    public Texture getPerch() {
+        return Perch;
+    }
+
+    public Texture getFlounder() {
+        return Flounder;
+    }
+
+    public Texture getLionfish() {
+        return Lionfish;
+    }
+
+    public Texture getHerring() {
+        return Herring;
+    }
+
+    public Texture getGhostfish() {
+        return Ghostfish;
+    }
+
+    public Texture getTilapia() {
+        return Tilapia;
+    }
+
+    public Texture getDorado() {
+        return Dorado;
+    }
+
+    public Texture getSunfish() {
+        return Sunfish;
+    }
+
+    public Texture getRainbowTrout() {
+        return RainbowTrout;
+    }
+
+    public Texture getLegend() {
+        return Legend;
+    }
+
+    public Texture getGlacierfish() {
+        return Glacierfish;
+    }
+
+    public Texture getAngler() {
+        return Angler;
+    }
+
+    public Texture getCrimsonfish() {
+        return Crimsonfish;
     }
 
     private final TextureRegion[] texturesShippingBin = new TextureRegion[] {

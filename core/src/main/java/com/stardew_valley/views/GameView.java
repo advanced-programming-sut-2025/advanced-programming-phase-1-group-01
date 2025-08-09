@@ -20,14 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CookingController;
 import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
-import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -40,12 +38,16 @@ import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.MarriageRequest;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.cooking.CookingRecipes;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.enums.commands.DateTimeCommands;
+import com.stardew_valley.models.enums.AreaType;
+import com.stardew_valley.models.enums.ArtisanStatus;
+import com.stardew_valley.models.enums.ArtisanType;
+import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
@@ -124,10 +126,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 200f;
 
     private final WindowManager inventoryMenu;
-    private final GameWindow inventoryView;
+    private final InventoryView inventoryView;
     private final SkillsView skillsView;
     private final SocialView socialView;
-    private final GameWindow miniMapView;
+    private final MiniMapView miniMapView;
     private final SettingsView settingsView;
 
     private final ShippingBinView shippingBinView;
@@ -142,12 +144,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Image backgroundImage;
     private Image heartImage;
-    private Label messageLabel;
+    private Label energyMessageLabel;
 
     private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
+
+    private static Label messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
 
     private float buff = 1f;
     private float buffTimer = 0f;
@@ -172,20 +176,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.inventoryMenu = new WindowManager(stage);
         this.shippingBinView = new ShippingBinView();
         this.foodMenuView = new FoodMenuView();
-        this.inventoryView = new InventoryView();
         this.skillsView = new SkillsView();
-        this.socialView = new SocialView();
-        this.miniMapView = new MiniMapView();
-        this.settingsView = new SettingsView(controller.getSettingsController());
-        friendshipView = new FriendshipView(player.getRelationService());
+        this.inventoryView = new InventoryView(stage);
+        this.socialView = new SocialView(stage);
+        this.miniMapView = new MiniMapView(stage);
+        this.settingsView = new SettingsView(controller.getSettingsController(), stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
-        giftView = new GiftView();
-        notificationsView = new NotificationsView();
+        giftView = new GiftView(controller.getRelationshipController(), stage, inventoryView);
+        friendshipView = new FriendshipView(controller.getRelationshipController(), player.getRelationService(), stage, giftView);
+        notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
         darknessRenderer = new ShapeRenderer();
+        energyMessageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+//        messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
     }
 
     @Override
@@ -216,6 +222,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 friendshipView.setVisible(!friendshipView.isVisible());
+                if (!friendshipView.isVisible()) stage.setKeyboardFocus(null);
             }
         });
 
@@ -224,7 +231,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         stage.addActor(heartImage);
 
-        stage.addActor(notificationsView);
+        messageLabel.setPosition(60, 60);
+        stage.addActor(messageLabel);
     }
 
     @Override
@@ -245,6 +253,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.update();
         skillsView.update();
         friendshipView.update();
+        notificationsView.update();
+        giftView.update();
         foodMenuView.update();
         eatFood();
 //        notificationsView.update();
@@ -262,6 +272,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         stage.act(delta);
         stage.draw();
     }
+
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -343,8 +354,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (button == 1) {
             Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
-            int tileX = (int)(worldCoords.x / TILE_SIZE);
-            int tileY = (int)(worldCoords.y / TILE_SIZE);
+            int tileX = (int) (worldCoords.x / TILE_SIZE);
+            int tileY = (int) (worldCoords.y / TILE_SIZE);
             for (Animal animal : animals) {
                 System.out.println(animal.getPosition().x() + " " + animal.getPosition().y());
                 System.out.println(tileX + " " + tileY);
@@ -429,10 +440,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawTileObjectsExceptTrees();
 
-
         drawAnimals();
 
-        drawPlayer();
+        drawPlayers();
 
         drawEquippedTool();
 
@@ -446,7 +456,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Tool tool = (player.getInventory().getEquippedSlot().getItem() instanceof Tool) ? (Tool) player.getInventory().getEquippedSlot().getItem() : null;
 
         if (tool != null) {
-            batch.draw(tool.getTexture(), player.getX() + 7, player.getY()  + 5, 14, 14);
+            batch.draw(tool.getTexture(), player.getX() + 7, player.getY() + 5, 14, 14);
         }
     }
 
@@ -517,11 +527,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
-    private void drawPlayer() {
-        for (int i = 0; i < controller.getRepo().getCurrentGame().getPlayers().size(); i++) {
-            Player currentPlayer = controller.getRepo().getCurrentGame().getPlayers().get(i);
-            batch.draw(currentPlayer.getCurrentFrame(), currentPlayer.getX(), currentPlayer.getY());
-        }
+    private void drawPlayers() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers())
+            batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
 //        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
@@ -660,6 +668,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private float stateTime = 0f;
+
     private void drawShippingBin() {
         stateTime += Gdx.graphics.getDeltaTime();
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
@@ -688,6 +697,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
      }
 
     private boolean isDialogOpen = false;
+
     private void checkPlayerNearShippingBin() {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
         int numRows = tiles.size();
@@ -829,11 +839,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Window marriageRequestsWindow = null;
     private boolean isNpressed = false;
+
     private void showMarriageRequestsWindow(Player currentPlayer) {
         if (!isNpressed) {
             marriageRequestsWindow = new Window("Marriage Requests", AssetManager.getAssetManager().getSkin());
             marriageRequestsWindow.setSize(1000, 600);
-            marriageRequestsWindow.setPosition(500,300);
+            marriageRequestsWindow.setPosition(500, 300);
             marriageRequestsWindow.setModal(true);
             marriageRequestsWindow.setMovable(true);
 
@@ -842,8 +853,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 Label label = new Label(request.getFrom().getNickname() + " wants to marry you", AssetManager.getAssetManager().getSkin());
                 TextButton acceptBtn = new TextButton("accept", AssetManager.getAssetManager().getSkin());
                 TextButton rejectBtn = new TextButton("reject", AssetManager.getAssetManager().getSkin());
-                acceptBtn.setSize(80,80);
-                rejectBtn.setSize(80,80);
+                acceptBtn.setSize(80, 80);
+                rejectBtn.setSize(80, 80);
 
                 Player anotherPlayer = request.getFrom().getPlayer();
                 Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
@@ -963,31 +974,31 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void showMessage(String text) {
-        messageLabel.setText(text);
-        messageLabel.setFontScale(0.8f);
-        messageLabel.pack();
+        energyMessageLabel.setText(text);
+        energyMessageLabel.setFontScale(0.8f);
+        energyMessageLabel.pack();
 
-        messageLabel.setPosition(
-            (Gdx.graphics.getWidth() - messageLabel.getWidth()) / 2f,
+        energyMessageLabel.setPosition(
+            (Gdx.graphics.getWidth() - energyMessageLabel.getWidth()) / 2f,
             43
         );
 
-        backgroundImage.setSize(messageLabel.getWidth() + 30, messageLabel.getHeight() + 20);
+        backgroundImage.setSize(energyMessageLabel.getWidth() + 30, energyMessageLabel.getHeight() + 20);
         backgroundImage.setPosition(
-            messageLabel.getX() - 15,
-            messageLabel.getY() - 10
+            energyMessageLabel.getX() - 15,
+            energyMessageLabel.getY() - 10
         );
 
-        messageLabel.clearActions();
+        energyMessageLabel.clearActions();
         backgroundImage.clearActions();
 
         if (!stage.getActors().contains(backgroundImage, true))
             stage.addActor(backgroundImage);
 
-        if (!stage.getActors().contains(messageLabel, true))
-            stage.addActor(messageLabel);
+        if (!stage.getActors().contains(energyMessageLabel, true))
+            stage.addActor(energyMessageLabel);
 
-        messageLabel.addAction(Actions.sequence(
+        energyMessageLabel.addAction(Actions.sequence(
             Actions.delay(2f),
             Actions.removeActor()
         ));
@@ -1109,6 +1120,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private float faintingTimer = 0f;
     public void handleMovement(float delta) {
+        if (friendshipView.isVisible()) return;
+
         boolean moving = false;
 
         maxEnergyTimer += delta;
@@ -1515,9 +1528,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
 
-
     }
-
 
 
     public void showMiniMap(Stage stage) {
@@ -1750,8 +1761,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
     private void handleAnimalAction(String action, Animal animal) {
         switch (action.toLowerCase()) {
             case "feed":
@@ -1797,12 +1806,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
-
-
-
-
     public void createAnimalDialog(final Stage stage, Skin skin) {
         animalDialog = new Dialog("Add Animal", skin);
 
@@ -1845,7 +1848,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     public boolean checkAreaValidation(String animalType) {
         switch (animalType) {
-            case "cow": case "sheep": case "goat": case "dinosaur": case "pig":
+            case "cow":
+            case "sheep":
+            case "goat":
+            case "dinosaur":
+            case "pig":
                 for (Area area : areas) {
                     if (area.type().equals(AreaType.BARN)) return true;
                 }
@@ -1873,8 +1880,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
                 String info = animal.getAnimalInfo().name();
                 String product = animal.getAnimalProductType().toString();
-                int x = (int)(animal.getX() / 16);
-                int y = (int)(animal.getY() / 16);
+                int x = (int) (animal.getX() / 16);
+                int y = (int) (animal.getY() / 16);
 
                 Label label = new Label(
                     info + " | " + product + " | (" + x + "," + y + ")",
@@ -1963,15 +1970,23 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Color getColorForTileType(TileType type) {
         switch (type) {
-            case GROUND: return Color.GREEN;
-            case RIVER: return Color.BLACK;
-            case MINE: return Color.GRAY;
-            case GREENHOUSE: return Color.FOREST;
-            case COTTAGE: return Color.BROWN;
-            case WALL: return Color.DARK_GRAY;
+            case GROUND:
+                return Color.GREEN;
+            case RIVER:
+                return Color.BLACK;
+            case MINE:
+                return Color.GRAY;
+            case GREENHOUSE:
+                return Color.FOREST;
+            case COTTAGE:
+                return Color.BROWN;
+            case WALL:
+                return Color.DARK_GRAY;
             //case SALE_BUCKET: return Color.PINK;
-            case FENCE: return Color.BLUE;
-            default: return Color.LIGHT_GRAY;
+            case FENCE:
+                return Color.BLUE;
+            default:
+                return Color.LIGHT_GRAY;
         }
     }
 
@@ -2016,6 +2031,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void handleInput(String input) {
         Result result = controller.handleCommand(input);
         System.out.println("[" + result.success() + "] " + result.message());
+        messageLabel.setText(result.toString());
+        messageLabel.addAction(Actions.sequence(
+            Actions.delay(5f),
+            Actions.run(() -> {
+                messageLabel.setText("");
+            })
+        ));
     }
 
     public void showArtisanDialog(Stage stage, Skin skin, Artisan artisan) {
@@ -2170,9 +2192,19 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
+    public static Label getMessageLabel() {
+        return messageLabel;
+    }
 
-
-
+    public static void setMessage(String message) {
+        messageLabel.setText(message);
+        messageLabel.addAction(Actions.sequence(
+            Actions.delay(5f),
+            Actions.run(() -> {
+                messageLabel.setText("");
+            })
+        ));
+    }
 }
 
 
