@@ -29,6 +29,7 @@ public class GameClient {
                 userInfoMsg.type = "userInfo";
                 userInfoMsg.json = Repository.getRepo().toUserInfoJson();
                 pClient.sendTCP(userInfoMsg);
+
             }
 
             @Override
