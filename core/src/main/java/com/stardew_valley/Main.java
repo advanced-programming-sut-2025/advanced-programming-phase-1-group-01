@@ -6,6 +6,7 @@ import com.stardew_valley.controllers.*;
 import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.SecurityQuestion;
 import com.stardew_valley.models.initializer.FarmInitializer;
@@ -45,11 +46,6 @@ public class Main extends Game {
         //setScreen(new TempLogin(new Repository()));
         //setScreen(new CookingView(new CookingController(Repository.getRepo())));
         //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
-//        try {
-//            setScreen(new GameView(new GameController(Repository.getRepo())));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
         //setScreen(new GameView(new GameController(Repository.getRepo())));
     }
 
@@ -66,7 +62,7 @@ public class Main extends Game {
     public void user() {
         if (Repository.getRepo().getUserByUsername("1") == null) {
             String path = "avatars/avatar1.png";
-            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("1", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            User user = new User("1", "a", "a", "a", Gender.FEMALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
             Repository.getRepo().setCurrentUser(user);
@@ -74,21 +70,21 @@ public class Main extends Game {
 
         if (Repository.getRepo().getUserByUsername("2") == null) {
             String path = "avatars/avatar1.png";
-            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("2", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            User user = new User("2", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
         }
 
         if (Repository.getRepo().getUserByUsername("3") == null) {
             String path = "avatars/avatar1.png";
-            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("3", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            User user = new User("3", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
         }
 
         if (Repository.getRepo().getUserByUsername("4") == null) {
             String path = "avatars/avatar1.png";
-            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("4", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            User user = new User("4", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
         }

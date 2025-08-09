@@ -108,7 +108,7 @@ public class RelationshipController extends Controller {
         return new Result(true, "");
     }
 
-    private Result showFriendships() {
+    public Result showFriendships() {
         Player player = repo.getCurrentGame().getCurrentPlayer();
         Game game = repo.getCurrentGame();
 
@@ -127,7 +127,7 @@ public class RelationshipController extends Controller {
         return new Result(true, resultMsg.toString());
     }
 
-    private Result talk(String username, String message) {
+    public Result talk(String username, String message) {
         Player sender = repo.getCurrentGame().getCurrentPlayer();
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
@@ -161,7 +161,7 @@ public class RelationshipController extends Controller {
         return new Result(true, "your message sent to " + receiver.getUser().getUsername());
     }
 
-    private Result talkHistory(String username) {
+    public Result talkHistory(String username) {
         Player friend = repo.getUserByUsername(username).getPlayer();
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
@@ -182,7 +182,7 @@ public class RelationshipController extends Controller {
         return new Result(true, resultMsg.toString());
     }
 
-    private Result hug(String username) {
+    public Result hug(String username) {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
@@ -220,7 +220,7 @@ public class RelationshipController extends Controller {
         return new Result(true, "you hugged each other!");
     }
 
-    private Result gift(String username, String itemName, int amount) {
+    public Result gift(String username, String itemName, int amount) {
         Player sender = repo.getCurrentGame().getCurrentPlayer();
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
@@ -228,9 +228,9 @@ public class RelationshipController extends Controller {
         Player receiver = repo.getUserByUsername(username).getPlayer();
         Friendship friendship = sender.getRelationService().getFriendship(receiver);
 
-        if (!sender.isNearTo(receiver)) {
-            return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
-        }
+//        if (!sender.isNearTo(receiver)) {
+//            return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
+//        }
 
         Slot slot = sender.getInventory().getSlot(itemName);
 
@@ -262,7 +262,7 @@ public class RelationshipController extends Controller {
         return new Result(true, "your gift sent to " + receiver.getUser().getUsername() + " successfully");
     }
 
-    private Result giftRate(int giftNumber, int rate) {
+    public Result giftRate(int giftNumber, int rate) {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Gift gift = null;
         for (Friendship friendship : currentPlayer.getRelationService().getFriendships().values()) {
@@ -298,7 +298,7 @@ public class RelationshipController extends Controller {
         }
     }
 
-    private Result giftList() {
+    public Result giftList() {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         List<Gift> receivedGifts = new ArrayList<>();
 
@@ -318,7 +318,17 @@ public class RelationshipController extends Controller {
         return new Result(true, resultMsg.toString());
     }
 
-    private Result giftHistory(String username) {
+    public List<Gift> getAllReceivedGifts() {
+        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        List<Gift> receivedGifts = new ArrayList<>();
+
+        for (Friendship friendship : currentPlayer.getRelationService().getFriendships().values()) {
+            receivedGifts.addAll(friendship.getReceivedGifts(currentPlayer));
+        }
+        return receivedGifts;
+    }
+
+    public Result giftHistory(String username) {
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "user not found");
         }
@@ -342,7 +352,7 @@ public class RelationshipController extends Controller {
         return new Result(true, resultMsg.toString());
     }
 
-    private Result flower(String username) {
+    public Result flower(String username) {
         Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
@@ -354,7 +364,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "you should be near to " + friend.getUser().getNickname());
         }
 
-        String flower = "flower";
+        String flower = "sunflower";
 
         if (currentPlayer.getInventory().getSlot(flower) == null) {
             return new Result(false, "you don't have flower in your inventory");
@@ -370,7 +380,7 @@ public class RelationshipController extends Controller {
         friend.getInventory().getSlot(flower).addQuantity(1);
 
         friendship.flower();
-        return new Result(true, "you hugged each other!");
+        return new Result(true, "you gave %s a flower!".formatted(friend.getUser().getUsername()));
     }
 
     private Result askMarriage(String username, String ring) {

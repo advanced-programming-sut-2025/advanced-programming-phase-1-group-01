@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CraftingController;
+import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.CraftingRecipe;
@@ -60,19 +61,18 @@ public class CraftingView extends View {
         craftSelection.setItems(recipeNames);
         craftButton = new TextButton("Craft", skin);
         messageLabel = new Label("", skin);
+        messageLabel.setFontScale(0.7f);
     }
 
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-    }
+        workShopImage.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getHeight() * 0.8f);
+        workShopImage.setPosition(200,100);
 
-    @Override
-    public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-            toggleRecipes();
-        }
+        stage.addActor(workShopImage);
+
         craftButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -82,15 +82,22 @@ public class CraftingView extends View {
     }
 
     @Override
+    public void handleInput() {
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            Main.getMain().setScreen(new GameView(new GameController(controller.getRepo())));
+            return;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            toggleRecipes();
+        }
+    }
+
+    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        Main.getBatch().begin();
-        float bgWidth = workShop.getWidth() * 4f;
-        float bgHeight = workShop.getHeight() * 3f;
-        Main.getBatch().draw(workShop, 200, 130, bgWidth, bgHeight);
-        Main.getBatch().end();
 
         stage.act(delta);
         stage.draw();
@@ -133,9 +140,10 @@ public class CraftingView extends View {
         stage.addActor(recipesImage);
 
         messageLabel.setAlignment(Align.center);
+
         messageLabel.setPosition(
             (Gdx.graphics.getWidth() - messageLabel.getWidth()) / 2f,
-            270);
+            290);
         stage.addActor(messageLabel);
     }
 

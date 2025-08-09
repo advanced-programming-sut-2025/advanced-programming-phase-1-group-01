@@ -41,9 +41,6 @@ public class EnergyView {
     }
 
     public void updateEnergy() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            player.getEnergy().consume(2.31f);
-        }
         int energy = (int) player.getEnergy().getAmount();
         double maxEnergy = player.getEnergy().getMaxEnergy();
         int heartIndex = (int) ((energy / maxEnergy) * 10);

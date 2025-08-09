@@ -27,7 +27,6 @@ public enum IngredientItems {
     STONE("Stone", 5, AssetManager.getAssetManager().getStone()),
     ACORN("Acorn", 20, AssetManager.getAssetManager().getAcorn()),;
 
-
     private final String name;
     private final int price;
     private final Texture texture;

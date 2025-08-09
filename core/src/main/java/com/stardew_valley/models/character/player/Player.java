@@ -18,13 +18,14 @@ import com.stardew_valley.models.enums.Color;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.relations.RelationshipService;
+import com.stardew_valley.models.data.User;
 
 import java.util.*;
 import java.util.List;
 
 public class Player extends Character {
     private Game game;
-    private final com.stardew_valley.models.data.User user;
+    private final User user;
     private final Gender gender;
     private Position position;
     private float x;
@@ -67,9 +68,10 @@ public class Player extends Character {
     private boolean whileFainting = false;
 
     private float globalDelta = 0f;
+    private Map<String,Integer> foods;
 
 
-    public Player(com.stardew_valley.models.data.User user) {
+    public Player(User user) {
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
@@ -83,10 +85,11 @@ public class Player extends Character {
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
         cookingRecipes = new HashSet<>();
+        foods = new HashMap<>();
         initializeRecipes();
     }
 
-    public Player(Game game, com.stardew_valley.models.data.User user) {
+    public Player(Game game, User user) {
         this.game = game;
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
@@ -101,6 +104,7 @@ public class Player extends Character {
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
         cookingRecipes = new HashSet<>();
+        foods = new HashMap<>();
         initializeRecipes();
     }
 
@@ -203,7 +207,7 @@ public class Player extends Character {
         this.game = game;
     }
 
-    public com.stardew_valley.models.data.User getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -220,7 +224,11 @@ public class Player extends Character {
     }
 
     public void readNotification(MessageEntry notification) {
-        notifications.put(notification, true);
+        for (Map.Entry<MessageEntry, Boolean> entry : notifications.entrySet()) {
+            if (entry.getKey() == notification) {
+                entry.setValue(true);
+            }
+        }
     }
 
     public void readAllNotifications() {
@@ -283,9 +291,11 @@ public class Player extends Character {
     }
 
     public void initializeRecipes() {
+        inventory.addItem("egg",5);
+        inventory.addItem("milk",5);
         addCookingRecipe(CookingRecipes.FRIED_EGG.toRecipe());
         addCookingRecipe(CookingRecipes.BAKED_FISH.toRecipe());
-        addCookingRecipe(CookingRecipes.SALAD.toRecipe());
+        addCookingRecipe(CookingRecipes.OMELET.toRecipe());
         addCraftingRecipe(CraftingRecipes.BEE_HOUSE.toRecipe());
         addCraftingRecipe(CraftingRecipes.KEG.toRecipe());
         addCraftingRecipe(CraftingRecipes.LOOM.toRecipe());
@@ -444,11 +454,11 @@ public class Player extends Character {
         }
     }
 
-    public void setPartner(com.stardew_valley.models.data.User partner) {
+    public void setPartner(User partner) {
         relationshipService.setPartner(partner);
     }
 
-    public com.stardew_valley.models.data.User getPartner() {
+    public User getPartner() {
         return relationshipService.getPartner();
     }
 
@@ -966,5 +976,22 @@ public class Player extends Character {
 
     public TextureRegion getTestTexture() {
         return AssetManager.getAssetManager().get_Alex_0_walking_down_animation().getKeyFrame(0);
+    }
+
+    public Map<String,Integer> getFoods() {
+        return foods;
+    }
+
+    public void addFood(String item) {
+        foods.put(item, foods.getOrDefault(item, 0) + 1);
+    }
+
+    public void removeFood(String item) {
+        int count = foods.getOrDefault(item, 0) - 1;
+        if (count > 0) {
+            foods.put(item, count);
+        } else {
+            foods.remove(item);
+        }
     }
 }

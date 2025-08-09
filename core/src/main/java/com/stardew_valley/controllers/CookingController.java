@@ -10,6 +10,7 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.FridgeOnlyItem;
 import com.stardew_valley.models.enums.commands.CookingCommands;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -22,12 +23,6 @@ public class CookingController extends Controller {
 
     @Override
     public Result handleCommand(String command) {
-
-        Player player = repo.getCurrentUser().getPlayer();
-        Building cottage = player.getFarm().getCottage();
-        if (!player.isPlayerNearBuilding(cottage)) {
-            return new Result(false, "You are not near Cottage");
-        }
 
         CookingCommands matchedCommand = null;
 
@@ -123,7 +118,7 @@ public class CookingController extends Controller {
         Slot slot = inventory.getSlot(itemStr);
 
         slot.removeQuantity(itemCount);
-        player.getRefrigerator().addItem(item,itemCount);
+        player.getRefrigerator().addItem(itemStr,itemCount);
         messageLabel.setText("Item added to refrigerator");
     }
 
@@ -134,20 +129,19 @@ public class CookingController extends Controller {
             itemCount = Integer.parseInt(count);
         }
         catch (NumberFormatException e) {
-            messageLabel.setText("please enter an integer");
+            messageLabel.setText("Please enter a valid integer.");
             return;
         }
 
         Player player = repo.getCurrentUser().getPlayer();
         Refrigerator refrigerator = player.getRefrigerator();
-        Item item = player.getInventory().getNewItem(itemStr);
 
-        if (refrigerator.containsItem(item)) {
+        if (!refrigerator.containsItem(itemStr)) {
             messageLabel.setText("You do not have this " + itemStr + " in your refrigerator.");
             return;
         }
 
-        if (refrigerator.containsItem(item, itemCount)) {
+        if (!refrigerator.containsItem(itemStr, itemCount)) {
             messageLabel.setText("You do not have enough of this " + itemStr + " in your refrigerator.");
             return;
         }
@@ -158,9 +152,9 @@ public class CookingController extends Controller {
             return;
         }
 
-        inventory.addItem(itemStr,itemCount);
-        refrigerator.removeItem(item,itemCount);
-        messageLabel.setText("Item added to inventory");
+        inventory.addItem(itemStr, itemCount);
+        refrigerator.removeItem(itemStr, itemCount);
+        messageLabel.setText("Item added to inventory.");
     }
 
     public void cook(Label messageLabel, String itemName) {
@@ -222,19 +216,20 @@ public class CookingController extends Controller {
             int remaining = requiredAmount;
 
             if (fridgeAmount >= remaining) {
-                refrigerator.removeItem(item, remaining);
+                refrigerator.removeItem(itemName, remaining);
             }
 
             else {
-                refrigerator.removeItem(item, fridgeAmount);
+                refrigerator.removeItem(itemName, fridgeAmount);
                 remaining -= fridgeAmount;
                 slot.removeQuantity(remaining);
             }
         }
 
+        player.addFood(itemName);
         inventory.addItem(itemName,1);
         player.getEnergy().consume(3);
-        messageLabel.setText(itemName + " added to your inventory");
+        messageLabel.setText(itemName.toLowerCase() + " added to your inventory");
     }
 
     private Result eat(String command) {
