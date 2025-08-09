@@ -145,8 +145,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
     //^ Network
-    //private GameClient client;
-
+    //private GameClient client
 
 
     public GameView(GameController controller) throws IOException {
