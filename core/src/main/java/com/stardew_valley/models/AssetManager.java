@@ -27,6 +27,24 @@ public class AssetManager {
     private final String barn_fence = "images/barn_fence_16x16.png";
     private final String cage_fence = "images/cage_fence_16x16.png";
 
+    private final String black_rect = "images/dark_rect_1.png";
+    private final String light_rect = "images/light_rect_1.png";
+
+    private final String done = "images/done_16x16.png";
+
+    private final String bee_house = "images/artisans/Bee_House.png";
+    private final String charcoal_kiln = "images/artisans/Charcoal_Kiln.png";
+    private final String cheese_press = "images/artisans/Cheese_Press.png";
+    private final String dehydrator = "images/artisans/Dehydrator.png";
+    private final String fish_smoker = "images/artisans/Fish_Smoker.png";
+    private final String furnace = "images/artisans/Furnace.png";
+    private final String keg = "images/artisans/Keg.png";
+    private final String loom = "images/artisans/Loom.png";
+    private final String mayonnaise_machine = "images/artisans/Mayonnaise_Machine.png";
+    private final String oil_maker = "images/artisans/Oil_Maker.png";
+    private final String preserves_jar = "images/artisans/Preserves_Jar.png";
+
+
     private final String chat_icon = "images/chat_16x16.png";
     private final String plus_icon = "images/plus_16x16.png";
 
@@ -342,6 +360,27 @@ public class AssetManager {
     private final String alex_0_walking_down_3 = "images/a_alex/tile_0_3.png";
 
 
+    private final String emily_0_walking_right_0 = "images/a_emily/tile_1_0.png";
+    private final String emily_0_walking_right_1 = "images/a_emily/tile_1_1.png";
+    private final String emily_0_walking_right_2 = "images/a_emily/tile_1_2.png";
+    private final String emily_0_walking_right_3 = "images/a_emily/tile_1_3.png";
+
+    private final String emily_0_walking_left_0 = "images/a_emily/tile_3_0.png";
+    private final String emily_0_walking_left_1 = "images/a_emily/tile_3_1.png";
+    private final String emily_0_walking_left_2 = "images/a_emily/tile_3_2.png";
+    private final String emily_0_walking_left_3 = "images/a_emily/tile_3_3.png";
+
+    private final String emily_0_walking_up_0 = "images/a_emily/tile_2_0.png";
+    private final String emily_0_walking_up_1 = "images/a_emily/tile_2_1.png";
+    private final String emily_0_walking_up_2 = "images/a_emily/tile_2_2.png";
+    private final String emily_0_walking_up_3 = "images/a_emily/tile_2_3.png";
+
+    private final String emily_0_walking_down_0 = "images/a_emily/tile_0_0.png";
+    private final String emily_0_walking_down_1 = "images/a_emily/tile_0_1.png";
+    private final String emily_0_walking_down_2 = "images/a_emily/tile_0_2.png";
+    private final String emily_0_walking_down_3 = "images/a_emily/tile_0_3.png";
+
+
     private final TextureRegion house_tex = new TextureRegion(new Texture(house));
 
 
@@ -377,6 +416,24 @@ public class AssetManager {
     private final TextureRegion wood_fence_tex = new TextureRegion(new Texture(wood_fence));
     private final Texture cage_fence_tex = new Texture(cage_fence);
     private final Texture barn_fence_tex = new Texture(barn_fence);
+
+    private final TextureRegion black_rect_tex = new TextureRegion(new Texture(black_rect));
+    private final TextureRegion light_rect_tex = new TextureRegion(new Texture(light_rect));
+
+    private final TextureRegion done_tex = new TextureRegion(new Texture(done));
+
+    private final TextureRegion bee_house_tex = new TextureRegion(new Texture(bee_house));
+    private final TextureRegion charcoal_kiln_tex = new TextureRegion(new Texture(charcoal_kiln));
+    private final TextureRegion cheese_press_tex = new TextureRegion(new Texture(cheese_press));
+    private final TextureRegion dehydrator_tex = new TextureRegion(new Texture(dehydrator));
+    private final TextureRegion fish_smoker_tex = new TextureRegion(new Texture(fish_smoker));
+    private final TextureRegion furnace_tex = new TextureRegion(new Texture(furnace));
+    private final TextureRegion keg_tex = new TextureRegion(new Texture(keg));
+    private final TextureRegion loom_tex = new TextureRegion(new Texture(loom));
+    private final TextureRegion mayonnaise_machine_tex = new TextureRegion(new Texture(mayonnaise_machine));
+    private final TextureRegion oil_maker_tex = new TextureRegion(new Texture(oil_maker));
+    private final TextureRegion preserves_jar_tex = new TextureRegion(new Texture(preserves_jar));
+
 
     private final Texture plus_tex = new Texture(plus_icon);
     private final Texture chat_tex = new Texture(chat_icon);
@@ -662,6 +719,27 @@ public class AssetManager {
     private final TextureRegion alex_0_walking_down_3_tex = new TextureRegion(new Texture(alex_0_walking_down_3));
 
 
+    private final TextureRegion emily_0_walking_right_0_tex = new TextureRegion(new Texture(emily_0_walking_right_0));
+    private final TextureRegion emily_0_walking_right_1_tex = new TextureRegion(new Texture(emily_0_walking_right_1));
+    private final TextureRegion emily_0_walking_right_2_tex = new TextureRegion(new Texture(emily_0_walking_right_2));
+    private final TextureRegion emily_0_walking_right_3_tex = new TextureRegion(new Texture(emily_0_walking_right_3));
+
+    private final TextureRegion emily_0_walking_left_0_tex = new TextureRegion(new Texture(emily_0_walking_left_0));
+    private final TextureRegion emily_0_walking_left_1_tex = new TextureRegion(new Texture(emily_0_walking_left_1));
+    private final TextureRegion emily_0_walking_left_2_tex = new TextureRegion(new Texture(emily_0_walking_left_2));
+    private final TextureRegion emily_0_walking_left_3_tex = new TextureRegion(new Texture(emily_0_walking_left_3));
+
+    private final TextureRegion emily_0_walking_up_0_tex = new TextureRegion(new Texture(emily_0_walking_up_0));
+    private final TextureRegion emily_0_walking_up_1_tex = new TextureRegion(new Texture(emily_0_walking_up_1));
+    private final TextureRegion emily_0_walking_up_2_tex = new TextureRegion(new Texture(emily_0_walking_up_2));
+    private final TextureRegion emily_0_walking_up_3_tex = new TextureRegion(new Texture(emily_0_walking_up_3));
+
+    private final TextureRegion emily_0_walking_down_0_tex = new TextureRegion(new Texture(emily_0_walking_down_0));
+    private final TextureRegion emily_0_walking_down_1_tex = new TextureRegion(new Texture(emily_0_walking_down_1));
+    private final TextureRegion emily_0_walking_down_2_tex = new TextureRegion(new Texture(emily_0_walking_down_2));
+    private final TextureRegion emily_0_walking_down_3_tex = new TextureRegion(new Texture(emily_0_walking_down_3));
+
+
     private final Animation<TextureRegion> alex_0_walking_right_animation = new Animation<>(0.1f,
         alex_0_walking_right_0_tex,
         alex_0_walking_right_1_tex,
@@ -689,6 +767,37 @@ public class AssetManager {
         alex_0_walking_down_2_tex,
         alex_0_walking_down_3_tex
     );
+
+
+
+    private final Animation<TextureRegion> emily_0_walking_right_animation = new Animation<>(0.1f,
+        emily_0_walking_right_0_tex,
+        emily_0_walking_right_1_tex,
+        emily_0_walking_right_2_tex,
+        emily_0_walking_right_3_tex
+    );
+
+    private final Animation<TextureRegion> emily_0_walking_left_animation = new Animation<>(0.1f,
+        emily_0_walking_left_0_tex,
+        emily_0_walking_left_1_tex,
+        emily_0_walking_left_2_tex,
+        emily_0_walking_left_3_tex
+    );
+
+    private final Animation<TextureRegion> emily_0_walking_up_animation = new Animation<>(0.1f,
+        emily_0_walking_up_0_tex,
+        emily_0_walking_up_1_tex,
+        emily_0_walking_up_2_tex,
+        emily_0_walking_up_3_tex
+    );
+
+    private final Animation<TextureRegion> emily_0_walking_down_animation = new Animation<>(0.1f,
+        emily_0_walking_down_0_tex,
+        emily_0_walking_down_1_tex,
+        emily_0_walking_down_2_tex,
+        emily_0_walking_down_3_tex
+    );
+
 
 
     private final Animation<TextureRegion> sheep_up_animation = new Animation<>(0.1f,
@@ -1060,6 +1169,66 @@ public class AssetManager {
     public Texture getBarnFence() {
         return barn_fence_tex;
     }
+
+
+    public TextureRegion getBlackRect() {
+        return black_rect_tex;
+    }
+
+    public TextureRegion getLightRect() {
+        return light_rect_tex;
+    }
+
+    public TextureRegion getDone() {
+        return done_tex;
+    }
+
+
+    public TextureRegion getBeeHouse() {
+        return bee_house_tex;
+    }
+
+    public TextureRegion getCharcoalKiln() {
+        return charcoal_kiln_tex;
+    }
+
+    public TextureRegion getCheesePress() {
+        return cheese_press_tex;
+    }
+
+    public TextureRegion getDehydrator() {
+        return dehydrator_tex;
+    }
+
+    public TextureRegion getFishSmoker() {
+        return fish_smoker_tex;
+    }
+
+    public TextureRegion getFurnace() {
+        return furnace_tex;
+    }
+
+    public TextureRegion getKeg() {
+        return keg_tex;
+    }
+
+    public TextureRegion getLoom() {
+        return loom_tex;
+    }
+
+    public TextureRegion getMayonnaiseMachine() {
+        return mayonnaise_machine_tex;
+    }
+
+    public TextureRegion getOilMaker() {
+        return oil_maker_tex;
+    }
+
+    public TextureRegion getPreservesJar() {
+        return preserves_jar_tex;
+    }
+
+
 
     public Texture getPlus() {
         return plus_tex;
@@ -4358,8 +4527,105 @@ public class AssetManager {
         return Shear;
     }
 
-    public Texture defaultTexture() {
-        return Hoe;
+    private final Texture Salmon = new Texture("fish/Salmon.png");
+    private final Texture Sardine = new Texture("fish/Sardine.png");
+    private final Texture Shad = new Texture("fish/Shad.png");
+    private final Texture BlueDiscus = new Texture("fish/Blue_Discus.png");
+    private final Texture MidnightCarp = new Texture("fish/Midnight_Carp.png");
+    private final Texture Squid = new Texture("fish/Squid.png");
+    private final Texture Tuna = new Texture("fish/Tuna.png");
+    private final Texture Perch = new Texture("fish/Perch.png");
+    private final Texture Flounder = new Texture("fish/Flounder.png");
+    private final Texture Lionfish = new Texture("fish/Lionfish.png");
+    private final Texture Herring = new Texture("fish/Herring.png");
+    private final Texture Ghostfish = new Texture("fish/Ghostfish.png");
+    private final Texture Tilapia = new Texture("fish/Tilapia.png");
+    private final Texture Dorado = new Texture("fish/Dorado.png");
+    private final Texture Sunfish = new Texture("fish/Sunfish.png");
+    private final Texture RainbowTrout = new Texture("fish/Rainbow_Trout.png");
+    private final Texture Legend = new Texture("fish/Legend.png");
+    private final Texture Glacierfish = new Texture("fish/Glacierfish.png");
+    private final Texture Angler = new Texture("fish/Angler.png");
+    private final Texture Crimsonfish = new Texture("fish/Crimsonfish.png");
+
+    public Texture getSalmon() {
+        return Salmon;
+    }
+
+    public Texture getSardine() {
+        return Sardine;
+    }
+
+    public Texture getShad() {
+        return Shad;
+    }
+
+    public Texture getBlueDiscus() {
+        return BlueDiscus;
+    }
+
+    public Texture getMidnightCarp() {
+        return MidnightCarp;
+    }
+
+    public Texture getSquid() {
+        return Squid;
+    }
+
+    public Texture getTuna() {
+        return Tuna;
+    }
+
+    public Texture getPerch() {
+        return Perch;
+    }
+
+    public Texture getFlounder() {
+        return Flounder;
+    }
+
+    public Texture getLionfish() {
+        return Lionfish;
+    }
+
+    public Texture getHerring() {
+        return Herring;
+    }
+
+    public Texture getGhostfish() {
+        return Ghostfish;
+    }
+
+    public Texture getTilapia() {
+        return Tilapia;
+    }
+
+    public Texture getDorado() {
+        return Dorado;
+    }
+
+    public Texture getSunfish() {
+        return Sunfish;
+    }
+
+    public Texture getRainbowTrout() {
+        return RainbowTrout;
+    }
+
+    public Texture getLegend() {
+        return Legend;
+    }
+
+    public Texture getGlacierfish() {
+        return Glacierfish;
+    }
+
+    public Texture getAngler() {
+        return Angler;
+    }
+
+    public Texture getCrimsonfish() {
+        return Crimsonfish;
     }
 
     private final TextureRegion[] texturesShippingBin = new TextureRegion[] {
@@ -4381,7 +4647,281 @@ public class AssetManager {
     };
 
     public Animation<TextureRegion> getShippingBinAnimation() {
-        return new Animation<TextureRegion>(0.1f, texturesShippingBin);
+        return new Animation<TextureRegion>(0.2f, texturesShippingBin);
+    }
+
+    public Texture getShippingBin() {
+        return new Texture("shipping bin/1.png");
+    }
+
+    public Texture getFarmingAbility() {
+        return new Texture("ability/Farming.png");
+    }
+
+    public Texture getFishingAbility() {
+        return new Texture("ability/Fishing.png");
+    }
+
+    public Texture getForagingAbility() {
+        return new Texture("ability/Foraging.png");
+    }
+
+    public Texture getMiningAbility() {
+        return new Texture("ability/Mining.png");
+    }
+
+    public Texture getRedIcon() {
+        return new Texture("ability/redIcon.png");
+    }
+
+    public Texture getYellowIcon() {
+        return new Texture("ability/yellowIcon.png");
+    }
+
+    public Texture getEmptyRedIcon() {
+        return new Texture("ability/emptyRedIcon.png");
+    }
+
+    public Texture getEmptyYellowIcon() {
+        return new Texture("ability/emptyYellowIcon.png");
+    }
+
+    public Texture getBackgroundMessage() {
+        return new Texture("relationship/messageBackground.png");
+    }
+
+    public Texture getHeart() {
+        return new Texture("relationship/heart.png");
+    }
+
+    private final Texture blackSmithOut = new Texture("shopping/blacksmith_out.png");
+    private final Texture blackSmithIn = new Texture("shopping/blacksmith_in.png");
+
+    private final Texture carpenterIn = new Texture("shopping/carpenter_in.png");
+    private final Texture carpenterOut = new Texture("shopping/carpenter_out.png");
+
+    private final Texture fishShopOut = new Texture("shopping/fishshop_out.png");
+    private final Texture fishShopIn = new Texture("shopping/fishshop_in.png");
+
+    private final Texture jojamartIn = new Texture("shopping/jojamart_in.png");
+    private final Texture jojamartOut = new Texture("shopping/jojamart_out.png");
+
+    private final Texture pierrIn = new Texture("shopping/pierr_in.png");
+    private final Texture pierrOut = new Texture("shopping/pierr_out.png");
+
+    private final Texture ranchIn = new Texture("shopping/ranch_in.png");
+    private final Texture ranchOut = new Texture("shopping/ranch_out.png");
+
+    private final Texture saloonIn = new Texture("shopping/saloon_in.png");
+    private final Texture saloonOut = new Texture("shopping/saloon_out.png");
+
+    public Texture getBlackSmithOut() {
+        return blackSmithOut;
+    }
+
+    public Texture getBlackSmithIn() {
+        return blackSmithIn;
+    }
+
+    public Texture getCarpenterIn() {
+        return carpenterIn;
+    }
+
+    public Texture getCarpenterOut() {
+        return carpenterOut;
+    }
+
+    public Texture getFishShopOut() {
+        return fishShopOut;
+    }
+
+    public Texture getFishShopIn() {
+        return fishShopIn;
+    }
+
+    public Texture getJojamartIn() {
+        return jojamartIn;
+    }
+
+    public Texture getJojamartOut() {
+        return jojamartOut;
+    }
+
+    public Texture getPierrIn() {
+        return pierrIn;
+    }
+
+    public Texture getPierrOut() {
+        return pierrOut;
+    }
+
+    public Texture getRanchIn() {
+        return ranchIn;
+    }
+
+    public Texture getRanchOut() {
+        return ranchOut;
+    }
+
+    public Texture getSaloonIn() {
+        return saloonIn;
+    }
+
+    public Texture getSaloonOut() {
+        return saloonOut;
+    }
+
+    private final Texture egg = new Texture("items/egg.png");
+    private final Texture bigEgg = new Texture("items/largeegg.png");
+    private final Texture duckEgg = new Texture("items/duckegg.png");
+    private final Texture duckFeather = new Texture("items/duckfeather.png");
+    private final Texture rabbitWool = new Texture("items/rabbitwool.png");
+    private final Texture rabbitLeg = new Texture("items/rabbitleg.png");
+    private final Texture dinosaurEgg = new Texture("items/dinosauregg.png");
+    private final Texture milk = new Texture("items/milk.png");
+    private final Texture bigMilk = new Texture("items/bigmilk.png");
+    private final Texture goatMilk = new Texture("items/goatmilk.png");
+    private final Texture bigGoatMilk = new Texture("items/largegoatmilk.png");
+    private final Texture sheepWool = new Texture("items/sheepwool.png");
+    private final Texture truffle = new Texture("items/truffle.png");
+
+    public Texture getEgg() {
+        return egg;
+    }
+
+    public Texture getBigEgg() {
+        return bigEgg;
+    }
+
+    public Texture getDuckEgg() {
+        return duckEgg;
+    }
+
+    public Texture getDuckFeather() {
+        return duckFeather;
+    }
+
+    public Texture getRabbitWool() {
+        return rabbitWool;
+    }
+
+    public Texture getRabbitLeg() {
+        return rabbitLeg;
+    }
+
+    public Texture getDinosaurEgg() {
+        return dinosaurEgg;
+    }
+
+    public Texture getMilk() {
+        return milk;
+    }
+
+    public Texture getBigMilk() {
+        return bigMilk;
+    }
+
+    public Texture getGoatMilk() {
+        return goatMilk;
+    }
+
+    public Texture getBigGoatMilk() {
+        return bigGoatMilk;
+    }
+
+    public Texture getSheepWool() {
+        return sheepWool;
+    }
+
+    public Texture getTruffle() {
+        return truffle;
+    }
+
+    private final Texture wheatFlour = new Texture("items/wheatflour.png");
+    private final Texture sugar = new Texture("items/sugar.png");
+    private final Texture cheese = new Texture("items/cheese.png");
+    private final Texture rice = new Texture("items/rice.png");
+    private final Texture fiber = new Texture("items/fiber.png");
+    private final Texture coffee = new Texture("items/coffee.png");
+    private final Texture hashBrowns = new Texture("items/hashbrowns.png");
+    private final Texture copperOre = new Texture("items/copperore.png");
+    private final Texture ironOre = new Texture("items/ironore.png");
+    private final Texture goldOre = new Texture("items/goldore.png");
+    private final Texture copperBar = new Texture("items/copperbar.png");
+    private final Texture ironBar = new Texture("items/ironbar.png");
+    private final Texture goldBar = new Texture("items/goldbar.png");
+    private final Texture iridiumBar = new Texture("items/iridiumbar.png");
+    private final Texture iridiumOre = new Texture("items/iridiumore.png");
+    private final Texture wood = new Texture("items/wood.png");
+    private final Texture stone = new Texture("items/stone.png");
+
+    public Texture getWheatFlour() {
+        return wheatFlour;
+    }
+
+    public Texture getSugar() {
+        return sugar;
+    }
+
+    public Texture getCheese() {
+        return cheese;
+    }
+
+    public Texture getRice() {
+        return rice;
+    }
+
+    public Texture getFiber() {
+        return fiber;
+    }
+
+    public Texture getCoffee() {
+        return coffee;
+    }
+
+    public Texture getHashBrowns() {
+        return hashBrowns;
+    }
+
+
+    public Texture getCopperOre() {
+        return copperOre;
+    }
+
+    public Texture getIronOre() {
+        return ironOre;
+    }
+
+    public Texture getGoldOre() {
+        return goldOre;
+    }
+
+    public Texture getCopperBar() {
+        return copperBar;
+    }
+
+    public Texture getIronBar() {
+        return ironBar;
+    }
+
+    public Texture getGoldBar() {
+        return goldBar;
+    }
+
+    public Texture getIridiumBar() {
+        return iridiumBar;
+    }
+
+    public Texture getIridiumOre() {
+        return iridiumOre;
+    }
+
+    public Texture getWood() {
+        return wood;
+    }
+
+    public Texture getStone() {
+        return stone;
     }
 
     public static AssetManager getAssetManager() {

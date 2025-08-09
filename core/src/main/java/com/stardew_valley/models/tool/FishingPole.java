@@ -1,15 +1,23 @@
 package com.stardew_valley.models.tool;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.stardew_valley.controllers.AnimalHusbandryController;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.Game;
+import com.stardew_valley.models.Position;
+import com.stardew_valley.models.Result;
+import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Inventory;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.tool.enums.FishingPoleInfo;
+import com.stardew_valley.views.GameView;
 import org.w3c.dom.Text;
 
 // related to fishing
 public class FishingPole extends Tool {
-    FishingPoleInfo info;
+    private FishingPoleInfo info;
 
     public FishingPole(Inventory inventory) {
         super(inventory);
@@ -26,9 +34,22 @@ public class FishingPole extends Tool {
         return info;
     }
 
+    public void setInfo(FishingPoleInfo info) {
+        this.info = info;
+    }
+
     @Override
     public void use(Direction direction) {
-        // what tool does
+        Player player = inventory.getPlayer();
+        Position appliedPosition = player.getTilesPosition().applyDirection(direction);
+        Tile tile = player.getFarm().getTile(appliedPosition);
+
+        if (tile.getType() == TileType.RIVER) {
+            Result result = AnimalHusbandryController.fish(getName());
+            GameView.setMessage(result.message());
+        } else {
+            GameView.setMessage("You should be near of lake!");
+        }
 
         double energyCost = getEffectiveEnergyCost();
         inventory.getPlayer().getEnergy().consume(energyCost);
@@ -48,5 +69,10 @@ public class FishingPole extends Tool {
             case FIBERGLASS -> am.getFiberglassRod();
             case IRIDIUM -> am.getIridiumRod();
         };
+    }
+
+    @Override
+    public String getName() {
+        return info.getName();
     }
 }

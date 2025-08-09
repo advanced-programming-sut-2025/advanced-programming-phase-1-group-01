@@ -12,17 +12,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.GameController;
-import com.stardew_valley.controllers.SettingsController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -32,16 +31,22 @@ import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCQuest;
 import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Energy;
+import com.stardew_valley.models.character.player.MarriageRequest;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.enums.AreaType;
+import com.stardew_valley.models.enums.ArtisanStatus;
+import com.stardew_valley.models.enums.ArtisanType;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
 import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
+import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
 
@@ -56,7 +61,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private final GameController controller;
     private final OrthographicCamera camera;
-    private final Player player;
+    private Player player;
     private final Batch batch;
     private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
@@ -113,11 +118,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final float speed = 200f;
 
     private final WindowManager inventoryMenu;
-    private final GameWindow inventoryView;
+    private final InventoryView inventoryView;
     private final SkillsView skillsView;
     private final SocialView socialView;
-    private final GameWindow miniMapView;
+    private final MiniMapView miniMapView;
     private final SettingsView settingsView;
+
+    private final ShippingBinView shippingBinView;
 
     private final FriendshipView friendshipView;
     private final TextButton friendshipsButton;
@@ -126,10 +133,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private final NotificationsView notificationsView;
 
+    private Image backgroundImage;
+    private Image heartImage;
+    private Label energyMessageLabel;
+
     private final EnergyView energyView;
 
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
+
+    private static final Label messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
 
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
@@ -142,16 +155,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryMenu = new WindowManager(stage);
-        this.inventoryView = new InventoryView();
-        this.skillsView = new SkillsView();
-        this.socialView = new SocialView();
-        this.miniMapView = new MiniMapView();
-        this.settingsView = new SettingsView(controller.getSettingsController());
-        friendshipView = new FriendshipView(player.getRelationService());
+        this.shippingBinView = new ShippingBinView(stage);
+        this.inventoryView = new InventoryView(stage);
+        this.skillsView = new SkillsView(stage);
+        this.socialView = new SocialView(stage);
+        this.miniMapView = new MiniMapView(stage);
+        this.settingsView = new SettingsView(controller.getSettingsController(), stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
-        giftView = new GiftView();
-        notificationsView = new NotificationsView();
+        giftView = new GiftView(controller.getRelationshipController(), stage, inventoryView);
+        friendshipView = new FriendshipView(controller.getRelationshipController(), player.getRelationService(), stage, giftView);
+        notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
+        heartImage = new Image(AssetManager.getAssetManager().getHeart());
+        backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
+        energyMessageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+//        messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
     }
 
     @Override
@@ -170,7 +188,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.addWindow("Settings", settingsView);
         inventoryMenu.showWindow(inventoryView);
 
-        stage.addActor(friendshipView);
         friendshipsButton.setSize(150, 80);
         friendshipsButton.getLabel().setFontScale(0.8f);
         friendshipsButton.setPosition(Gdx.graphics.getWidth() - 170, 20);
@@ -179,10 +196,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 friendshipView.setVisible(!friendshipView.isVisible());
+                if (!friendshipView.isVisible()) stage.setKeyboardFocus(null);
             }
         });
 
-        stage.addActor(notificationsView);
+        heartImage.setSize(64, 64);
+        heartImage.setVisible(false);
+
+        stage.addActor(heartImage);
+
+        messageLabel.setPosition(60, 60);
+        stage.addActor(messageLabel);
     }
 
     @Override
@@ -201,7 +225,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         energyView.render(delta);
         inventoryMenu.update();
         friendshipView.update();
-//        notificationsView.update();
+        notificationsView.update();
+        giftView.update();
         batch.end();
 
         stage.act(delta);
@@ -289,8 +314,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (button == 1) {
             Vector3 worldCoords = camera.unproject(new Vector3(screenX, screenY, 0));
-            int tileX = (int)(worldCoords.x / TILE_SIZE);
-            int tileY = (int)(worldCoords.y / TILE_SIZE);
+            int tileX = (int) (worldCoords.x / TILE_SIZE);
+            int tileY = (int) (worldCoords.y / TILE_SIZE);
             for (Animal animal : animals) {
                 System.out.println(animal.getPosition().x() + " " + animal.getPosition().y());
                 System.out.println(tileX + " " + tileY);
@@ -306,6 +331,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 }
                 if (npc.isInsideChatIcon(worldCoords.x, worldCoords.y) && !npc.getMessage().isEmpty()) {
                     showSimpleDialog(stage, AssetManager.getAssetManager().getSkin(), "NPC Answer", npc.getMessage());
+                }
+            }
+            for (Artisan artisan : player.getArtisans()) {
+                if (artisan.isArtisanClicked(worldCoords.x, worldCoords.y)) {
+                    showArtisanDialog(stage, AssetManager.getAssetManager().getSkin(), artisan);
+                }
+                if (artisan.isDoneClicked(worldCoords.x, worldCoords.y)) {
+                    artisan.finish();
                 }
             }
 
@@ -349,7 +382,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawDividingFences();
 
+        drawHouseTop();
+
         drawNPCs();
+
+        drawArtisan();
+
+        drawShippingBin();
 
 //        drawTileHighlights();
 
@@ -359,14 +398,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         drawTileObjectsExceptTrees();
 
-
         drawAnimals();
 
-        drawPlayer();
+        drawPlayers();
 
         drawEquippedTool();
-
-        drawShippingBin();
 
         drawHouseTop();
 
@@ -378,7 +414,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Tool tool = (player.getInventory().getEquippedSlot().getItem() instanceof Tool) ? (Tool) player.getInventory().getEquippedSlot().getItem() : null;
 
         if (tool != null) {
-            batch.draw(tool.getTexture(), player.getX() + 7, player.getY()  + 5, 14, 14);
+            batch.draw(tool.getTexture(), player.getX() + 7, player.getY() + 5, 14, 14);
         }
     }
 
@@ -408,6 +444,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     }
                 }
             }
+        }
+    }
+
+    private void drawArtisan() {
+        for (Artisan artisan : player.getArtisans()) {
+            artisan.draw(batch);
         }
     }
 
@@ -443,9 +485,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
-    private void drawPlayer() {
-        batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
-        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+    private void drawPlayers() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers())
+            batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -583,6 +626,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private float stateTime = 0f;
+
     private void drawShippingBin() {
         stateTime += Gdx.graphics.getDeltaTime();
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
@@ -601,6 +645,254 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private boolean isDialogOpen = false;
+
+    private void checkPlayerNearShippingBin() {
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+        int numRows = tiles.size();
+        int numCols = tiles.get(0).size();
+
+        float playerX = player.getPosition().x();
+        float playerY = player.getPosition().y();
+        float maxDistance = 32f;
+
+        boolean foundNearby = false;
+
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                Tile tile = tiles.get(row).get(col);
+                if (tile.getType() == TileType.SHIPPING_BIN) {
+                    float tileX = col * TILE_SIZE;
+                    float tileY = row * TILE_SIZE;
+                    float dx = playerX - tileX;
+                    float dy = playerY - tileY;
+                    float distance = (float) Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        foundNearby = true;
+                        if (!isDialogOpen) {
+                            shippingBinView.setVisible(true);
+                            isDialogOpen = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (foundNearby) break;
+        }
+
+        if (!foundNearby && isDialogOpen) {
+            shippingBinView.setVisible(false);
+            isDialogOpen = false;
+        }
+    }
+
+    public void hug() {
+        boolean isNear = false;
+        Player anotherPlayer = null;
+
+        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
+            if (player == friend) continue;
+            if (player.isNearTo(friend)) {
+                isNear = true;
+                anotherPlayer = friend;
+                break;
+            }
+        }
+
+        if (!isNear) {
+            showMessage("you should be near to another player!");
+            return;
+        }
+
+        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+
+        if (friendship.getLevel() < 2) {
+            showMessage("you don't have enough level!");
+            return;
+        }
+
+        DateTime currentTime = controller.getRepo().getCurrentGame().getTimeManager().getNow();
+
+        if (friendship.getLastHugDay() != currentTime.getDay()) {
+            friendship.setLastHugDay(currentTime.getDay());
+            friendship.increaseXp(Friendship.HUG_XP);
+        }
+
+        int worldX = player.getPosition().x();
+        int worldY = player.getPosition().y();
+
+        Vector3 screenPos = camera.project(new Vector3(worldX, worldY, 0));
+
+        heartImage.setPosition(screenPos.x - 20, screenPos.y + 60);
+        heartImage.getColor().a = 1f;
+        heartImage.setVisible(true);
+        heartImage.clearActions();
+
+        heartImage.addAction(Actions.sequence(
+            Actions.delay(0.2f),
+            Actions.parallel(
+                Actions.moveBy(0, 50, 1f),
+                Actions.fadeOut(1.5f)
+            ),
+            Actions.run(() -> heartImage.setVisible(false))
+        ));
+
+        showMessage("you hugged each other!");
+
+    }
+
+    private void marriage() {
+        boolean isNear = false;
+        Player anotherPlayer = null;
+
+        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
+            if (player == friend) continue;
+            if (player.isNearTo(friend)) {
+                isNear = true;
+                anotherPlayer = friend;
+                break;
+            }
+        }
+
+        if (!isNear) {
+            showMessage("you should be near to another player!");
+            return;
+        }
+
+        if (player.getGender() == Gender.FEMALE) {
+            showMessage("you are girl and you can't request marriage");
+            return;
+        }
+
+        if (anotherPlayer.getGender() == Gender.MALE) {
+            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
+            return;
+        }
+
+        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+        if (friendship.getLevel() != 3) {
+            showMessage("you don't have enough level!");
+            return;
+        }
+
+        if (player.getInventory().getSlot("ring") == null) {
+            showMessage("you don't have ring in your inventory");
+            return;
+        }
+        //send message
+        MarriageRequest request = new MarriageRequest(player.getUser());
+        anotherPlayer.addMarriageRequest(request);
+        showMessage("your request sent to " + anotherPlayer.getUser().getNickname());
+    }
+
+    private Window marriageRequestsWindow = null;
+    private boolean isNpressed = false;
+
+    private void showMarriageRequestsWindow(Player currentPlayer) {
+        if (!isNpressed) {
+            marriageRequestsWindow = new Window("Marriage Requests", AssetManager.getAssetManager().getSkin());
+            marriageRequestsWindow.setSize(1000, 600);
+            marriageRequestsWindow.setPosition(500, 300);
+            marriageRequestsWindow.setModal(true);
+            marriageRequestsWindow.setMovable(true);
+
+            for (MarriageRequest request : currentPlayer.getMarriageRequests()) {
+                Table marriageRequestsTable = new Table();
+                Label label = new Label(request.getFrom().getNickname() + " wants to marry you", AssetManager.getAssetManager().getSkin());
+                TextButton acceptBtn = new TextButton("accept", AssetManager.getAssetManager().getSkin());
+                TextButton rejectBtn = new TextButton("reject", AssetManager.getAssetManager().getSkin());
+                acceptBtn.setSize(80, 80);
+                rejectBtn.setSize(80, 80);
+
+                Player anotherPlayer = request.getFrom().getPlayer();
+                Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+
+                acceptBtn.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        currentPlayer.removeMarriageRequest(request);
+                        showMessage("you married with " + request.getFrom().getNickname());
+                        friendship.setLevel(4);
+                        anotherPlayer.getInventory().getSlot("ring").removeQuantity(1);
+                        currentPlayer.getInventory().getSlot("ring").addQuantity(1);
+
+                        currentPlayer.getRelationService().marry(anotherPlayer);
+                        currentPlayer.updateOfMarriage(anotherPlayer);
+                        marriageRequestsWindow.remove();
+                        isNpressed = false;
+                    }
+                });
+
+                rejectBtn.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        currentPlayer.removeMarriageRequest(request);
+                        showMessage("you rejected the request");
+                        friendship.setLevel(0);
+                        friendship.setXp(0);
+                        double energy = anotherPlayer.getEnergy().getMaxEnergy();
+                        anotherPlayer.getEnergy().setMaxEnergy(energy / 2);
+                        anotherPlayer.getEnergy().setAmount(Math.min(100, energy));
+                        anotherPlayer.setEnergyHalved(true);
+                        marriageRequestsWindow.remove();
+                        isNpressed = false;
+                    }
+                });
+
+                marriageRequestsTable.add(label).pad(20);
+                marriageRequestsTable.add(acceptBtn).pad(20);
+                marriageRequestsTable.add(rejectBtn).pad(20);
+
+                marriageRequestsWindow.add(marriageRequestsTable);
+            }
+
+            stage.addActor(marriageRequestsWindow);
+            isNpressed = true;
+
+        } else {
+            if (marriageRequestsWindow != null) {
+                marriageRequestsWindow.remove();
+            }
+            isNpressed = false;
+        }
+    }
+
+    private void showMessage(String text) {
+        energyMessageLabel.setText(text);
+        energyMessageLabel.setFontScale(0.8f);
+        energyMessageLabel.pack();
+
+        energyMessageLabel.setPosition(
+            (Gdx.graphics.getWidth() - energyMessageLabel.getWidth()) / 2f,
+            43
+        );
+
+        backgroundImage.setSize(energyMessageLabel.getWidth() + 30, energyMessageLabel.getHeight() + 20);
+        backgroundImage.setPosition(
+            energyMessageLabel.getX() - 15,
+            energyMessageLabel.getY() - 10
+        );
+
+        energyMessageLabel.clearActions();
+        backgroundImage.clearActions();
+
+        if (!stage.getActors().contains(backgroundImage, true))
+            stage.addActor(backgroundImage);
+
+        if (!stage.getActors().contains(energyMessageLabel, true))
+            stage.addActor(energyMessageLabel);
+
+        energyMessageLabel.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.removeActor()
+        ));
+
+        backgroundImage.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.removeActor()
+        ));
+    }
 
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
@@ -675,9 +967,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void updateGame(float delta) {
         controller.getRepo().getCurrentGame().getCurrentPlayer().updateStateTime(delta);
         handleMovement(delta);
+        checkPlayerNearShippingBin();
     }
 
     public void handleMovement(float delta) {
+        if (friendshipView.isVisible()) return;
+
         boolean moving = false;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
@@ -730,6 +1025,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (player.getEnergy().hasPassedOut()) {
             player.setFainting(true);
+            controller.getSettingsController().nextTurn();
         }
 
         if (player.isFainting()) {
@@ -776,6 +1072,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             }
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            hug();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            marriage();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+            showMarriageRequestsWindow(player);
+        }
+
         player.setMoving(moving);
 
     }
@@ -805,7 +1113,21 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Dialog dialog = new Dialog("Select Item", skin);
 
         SelectBox<String> selectBox = new SelectBox<>(skin);
-        selectBox.setItems("A", "B");
+        selectBox.setItems(
+            "A",
+            "B",
+            "Bee House",
+            "Charcoal Kiln",
+            "Cheese Press",
+            "Dehydrator",
+            "Fish Smoker",
+            "Furnace",
+            "Keg",
+            "Loom",
+            "Mayonnaise Machine",
+            "Oil Maker",
+            "Preserves Jar"
+        );
 
         dialog.getContentTable().add(selectBox).pad(10).row();
 
@@ -824,9 +1146,29 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         case "A":
                             if (!isPixelDialogVisible)
                                 togglePixelDialog(6, 7, "A");
-                        default:
+                            break;
+                        case "B":
                             if (!isPixelDialogVisible)
                                 togglePixelDialog(4, 4, "B");
+                            break;
+                        case "Bee House":
+                        case "Charcoal Kiln":
+                        case "Cheese Press":
+                        case "Dehydrator":
+                        case "Fish Smoker":
+                        case "Furnace":
+                        case "Keg":
+                        case "Loom":
+                        case "Mayonnaise Machine":
+                        case "Oil Maker":
+                        case "Preserves Jar":
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(3, 6, selected);
+                            break;
+                        default:
+                            if (!isPixelDialogVisible)
+                                togglePixelDialog(1, 1, "Unknown");
+                            break;
                     }
                 } else {
                     System.out.println("Selection cancelled");
@@ -963,16 +1305,39 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (isPlantableArea(row, col, height, width)) {
-                    setObject(row, col, height, width, type);
-                    areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
+                if (type.equals("A") || type.equals("B")) {
+                    if (isPlantableArea(row, col, height, width)) {
+                        setObject(row, col, height, width, type);
+                        areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
+                    }
+                } else {
+                    createArtisan(row, col, type);
                 }
+
                 pixelDialog.hide();
                 isPixelDialogVisible = false;
             }
         });
 
         return button;
+    }
+
+    public void createArtisan(int row, int col, String type) {
+        int height = 3;
+        int width = 6;
+
+        player.addArtisan(new Artisan(col * 16, row * 16, ArtisanType.fromString(type), controller.getRepo()));
+
+        List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
+
+        for (int r = row; r <= row + height; r++) {
+            for (int c = col; c <= col + width; c++) {
+                Tile tile = tiles.get(r).get(c);
+                tile.setMovable(false);
+            }
+        }
+
+
     }
 
 
@@ -1206,8 +1571,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
     private void handleAnimalAction(String action, Animal animal) {
         switch (action.toLowerCase()) {
             case "feed":
@@ -1253,12 +1616,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
-
-
-
-
-
     public void createAnimalDialog(final Stage stage, Skin skin) {
         animalDialog = new Dialog("Add Animal", skin);
 
@@ -1301,7 +1658,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     public boolean checkAreaValidation(String animalType) {
         switch (animalType) {
-            case "cow": case "sheep": case "goat": case "dinosaur": case "pig":
+            case "cow":
+            case "sheep":
+            case "goat":
+            case "dinosaur":
+            case "pig":
                 for (Area area : areas) {
                     if (area.type().equals(AreaType.BARN)) return true;
                 }
@@ -1329,8 +1690,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
                 String info = animal.getAnimalInfo().name();
                 String product = animal.getAnimalProductType().toString();
-                int x = (int)(animal.getX() / 16);
-                int y = (int)(animal.getY() / 16);
+                int x = (int) (animal.getX() / 16);
+                int y = (int) (animal.getY() / 16);
 
                 Label label = new Label(
                     info + " | " + product + " | (" + x + "," + y + ")",
@@ -1419,15 +1780,23 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Color getColorForTileType(TileType type) {
         switch (type) {
-            case GROUND: return Color.GREEN;
-            case RIVER: return Color.BLACK;
-            case MINE: return Color.GRAY;
-            case GREENHOUSE: return Color.FOREST;
-            case COTTAGE: return Color.BROWN;
-            case WALL: return Color.DARK_GRAY;
+            case GROUND:
+                return Color.GREEN;
+            case RIVER:
+                return Color.BLACK;
+            case MINE:
+                return Color.GRAY;
+            case GREENHOUSE:
+                return Color.FOREST;
+            case COTTAGE:
+                return Color.BROWN;
+            case WALL:
+                return Color.DARK_GRAY;
             //case SALE_BUCKET: return Color.PINK;
-            case FENCE: return Color.BLUE;
-            default: return Color.LIGHT_GRAY;
+            case FENCE:
+                return Color.BLUE;
+            default:
+                return Color.LIGHT_GRAY;
         }
     }
 
@@ -1472,7 +1841,96 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void handleInput(String input) {
         Result result = controller.handleCommand(input);
         System.out.println("[" + result.success() + "] " + result.message());
+        messageLabel.setText(result.toString());
+        messageLabel.addAction(Actions.sequence(
+            Actions.delay(5f),
+            Actions.run(() -> {
+                messageLabel.setText("");
+            })
+        ));
     }
+
+    public void showArtisanDialog(Stage stage, Skin skin, Artisan artisan) {
+        Dialog dialog = new Dialog("Artisan Info", skin);
+
+        Table content = dialog.getContentTable();
+
+        Label descriptionLabel = new Label("This device can produce: " + String.join(", ", artisan.getItems()), skin);
+        descriptionLabel.setWrap(true);
+        descriptionLabel.setAlignment(Align.center);
+
+        float maxWidth = Gdx.graphics.getWidth() * 0.6f;
+        descriptionLabel.setWidth(maxWidth);
+        content.add(descriptionLabel).width(maxWidth).pad(10);
+        content.row();
+
+
+        if (artisan.getStatus() == ArtisanStatus.WORKING) {
+            String productInfo = "Product: " + artisan.getWorkingProduct();
+            String timeInfo = "Time left (h): " + (artisan.getHoursLeft());
+
+            Label productLabel = new Label(productInfo, skin);
+            productLabel.setAlignment(Align.center);
+            content.add(productLabel).pad(5);
+            content.row();
+
+            Label timeLabel = new Label(timeInfo, skin);
+            timeLabel.setAlignment(Align.center);
+            content.add(timeLabel).pad(5);
+            content.row();
+        }
+
+
+        TextButton useButton = new TextButton("Use", skin);
+        useButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+                showSelectItemDialog(stage, skin, artisan);
+            }
+        });
+
+        dialog.button("Close", true);
+
+        dialog.show(stage);
+    }
+
+    public void showSelectItemDialog(Stage stage, Skin skin, Artisan artisan) {
+        Dialog dialog = new Dialog("Select Item", skin);
+
+        Table content = dialog.getContentTable();
+
+
+        SelectBox<String> selectBox = new SelectBox<>(skin);
+        selectBox.setItems(artisan.getItems().toArray(new String[0]));
+        content.add(selectBox).width(Gdx.graphics.getWidth() * 0.6f).pad(10);
+        content.row();
+
+
+        TextButton okButton = new TextButton("OK", skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String selectedItem = selectBox.getSelected();
+                //onItemSelected(selectedItem);
+                dialog.hide();
+            }
+        });
+
+        TextButton closeButton = new TextButton("Close", skin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        dialog.getButtonTable().add(okButton).pad(10);
+        dialog.getButtonTable().add(closeButton).pad(10);
+
+        dialog.show(stage);
+    }
+
 
     public void showSimpleDialog(Stage stage, Skin skin, String title, String message) {
         Dialog dialog = new Dialog(title, skin);
@@ -1544,9 +2002,19 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
+    public static Label getMessageLabel() {
+        return messageLabel;
+    }
 
-
-
+    public static void setMessage(String message) {
+        messageLabel.setText(message);
+        messageLabel.addAction(Actions.sequence(
+            Actions.delay(5f),
+            Actions.run(() -> {
+                messageLabel.setText("");
+            })
+        ));
+    }
 }
 
 

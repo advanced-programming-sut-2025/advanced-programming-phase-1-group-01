@@ -67,10 +67,6 @@ public class LoginMenuController extends Controller {
         }, 2);
     }
 
-    public void forgotPassword(Label messageLabel) {
-
-    }
-
     public void loadGame(Label messageLabel) {
         User user = FileManager.loadUserFromFile(repo);
 

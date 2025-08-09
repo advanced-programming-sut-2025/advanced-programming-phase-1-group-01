@@ -6,10 +6,7 @@ import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.DateTime;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Friendship extends Relationship {
     private final Character firstFriend;
@@ -40,7 +37,7 @@ public class Friendship extends Relationship {
         firstFriend = p1;
         secondFriend = p2;
         messages = new LinkedHashMap<>();
-        gifts = new LinkedHashMap<Integer, Gift>();
+        gifts = new LinkedHashMap<>();
         lastHugDay = 0;
         lastTalkDay = 0;
         lastGiftDay = 0;

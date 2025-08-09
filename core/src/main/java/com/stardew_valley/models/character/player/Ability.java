@@ -2,7 +2,7 @@ package com.stardew_valley.models.character.player;
 
 public class Ability {
     private AbilityType abilityType;
-    private AbilityService abilityService;
+    private final AbilityService abilityService;
     private int level;
     private int xp;
 

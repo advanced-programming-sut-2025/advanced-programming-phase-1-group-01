@@ -129,5 +129,10 @@ public class WindowManager extends Group {
         for (GameWindow window : windows.values()) {
             window.update();
         }
+        if (windows.get("Inventory") instanceof InventoryView inventoryView) {
+            if (!inventoryView.isPickingGift()) {
+                inventoryView.setVisible(isVisible() && currentWindow == inventoryView);
+            }
+        }
     }
 }

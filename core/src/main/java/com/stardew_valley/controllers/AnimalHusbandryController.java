@@ -180,11 +180,11 @@ public class AnimalHusbandryController extends Controller {
 
     private static final Random RANDOM = new Random();
 
-    public Result fishing(String poleName) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+    public static Result fish(String poleName) {
+        Player player = Repository.getRepo().getCurrentGame().getCurrentPlayer();
         Inventory inventory = player.getInventory();
         Item item = inventory.getSlot(poleName).getItem();
-        Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();
+        Season currSeason = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason();
 
         if (item == null) {
             return new Result(false, "item not found");
@@ -205,7 +205,7 @@ public class AnimalHusbandryController extends Controller {
         // num of fishes: ⌈R × M × (skill + 2)⌉
         double R = RANDOM.nextDouble();
         int skill = player.getAbilityService().getFishing().getLevel();
-        double M = repo.getCurrentGame().getWeatherManager().getTodayWeather().getFishingFactor();
+        double M = Repository.getRepo().getCurrentGame().getWeatherManager().getTodayWeather().getFishingFactor();
 
         int numOfFishes = (int) Math.min(6, Math.ceil(R * M * (skill + 2)));
 
