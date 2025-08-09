@@ -9,6 +9,8 @@ public class Ability {
     public Ability(AbilityService abilityService, AbilityType abilityType) {
         this.abilityService = abilityService;
         this.abilityType = abilityType;
+        this.level = 0;
+        this.xp = 0;
     }
 
     public int getXp() {

@@ -66,6 +66,7 @@ public class Player extends Character {
     private boolean whileFainting = false;
 
     private float globalDelta = 0f;
+    private Map<String,Integer> foods;
 
 
     public Player(User user) {
@@ -82,6 +83,7 @@ public class Player extends Character {
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
         cookingRecipes = new HashSet<>();
+        foods = new HashMap<>();
         initializeRecipes();
     }
 
@@ -100,6 +102,7 @@ public class Player extends Character {
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
         cookingRecipes = new HashSet<>();
+        foods = new HashMap<>();
         initializeRecipes();
     }
 
@@ -286,9 +289,11 @@ public class Player extends Character {
     }
 
     public void initializeRecipes() {
+        inventory.addItem("egg",5);
+        inventory.addItem("milk",5);
         addCookingRecipe(CookingRecipes.FRIED_EGG.toRecipe());
         addCookingRecipe(CookingRecipes.BAKED_FISH.toRecipe());
-        addCookingRecipe(CookingRecipes.SALAD.toRecipe());
+        addCookingRecipe(CookingRecipes.OMELET.toRecipe());
         addCraftingRecipe(CraftingRecipes.BEE_HOUSE.toRecipe());
         addCraftingRecipe(CraftingRecipes.KEG.toRecipe());
         addCraftingRecipe(CraftingRecipes.LOOM.toRecipe());
@@ -949,5 +954,22 @@ public class Player extends Character {
 
     public void removeMarriageRequest(MarriageRequest request) {
         marriageRequests.remove(request);
+    }
+
+    public Map<String,Integer> getFoods() {
+        return foods;
+    }
+
+    public void addFood(String item) {
+        foods.put(item, foods.getOrDefault(item, 0) + 1);
+    }
+
+    public void removeFood(String item) {
+        int count = foods.getOrDefault(item, 0) - 1;
+        if (count > 0) {
+            foods.put(item, count);
+        } else {
+            foods.remove(item);
+        }
     }
 }

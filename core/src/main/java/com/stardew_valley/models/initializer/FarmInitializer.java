@@ -11,6 +11,7 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.foraging.ForagingManager;
+import com.stardew_valley.models.shop.enums.Shop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +60,6 @@ public class FarmInitializer {
 
     private final static Position HARVEY_STARTING_POSITION = new Position(82, 89);
 
-    private final static Position BLACKSMITH_BL = new Position(5, 5);
-    private final static Position BLACKSMITH_TR = new Position(25, 25);
-
     private final static List<List<Tile>> tiles = new ArrayList<>();
     private static Cottage cottage;
     private static Greenhouse greenhouse;
@@ -85,6 +83,7 @@ public class FarmInitializer {
         shippingBinInitializer(3);
         shippingBinInitializer(5);
         shippingBinInitializer(7);
+        shopsInitializer();
     }
 
     private static void npcsHouseInitializer() {
@@ -241,6 +240,25 @@ public class FarmInitializer {
                     .setObject(null)
                     .build();
                 tiles.get(y).set(x, tile);
+            }
+        }
+    }
+
+    private static void shopsInitializer() {
+        int size = 10;
+        for (Shop shop: Shop.values()) {
+            Position bottomLeft = shop.getBottomLeft();
+            for (int x = bottomLeft.x() - 1; x < bottomLeft.x() + size; x++) {
+                for (int y = bottomLeft.y() - 1; y < bottomLeft.y() + size; y++) {
+                    Tile tile = new Tile.Builder()
+                        .setPosition(new Position(x, y))
+                        .setType(TileType.SHOP)
+                        .setMovable(false)
+                        .setBuilding(null)
+                        .setObject(null)
+                        .build();
+                    tiles.get(y).set(x, tile);
+                }
             }
         }
     }

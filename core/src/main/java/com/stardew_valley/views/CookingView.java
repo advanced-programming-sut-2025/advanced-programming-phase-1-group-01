@@ -5,7 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -14,11 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CookingController;
+import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Item;
+import com.stardew_valley.models.character.player.Ability;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Refrigerator;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.cooking.CookingRecipe;
@@ -29,12 +36,13 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+
+
 public class CookingView extends View {
 
     private Stage stage;
     private Skin skin;
     private final Texture kitchen;
-    private Image kitchenImage;
     private Texture background;
     private final Image backgroundImage;
 
@@ -61,6 +69,7 @@ public class CookingView extends View {
     private final TextField itemTextField;
     private final TextField itemCountTextField;
     private final Label messageLabel;
+    private final Label hoverLabel;
 
     private boolean isPressedRecipes = false;
     private boolean isPressedRefrigerator = false;
@@ -70,7 +79,6 @@ public class CookingView extends View {
         this.controller = controller;
         skin = AssetManager.getAssetManager().getSkin();
         kitchen = new Texture("cooking/kitchen.png");
-        kitchenImage = new Image(kitchen);
         background = new Texture("cooking/back.png");
         backgroundImage = new Image(background);
         refrigerator = new Texture("cooking/refrigerator.png");
@@ -98,12 +106,64 @@ public class CookingView extends View {
         itemTextField = new TextField("item?", skin);
         itemCountTextField = new TextField("how?", skin);
         messageLabel = new Label("", skin);
+        messageLabel.setFontScale(0.7f);
+
+        hoverLabel = new Label("", skin);
+        hoverLabel.setVisible(false);
     }
 
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        Image kitchenImage = new Image(kitchen);
+        kitchenImage.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getHeight() * 0.8f);
+        kitchenImage.setPosition(200,100);
+        stage.addActor(kitchenImage);
+
+        putButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.put(messageLabel,itemTextField.getText(),itemCountTextField.getText());
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        messageLabel.setText("");
+                    }
+                }, 1);
+            }
+        });
+
+        pickButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.pick(messageLabel,itemTextField.getText(),itemCountTextField.getText());
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        messageLabel.setText("");
+                    }
+                }, 1);
+            }
+        });
+
+        cookButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.cook(messageLabel, foodSelection.getSelected());
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        messageLabel.setText("");
+                    }
+                }, 1);
+            }
+        });
+
     }
 
     @Override
@@ -111,14 +171,9 @@ public class CookingView extends View {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Main.getBatch().begin();
-        float bgWidth = kitchen.getWidth() * 2.2f;
-        float bgHeight = kitchen.getHeight() * 2.2f;
-        Main.getBatch().draw(kitchen, 100, 150, bgWidth, bgHeight);
-        Main.getBatch().end();
-
         stage.act(delta);
         stage.draw();
+
         handleInput();
     }
 
@@ -132,26 +187,9 @@ public class CookingView extends View {
             toggleFridgeAndInventory();
         }
 
-        putButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.put(messageLabel,itemTextField.getMessageText(),itemCountTextField.getMessageText());
-            }
-        });
-
-        pickButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.pick(messageLabel,itemTextField.getMessageText(),itemCountTextField.getMessageText());
-            }
-        });
-
-        cookButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.cook(messageLabel,foodSelection.getSelected());
-            }
-        });
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+            Main.getMain().setScreen(new GameView(new GameController(controller.getRepo())));
+        }
     }
 
     @Override
@@ -208,6 +246,8 @@ public class CookingView extends View {
             (Gdx.graphics.getWidth() - messageLabel.getWidth()) / 2f,
             270);
         stage.addActor(messageLabel);
+
+        stage.addActor(hoverLabel);
     }
 
     private void showFridgeInventoryUI() {
@@ -240,7 +280,7 @@ public class CookingView extends View {
         messageLabel.setAlignment(Align.center);
         messageLabel.setPosition(
             (Gdx.graphics.getWidth() - messageLabel.getWidth()) / 2f,
-            105);
+            145);
         stage.addActor(messageLabel);
     }
 
@@ -278,6 +318,15 @@ public class CookingView extends View {
             stage.addActor(cellImage);
             recipeItemImages.add(cellImage);
 
+            CookingRecipes recipeName = null;
+            for (CookingRecipes r: CookingRecipes.values()) {
+                if (r.getName().equals(recipe.getName())) {
+                    recipeName = r;
+                }
+            }
+
+            setupTooltip(cellImage,recipeName,hoverLabel);
+
             index++;
         }
     }
@@ -292,7 +341,7 @@ public class CookingView extends View {
         clearRefrigeratorItems();
 
         Refrigerator refrigerator = controller.getRepo().getCurrentGame().getCurrentPlayer().getRefrigerator();
-        Map<Item,Integer> items = refrigerator.getItems();
+        Map<String,Integer> items = refrigerator.getItems();
         float startX = 680f;
         float startY = 933f;
         float cellWidth = 40f;
@@ -300,14 +349,16 @@ public class CookingView extends View {
 
         int cols = 14;
         int i = 0;
-        for (Map.Entry<Item,Integer> entry : items.entrySet()) {
+        for (Map.Entry<String,Integer> entry : items.entrySet()) {
             int col = i % cols;
             int row = i / cols;
 
             float x = startX + col * cellWidth;
             float y = startY - (row + 1) * cellHeight;
 
-            Image image = new Image(entry.getKey().getTexture());
+            Player player = controller.getRepo().getCurrentGame().getCurrentPlayer();
+            Item item = player.getInventory().getNewItem(entry.getKey());
+            Image image = new Image(item.getTexture());
             image.setBounds(x, y, 30f, 30f);
 
             refrigeratorItemImages.add(image);
@@ -320,7 +371,7 @@ public class CookingView extends View {
 
             quantityLabel.setFontScale(1.2f);
             quantityLabel.setPosition(x + 10, y);
-            inventoryItemCount.add(quantityLabel);
+            refrigeratorItemCount.add(quantityLabel);
             stage.addActor(quantityLabel);
         }
     }
@@ -380,5 +431,30 @@ public class CookingView extends View {
             label.remove();
         }
         inventoryItemCount.clear();
+    }
+
+    private void setupTooltip(final Image recipeImage, final CookingRecipes recipe, final Label hoverLabel) {
+        recipeImage.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (Map.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+                    stringBuilder.append(ingredient.getKey());
+                    stringBuilder.append(": ");
+                    stringBuilder.append(ingredient.getValue());
+                    stringBuilder.append("\n");
+                }
+                hoverLabel.setText(stringBuilder.toString());
+                hoverLabel.pack();
+                hoverLabel.setPosition(650,400);
+                hoverLabel.setVisible(true);
+            }
+
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                hoverLabel.setVisible(false);
+            }
+        });
     }
 }

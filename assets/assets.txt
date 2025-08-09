@@ -948,6 +948,7 @@ fish/Tuna.png
 fish/Void_Salmon.png
 fish/Walleye.png
 fish/Woodskip.png
+greenhouse.png
 images/PS4_Circle.png
 images/a_Abigail/tile_0_0.png
 images/a_Abigail/tile_0_1.png

@@ -1,12 +1,10 @@
 package com.stardew_valley.models.character.player;
 
-import com.stardew_valley.models.Item;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Refrigerator {
-    private final Map<Item, Integer> items;
+    private final Map<String, Integer> items;
     private Player player;
 
     public Refrigerator(Player player) {
@@ -14,40 +12,40 @@ public class Refrigerator {
         items = new HashMap<>();
     }
 
-    public boolean addItem(Item item, int quantity) {
-        items.put(item, items.getOrDefault(item, 0) + quantity);
+    public boolean addItem(String itemName, int quantity) {
+        items.put(itemName, items.getOrDefault(itemName, 0) + quantity);
         return true;
     }
 
-    public boolean removeItem(Item item, int quantity) {
-        if (!items.containsKey(item)) return false;
+    public boolean removeItem(String itemName, int quantity) {
+        if (!items.containsKey(itemName)) return false;
 
-        int currentQty = items.get(item);
+        int currentQty = items.get(itemName);
         if (quantity > currentQty) return false;
 
-        if (quantity == currentQty) items.remove(item);
-        else items.put(item, currentQty - quantity);
+        if (quantity == currentQty) items.remove(itemName);
+        else items.put(itemName, currentQty - quantity);
 
         return true;
     }
 
-    public boolean containsItem(Item item) {
-        return items.containsKey(item);
+    public boolean containsItem(String itemName) {
+        return items.containsKey(itemName);
     }
 
-    public boolean containsItem(Item item, int quantity) {
-        return items.getOrDefault(item, 0) >= quantity;
+    public boolean containsItem(String itemName, int quantity) {
+        return items.getOrDefault(itemName, 0) >= quantity;
     }
 
-    public int getQuantity(String item) {
-        return items.getOrDefault(item, 0);
+    public int getQuantity(String itemName) {
+        return items.getOrDefault(itemName, 0);
     }
 
     public boolean refrigerateHasCapacity() {
         return items.size() < 10;
     }
 
-    public Map<Item, Integer> getItems() {
+    public Map<String, Integer> getItems() {
         return items;
     }
 }

@@ -299,6 +299,12 @@ public class Inventory {
                     }
                 }
 
+                for (IngredientItems item : IngredientItems.values()) {
+                    if (item.getName().equalsIgnoreCase(itemName)) {
+                        yield item.toItem();
+                    }
+                }
+
                 for (QuestItemType QuestItem : QuestItemType.values()) {
                     if (QuestItem.getName().equalsIgnoreCase(itemName)) {
                         yield QuestItem.toItem();
