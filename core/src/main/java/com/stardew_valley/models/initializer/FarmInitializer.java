@@ -59,9 +59,6 @@ public class FarmInitializer {
 
     private final static Position HARVEY_STARTING_POSITION = new Position(82, 89);
 
-    private final static Position BLACKSMITH_BL = new Position(5, 5);
-    private final static Position BLACKSMITH_TR = new Position(25, 25);
-
     private final static List<List<Tile>> tiles = new ArrayList<>();
     private static Cottage cottage;
     private static Greenhouse greenhouse;

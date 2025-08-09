@@ -71,6 +71,14 @@ public enum CookingRecipes {
         return name;
     }
 
+    public Map<String, Integer> getIngredients() {
+        return ingredients;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
     public CookingRecipe toRecipe() {
         return new CookingRecipe(name, ingredients, buff, energy, sellPrice, source,path);
     }

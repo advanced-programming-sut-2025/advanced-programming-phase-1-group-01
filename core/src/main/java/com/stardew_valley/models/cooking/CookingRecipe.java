@@ -19,6 +19,11 @@ public record CookingRecipe(String name, Map<String, Integer> ingredients, Strin
         return -1;
     }
 
+    @Override
+    public Texture getTexture() {
+        return new Texture(path);
+    }
+
     public Image getImage() {
         Texture texture = new Texture(path);
         return new Image(texture);

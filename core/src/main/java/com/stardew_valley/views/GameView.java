@@ -2,12 +2,14 @@ package com.stardew_valley.views;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
+import com.stardew_valley.controllers.CookingController;
 import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.controllers.SettingsController;
@@ -36,17 +39,20 @@ import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.MarriageRequest;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.*;
+import com.stardew_valley.models.enums.commands.DateTimeCommands;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
 import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
+import com.stardew_valley.models.shop.enums.Shop;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
 
@@ -125,6 +131,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final SettingsView settingsView;
 
     private final ShippingBinView shippingBinView;
+    private final FoodMenuView foodMenuView;
 
     private final FriendshipView friendshipView;
     private final TextButton friendshipsButton;
@@ -142,6 +149,16 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final List<Area> areas = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
 
+    private float buff = 1f;
+    private float buffTimer = 0f;
+    private float maxEnergyTimer = 0f;
+    private ShapeRenderer darknessRenderer;
+
+    private float shakeTime = 0f;
+    private float shakeDuration = 0f;
+    private float shakeIntensity = 0f;
+    private Vector3 originalCameraPos = new Vector3();
+
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
         this.controller = controller;
@@ -154,6 +171,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryMenu = new WindowManager(stage);
         this.shippingBinView = new ShippingBinView();
+        this.foodMenuView = new FoodMenuView();
         this.inventoryView = new InventoryView();
         this.skillsView = new SkillsView();
         this.socialView = new SocialView();
@@ -167,6 +185,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        darknessRenderer = new ShapeRenderer();
     }
 
     @Override
@@ -186,6 +205,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.showWindow(inventoryView);
 
         stage.addActor(shippingBinView);
+        stage.addActor(foodMenuView);
 
         stage.addActor(friendshipView);
         friendshipsButton.setSize(150, 80);
@@ -214,6 +234,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.zoom = 0.5f;
+        updateCameraShake(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -224,8 +245,19 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.update();
         skillsView.update();
         friendshipView.update();
+        foodMenuView.update();
+        eatFood();
 //        notificationsView.update();
         batch.end();
+        if (controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour() >= 18) {
+            drawDark(0.85f);
+        }
+
+        if (shakeTime < shakeDuration) {
+            float currentIntensity = shakeIntensity * (1 - shakeTime / shakeDuration);
+            float darknessAlpha = 0.8f * (currentIntensity / shakeIntensity);
+            drawDark(darknessAlpha);
+        }
 
         stage.act(delta);
         stage.draw();
@@ -386,6 +418,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawArtisan();
 
         drawShippingBin();
+
+        drawShopping();
 
 //        drawTileHighlights();
 
@@ -644,6 +678,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    private void drawShopping() {
+
+        for (Shop shop: Shop.values()) {
+            Position BL = shop.getBottomLeft();
+            Texture texture = shop.getTexture();
+            batch.draw(texture,getTilePixel(BL.x()),getTilePixel(BL.y()),160f,160f);
+        }
+     }
+
     private boolean isDialogOpen = false;
     private void checkPlayerNearShippingBin() {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
@@ -855,6 +898,70 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
+    public void eatFood() {
+
+        Item item = foodMenuView.getFoodItem();
+        if (item == null) return;
+
+        Texture foodTexture = item.getTexture();
+        Image foodImage = new Image(foodTexture);
+        foodImage.setVisible(false);
+        stage.addActor(foodImage);
+
+        int worldX = player.getPosition().x();
+        int worldY = player.getPosition().y();
+
+        Vector3 screenPos = camera.project(new Vector3(worldX, worldY, 0));
+
+        foodImage.setPosition(screenPos.x - 10, screenPos.y + 60);
+        foodImage.getColor().a = 1f;
+        foodImage.setVisible(true);
+        foodImage.clearActions();
+
+        foodImage.addAction(Actions.sequence(
+            Actions.delay(0.2f),
+            Actions.parallel(
+                Actions.moveBy(0, 50, 1f),
+                Actions.fadeOut(2.5f)
+            ),
+            Actions.run(() -> foodImage.setVisible(false))
+        ));
+
+        showMessage("you eat the " + item.getName().toLowerCase());
+        foodMenuView.setFoodItem(null);
+
+        CookingRecipes foodEnergy = null;
+        for (CookingRecipes recipe : CookingRecipes.values()) {
+            if (recipe.getName().equalsIgnoreCase(item.getName())) {
+                foodEnergy = recipe;
+            }
+        }
+
+        player.getEnergy().increase(foodEnergy.getEnergy());
+
+        if (foodEnergy.getName().equals(CookingRecipes.OMELET.getName())) {
+            setBuff(2.5f);
+            player.getEnergy().setMaxEnergy(player.getEnergy().getMaxEnergy() + 100);
+            maxEnergyTimer = 0f;
+            buffTimer = 0f;
+        }
+    }
+
+    private void setBuff(float buff) {
+        this.buff = buff;
+    }
+
+    boolean isShown = false;
+    public void toggleFoodMenu() {
+        if (!isShown) {
+            foodMenuView.setVisible(true);
+        }
+        else {
+            foodMenuView.setVisible(false);
+        }
+        isShown = !isShown;
+    }
+
     private void showMessage(String text) {
         messageLabel.setText(text);
         messageLabel.setFontScale(0.8f);
@@ -889,6 +996,39 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             Actions.delay(2f),
             Actions.removeActor()
         ));
+    }
+
+    public void drawDark(float alpha) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, alpha);
+        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shapeRenderer.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    public void startCameraShake(float duration, float intensity) {
+        shakeDuration = duration;
+        shakeIntensity = intensity;
+        shakeTime = 0f;
+        originalCameraPos.set(player.getPosition().x(), player.getPosition().y(), 0);
+    }
+
+    public void updateCameraShake(float delta) {
+        shakeTime += delta;
+        if (shakeTime < shakeDuration) {
+            float currentIntensity = shakeIntensity * (1 - shakeTime / shakeDuration);
+            float offsetX = (float)((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetY = (float)((Math.random() - 0.5) * 2 * currentIntensity);
+
+            camera.position.set(originalCameraPos.x + offsetX, originalCameraPos.y + offsetY, 0);
+        }
+        else {
+            camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
+        }
     }
 
     public void printTileTypeCounts() {
@@ -967,8 +1107,22 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         checkPlayerNearShippingBin();
     }
 
+    private float faintingTimer = 0f;
     public void handleMovement(float delta) {
         boolean moving = false;
+
+        maxEnergyTimer += delta;
+
+        if (buffTimer > 5f) {
+            setBuff(1f);
+        }
+
+        if (maxEnergyTimer > 20f) {
+            player.getEnergy().setMaxEnergy(200f);
+            if (player.getEnergy().getAmount() >= 200f) {
+                player.getEnergy().setAmount(200f);
+            }
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
             toggleDialog();
@@ -1018,51 +1172,62 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
 
-        if (player.getEnergy().hasPassedOut()) {
+        if (player.getEnergy().hasPassedOut() && !player.isFainting()) {
             player.setFainting(true);
-            controller.getSettingsController().nextTurn();
+            return;
         }
 
         if (player.isFainting()) {
+            faintingTimer += delta;
+            float FAINTING_DURATION = 3.0f;
+            if (faintingTimer >= FAINTING_DURATION) {
+                player.setFainting(false);
+                faintingTimer = 0f;
+                controller.getSettingsController().nextTurn();
+            }
             return;
         }
 
         Energy energy = player.getEnergy();
-        double consumeAmount = 1.0 / 14.4;
+        double consumeAmount = 1.0 / 96.0;
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            float nextX = player.getX() + speed * delta;
+            float nextX = player.getX() + speed * delta * buff;
             if (canMoveTo(nextX, player.getY())) {
                 player.setX(nextX);
                 player.setDirection(Direction.RIGHT);
                 moving = true;
                 energy.consume(consumeAmount);
+                buffTimer += delta;
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            float nextX = player.getX() - speed * delta;
+            float nextX = player.getX() - speed * delta * buff;
             if (canMoveTo(nextX, player.getY())) {
                 player.setX(nextX);
                 player.setDirection(Direction.LEFT);
                 moving = true;
                 energy.consume(consumeAmount);
+                buffTimer += delta;
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            float nextY = player.getY() + speed * delta;
+            float nextY = player.getY() + speed * delta * buff;
             if (canMoveTo(player.getX(), nextY)) {
                 player.setY(nextY);
                 player.setDirection(Direction.UP);
                 moving = true;
                 energy.consume(consumeAmount);
+                buffTimer += delta;
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            float nextY = player.getY() - speed * delta;
+            float nextY = player.getY() - speed * delta * buff;
             if (canMoveTo(player.getX(), nextY)) {
                 player.setY(nextY);
                 player.setDirection(Direction.DOWN);
                 moving = true;
                 energy.consume(consumeAmount);
+                buffTimer += delta;
             }
         }
 
@@ -1076,6 +1241,24 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
             showMarriageRequestsWindow(player);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            toggleFoodMenu();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            startCameraShake(1f, 10f);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+            Main.getMain().setScreen(new CookingView(new CookingController(Repository.getRepo())));
+            return;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            Main.getMain().setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
+            return;
         }
 
         player.setMoving(moving);

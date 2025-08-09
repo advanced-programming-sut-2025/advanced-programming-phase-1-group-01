@@ -1,6 +1,8 @@
 package com.stardew_valley.models.crafting;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
+import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 
 import java.util.List;
 
@@ -29,6 +31,10 @@ public class Keg extends CraftingDevice {
     @Override
     public int getRequiredTurns() {
         return 0;
+    }
+
+    public Texture getTexture() {
+        return CraftingRecipes.KEG.toRecipe().getTexture();
     }
 
 }

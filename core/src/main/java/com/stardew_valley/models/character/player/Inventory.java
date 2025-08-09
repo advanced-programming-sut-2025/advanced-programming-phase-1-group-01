@@ -218,12 +218,6 @@ public class Inventory {
                     }
                 }
 
-                for (QuestItemType QuestItem : QuestItemType.values()) {
-                    if (QuestItem.getName().equalsIgnoreCase(itemName)) {
-                        yield QuestItem.toItem();
-                    }
-                }
-
                 for (CookingRecipes recipeEnum : CookingRecipes.values()) {
                     if (recipeEnum.getName().equalsIgnoreCase(itemName)) {
                         yield recipeEnum.toRecipe();
@@ -281,6 +275,12 @@ public class Inventory {
                 for (IngredientItems item : IngredientItems.values()) {
                     if (item.getName().equalsIgnoreCase(itemName)) {
                         yield item.toItem();
+                    }
+                }
+
+                for (QuestItemType QuestItem : QuestItemType.values()) {
+                    if (QuestItem.getName().equalsIgnoreCase(itemName)) {
+                        yield QuestItem.toItem();
                     }
                 }
 

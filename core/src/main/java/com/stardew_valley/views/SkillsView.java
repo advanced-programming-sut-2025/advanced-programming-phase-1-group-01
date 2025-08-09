@@ -1,9 +1,14 @@
 package com.stardew_valley.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.player.Ability;
 import com.stardew_valley.models.character.player.AbilityService;
@@ -14,18 +19,17 @@ public class SkillsView extends GameWindow {
     private Table skillsTable;
     private AbilityService abilityService;
 
-    private Label farmingAbilityLabel;
-    private Image farmingAbilityImage;
-    private Label fishingAbilityLabel;
-    private Image fishingAbilityImage;
-    private Label foragingAbilityLabel;
-    private Image foragingAbilityImage;
-    private Label miningAbilityLabel;
-    private Image miningAbilityImage;
-
-    private Drawable redIconDrawable;
-    private Drawable yellowIconDrawable;
-    private Drawable emptyRedIconDrawable;
+    private final Label farmingAbilityLabel;
+    private final Image farmingAbilityImage;
+    private final Label fishingAbilityLabel;
+    private final Image fishingAbilityImage;
+    private final Label foragingAbilityLabel;
+    private final Image foragingAbilityImage;
+    private final Label miningAbilityLabel;
+    private final Image miningAbilityImage;
+    private final Drawable redIconDrawable;
+    private final Drawable yellowIconDrawable;
+    private final Drawable emptyRedIconDrawable;
     private Drawable emptyYellowIconDrawable;
 
     private Image[] farmingIcons = new Image[4];
@@ -37,7 +41,7 @@ public class SkillsView extends GameWindow {
         super("Skills", AssetManager.getAssetManager().getSkin(), "Letter");
         skin = AssetManager.getAssetManager().getSkin();
 
-        skillsTable = new Table(getSkin());
+        skillsTable = new Table(skin);
         add(skillsTable).expand().fill().padTop(30);
 
         abilityService = repo.getCurrentGame().getCurrentPlayer().getAbilityService();
@@ -65,6 +69,16 @@ public class SkillsView extends GameWindow {
             foragingIcons[i] = new Image(emptyRedIconDrawable);
             miningIcons[i] = new Image(emptyRedIconDrawable);
         }
+
+        Label hoverLabel = new Label("", skin);
+        hoverLabel.setVisible(false);
+        hoverLabel.setPosition(430,450);
+        this.addActor(hoverLabel);
+        setupAbilityTooltip(farmingAbilityImage, abilityService.getFarming(), hoverLabel);
+        setupAbilityTooltip(fishingAbilityImage, abilityService.getFishing(), hoverLabel);
+        setupAbilityTooltip(foragingAbilityImage, abilityService.getForaging(), hoverLabel);
+        setupAbilityTooltip(miningAbilityImage, abilityService.getMining(), hoverLabel);
+
     }
 
     @Override
@@ -157,5 +171,27 @@ public class SkillsView extends GameWindow {
             ProgressBar levelXpBar = new ProgressBar(0, ability.getMaxXp(), 1, false, getSkin());
             levelXpBar.setValue(ability.getXp());
             skillsTable.add(levelXpBar).pad(10).colspan(4).fillX();
+    }
+
+    private Timer.Task hideTask;
+
+    private void setupAbilityTooltip(final Image abilityImage, final Ability ability, final Label hoverLabel) {
+        abilityImage.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                hoverLabel.setText(
+                    ability.getAbilityType().name() +
+                        "\nLevel: " + ability.getLevel() +
+                        "\nXP: " + ability.getXp()
+                );
+                hoverLabel.pack();
+                hoverLabel.setVisible(true);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                hoverLabel.setVisible(false);
+            }
+        });
     }
 }

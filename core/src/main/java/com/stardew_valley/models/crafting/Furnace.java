@@ -1,6 +1,8 @@
 package com.stardew_valley.models.crafting;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
+import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 
 import java.util.List;
 
@@ -31,4 +33,8 @@ public class Furnace extends CraftingDevice {
         return 0;
     }
 
+    @Override
+    public Texture getTexture() {
+        return CraftingRecipes.FURNACE.toRecipe().getTexture();
+    }
 }

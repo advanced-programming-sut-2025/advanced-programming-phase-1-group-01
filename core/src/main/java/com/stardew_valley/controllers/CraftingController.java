@@ -28,12 +28,6 @@ public class CraftingController extends Controller {
     @Override
     public Result handleCommand(String command) {
 
-        Player player = repo.getCurrentUser().getPlayer();
-        Building cottage = player.getFarm().getCottage();
-        if (!player.isPlayerNearBuilding(cottage)) {
-            return new Result(false, "You are not near Cottage");
-        }
-
         CraftingCommands matchedCommand = null;
 
         for (CraftingCommands cmd : CraftingCommands.values()) {
