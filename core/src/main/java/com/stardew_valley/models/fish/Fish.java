@@ -1,5 +1,6 @@
 package com.stardew_valley.models.fish;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.animal.ProductQuality;
 
@@ -31,5 +32,10 @@ public class Fish implements Item {
 
     public void setQuality(ProductQuality quality) {
         this.quality = quality;
+    }
+
+    @Override
+    public Texture getTexture() {
+        return info.getTexture();
     }
 }

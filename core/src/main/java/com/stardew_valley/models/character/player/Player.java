@@ -219,7 +219,11 @@ public class Player extends Character {
     }
 
     public void readNotification(MessageEntry notification) {
-        notifications.put(notification, true);
+        for (Map.Entry<MessageEntry, Boolean> entry : notifications.entrySet()) {
+            if (entry.getKey() == notification) {
+                entry.setValue(true);
+            }
+        }
     }
 
     public void readAllNotifications() {
