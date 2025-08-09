@@ -2,18 +2,18 @@ package com.stardew_valley.models.moving;
 
 import com.stardew_valley.models.Game;
 import com.stardew_valley.models.Position;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 import java.util.List;
 
 public class ReduceEnergy {
-    public static void movePlayer(User player, Position end, Game game) {
+    public static void movePlayer(Player player, Position end, Game game) {
         List<Position> path = PathFinding.findPath(player.getPosition(), end, player.getFarm().getTiles());
         Position realEnd = FindRealEnd(path, player, game);
         player.setPosition(realEnd);
     }
 
-    private static Position FindRealEnd(List<Position> path, User player, Game game) {
+    private static Position FindRealEnd(List<Position> path, Player player, Game game) {
         if (path.isEmpty()) return player.getPosition();
 
         Position end = path.get(0);
@@ -46,7 +46,7 @@ public class ReduceEnergy {
         return end;
     }
 
-    public static int  calculateEnergy(User player, Position end) {
+    public static int  calculateEnergy(Player player, Position end) {
          List<Position> path = PathFinding.findPath(player.getPosition(), end, player.getFarm().getTiles());
          if (path.isEmpty()) return -1;
 

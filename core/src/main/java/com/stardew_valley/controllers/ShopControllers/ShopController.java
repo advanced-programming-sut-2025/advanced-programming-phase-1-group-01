@@ -3,7 +3,7 @@ package com.stardew_valley.controllers.ShopControllers;
 import com.stardew_valley.controllers.Controller;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.data.Repository;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.shop.Shop;
 
 import java.util.regex.Matcher;
@@ -33,7 +33,7 @@ public abstract class ShopController extends Controller {
         return null;
     }
 
-    protected boolean isNear(User player, Shop shop) {
+    protected boolean isNear(Player player, Shop shop) {
             int dx = Math.abs(player.getPosition().x() - shop.getX());
             int dy = Math.abs(player.getPosition().y() - shop.getY());
             double distance = Math.sqrt(dx * dx + dy * dy);

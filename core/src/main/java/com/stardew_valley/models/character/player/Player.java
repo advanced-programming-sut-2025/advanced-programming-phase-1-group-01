@@ -22,7 +22,7 @@ import com.stardew_valley.models.relations.RelationshipService;
 import java.util.*;
 import java.util.List;
 
-public class User extends Character {
+public class Player extends Character {
     private Game game;
     private final com.stardew_valley.models.data.User user;
     private final Gender gender;
@@ -69,7 +69,7 @@ public class User extends Character {
     private float globalDelta = 0f;
 
 
-    public User(com.stardew_valley.models.data.User user) {
+    public Player(com.stardew_valley.models.data.User user) {
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
@@ -86,7 +86,7 @@ public class User extends Character {
         initializeRecipes();
     }
 
-    public User(Game game, com.stardew_valley.models.data.User user) {
+    public Player(Game game, com.stardew_valley.models.data.User user) {
         this.game = game;
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
@@ -134,7 +134,7 @@ public class User extends Character {
 
     public void setNumOfCoins(int numOfCoins) {
         if (!syncingCoins && relationshipService.getMarriage() != null) {
-            User partner = relationshipService.getMarriage().getPartner(this);
+            Player partner = relationshipService.getMarriage().getPartner(this);
             syncingCoins = true;
             partner.setNumOfCoins(numOfCoins);
             syncingCoins = false;
@@ -215,7 +215,7 @@ public class User extends Character {
         return notifications;
     }
 
-    public void addNotification(User sender, String message) {
+    public void addNotification(Player sender, String message) {
         notifications.put(new MessageEntry(sender, message), false);
     }
 
@@ -231,7 +231,7 @@ public class User extends Character {
         }
     }
 
-    public boolean isNearTo(User p) {
+    public boolean isNearTo(Player p) {
         return Math.abs(p.getPosition().x() - position.x()) <= 32 && Math.abs(p.getPosition().y() - position.y()) <= 32;
     }
 
@@ -303,7 +303,7 @@ public class User extends Character {
         this.partnerFarm = farm;
     }
 
-    public void updateOfMarriage(User player) {
+    public void updateOfMarriage(Player player) {
         numOfCoins += player.getNumOfCoins();
         player.setNumOfCoins(numOfCoins);
         setPartnerFarm(player.getFarm());

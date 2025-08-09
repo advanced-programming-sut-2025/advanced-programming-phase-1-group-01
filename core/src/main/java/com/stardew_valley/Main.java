@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.stardew_valley.controllers.*;
 import com.stardew_valley.models.building.Farm;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.SecurityQuestion;
@@ -93,7 +93,7 @@ public class Main extends Game {
             Repository.getRepo().addUser(user);
         }
 
-        List<User> playerList = new ArrayList<>();
+        List<Player> playerList = new ArrayList<>();
         playerList.add(Repository.getRepo().getUserByUsername("1").getPlayer());
         playerList.add(Repository.getRepo().getUserByUsername("2").getPlayer());
         playerList.add(Repository.getRepo().getUserByUsername("3").getPlayer());
@@ -107,7 +107,7 @@ public class Main extends Game {
 
         Farm farm = FarmInitializer.initializeFarm();
 
-        for (User player : playerList) {
+        for (Player player : playerList) {
             player.setFarm(farm);
             player.setCurrentMap(farm);
             if (player.getUser().getUsername().equals("4"))

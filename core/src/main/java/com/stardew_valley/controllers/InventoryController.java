@@ -2,7 +2,7 @@ package com.stardew_valley.controllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.InventoryCommands;
@@ -76,7 +76,7 @@ public class InventoryController extends Controller {
     }
 
     private Result inventoryTrash(String itemName, int quantity) {
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = repo.getCurrentGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlot(itemName);
 
@@ -101,7 +101,7 @@ public class InventoryController extends Controller {
     }
 
     private Result inventoryTrash(String itemName) {
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = repo.getCurrentGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlot(itemName);
 
@@ -133,7 +133,7 @@ public class InventoryController extends Controller {
         String itemCountStr = extractValue(command, "-c", null);
         int itemCount = Integer.parseInt(itemCountStr);
 
-        User player = repo.getCurrentUser().getPlayer();
+        Player player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
         Item item = inventory.getNewItem(itemName);
 

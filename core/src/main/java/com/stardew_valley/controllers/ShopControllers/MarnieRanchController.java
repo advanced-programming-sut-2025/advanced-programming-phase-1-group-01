@@ -2,7 +2,7 @@ package com.stardew_valley.controllers.ShopControllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.MarnieRanch;
 import com.stardew_valley.models.shop.enums.MarnieCommands;
@@ -18,7 +18,7 @@ public class MarnieRanchController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getMarnieRanch();
 
         if (!isNear(player, shop)) {
@@ -111,7 +111,7 @@ public class MarnieRanchController extends ShopController {
         count = Integer.parseInt(countStr);
 
         MarnieRanch shop = repo.getCurrentGame().getMarnieRanch();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (MarnieRanchProducts product : MarnieRanchProducts.values()) {
             if (product.getName().equalsIgnoreCase(itemName)) {

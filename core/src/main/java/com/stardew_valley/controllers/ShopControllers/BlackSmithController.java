@@ -3,7 +3,7 @@ package com.stardew_valley.controllers.ShopControllers;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.Blacksmith;
@@ -23,7 +23,7 @@ public class BlackSmithController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getBlacksmith();
 
         if (!isNear(player, shop)) {
@@ -144,7 +144,7 @@ public class BlackSmithController extends ShopController {
         count = Integer.parseInt(countStr);
 
         Blacksmith shop = repo.getCurrentGame().getBlacksmith();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (BlacksmithProducts product : BlacksmithProducts.values()) {
             if (product.getName().equalsIgnoreCase(itemName)) {
@@ -175,7 +175,7 @@ public class BlackSmithController extends ShopController {
 
     private Result toolUpgrade(String command) {
         String itemName = extractValue(command, "upgrade", null);
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
         Slot slot = player.getInventory().getSlot(itemName);
 

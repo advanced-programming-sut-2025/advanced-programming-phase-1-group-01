@@ -2,7 +2,7 @@ package com.stardew_valley.controllers.ShopControllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.CarpenterShop;
 import com.stardew_valley.models.shop.enums.CarpenterCommands;
@@ -18,7 +18,7 @@ public class CarpenterController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getBlacksmith();
 
         if (!isNear(player, shop)) {
@@ -112,7 +112,7 @@ public class CarpenterController extends ShopController {
 
 
         CarpenterShop shop = repo.getCurrentGame().getCarpenterShop();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (CarpenterShopProducts product : CarpenterShopProducts.values()) {
             if (product.getName().equalsIgnoreCase(itemName)) {

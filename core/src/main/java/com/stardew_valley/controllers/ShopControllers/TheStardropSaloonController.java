@@ -2,7 +2,7 @@ package com.stardew_valley.controllers.ShopControllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.TheStardropSaloon;
 import com.stardew_valley.models.shop.enums.StardropSallonCommands;
@@ -18,7 +18,7 @@ public class TheStardropSaloonController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getTheStardropSaloon();
 
         if (!isNear(player, shop)) {
@@ -107,7 +107,7 @@ public class TheStardropSaloonController extends ShopController {
         count = Integer.parseInt(countStr);
 
         TheStardropSaloon shop = repo.getCurrentGame().getTheStardropSaloon();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (TheStardropSaloonProducts product : TheStardropSaloonProducts.values()) {
             if (product.getName().equalsIgnoreCase(itemName)) {

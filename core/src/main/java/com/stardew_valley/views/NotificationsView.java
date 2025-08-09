@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.MessageEntry;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class NotificationsView extends GameWindow {
     private final Table notifsTable;
 
     private Map<MessageEntry, Boolean> notifsMap;
-    private User player;
+    private Player player;
 
     public NotificationsView(Stage stage) {
         super("Notifications", AssetManager.getAssetManager().getSkin(), "Letter", stage);

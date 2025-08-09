@@ -1,7 +1,7 @@
 package com.stardew_valley.controllers.ShopControllers;
 
 import com.stardew_valley.models.Result;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.FishShop;
 import com.stardew_valley.models.shop.enums.FishShopCommands;
@@ -17,7 +17,7 @@ public class FishShopController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getFishShop();
 
         if (!isNear(player, shop)) {
@@ -105,7 +105,7 @@ public class FishShopController extends ShopController {
         }
 
         FishShop shop = repo.getCurrentGame().getFishShop();
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
 
         for (FishShopProducts product : FishShopProducts.values()) {
             if (product.getName().equalsIgnoreCase(productName)) {

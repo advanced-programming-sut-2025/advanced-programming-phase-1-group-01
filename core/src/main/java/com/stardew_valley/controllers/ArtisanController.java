@@ -2,7 +2,7 @@ package com.stardew_valley.controllers;
 
 import com.stardew_valley.models.Artisan;
 import com.stardew_valley.models.Result;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.ProcessingCommands;
 
@@ -27,7 +27,7 @@ public class ArtisanController extends Controller {
             String artisanName = matcher.group("artisanName").toLowerCase();
             String itemName = matcher.group("itemName").toLowerCase();
 
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.useArtisan(artisanName, itemName));
 
         } return new Result(false, "Invalid command");
@@ -40,7 +40,7 @@ public class ArtisanController extends Controller {
         if (matcher.matches()) {
             String artisanName = matcher.group("artisanName");
 
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.getArtisan(artisanName));
 
         } else return new Result(false, "Invalid command");

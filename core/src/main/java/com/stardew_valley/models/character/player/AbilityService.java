@@ -9,13 +9,13 @@ import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 
 public class AbilityService {
-    private final User player;
+    private final Player player;
     private final Ability farming;
     private final Ability mining;
     private final Ability fishing;
     private final Ability foraging;
 
-    public AbilityService(User player) {
+    public AbilityService(Player player) {
         this.player = player;
         this.farming = new Ability(this, AbilityType.FARMING);
         this.mining = new Ability(this, AbilityType.MINING);

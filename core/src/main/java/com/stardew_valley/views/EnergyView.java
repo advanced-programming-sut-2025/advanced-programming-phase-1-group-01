@@ -10,17 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.models.AssetManager;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 public class EnergyView {
 
-    private final User player;
+    private final Player player;
     private final Stage stage;
     private final Image heartImage;
     private final Label energyLabel;
     private final Texture[] heartTextures;
 
-    public EnergyView(User player) {
+    public EnergyView(Player player) {
         this.player = player;
         this.stage = new Stage(new ScreenViewport());
 

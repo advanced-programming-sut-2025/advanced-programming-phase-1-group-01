@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
-    private final User player;
+    private final Player player;
     private int capacity;
     private final List<Slot> slots;
     private Slot equippedSlot;
 
-    public Inventory(User player) {
+    public Inventory(Player player) {
         this.player = player;
         capacity = BackpackType.SMALL.getCapacity();
         slots = new ArrayList<>();
@@ -92,7 +92,7 @@ public class Inventory {
         return false;
     }
 
-    public User getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

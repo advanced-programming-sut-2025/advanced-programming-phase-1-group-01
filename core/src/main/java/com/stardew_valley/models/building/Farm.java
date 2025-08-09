@@ -3,7 +3,7 @@ package com.stardew_valley.models.building;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.animal.*;
 import com.stardew_valley.models.character.NPC.NPC;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.initializer.CreateShelter;
 import com.stardew_valley.models.farming.Plant;
@@ -276,7 +276,7 @@ public class Farm extends Maps {
         return "Animal moved";
     }
 
-    public String feedByHay(String animalName, User player) {
+    public String feedByHay(String animalName, Player player) {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         if (!animal.getIsHungry()) return "Animal is not hungry";
@@ -286,7 +286,7 @@ public class Farm extends Maps {
         return "Animal feed by hay";
     }
 
-    public String collectProduct(String animalName, User player, Season season) {
+    public String collectProduct(String animalName, Player player, Season season) {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         if (!animal.hasAnyProduct()) return "No produce for this animal";
@@ -301,7 +301,7 @@ public class Farm extends Maps {
         return "Product collected";
     }
 
-    public String sellAnimal(String animalName, User player) {
+    public String sellAnimal(String animalName, Player player) {
         Animal animal = fineAnimalByName(animalName);
         if (animal == null) return "Invalid animal name";
         int income = animal.calculateSellPrice();

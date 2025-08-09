@@ -1,7 +1,7 @@
 package com.stardew_valley.controllers;
 
 import com.stardew_valley.models.Result;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.DateTimeCommands;
 
@@ -116,7 +116,7 @@ public class DateTimeController extends Controller {
         Matcher matcher = pattern.matcher(commandLine);
 
         if(matcher.matches()) {
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, String.valueOf(player.getNumOfCoins()));
         } else return new Result(false , "invalid command");
     }

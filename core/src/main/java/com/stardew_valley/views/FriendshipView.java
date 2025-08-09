@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.NPC.NPC;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.relations.RelationshipService;
@@ -78,7 +78,7 @@ public class FriendshipView extends GameWindow {
         for (int i = 0; i < Math.min(friendships.size(), 3); i++) {
             if (friends.get(i) instanceof NPC) continue;
 
-            User player = (User) friends.get(i);
+            Player player = (Player) friends.get(i);
             Friendship friendship = friendships.get(friends.get(i));
 
             friendNameLabels.get(i).setText("Friend: " + player.getUser().getUsername());

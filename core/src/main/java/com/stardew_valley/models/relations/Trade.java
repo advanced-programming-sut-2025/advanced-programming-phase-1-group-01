@@ -1,17 +1,17 @@
 package com.stardew_valley.models.relations;
 
 import com.stardew_valley.models.Item;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 public abstract class Trade {
-    private final User sender;
-    private final User receiver;
+    private final Player sender;
+    private final Player receiver;
     private final Item item;
     private final int amount;
     private int index = 1;
     private int id;
 
-    public Trade(User sender, User receiver, Item item, int amount) {
+    public Trade(Player sender, Player receiver, Item item, int amount) {
         this.sender = sender;
         this.receiver = receiver;
         this.item = item;
@@ -23,11 +23,11 @@ public abstract class Trade {
         return amount;
     }
 
-    public User getSender() {
+    public Player getSender() {
         return sender;
     }
 
-    public User getReceiver() {
+    public Player getReceiver() {
         return receiver;
     }
 

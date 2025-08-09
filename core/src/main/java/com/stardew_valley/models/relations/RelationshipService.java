@@ -1,7 +1,7 @@
 package com.stardew_valley.models.relations;
 
 import com.stardew_valley.models.character.Character;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,11 +34,11 @@ public class RelationshipService {
         return relationships.containsKey(character);
     }
 
-    public void marry(User partner) throws GaysMarriageException {
+    public void marry(Player partner) throws GaysMarriageException {
         if (marriage != null) return;
-        marriage = new Marriage((User) character, partner);
+        marriage = new Marriage((Player) character, partner);
         if (!partner.getRelationService().isMarried()) {
-            partner.getRelationService().marry((User) character);
+            partner.getRelationService().marry((Player) character);
         }
     }
 
@@ -65,7 +65,7 @@ public class RelationshipService {
     }
 
     public void addTrader(Character friend) {
-        tradings.putIfAbsent(friend, new Trading((User) character, (User) friend));
+        tradings.putIfAbsent(friend, new Trading((Player) character, (Player) friend));
         if (!friend.getRelationService().haveTradeWith(character)) {
             friend.getRelationService().addTrader(character);
         }

@@ -3,7 +3,7 @@ package com.stardew_valley.models.dateTime;
 import com.stardew_valley.models.Game;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.character.NPC.NPC;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.crafting.UnripeProduct;
 
 import java.util.*;
@@ -75,7 +75,7 @@ public class TimeManager {
     }
 
     public void prepareForNewHour() {
-        for (User player : game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             player.getTomorrowMoney();
             for (UnripeProduct unripeProduct : player.getUnripeProducts()) {
                 unripeProduct.advanceHourCounter();
@@ -88,7 +88,7 @@ public class TimeManager {
 
     public void prepareForNewDay() {
 
-        for (User player : game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             game.getDelayedPaymentSystem().processSalesForPlayer(player);
         }
 
@@ -107,7 +107,7 @@ public class TimeManager {
         game.getTheStardropSaloon().resetDailyStock();
 
 
-        for (User player : game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             for (Animal animal: player.getFarm().getAnimals()) {
                 animal.DailyResetAndStart();
             }

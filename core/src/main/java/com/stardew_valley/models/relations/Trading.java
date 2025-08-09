@@ -2,7 +2,7 @@ package com.stardew_valley.models.relations;
 
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.character.Character;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,7 +20,7 @@ public class Trading extends Relationship {
         this.receiver = receiver;
     }
 
-    public void sendMessage(User sender, String message) {
+    public void sendMessage(Player sender, String message) {
         messages.put(new MessageEntry(sender, message), false);
     }
 

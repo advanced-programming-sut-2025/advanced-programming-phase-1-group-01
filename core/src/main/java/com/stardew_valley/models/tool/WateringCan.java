@@ -6,7 +6,7 @@ import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Plant;
 import com.stardew_valley.models.tool.enums.WateringCanType;
@@ -57,7 +57,7 @@ public class WateringCan extends Tool {
 
     @Override
     public void use(Direction direction) {
-        User player = inventory.getPlayer();
+        Player player = inventory.getPlayer();
         Position position = player.getTilesPosition();
         Position dirAppliedPosition = position.applyDirection(direction);
 

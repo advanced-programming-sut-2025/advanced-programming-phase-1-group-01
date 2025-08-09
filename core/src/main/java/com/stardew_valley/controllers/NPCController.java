@@ -3,7 +3,7 @@ package com.stardew_valley.controllers;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCVillage;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.commands.NPCCommands;
@@ -40,7 +40,7 @@ public class NPCController extends Controller {
             String message = matcher.group("message");
 
             NPC npc = repo.getCurrentGame().getNPCVillage().getNPCIdByName(name);
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
             Weather weather = repo.getCurrentGame().getWeatherManager().getTodayWeather();
             Season season = repo.getCurrentGame().getTimeManager().getNow().getSeason();
             int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
@@ -60,7 +60,7 @@ public class NPCController extends Controller {
             String item = matcher.group("item");
 
             NPC npc = repo.getCurrentGame().getNPCVillage().getNPCIdByName(name);
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
 
             if (npc == null) {
                 return new Result(false, "NPC with name " + name + " not found");
@@ -76,7 +76,7 @@ public class NPCController extends Controller {
 
         if (matcher.matches()) {
             NPCVillage npcVillage = repo.getCurrentGame().getNPCVillage();
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
 
             return new Result(true, npcVillage.getListedNPCFriendships(player));
 
@@ -89,7 +89,7 @@ public class NPCController extends Controller {
 
         if (matcher.matches()) {
             NPCVillage npcVillage = repo.getCurrentGame().getNPCVillage();
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
 
             return new Result(true, npcVillage.getListedQuests(player));
         } else return new Result(false, "Unknown command");
@@ -102,7 +102,7 @@ public class NPCController extends Controller {
         if (matcher.matches()) {
             int index = Integer.parseInt(matcher.group("index"));
 
-            User player = repo.getCurrentGame().getCurrentPlayer();
+            Player player = repo.getCurrentGame().getCurrentPlayer();
             NPCVillage npcVillage = repo.getCurrentGame().getNPCVillage();
 
             return new Result(true, "hey hey");

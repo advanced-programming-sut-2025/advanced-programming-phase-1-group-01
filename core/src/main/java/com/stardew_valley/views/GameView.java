@@ -32,7 +32,7 @@ import com.stardew_valley.models.character.NPC.NPCQuest;
 import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.MarriageRequest;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
@@ -62,7 +62,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private final GameController controller;
     private final OrthographicCamera camera;
-    private User player;
+    private Player player;
     private final Batch batch;
     private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
@@ -526,7 +526,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void drawPlayers() {
-        for (User p : controller.getRepo().getCurrentGame().getPlayers())
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers())
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
 //        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
         batch.draw(player.getTestTexture(), controller.getRepo().getOtherX(), controller.getRepo().getOtherY());
@@ -728,9 +728,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     public void hug() {
         boolean isNear = false;
-        User anotherPlayer = null;
+        Player anotherPlayer = null;
 
-        for (User friend : controller.getRepo().getCurrentGame().getPlayers()) {
+        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
             if (player == friend) continue;
             if (player.isNearTo(friend)) {
                 isNear = true;
@@ -783,9 +783,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void marriage() {
         boolean isNear = false;
-        User anotherPlayer = null;
+        Player anotherPlayer = null;
 
-        for (User friend : controller.getRepo().getCurrentGame().getPlayers()) {
+        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
             if (player == friend) continue;
             if (player.isNearTo(friend)) {
                 isNear = true;
@@ -827,7 +827,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Window marriageRequestsWindow = null;
     private boolean isNpressed = false;
-    private void showMarriageRequestsWindow(User currentPlayer) {
+    private void showMarriageRequestsWindow(Player currentPlayer) {
         if (!isNpressed) {
             marriageRequestsWindow = new Window("Marriage Requests", AssetManager.getAssetManager().getSkin());
             marriageRequestsWindow.setSize(1000, 600);
@@ -843,7 +843,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 acceptBtn.setSize(80,80);
                 rejectBtn.setSize(80,80);
 
-                User anotherPlayer = request.getFrom().getPlayer();
+                Player anotherPlayer = request.getFrom().getPlayer();
                 Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
 
                 acceptBtn.addListener(new ClickListener() {
@@ -1979,7 +1979,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dialog.show(stage);
     }
 
-    public void showQuestDialog(Stage stage, Skin skin, NPC npc, User player) {
+    public void showQuestDialog(Stage stage, Skin skin, NPC npc, Player player) {
         Dialog dialog = new Dialog("Quests", skin);
         Table content = dialog.getContentTable();
         float maxWidth = Gdx.graphics.getWidth() * 0.7f;

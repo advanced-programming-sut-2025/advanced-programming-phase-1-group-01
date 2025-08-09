@@ -2,7 +2,7 @@ package com.stardew_valley.controllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Direction;
@@ -49,7 +49,7 @@ public class ToolController extends Controller {
     }
 
     private Result equipTool(String toolName) {
-        User player = repo.getCurrentGame().getCurrentPlayer();
+        Player player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = player.getInventory();
 
         Slot slot = inventory.getSlot(toolName);

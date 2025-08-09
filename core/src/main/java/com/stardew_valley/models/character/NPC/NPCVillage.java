@@ -1,7 +1,7 @@
 package com.stardew_valley.models.character.NPC;
 
 import com.stardew_valley.models.building.*;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class NPCVillage extends Maps {
         }
     }
 
-    public String getListedNPCFriendships(User player) {
+    public String getListedNPCFriendships(Player player) {
         StringBuilder listedNPCFriendships = new StringBuilder();
         listedNPCFriendships.append("Friendships levels:\n");
         for (NPC npc : NPCs) {
@@ -82,7 +82,7 @@ public class NPCVillage extends Maps {
         return listedNPCFriendships.toString();
     }
 
-    public String getListedQuests(User player) {
+    public String getListedQuests(Player player) {
         StringBuilder listedQuests = new StringBuilder();
         listedQuests.append("Activated for you quests:\n");
         for (NPC npc : NPCs) {
@@ -98,7 +98,7 @@ public class NPCVillage extends Maps {
         return listedQuests.toString();
     }
 
-    public static boolean canFinishQuest(User player, int index, List<NPC> NPCs) {
+    public static boolean canFinishQuest(Player player, int index, List<NPC> NPCs) {
         NPCQuest quest = null;
         NPC npc = null;
 
@@ -176,7 +176,7 @@ public class NPCVillage extends Maps {
     }
 
 
-    public static String finishQuest(User player, int index, List<NPC> NPCs) {
+    public static String finishQuest(Player player, int index, List<NPC> NPCs) {
         NPCQuest quest = null;
         NPC npc = null;
         outer:

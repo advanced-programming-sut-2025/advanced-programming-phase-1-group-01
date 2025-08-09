@@ -1,6 +1,7 @@
 package com.stardew_valley.models.data;
 
 import com.stardew_valley.models.Game;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.SecurityQuestion;
 
@@ -11,7 +12,7 @@ public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private Game game;
-    private com.stardew_valley.models.character.player.User player;
+    private Player player;
     private String username;
     private String password;
     private String nickname;
@@ -32,15 +33,15 @@ public class User implements Serializable {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
         this.avatarPath = avatarPath;
-        player = new com.stardew_valley.models.character.player.User(this);
+        player = new Player(this);
     }
 
 
-    public com.stardew_valley.models.character.player.User getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public void setPlayer(com.stardew_valley.models.character.player.User player) {
+    public void setPlayer(Player player) {
         this.player = player;
     }
 

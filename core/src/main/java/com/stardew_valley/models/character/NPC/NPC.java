@@ -7,7 +7,7 @@ import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Building;
 import com.stardew_valley.models.character.Character;
-import com.stardew_valley.models.character.player.User;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.Direction;
@@ -22,10 +22,10 @@ public class NPC extends Character {
     private Building home;
     private Position position;
     private Direction direction;
-    private final Map<User, Boolean> hasTalkedToday = new HashMap<>();
-    private final Map<User, Boolean> hasReceivedToday = new HashMap<>();
+    private final Map<Player, Boolean> hasTalkedToday = new HashMap<>();
+    private final Map<Player, Boolean> hasReceivedToday = new HashMap<>();
     private final List<NPCQuest> quests;
-    private final Map<User, Integer> friendshipLevels = new HashMap<>();
+    private final Map<Player, Integer> friendshipLevels = new HashMap<>();
     private boolean isDayCounterForThirdQuestStarted = false;
     private int dayCounter = 0;
     private boolean isMoving = false;
@@ -57,25 +57,25 @@ public class NPC extends Character {
         this.y = position.y() * 16;
     }
 
-    public void addFriendshipAndLevel(User player) {
+    public void addFriendshipAndLevel(Player player) {
         friendshipLevels.put(player, 0);
     }
 
-    public void addGiftDailyStatus(User player) {
+    public void addGiftDailyStatus(Player player) {
         hasReceivedToday.put(player, false);
     }
 
-    public void addPlayerToTalk(User player) {
+    public void addPlayerToTalk(Player player) {
         hasTalkedToday.put(player, false);
     }
 
-    private void acceptGift(User player, Slot slot) {
+    private void acceptGift(Player player, Slot slot) {
         if (!hasReceivedToday.get(player)) advanceFriendshipLevel(player, 50);
         if (type.isFavorite(slot.getItem())) advanceFriendshipLevel(player, 200);
         slot.removeQuantity(1);
     }
 
-    public void advanceFriendshipLevel(User player, int amount) {
+    public void advanceFriendshipLevel(Player player, int amount) {
         if (friendshipLevels.get(player) + amount <= 799) {
             friendshipLevels.put(player, friendshipLevels.get(player) + amount);
             if (friendshipLevels.get(player) >= 200) {
@@ -92,12 +92,12 @@ public class NPC extends Character {
         return position;
     }
 
-    public int getFriendshipLevel(User player) {
+    public int getFriendshipLevel(Player player) {
         return friendshipLevels.get(player);
     }
 
 
-    public String talkWithPlayer(User player, String message, Season season, Weather weather, int hour) {
+    public String talkWithPlayer(Player player, String message, Season season, Weather weather, int hour) {
         return AIChat.messageGenerator(message, season, weather, hour, getFriendshipLevel());
     }
 
@@ -117,7 +117,7 @@ public class NPC extends Character {
     }
 
 
-    public void handleGifting(User player) {
+    public void handleGifting(Player player) {
         if (isBeingGifted) return;
 
         isBeingGifted = true;
@@ -136,7 +136,7 @@ public class NPC extends Character {
 
 
 
-    public String giftNPC(User player, String gift) {
+    public String giftNPC(Player player, String gift) {
         Slot slot = player.getInventory().getSlot(gift);
         if (slot == null) return "invalid gift";
         if (slot.getQuantity() >= 0) {
