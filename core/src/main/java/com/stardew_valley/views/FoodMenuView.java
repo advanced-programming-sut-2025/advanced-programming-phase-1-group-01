@@ -2,6 +2,7 @@ package com.stardew_valley.views;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -23,8 +24,8 @@ public class FoodMenuView extends GameWindow {
     private Item foodItem;
     private final Label messageLabel;
 
-    public FoodMenuView() {
-        super("Food Menu", AssetManager.getAssetManager().getSkin(), "Letter");
+    public FoodMenuView(Stage stage) {
+        super("Food Menu", AssetManager.getAssetManager().getSkin(), "Letter", stage);
         skin = AssetManager.getAssetManager().getSkin();
 
         table = new Table(skin);

@@ -174,9 +174,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryMenu = new WindowManager(stage);
-        this.shippingBinView = new ShippingBinView();
-        this.foodMenuView = new FoodMenuView();
-        this.skillsView = new SkillsView();
+        this.shippingBinView = new ShippingBinView(stage);
+        this.foodMenuView = new FoodMenuView(stage);
+        this.skillsView = new SkillsView(stage);
         this.inventoryView = new InventoryView(stage);
         this.socialView = new SocialView(stage);
         this.miniMapView = new MiniMapView(stage);
@@ -530,7 +530,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayers() {
         for (Player p : controller.getRepo().getCurrentGame().getPlayers())
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+        //System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {

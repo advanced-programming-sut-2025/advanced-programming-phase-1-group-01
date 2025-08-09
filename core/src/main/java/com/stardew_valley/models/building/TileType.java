@@ -2,7 +2,7 @@ package com.stardew_valley.models.building;
 
 public enum TileType {
     GROUND("🟩"), RIVER("〰️"), MINE("⛰️"), GREENHOUSE("🍀"), COTTAGE("🟫"), WALL("🧱")
-    , FENCE("⛓"),SHIPPING_BIN("🚽");
+    , FENCE("⛓"),SHIPPING_BIN("🚽"), SHOP("🚽");
     private final String symbol;
 
     TileType(String symbol) {
