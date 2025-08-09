@@ -3,16 +3,11 @@ package com.stardew_valley.models.animal;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.TileObject;
 import com.stardew_valley.models.character.Character;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Emoji;
 import com.stardew_valley.models.Random;
@@ -20,7 +15,7 @@ import com.stardew_valley.models.Random;
 public class Animal extends Character implements TileObject {
     protected final AnimalInfo animalInfo;
     protected String name;
-    protected Player owner;
+    protected User owner;
     protected Position position;
     protected Direction direction;
     protected boolean isHungry = true;
@@ -57,7 +52,7 @@ public class Animal extends Character implements TileObject {
 
 
 
-    public Animal(AnimalInfo animalInfo,String name, Player owner, AnimalHouse shelter) {
+    public Animal(AnimalInfo animalInfo, String name, User owner, AnimalHouse shelter) {
         this.animalInfo = animalInfo;
         this.owner = owner;
         this.shelter = shelter;
@@ -65,7 +60,7 @@ public class Animal extends Character implements TileObject {
         this.name = name;
     }
 
-    public Animal(AnimalInfo animalInfo, Player owner, Position position, float x, float y) {
+    public Animal(AnimalInfo animalInfo, User owner, Position position, float x, float y) {
         this.animalInfo = animalInfo;
         this.owner = owner;
         this.direction = Direction.LEFT;

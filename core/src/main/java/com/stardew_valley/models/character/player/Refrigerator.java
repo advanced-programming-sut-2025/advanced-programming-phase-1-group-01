@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class Refrigerator {
     private final Map<Item, Integer> items;
-    private Player player;
+    private User player;
 
-    public Refrigerator(Player player) {
+    public Refrigerator(User player) {
         this.player = player;
         items = new HashMap<>();
     }

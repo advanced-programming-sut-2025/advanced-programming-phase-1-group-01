@@ -2,13 +2,12 @@ package com.stardew_valley.controllers.ShopControllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.shop.MarnieRanch;
 import com.stardew_valley.models.shop.enums.MarnieCommands;
 import com.stardew_valley.models.shop.enums.MarnieRanchProducts;
 import com.stardew_valley.models.shop.Shop;
-import com.stardew_valley.models.shop.Blacksmith;
 
 public class MarnieRanchController extends ShopController {
 
@@ -19,7 +18,7 @@ public class MarnieRanchController extends ShopController {
     @Override
     public Result handleCommand(String command) {
         int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Shop shop = repo.getCurrentGame().getMarnieRanch();
 
         if (!isNear(player, shop)) {
@@ -112,7 +111,7 @@ public class MarnieRanchController extends ShopController {
         count = Integer.parseInt(countStr);
 
         MarnieRanch shop = repo.getCurrentGame().getMarnieRanch();
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
 
         for (MarnieRanchProducts product : MarnieRanchProducts.values()) {
             if (product.getName().equalsIgnoreCase(itemName)) {

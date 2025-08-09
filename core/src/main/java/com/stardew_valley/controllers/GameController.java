@@ -5,6 +5,8 @@ import com.stardew_valley.models.Result;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.*;
 import com.stardew_valley.models.shop.enums.*;
+import com.stardew_valley.network.GameClient;
+import com.stardew_valley.network.Network;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +14,7 @@ import java.util.List;
 
 public class GameController extends Controller {
     private final List<Command> commands;
+    //private final GameClient gameClient;
 
     private final DateTimeController dateTimeController;
     private final EnergyController energyController;
@@ -39,10 +42,11 @@ public class GameController extends Controller {
 
     public GameController(Repository repo) {
         super(repo);
-        dateTimeController = new DateTimeController(repo);
         energyController = new EnergyController(repo);
         farmingController = new FarmingController(repo);
         gameMenuController = new GameMenuController(repo);
+        //gameClient = new GameClient(gameMenuController);
+        dateTimeController = new DateTimeController(repo);
         relationshipController = new RelationshipController(repo);
         toolController = new ToolController(repo);
         weatherController = new WeatherController(repo);
@@ -273,4 +277,13 @@ public class GameController extends Controller {
     public SettingsController getSettingsController() {
         return settingsController;
     }
+
+//    public GameClient getGameClient() {
+//        return gameClient;
+//    }
+
+//    public void updatePlayerPosition(float x, float y) {
+//        gameClient.sendMove(x, y);
+//        if(System.currentTimeMillis() % 1000 < 5) System.out.println(gameClient.getPlayerId());
+//    }
 }

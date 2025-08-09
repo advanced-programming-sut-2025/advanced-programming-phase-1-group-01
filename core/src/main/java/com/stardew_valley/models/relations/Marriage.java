@@ -1,14 +1,14 @@
 package com.stardew_valley.models.relations;
 
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.enums.Gender;
 
 public class Marriage extends Relationship {
-    private Player husband;
-    private Player wife;
+    private User husband;
+    private User wife;
     private int lastRelation;
 
-    public Marriage(Player p1, Player p2) throws GaysMarriageException {
+    public Marriage(User p1, User p2) throws GaysMarriageException {
         if (p1.getGender() == p2.getGender()) {
             throw new GaysMarriageException();
         } else if (p1.getGender() == Gender.MALE) {
@@ -21,15 +21,15 @@ public class Marriage extends Relationship {
         this.lastRelation = 0;
     }
 
-    public Player getHusband() {
+    public User getHusband() {
         return husband;
     }
 
-    public Player getWife() {
+    public User getWife() {
         return wife;
     }
 
-    public Player getPartner(Player p) {
+    public User getPartner(User p) {
         if (p != husband && p != wife) {
             return null;
         }

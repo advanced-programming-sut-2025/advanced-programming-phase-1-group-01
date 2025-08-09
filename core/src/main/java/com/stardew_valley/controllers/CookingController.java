@@ -23,7 +23,7 @@ public class CookingController extends Controller {
     @Override
     public Result handleCommand(String command) {
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Building cottage = player.getFarm().getCottage();
         if (!player.isPlayerNearBuilding(cottage)) {
             return new Result(false, "You are not near Cottage");
@@ -62,7 +62,7 @@ public class CookingController extends Controller {
     private Result cheatAddRecipe(String command) {
         String recipeName = extractValue(command,"-r",null);
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
 
         CookingRecipes matched = null;
 
@@ -101,7 +101,7 @@ public class CookingController extends Controller {
             return;
         }
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
 
         if (inventory.getSlot(itemStr) == null) {
@@ -138,7 +138,7 @@ public class CookingController extends Controller {
             return;
         }
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Refrigerator refrigerator = player.getRefrigerator();
         Item item = player.getInventory().getNewItem(itemStr);
 
@@ -180,7 +180,7 @@ public class CookingController extends Controller {
             return;
         }
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
         Refrigerator refrigerator = player.getRefrigerator();
 
@@ -240,7 +240,7 @@ public class CookingController extends Controller {
     private Result eat(String command) {
         String foodName ="ali";
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlot(foodName);
 

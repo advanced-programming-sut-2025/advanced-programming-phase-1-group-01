@@ -28,11 +28,9 @@ public class ForagingManager {
                     if (prob == 0) {
                         Season currSeason = game.getTimeManager().getNow().getSeason();
                         if (tile.isPlowed()) {
-//                        game.getFarmingManager().plant(new Seed(SeedInfo.randomForagingSeed()), tile);
                             tile.setObject(new Seed(currSeason.getRandomForagingSeed()));
                         } else {
                             tile.setObject(new ForagingCrop(currSeason.getRandomForagingCrop()));
-//                        System.out.println(tile.getPosition().x() + " " + tile.getPosition().y() + " " + "FC");
                         }
                     }
                 }
@@ -45,6 +43,6 @@ public class ForagingManager {
                     }
                 }
             }
-            }
         }
     }
+}

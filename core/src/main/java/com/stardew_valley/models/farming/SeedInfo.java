@@ -102,4 +102,52 @@ public enum SeedInfo implements FarmingEnum {
     public Texture getTexture() {
         return texture;
     }
+
+    public static SeedInfo getSeedByNumber(int num) {
+        switch (num) {
+            case 1: return SeedInfo.JAZZ_SEEDS;
+            case 2: return SeedInfo.CARROT_SEEDS;
+            case 3: return SeedInfo.CAULIFLOWER_SEEDS;
+            case 4: return SeedInfo.COFFEE_BEAN;
+            case 5: return SeedInfo.GARLIC_SEEDS;
+            case 6: return SeedInfo.BEAN_STARTER;
+            case 7: return SeedInfo.KALE_SEEDS;
+            case 8: return SeedInfo.PARSNIP_SEEDS;
+            case 9: return SeedInfo.POTATO_SEEDS;
+            case 10: return SeedInfo.RHUBARB_SEEDS;
+            case 11: return SeedInfo.STRAWBERRY_SEEDS;
+            case 12: return SeedInfo.TULIP_BULB;
+            case 13: return SeedInfo.RICE_SHOOT;
+            case 14: return SeedInfo.BLUEBERRY_SEEDS;
+            case 15: return SeedInfo.CORN_SEEDS;
+            case 16: return SeedInfo.HOPS_STARTER;
+            case 17: return SeedInfo.PEPPER_SEEDS;
+            case 18: return SeedInfo.MELON_SEEDS;
+            case 19: return SeedInfo.POPPY_SEEDS;
+            case 20: return SeedInfo.RADISH_SEEDS;
+            case 21: return SeedInfo.RED_CABBAGE_SEEDS;
+            case 22: return SeedInfo.STARFRUIT_SEEDS;
+            case 23: return SeedInfo.SPANGLE_SEEDS;
+            case 24: return SeedInfo.SUMMER_SQUASH_SEEDS;
+            case 25: return SeedInfo.SUNFLOWER_SEEDS;
+            case 26: return SeedInfo.TOMATO_SEEDS;
+            case 27: return SeedInfo.WHEAT_SEEDS;
+            case 28: return SeedInfo.AMARANTH_SEEDS;
+            case 29: return SeedInfo.ARTICHOKE_SEEDS;
+            case 30: return SeedInfo.BEET_SEEDS;
+            case 31: return SeedInfo.BOKCHOY_SEEDS;
+            case 32: return SeedInfo.BROCCOLI_SEEDS;
+            case 33: return SeedInfo.CRANBERRY_SEEDS;
+            case 34: return SeedInfo.EGGPLANT_SEEDS;
+            case 35: return SeedInfo.FAIRY_SEEDS;
+            case 36: return SeedInfo.GRAPE_STARTER;
+            case 37: return SeedInfo.PUMPKIN_SEEDS;
+            case 38: return SeedInfo.YAM_SEEDS;
+            case 39: return SeedInfo.RARE_SEEDS;
+            case 40: return SeedInfo.POWDERMELON_SEEDS;
+            case 41: return SeedInfo.ANCIENT_SEEDS;
+            case 42: return SeedInfo.MIXED_SEEDS;
+            default: return null;
+        }
+    }
 }

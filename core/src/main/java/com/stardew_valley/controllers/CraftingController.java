@@ -7,9 +7,8 @@ import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Building;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.crafting.*;
-import com.stardew_valley.models.crafting.enums.CraftingDevices;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.commands.CraftingCommands;
@@ -28,7 +27,7 @@ public class CraftingController extends Controller {
     @Override
     public Result handleCommand(String command) {
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Building cottage = player.getFarm().getCottage();
         if (!player.isPlayerNearBuilding(cottage)) {
             return new Result(false, "You are not near Cottage");
@@ -75,7 +74,7 @@ public class CraftingController extends Controller {
 
         Map<String, Integer> requiredIngredients = targetRecipe.ingredients();
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
 
         if (!inventory.hasCapacity()) {
@@ -117,7 +116,7 @@ public class CraftingController extends Controller {
     private Result cheatAddRecipe(String command) {
         String recipeName = extractValue(command,"-r",null);
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
 
         CraftingRecipes matched = null;
 
@@ -147,7 +146,7 @@ public class CraftingController extends Controller {
         String itemName = "ali";
         String directionStr = "mamad";
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
 
         Item item = inventory.getNewItem(itemName);

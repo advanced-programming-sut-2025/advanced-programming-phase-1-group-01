@@ -1,12 +1,12 @@
 package com.stardew_valley.models.character.NPC;
 
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 
 public class NPCQuest {
     private final NPCQuestType questType;
     private boolean isActive;
     private boolean isCompleted;
-    private Player owner;
+    private User owner;
 
     public NPCQuest(NPCQuestType questType) {
         this.questType = questType;
@@ -34,11 +34,11 @@ public class NPCQuest {
         return isCompleted;
     }
 
-    public Player getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(Player owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 }

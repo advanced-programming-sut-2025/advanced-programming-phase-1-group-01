@@ -1,0 +1,76 @@
+package com.stardew_valley.models;
+
+
+
+//import com.stardew_valley.models.data.User;
+
+//import com.stardew_valley.models.character.player.User;
+
+import com.stardew_valley.models.data.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LobbyData {
+
+    private final String name;
+    private final List<User> players = new ArrayList<>();
+    private final boolean isPrivate;
+    private final boolean isVisible;
+    private final String password;
+    private final int id;
+    private User admin;
+    private final int maxPlayers = 8;
+    private final long createdTime;
+
+    public LobbyData(String name, boolean isPrivate, boolean isVisible, String password, int id, User admin) {
+        this.name = name;
+        this.isPrivate = isPrivate;
+        this.isVisible = isVisible;
+        this.password = password;
+        this.id = id;
+        this.admin = admin;
+        this.players.add(admin);
+        this.createdTime = System.currentTimeMillis();
+    }
+
+    public String getName() { return name; }
+    public List<User> getPlayers() { return players; }
+    public boolean isPrivate() { return isPrivate; }
+    public boolean isVisible() { return isVisible; }
+    public String getPassword() { return password; }
+    public int getId() { return id; }
+    public User getAdmin() { return admin; }
+    public int getMaxPlayers() { return maxPlayers; }
+    public long getCreatedTime() { return createdTime; }
+
+    public boolean addUser(User user) {
+        if (players.size() >= maxPlayers) return false;
+        if (!players.contains(user)) {
+            players.add(user);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removePlayer(User player) {
+        boolean removed = players.remove(player);
+        if (removed && player.equals(admin) && !players.isEmpty()) {
+            admin = players.get(0);
+        }
+        return removed;
+    }
+
+    public boolean canStartGame() {
+        return players.size() >= 2 && admin != null;
+    }
+
+    public boolean isFull() {
+        return players.size() >= maxPlayers;
+    }
+
+    public boolean checkPassword(String input) {
+        if (!isPrivate) return true;
+        return password != null && password.equals(input);
+    }
+}

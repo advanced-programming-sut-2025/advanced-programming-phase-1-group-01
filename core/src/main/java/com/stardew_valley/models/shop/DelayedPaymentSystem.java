@@ -1,6 +1,6 @@
 package com.stardew_valley.models.shop;
 
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 public class DelayedPaymentSystem {
-    private final Map<Player, List<PendingSale>> pendingSales = new HashMap<>();
+    private final Map<User, List<PendingSale>> pendingSales = new HashMap<>();
 
-    public void addPendingSale(Player player, String itemName, int count, int totalPrice) {
+    public void addPendingSale(User player, String itemName, int count, int totalPrice) {
         pendingSales.computeIfAbsent(player, k -> new ArrayList<>())
                 .add(new PendingSale(itemName, count, totalPrice));
     }
 
-    public void processSalesForPlayer(Player player) {
+    public void processSalesForPlayer(User player) {
         List<PendingSale> sales = pendingSales.remove(player);
         if (sales == null) return;
 

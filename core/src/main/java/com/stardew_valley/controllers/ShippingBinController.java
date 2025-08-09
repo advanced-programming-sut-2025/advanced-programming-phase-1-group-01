@@ -4,7 +4,7 @@ import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.animal.ProductQuality;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.BanSellItem;
@@ -56,7 +56,7 @@ public class ShippingBinController extends Controller {
 
         count = Integer.parseInt(countStr);
 
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         if (!player.isNearToSellBucket(player.getPosition().x(), player.getPosition().y())) {
             return new Result(false, "You are not near a Sell Bucket!");
         }

@@ -4,27 +4,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Timer;
 import com.stardew_valley.Main;
-import com.stardew_valley.models.Game;
 import com.stardew_valley.models.Result;
-import com.stardew_valley.models.building.Farm;
-import com.stardew_valley.models.character.player.Player;
+//import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.data.Repository;
-import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.commands.GameMenuCommands;
-import com.stardew_valley.models.initializer.FarmInitializer;
-import com.stardew_valley.models.initializer.VillageInitializer;
-import com.stardew_valley.views.GameView;
+import com.stardew_valley.network.GameClient;
+import com.stardew_valley.network.Network;
+import com.stardew_valley.views.LobbyView;
 import com.stardew_valley.views.MainMenuView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static com.stardew_valley.models.Game.PLAYER1_STARTING_POSITION;
 
 public class GameMenuController extends Controller {
+
+
     public GameMenuController(Repository repo) {
         super(repo);
     }
@@ -80,52 +74,19 @@ public class GameMenuController extends Controller {
     }
 
     public void startGame(Label messageLabel, List<TextField> players) throws IOException {
-        Set<String> playerSet = new HashSet();
-        playerSet.add(repo.getCurrentUser().getUsername());
+        GameClient client = GameClient.getInstance();
 
-        List<Player> playerList = null;
-        for (TextField textField : players) {
-            User user = repo.getUserByUsername(textField.getText());
-            if (user == null) {
-                messageLabel.setText("Invalid username: " + textField.getText());
-                return;
-            }
-
-            if (!playerSet.add(textField.getText())) {
-                messageLabel.setText("Duplicate username: " + textField.getText());
-                return;
-            }
-
-            if (user.getGame() != null) {
-                messageLabel.setText("Game already in another game: " + textField.getText());
-                return;
-            }
-
-            playerList = new ArrayList<>();
-            playerList.add(repo.getCurrentUser().getPlayer());
-
-            for (String username : playerSet) {
-                playerList.add(repo.getUserByUsername(username).getPlayer());
-            }
+        try {
+            client.connect("127.0.0.1");
+        } catch (IOException e) {
+            System.out.println("Could not connect to server!");
         }
 
-        //phony
-        Game game = new Game(playerList);
-        repo.addGame(game);
-        repo.setCurrentGame(game);
-        repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));
-        repo.getCurrentUser().getPlayer().setPosition(PLAYER1_STARTING_POSITION);
-
-        Farm farm = FarmInitializer.initializeFarm();
-
-        for (Player player : playerList) {
-            player.setFarm(farm);
-            player.setCurrentMap(farm);
-        }
-        game.getForagingManager().prepareNewDayForaging();
-
-        Main.getMain().setScreen(new GameView(new GameController(repo)));
+        LobbyController.getInstance().init(repo);
+        Main.getMain().setScreen(new LobbyView(LobbyController.getInstance()));
     }
+
+
 
     public void nextTurn(Label messageLabel) {
 

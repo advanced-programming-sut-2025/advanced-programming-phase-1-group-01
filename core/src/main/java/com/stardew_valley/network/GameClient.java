@@ -1,36 +1,44 @@
 package com.stardew_valley.network;
 
-import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.stardew_valley.models.character.player.Player;
-import com.stardew_valley.views.GameView;
+import com.stardew_valley.controllers.GameMenuController;
+import com.stardew_valley.controllers.LobbyController;
+import com.stardew_valley.models.data.Repository;
 
 import java.io.IOException;
 
 public class GameClient {
 
-    private Client client;
+    private static GameClient instance;
+    private final Client pClient;
     private int playerId;
-    private final GameView gameView;
 
-    public GameClient(GameView gameView) throws IOException {
-        this.gameView = gameView;
-        client = new Client();
-        Network.register(client);
+    public GameClient() {
+        pClient = new Client(6553600, 6553600);
+        Network.register(pClient);
 
-        client.addListener(new Listener() {
+        pClient.addListener(new Listener() {
             @Override
-            public void connected(com.esotericsoftware.kryonet.Connection connection) {
+            public void connected(Connection connection) {
                 playerId = connection.getID();
-                System.out.println("Connected to the server with Id: " + playerId);
+                System.out.println("Connected with Id: " + playerId);
+
+                Network.JsonMessage userInfoMsg = new Network.JsonMessage();
+                userInfoMsg.type = "userInfo";
+                userInfoMsg.json = Repository.getRepo().toUserInfoJson();
+                pClient.sendTCP(userInfoMsg);
             }
 
             @Override
             public void received(com.esotericsoftware.kryonet.Connection connection, Object object) {
-                if (object instanceof Network.MovePlayer moveUpdate) {
-                    System.out.println("Player moved to: X=" + moveUpdate.x + " Y=" + moveUpdate.y);
-                    gameView.receiveUpdate(moveUpdate);
+                if (object instanceof Network.CreateLobbyResponse resp) {
+                    System.out.println("Create Lobby Response: " + resp.message);
+                } else if (object instanceof Network.JoinLobbyResponse resp) {
+                    System.out.println("Join Lobby Response: " + resp.message);
+                } else if (object instanceof Network.LobbyListResponse resp) {
+                    LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies);
                 }
             }
 
@@ -40,25 +48,39 @@ public class GameClient {
             }
         });
 
-        client.start();
+        pClient.start();
     }
 
     public void connect(String ip) throws IOException {
-        client.connect(5000, ip, Network.PORT);
+        pClient.connect(5000, ip, Network.PORT);
     }
 
-    public void sendMove(float x, float y) {
-        Network.MovePlayer moveUpdate = new Network.MovePlayer();
-        moveUpdate.x = x;
-        moveUpdate.y = y;
-        client.sendTCP(moveUpdate);
+    public void createLobby(String name, boolean isPrivate, String password, boolean isVisible) {
+        Network.CreateLobbyRequest req = new Network.CreateLobbyRequest();
+        req.name = name;
+        req.isPrivate = isPrivate;
+        req.password = password;
+        req.isVisible = isVisible;
+        pClient.sendTCP(req);
     }
 
-    public void addListener(Listener listener) {
-        client.addListener(listener);
+    public void joinLobby(int lobbyId, String password) {
+        Network.JoinLobbyRequest req = new Network.JoinLobbyRequest();
+        req.lobbyId = lobbyId;
+        req.password = password;
+        pClient.sendTCP(req);
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public static synchronized GameClient getInstance() {
+        if (instance == null) {
+            instance = new GameClient();
+        }
+        return instance;
     }
+
+    public void requestLobbyList() {
+        Network.RequestLobbyList req = new Network.RequestLobbyList();
+        pClient.sendTCP(req);
+    }
+
 }

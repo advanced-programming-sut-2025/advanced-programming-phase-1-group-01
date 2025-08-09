@@ -14,7 +14,6 @@ import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
-import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.Color;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
@@ -23,9 +22,9 @@ import com.stardew_valley.models.relations.RelationshipService;
 import java.util.*;
 import java.util.List;
 
-public class Player extends Character {
+public class User extends Character {
     private Game game;
-    private final User user;
+    private final com.stardew_valley.models.data.User user;
     private final Gender gender;
     private Position position;
     private float x;
@@ -59,6 +58,7 @@ public class Player extends Character {
     private final List<Artisan> artisans = new ArrayList<>();
     private int artisanId = 0;
     private int id;
+    private String mapJson;
 
     List<Animal> animals;
 
@@ -69,7 +69,7 @@ public class Player extends Character {
     private float globalDelta = 0f;
 
 
-    public Player(User user) {
+    public User(com.stardew_valley.models.data.User user) {
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
@@ -86,7 +86,7 @@ public class Player extends Character {
         initializeRecipes();
     }
 
-    public Player(Game game, User user) {
+    public User(Game game, com.stardew_valley.models.data.User user) {
         this.game = game;
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
@@ -134,7 +134,7 @@ public class Player extends Character {
 
     public void setNumOfCoins(int numOfCoins) {
         if (!syncingCoins && relationshipService.getMarriage() != null) {
-            Player partner = relationshipService.getMarriage().getPartner(this);
+            User partner = relationshipService.getMarriage().getPartner(this);
             syncingCoins = true;
             partner.setNumOfCoins(numOfCoins);
             syncingCoins = false;
@@ -203,7 +203,7 @@ public class Player extends Character {
         this.game = game;
     }
 
-    public User getUser() {
+    public com.stardew_valley.models.data.User getUser() {
         return user;
     }
 
@@ -215,7 +215,7 @@ public class Player extends Character {
         return notifications;
     }
 
-    public void addNotification(Player sender, String message) {
+    public void addNotification(User sender, String message) {
         notifications.put(new MessageEntry(sender, message), false);
     }
 
@@ -231,7 +231,7 @@ public class Player extends Character {
         }
     }
 
-    public boolean isNearTo(Player p) {
+    public boolean isNearTo(User p) {
         return Math.abs(p.getPosition().x() - position.x()) <= 32 && Math.abs(p.getPosition().y() - position.y()) <= 32;
     }
 
@@ -303,7 +303,7 @@ public class Player extends Character {
         this.partnerFarm = farm;
     }
 
-    public void updateOfMarriage(Player player) {
+    public void updateOfMarriage(User player) {
         numOfCoins += player.getNumOfCoins();
         player.setNumOfCoins(numOfCoins);
         setPartnerFarm(player.getFarm());
@@ -444,11 +444,11 @@ public class Player extends Character {
         }
     }
 
-    public void setPartner(User partner) {
+    public void setPartner(com.stardew_valley.models.data.User partner) {
         relationshipService.setPartner(partner);
     }
 
-    public User getPartner() {
+    public com.stardew_valley.models.data.User getPartner() {
         return relationshipService.getPartner();
     }
 
@@ -954,5 +954,17 @@ public class Player extends Character {
 
     public int getId() {
         return id;
+    }
+
+    public void setMapJson(String mapJson) {
+        this.mapJson = mapJson;
+    }
+
+    public String getMapJson() {
+        return mapJson;
+    }
+
+    public TextureRegion getTestTexture() {
+        return AssetManager.getAssetManager().get_Alex_0_walking_down_animation().getKeyFrame(0);
     }
 }

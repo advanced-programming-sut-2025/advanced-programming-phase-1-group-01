@@ -6,7 +6,7 @@ import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.tool.enums.AxeType;
@@ -28,7 +28,7 @@ public class Axe extends Tool {
 
     @Override
     public void use(Direction direction) {
-        Player player = inventory.getPlayer();
+        User player = inventory.getPlayer();
         Position position = player.getTilesPosition();
         Tile tile = player.getCurrentMap().getTile(position);
 

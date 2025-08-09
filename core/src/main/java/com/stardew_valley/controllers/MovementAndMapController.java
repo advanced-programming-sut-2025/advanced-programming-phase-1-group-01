@@ -3,7 +3,7 @@ package com.stardew_valley.controllers;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.TileType;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Emoji;
 import com.stardew_valley.models.enums.commands.MovementAndMapCommands;
@@ -45,7 +45,7 @@ public class MovementAndMapController extends Controller {
             int x = parseInt(matcher.group("X"));
             int y = parseInt(matcher.group("Y"));
             walkPosition = new Position(x, y);
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
             int requiredEnergy = ReduceEnergy.calculateEnergy(player, new Position(x, y));
             if (requiredEnergy == -1) return new Result(false, "invalid position");
             isWalkUsed = true;
@@ -57,7 +57,7 @@ public class MovementAndMapController extends Controller {
     }
 
     private Result walk(Position position) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         ReduceEnergy.movePlayer(player, position, repo.getCurrentGame());
         isWalkUsed = false;
         return new Result(true, "walked to %s successfully".formatted(position));
@@ -82,7 +82,7 @@ public class MovementAndMapController extends Controller {
             int x = parseInt(matcher.group("X"));
             int y = parseInt(matcher.group("Y"));
             int size = parseInt(matcher.group("size"));
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.getCurrentMap().printMap(x, y, size, repo.getCurrentGame()));
         } else return new Result(false, "invalid command");
     }

@@ -6,7 +6,7 @@ import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.crafting.CraftingDevice;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.foraging.ForagingMineral;
@@ -30,7 +30,7 @@ public class Pickaxe extends Tool {
 
     @Override
     public void use(Direction direction) {
-        Player player = inventory.getPlayer();
+        User player = inventory.getPlayer();
         Position position = player.getTilesPosition();
         Position appliedPosition = position.applyDirection(direction);
 

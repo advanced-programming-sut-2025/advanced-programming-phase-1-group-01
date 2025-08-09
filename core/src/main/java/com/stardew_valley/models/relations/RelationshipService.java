@@ -1,8 +1,7 @@
 package com.stardew_valley.models.relations;
 
 import com.stardew_valley.models.character.Character;
-import com.stardew_valley.models.character.player.Player;
-import com.stardew_valley.models.data.User;
+import com.stardew_valley.models.character.player.User;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,7 +12,7 @@ public class RelationshipService {
     private Marriage marriage;
     private final Map<Character, Relationship> relationships;
     private final Map<Character, Trading> tradings;
-    private User partner;
+    private com.stardew_valley.models.data.User partner;
 
     public RelationshipService(Character character) {
         this.partner = null;
@@ -35,11 +34,11 @@ public class RelationshipService {
         return relationships.containsKey(character);
     }
 
-    public void marry(Player partner) throws GaysMarriageException {
+    public void marry(User partner) throws GaysMarriageException {
         if (marriage != null) return;
-        marriage = new Marriage((Player) character, partner);
+        marriage = new Marriage((User) character, partner);
         if (!partner.getRelationService().isMarried()) {
-            partner.getRelationService().marry((Player) character);
+            partner.getRelationService().marry((User) character);
         }
     }
 
@@ -66,7 +65,7 @@ public class RelationshipService {
     }
 
     public void addTrader(Character friend) {
-        tradings.putIfAbsent(friend, new Trading((Player) character, (Player) friend));
+        tradings.putIfAbsent(friend, new Trading((User) character, (User) friend));
         if (!friend.getRelationService().haveTradeWith(character)) {
             friend.getRelationService().addTrader(character);
         }
@@ -98,11 +97,11 @@ public class RelationshipService {
         return character;
     }
 
-    public void setPartner(User partner) {
+    public void setPartner(com.stardew_valley.models.data.User partner) {
         this.partner = partner;
     }
 
-    public User getPartner() {
+    public com.stardew_valley.models.data.User getPartner() {
         return partner;
     }
 }

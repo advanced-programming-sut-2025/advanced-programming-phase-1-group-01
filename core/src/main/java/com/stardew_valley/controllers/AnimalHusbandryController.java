@@ -7,7 +7,7 @@ import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.ProductQuality;
 import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
@@ -52,7 +52,7 @@ public class AnimalHusbandryController extends Controller {
     private Result handleBuildShelter(String commandLine) {
         Pattern pattern = Pattern.compile(AnimalHusbandryCommands.BUILD.getRegex());
         Matcher matcher = pattern.matcher(commandLine);
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
@@ -74,7 +74,7 @@ public class AnimalHusbandryController extends Controller {
             String animalType = matcher.group("animal");
             String animalName = matcher.group("name");
 
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.buyAnimal(animalType, animalName));
         } else return new Result(false, "Invalid command");
     }
@@ -85,7 +85,7 @@ public class AnimalHusbandryController extends Controller {
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.petAnimal(animalName));
         } else return new Result(false, "Invalid command");
     }
@@ -95,7 +95,7 @@ public class AnimalHusbandryController extends Controller {
         Matcher matcher = pattern.matcher(commandLine);
 
         if (matcher.matches()) {
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
             return new Result(true, player.getFormattedAnimals());
         } else return new Result(false, "Invalid command");
     }
@@ -120,7 +120,7 @@ public class AnimalHusbandryController extends Controller {
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
             return new Result(true, farm.feedByHay(animalName, player));
@@ -144,7 +144,7 @@ public class AnimalHusbandryController extends Controller {
         if (matcher.matches()) {
             String animalName = matcher.group("name");
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
             Season season = repo.getCurrentGame().getTimeManager().getNow().getSeason();
 
             return new Result(true, farm.collectProduct(animalName, player, season));
@@ -157,7 +157,7 @@ public class AnimalHusbandryController extends Controller {
 
         if (matcher.matches()) {
             String animalName = matcher.group("name");
-            Player player = repo.getCurrentGame().getCurrentPlayer();
+            User player = repo.getCurrentGame().getCurrentPlayer();
 
             Farm farm = repo.getCurrentGame().getCurrentPlayer().getFarm();
             return new Result(true, farm.sellAnimal(animalName, player));
@@ -181,7 +181,7 @@ public class AnimalHusbandryController extends Controller {
     private static final Random RANDOM = new Random();
 
     public Result fishing(String poleName) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = player.getInventory();
         Item item = inventory.getSlot(poleName).getItem();
         Season currSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason();

@@ -3,7 +3,7 @@ package com.stardew_valley.models.relations;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.character.Character;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.dateTime.DateTime;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class Friendship extends Relationship {
         return secondFriend;
     }
 
-    public Character getFriend(Player p) {
+    public Character getFriend(User p) {
         if (p != firstFriend && p != secondFriend) {
             return null;
         }
@@ -71,7 +71,7 @@ public class Friendship extends Relationship {
         return gifts;
     }
 
-    public void sendMessage(Player sender, String message) {
+    public void sendMessage(User sender, String message) {
         messages.put(new MessageEntry(sender, message), false);
     }
 
@@ -79,7 +79,7 @@ public class Friendship extends Relationship {
         return messages;
     }
 
-    public void addGift(Player sender, Player receiver, Item item, int amount, DateTime now) {
+    public void addGift(User sender, User receiver, Item item, int amount, DateTime now) {
         Gift gift = new Gift.Builder()
                 .setSender(sender)
                 .setReceiver(receiver)
@@ -90,7 +90,7 @@ public class Friendship extends Relationship {
         gifts.put(gift.giftNumber(), gift);
     }
 
-    public List<Gift> getReceivedGifts(Player receiver) {
+    public List<Gift> getReceivedGifts(User receiver) {
         List<Gift> receivedGifts = new ArrayList<>();
         for (Gift gift : gifts.values()) {
             if (gift.receiver() == receiver) {

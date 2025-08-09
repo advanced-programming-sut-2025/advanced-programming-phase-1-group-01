@@ -7,13 +7,11 @@ import com.stardew_valley.models.animal.AnimalProductType;
 import com.stardew_valley.models.animal.ProductQuality;
 import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.cooking.FoodsEnum;
-import com.stardew_valley.models.cooking.IngredientItem;
 import com.stardew_valley.models.cooking.IngredientItems;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.farming.*;
-import com.stardew_valley.models.foraging.ForagingCrop;
 import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.foraging.ForagingMineralInfo;
 import com.stardew_valley.models.foraging.ForagingTreeInfo;
@@ -26,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
-    private final Player player;
+    private final User player;
     private int capacity;
     private final List<Slot> slots;
     private Slot equippedSlot;
 
-    public Inventory(Player player) {
+    public Inventory(User player) {
         this.player = player;
         capacity = BackpackType.SMALL.getCapacity();
         slots = new ArrayList<>();
@@ -94,7 +92,7 @@ public class Inventory {
         return false;
     }
 
-    public Player getPlayer() {
+    public User getPlayer() {
         return player;
     }
 

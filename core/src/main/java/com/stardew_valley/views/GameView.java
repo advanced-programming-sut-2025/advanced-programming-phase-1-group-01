@@ -20,8 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.animal.Animal;
@@ -34,7 +32,7 @@ import com.stardew_valley.models.character.NPC.NPCQuest;
 import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Energy;
 import com.stardew_valley.models.character.player.MarriageRequest;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
@@ -51,8 +49,6 @@ import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
-import com.stardew_valley.network.GameClient;
-import com.stardew_valley.network.Network;
 
 import java.io.IOException;
 import java.util.Random;
@@ -66,7 +62,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private final GameController controller;
     private final OrthographicCamera camera;
-    private Player player;
+    private User player;
     private final Batch batch;
     private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
@@ -149,7 +145,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
     //^ Network
-    private GameClient client;
+    //private GameClient client;
 
 
 
@@ -178,39 +174,39 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
-        client = new GameClient(this);
-        client.connect("127.0.0.1");
-        player.setId(client.getPlayerId());
-        client.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof Network.MovePlayer moveUpdate) {
-                    receiveUpdate(moveUpdate);
-                }
-            }
-        });
+        //client = new GameClient(this);
+        //client.connect("127.0.0.1");
+        //player.setId(client.getPlayerId());
+//        client.addListener(new Listener() {
+//            @Override
+//            public void received(Connection connection, Object object) {
+//                if (object instanceof Network.MovePlayer moveUpdate) {
+//                    receiveUpdate(moveUpdate);
+//                }
+//            }
+//        });
     }
 
-    public void receiveUpdate(Network.MovePlayer moveUpdate) {
-        Player player = controller.getRepo().getCurrentGame().getPlayers()
-            .stream()
-            .filter(p -> p.getId() == moveUpdate.playerId)
-            .findFirst()
-            .orElse(null);
+//    public void receiveUpdate(Network.MovePlayer moveUpdate) {
+//        Player player = controller.getRepo().getCurrentGame().getPlayers()
+//            .stream()
+//            .filter(p -> p.getId() == moveUpdate.playerId)
+//            .findFirst()
+//            .orElse(null);
+//
+//        if (player != null) {
+//            player.setX(moveUpdate.x);
+//            player.setY(moveUpdate.y);
+//        } else {
+//            System.out.println("Player with ID " + moveUpdate.playerId + " not found!");
+//        }
+//    }
 
-        if (player != null) {
-            player.setX(moveUpdate.x);
-            player.setY(moveUpdate.y);
-        } else {
-            System.out.println("Player with ID " + moveUpdate.playerId + " not found!");
-        }
-    }
 
 
-
-    public void updatePlayerPosition(float x, float y) {
-        client.sendMove(x, y);
-    }
+//    public void updatePlayerPosition(float x, float y) {
+//        client.sendMove(x, y);
+//    }
 
     @Override
     public void show() {
@@ -530,9 +526,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void drawPlayers() {
-        for (Player p : controller.getRepo().getCurrentGame().getPlayers())
+        for (User p : controller.getRepo().getCurrentGame().getPlayers())
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
 //        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+        batch.draw(player.getTestTexture(), controller.getRepo().getOtherX(), controller.getRepo().getOtherY());
     }
 
     private void drawNPCs() {
@@ -731,9 +728,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     public void hug() {
         boolean isNear = false;
-        Player anotherPlayer = null;
+        User anotherPlayer = null;
 
-        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
+        for (User friend : controller.getRepo().getCurrentGame().getPlayers()) {
             if (player == friend) continue;
             if (player.isNearTo(friend)) {
                 isNear = true;
@@ -786,9 +783,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void marriage() {
         boolean isNear = false;
-        Player anotherPlayer = null;
+        User anotherPlayer = null;
 
-        for (Player friend : controller.getRepo().getCurrentGame().getPlayers()) {
+        for (User friend : controller.getRepo().getCurrentGame().getPlayers()) {
             if (player == friend) continue;
             if (player.isNearTo(friend)) {
                 isNear = true;
@@ -830,7 +827,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Window marriageRequestsWindow = null;
     private boolean isNpressed = false;
-    private void showMarriageRequestsWindow(Player currentPlayer) {
+    private void showMarriageRequestsWindow(User currentPlayer) {
         if (!isNpressed) {
             marriageRequestsWindow = new Window("Marriage Requests", AssetManager.getAssetManager().getSkin());
             marriageRequestsWindow.setSize(1000, 600);
@@ -846,7 +843,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 acceptBtn.setSize(80,80);
                 rejectBtn.setSize(80,80);
 
-                Player anotherPlayer = request.getFrom().getPlayer();
+                User anotherPlayer = request.getFrom().getPlayer();
                 Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
 
                 acceptBtn.addListener(new ClickListener() {
@@ -1072,7 +1069,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
         Energy energy = player.getEnergy();
-        double consumeAmount = 1.0 / 14.4;
+        double consumeAmount = 1.0 / 14.4 / 1000;
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             float nextX = player.getX() + speed * delta;
@@ -1111,7 +1108,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             }
         }
 
-        updatePlayerPosition(player.getX(), player.getY());
+        //controller.updatePlayerPosition(player.getX(), player.getY());
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             hug();
@@ -1982,7 +1979,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dialog.show(stage);
     }
 
-    public void showQuestDialog(Stage stage, Skin skin, NPC npc, Player player) {
+    public void showQuestDialog(Stage stage, Skin skin, NPC npc, User player) {
         Dialog dialog = new Dialog("Quests", skin);
         Table content = dialog.getContentTable();
         float maxWidth = Gdx.graphics.getWidth() * 0.7f;
@@ -2034,7 +2031,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-
+    public GameController getController() {
+        return controller;
+    }
 
 
 }

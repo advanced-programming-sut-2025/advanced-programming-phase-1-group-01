@@ -1,16 +1,16 @@
 package com.stardew_valley.models.initializer;
 
+import com.google.gson.*;
 import com.stardew_valley.models.Position;
-import com.stardew_valley.models.Random;
 import com.stardew_valley.models.building.*;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCQuest;
 import com.stardew_valley.models.character.NPC.NPCQuestType;
 import com.stardew_valley.models.character.NPC.NPCType;
-import com.stardew_valley.models.character.player.Player;
-import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Direction;
-import com.stardew_valley.models.foraging.ForagingManager;
+import com.stardew_valley.models.farming.Seed;
+import com.stardew_valley.models.farming.SeedInfo;
+import com.stardew_valley.models.foraging.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,8 @@ import java.util.List;
 public class FarmInitializer {
     private final static Position FARM_BL = new Position(0, 0);
     private final static Position FARM_TR = new Position(225, 225);
-    private final static Position GROUND_TP = new Position(0, 0);
-    private final static Position GROUND_BR = new Position(75, 75);
     private final static Position RIVER_BL = new Position(45, 5);
     private final static Position RIVER_TR = new Position(53, 12);
-    private final static Position MINE_TP = new Position(1, 1);
-    private final static Position MINE_BR = new Position(13, 10);
     private final static Position GREENHOUSE_BL = new Position(6, 5);
     private final static Position GREENHOUSE_TR = new Position(20, 22);
     private final static Position MINE_BL = new Position(3, 57);
@@ -528,13 +524,6 @@ public class FarmInitializer {
                 && tiles.get(position.x()).get(position.y()).getObject() == null;
     }
 
-    private static Position randomPosition() {
-        return new Position(Random.rand(GROUND_TP.x(), GROUND_BR.x()), Random.rand(GROUND_TP.y(), GROUND_BR.y()));
-    }
-
-    private static Position randomMinePosition() {
-        return new Position(Random.rand(MINE_TP.x(), MINE_BR.x()), Random.rand(MINE_TP.y(), MINE_BR.y()));
-    }
 
     public static int getAdditionalX(int id) {
         switch (id) {
@@ -568,5 +557,106 @@ public class FarmInitializer {
         tiles.get(75).get(105).setMovable(true);
         tiles.get(105).get(75).setMovable(true);
         return new Farm(tiles, lake, cottage, quarry, greenhouse, List.of(sebastian, abigail, harvey, leah));
+    }
+
+    public static JsonArray buildTilesJson(List<List<Tile>> tiles) {
+        JsonArray result = new JsonArray();
+
+        for (List<Tile> row : tiles) {
+            for (Tile tile : row) {
+                JsonObject tileJson = new JsonObject();
+
+                tileJson.addProperty("x", tile.getPosition().x());
+                tileJson.addProperty("y", tile.getPosition().y());
+                tileJson.addProperty("t", TileType.getNumberFromTileType(tile.getType()));
+                tileJson.addProperty("p", tile.isPlowed() ? 1 : 0);
+                tileJson.addProperty("m", tile.isMovable() ? 1 : 0);
+                tileJson.addProperty("o", Foraging.getNumberFromTileObject(tile.getObject()));
+
+                result.add(tileJson);
+            }
+        }
+        return result;
+    }
+
+    public static List<List<Tile>> fromJson(String json) {
+        Gson gson = new Gson();
+        JsonArray rows = gson.fromJson(json, JsonArray.class);
+
+        List<List<Tile>> tileMap = new ArrayList<>();
+
+        for (int i = 0; i < rows.size(); i++) {
+            JsonArray row = rows.get(i).getAsJsonArray();
+            List<Tile> tileRow = new ArrayList<>();
+
+            for (int j = 0; j < row.size(); j++) {
+                JsonObject tileJson = row.get(j).getAsJsonObject();
+
+                int x = tileJson.get("x").getAsInt();
+                int y = tileJson.get("y").getAsInt();
+                int typeNum = tileJson.get("t").getAsInt();
+                boolean plowed = tileJson.get("p").getAsBoolean();
+                boolean movable = tileJson.get("m").getAsBoolean();
+                int objectNum = tileJson.get("o").getAsInt();
+
+                Tile tile;
+
+                if (validateTileData(x, y, typeNum, objectNum)) {
+                    tile = new Tile.Builder()
+                        .setPosition(new Position(x, y))
+                        .setType(TileType.values()[typeNum - 1])
+                        .setMovable(movable)
+                        .setObject(getTileObjectFromNumber(objectNum))
+                        .build();
+                } else {
+                    tile = new Tile.Builder()
+                        .setPosition(new Position(i, j))
+                        .setType(TileType.GROUND)
+                        .setMovable(true)
+                        .setObject(null)
+                        .build();
+                }
+
+
+                if (plowed) {
+                    tile.plow();
+                }
+
+                tileRow.add(tile);
+            }
+
+            tileMap.add(tileRow);
+        }
+
+        return tileMap;
+    }
+
+    public static TileObject getTileObjectFromNumber(int num) {
+        if (num == 0) {
+            return null;
+        } else if (num >= 1 && num <= 42) {
+            return new Seed(SeedInfo.values()[num - 1]);
+        } else if (num >= 43 && num <= 65) {
+            return new ForagingCrop(ForagingCropInfo.values()[num - 43]);
+        } else if (num >= 66) {
+            return new ForagingMineral(ForagingMineralInfo.values()[num - 66]);
+        }
+        return null;
+    }
+
+    private static boolean validateTileData(int x, int y, int typeNum, int objectNum) {
+        if (x < 0 || y < 0 || x >= 225 || y >= 225) {
+            return false;
+        }
+
+        if (typeNum < 1 || typeNum > TileType.values().length) {
+            return false;
+        }
+
+        if (objectNum < 1 || objectNum > 82) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -7,7 +7,7 @@ import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.Direction;
@@ -87,7 +87,7 @@ public class FarmingController extends Controller {
     }
 
     public Result plant(String sourceName, Direction direction) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlot(sourceName);
         Position appliedPosition = player.getTilesPosition().applyDirection(direction);
         Tile tile = player.getFarm().getTile(appliedPosition);
@@ -129,7 +129,7 @@ public class FarmingController extends Controller {
     }
 
     private Result showPlantInfo(Position position) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Tile tile = player.getFarm().getTile(position);
 
         Crop crop;
@@ -160,7 +160,7 @@ public class FarmingController extends Controller {
     }
 
     private Result fertilize(String fertilizerName, Direction direction) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlot(fertilizerName);
 
         if (slot == null) {
@@ -186,7 +186,7 @@ public class FarmingController extends Controller {
     }
 
     private Result howMuchWater() {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Slot slot = player.getInventory().getSlot("watering can");
 
         if (slot == null) {
@@ -202,7 +202,7 @@ public class FarmingController extends Controller {
     }
 
     public Result cheatPlowNineTiles(Position position) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Array<Position> tilePositions = new Array<>();
         tilePositions.add(position);
 

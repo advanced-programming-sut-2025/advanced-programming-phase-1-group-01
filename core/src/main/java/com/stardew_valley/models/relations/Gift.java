@@ -1,12 +1,12 @@
 package com.stardew_valley.models.relations;
 
 import com.stardew_valley.models.Item;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.dateTime.DateTime;
 
 public class Gift {
-    private final Player sender;
-    private final Player receiver;
+    private final User sender;
+    private final User receiver;
     private final Item item;
     private final int amount;
     private final DateTime sentTime;
@@ -15,7 +15,7 @@ public class Gift {
 
     private static int nextGiftNumber = 1;
 
-    public Gift(Player sender, Player receiver, Item item, int amount, DateTime sentTime) {
+    public Gift(User sender, User receiver, Item item, int amount, DateTime sentTime) {
         this.sender = sender;
         this.receiver = receiver;
         this.item = item;
@@ -24,11 +24,11 @@ public class Gift {
         this.giftNumber = nextGiftNumber++;
     }
 
-    public Player sender() {
+    public User sender() {
         return sender;
     }
 
-    public Player receiver() {
+    public User receiver() {
         return receiver;
     }
 
@@ -72,18 +72,18 @@ public class Gift {
     }
 
     public static class Builder {
-        private Player sender;
-        private Player receiver;
+        private User sender;
+        private User receiver;
         private Item item;
         private int amount;
         private DateTime sentTime;
 
-        public Gift.Builder setSender(Player sender) {
+        public Gift.Builder setSender(User sender) {
             this.sender = sender;
             return this;
         }
 
-        public Gift.Builder setReceiver(Player receiver) {
+        public Gift.Builder setReceiver(User receiver) {
             this.receiver = receiver;
             return this;
         }

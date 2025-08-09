@@ -94,4 +94,33 @@ public enum ForagingCropInfo implements FarmingEnum {
     public ForagingCrop toItem() {
         return new ForagingCrop(this);
     }
+
+    public static ForagingCropInfo getForagingCropByNumber(int num) {
+        switch (num) {
+            case 43: return ForagingCropInfo.COMMON_MUSHROOM;
+            case 44: return ForagingCropInfo.DAFFODIL;
+            case 45: return ForagingCropInfo.DANDELION;
+            case 46: return ForagingCropInfo.LEEK;
+            case 47: return ForagingCropInfo.MOREL;
+            case 48: return ForagingCropInfo.SALMONBERRY;
+            case 49: return ForagingCropInfo.SPRING_ONION;
+            case 50: return ForagingCropInfo.WILD_HORSERADISH;
+            case 51: return ForagingCropInfo.FIDDLEHEAD_FERN;
+            case 52: return ForagingCropInfo.GRAPE;
+            case 53: return ForagingCropInfo.RED_MUSHROOM;
+            case 54: return ForagingCropInfo.SPICE_BERRY;
+            case 55: return ForagingCropInfo.SWEET_PEA;
+            case 56: return ForagingCropInfo.BLACKBERRY;
+            case 57: return ForagingCropInfo.CHANTERELLE;
+            case 58: return ForagingCropInfo.HAZELNUT;
+            case 59: return ForagingCropInfo.PURPLE_MUSHROOM;
+            case 60: return ForagingCropInfo.WILD_PLUM;
+            case 61: return ForagingCropInfo.CROCUS;
+            case 62: return ForagingCropInfo.CRYSTAL_FRUIT;
+            case 63: return ForagingCropInfo.HOLLY;
+            case 64: return ForagingCropInfo.SNOW_YAM;
+            case 65: return ForagingCropInfo.WINTER_ROOT;
+            default: return null;
+        }
+    }
 }

@@ -6,7 +6,7 @@ import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.commands.RelationshipCommands;
@@ -109,12 +109,12 @@ public class RelationshipController extends Controller {
     }
 
     private Result showFriendships() {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Game game = repo.getCurrentGame();
 
         StringBuilder resultMsg = new StringBuilder();
 
-        for (Player gamePlayer : game.getPlayers()) {
+        for (User gamePlayer : game.getPlayers()) {
             if (player != gamePlayer) {
                 if (player.getRelationService().isFriendWith(gamePlayer)) {
                     resultMsg.append("%s:\nlevel: %d, xp: %d\n".formatted(gamePlayer.getUser().getUsername(), player.getRelationService().getFriendship(gamePlayer).getLevel(), player.getRelationService().getFriendship(gamePlayer).getXp()));
@@ -128,11 +128,11 @@ public class RelationshipController extends Controller {
     }
 
     private Result talk(String username, String message) {
-        Player sender = repo.getCurrentGame().getCurrentPlayer();
+        User sender = repo.getCurrentGame().getCurrentPlayer();
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
-        Player receiver = repo.getUserByUsername(username).getPlayer();
+        User receiver = repo.getUserByUsername(username).getPlayer();
         if (!sender.isNearTo(receiver)) {
             return new Result(false, "you should be near of %s".formatted(receiver.getUser().getNickname()));
         }
@@ -162,8 +162,8 @@ public class RelationshipController extends Controller {
     }
 
     private Result talkHistory(String username) {
-        Player friend = repo.getUserByUsername(username).getPlayer();
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         Map<MessageEntry, Boolean> messages = currentPlayer.getRelationService().getFriendship(friend).getMessages();
 
@@ -183,13 +183,13 @@ public class RelationshipController extends Controller {
     }
 
     private Result hug(String username) {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
 
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
 
         if (!currentPlayer.isNearTo(friend)) {
             return new Result(false, "you should be near to " + friend.getUser().getNickname());
@@ -221,11 +221,11 @@ public class RelationshipController extends Controller {
     }
 
     private Result gift(String username, String itemName, int amount) {
-        Player sender = repo.getCurrentGame().getCurrentPlayer();
+        User sender = repo.getCurrentGame().getCurrentPlayer();
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
-        Player receiver = repo.getUserByUsername(username).getPlayer();
+        User receiver = repo.getUserByUsername(username).getPlayer();
         Friendship friendship = sender.getRelationService().getFriendship(receiver);
 
         if (!sender.isNearTo(receiver)) {
@@ -263,7 +263,7 @@ public class RelationshipController extends Controller {
     }
 
     private Result giftRate(int giftNumber, int rate) {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Gift gift = null;
         for (Friendship friendship : currentPlayer.getRelationService().getFriendships().values()) {
             gift = friendship.getGift(giftNumber);
@@ -277,7 +277,7 @@ public class RelationshipController extends Controller {
 
         boolean result = gift.setRate(rate);
         if (result) {
-            Player sender = gift.sender();
+            User sender = gift.sender();
             Friendship friendship = currentPlayer.getRelationService().getFriendship(sender);
 
             DateTime now = repo.getCurrentGame().getTimeManager().getNow();
@@ -299,7 +299,7 @@ public class RelationshipController extends Controller {
     }
 
     private Result giftList() {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         List<Gift> receivedGifts = new ArrayList<>();
 
         for (Friendship friendship : currentPlayer.getRelationService().getFriendships().values()) {
@@ -322,8 +322,8 @@ public class RelationshipController extends Controller {
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "user not found");
         }
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
-        Player otherPlayer = repo.getUserByUsername(username).getPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User otherPlayer = repo.getUserByUsername(username).getPlayer();
         if (otherPlayer == null) {
             return new Result(false, "player not found");
         }
@@ -343,13 +343,13 @@ public class RelationshipController extends Controller {
     }
 
     private Result flower(String username) {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
 
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
         if (!currentPlayer.isNearTo(friend)) {
             return new Result(false, "you should be near to " + friend.getUser().getNickname());
         }
@@ -374,12 +374,12 @@ public class RelationshipController extends Controller {
     }
 
     private Result askMarriage(String username, String ring) {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
         if (friendship == null || friendship.getLevel() != 3) {
@@ -404,12 +404,12 @@ public class RelationshipController extends Controller {
     }
 
     private Result respondMarriage(String username, String respond) {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
 
         Friendship friendship = currentPlayer.getRelationService().getFriendship(friend);
         if (friendship == null || friendship.getLevel() != 3) {
@@ -443,12 +443,12 @@ public class RelationshipController extends Controller {
 
     private Result startTrade() {
         Game currentGame = repo.getCurrentGame();
-        List<Player> players = currentGame.getPlayers();
+        List<User> players = currentGame.getPlayers();
 
         StringBuilder info = new StringBuilder();
         info.append("List of players:\n");
 
-        for (Player player : players) {
+        for (User player : players) {
             if (currentGame.getCurrentPlayer().equals(player)) {
                 continue;
             }
@@ -469,13 +469,13 @@ public class RelationshipController extends Controller {
             return new Result(false, "invalid trade");
         }
 
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         int amount;
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
 
         Item item = currentPlayer.getInventory().getNewItem(itemName);
 
@@ -521,7 +521,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "invalid trade");
         }
 
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         int amount;
         int targetAmount;
 
@@ -529,7 +529,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "player not found");
         }
 
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
 
         Item item = currentPlayer.getInventory().getNewItem(itemName);
         Item itemTarget = currentPlayer.getInventory().getNewItem(targetName);
@@ -575,13 +575,13 @@ public class RelationshipController extends Controller {
     }
 
     private Result tradeTalk(String username, String message) {
-        Player sender = repo.getCurrentGame().getCurrentPlayer();
+        User sender = repo.getCurrentGame().getCurrentPlayer();
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
 
-        Player receiver = repo.getUserByUsername(username).getPlayer();
+        User receiver = repo.getUserByUsername(username).getPlayer();
         Trading trading = sender.getRelationService().getTrading(receiver);
 
         trading.sendMessage(sender, message);
@@ -595,9 +595,9 @@ public class RelationshipController extends Controller {
             return new Result(false, "player not found");
         }
 
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        User friend = repo.getUserByUsername(username).getPlayer();
 
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
 
         Map<MessageEntry, Boolean> messages = currentPlayer.getRelationService().getTrading(friend).getMessages();
 
@@ -617,7 +617,7 @@ public class RelationshipController extends Controller {
     }
 
     private Result tradeInWait() {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Map<Integer, Trade> pendingTradesMap = new HashMap<>();
 
         for (Trading trading : currentPlayer.getRelationService().getTradings().values()) {
@@ -652,7 +652,7 @@ public class RelationshipController extends Controller {
     }
 
     private Result tradeAll() {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Map<Integer, Trade> allTradesMap = new HashMap<>();
 
         for (Trading trading : currentPlayer.getRelationService().getTradings().values()) {
@@ -697,7 +697,7 @@ public class RelationshipController extends Controller {
             return new Result(false, "invalid id");
         }
         int id = Integer.parseInt(idStr);
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        User currentPlayer = repo.getCurrentGame().getCurrentPlayer();
         Trade foundTrade = null;
         Character tradePartner = null;
 
@@ -714,8 +714,8 @@ public class RelationshipController extends Controller {
             return new Result(false, "trade not found or not for you");
         }
 
-        Player sender = foundTrade.getSender();
-        Player receiver = foundTrade.getReceiver();
+        User sender = foundTrade.getSender();
+        User receiver = foundTrade.getReceiver();
         Inventory senderInventory = sender.getInventory();
         Inventory receiverInventory = receiver.getInventory();
         Trading senderTrading = sender.getRelationService().getTrading(receiver);

@@ -1,7 +1,6 @@
 package com.stardew_valley.models.data;
 
 import com.stardew_valley.models.Game;
-import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.SecurityQuestion;
 
@@ -12,7 +11,7 @@ public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private Game game;
-    private Player player;
+    private com.stardew_valley.models.character.player.User player;
     private String username;
     private String password;
     private String nickname;
@@ -33,14 +32,15 @@ public class User implements Serializable {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
         this.avatarPath = avatarPath;
-        player = new Player(this);
+        player = new com.stardew_valley.models.character.player.User(this);
     }
 
-    public Player getPlayer() {
+
+    public com.stardew_valley.models.character.player.User getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(com.stardew_valley.models.character.player.User player) {
         this.player = player;
     }
 
@@ -132,4 +132,26 @@ public class User implements Serializable {
     public void setAvatarPath(String avatarPath) {
         this.avatarPath = avatarPath;
     }
+
+    public String userToJson() {
+        User user = this;
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+
+        sb.append("\"username\":\"").append(user.getUsername()).append("\",");
+        sb.append("\"password\":\"").append(user.getPassword()).append("\",");
+        sb.append("\"nickname\":\"").append(user.getNickname()).append("\",");
+        sb.append("\"email\":\"").append(user.getEmail()).append("\",");
+
+        sb.append("\"gender\":\"").append(user.getGender().toString()).append("\",");
+
+        sb.append("\"securityQuestion\":\"").append(user.getSecurityQuestion().toString()).append("\",");
+        sb.append("\"securityAnswer\":\"").append(user.getSecurityAnswer()).append("\",");
+
+        sb.append("\"avatarPath\":\"").append(user.getAvatarPath()).append("\"");
+
+        sb.append("}");
+        return sb.toString();
+    }
+
 }

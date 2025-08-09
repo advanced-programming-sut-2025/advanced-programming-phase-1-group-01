@@ -2,16 +2,12 @@ package com.stardew_valley.controllers;
 
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.InventoryCommands;
 import com.stardew_valley.models.tool.TrashCan;
 import com.stardew_valley.models.Item;
-import com.stardew_valley.models.Position;
-import com.stardew_valley.models.crafting.CraftingDevice;
-import com.stardew_valley.models.enums.Direction;
-import com.stardew_valley.models.weather.Weather;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,7 +76,7 @@ public class InventoryController extends Controller {
     }
 
     private Result inventoryTrash(String itemName, int quantity) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = repo.getCurrentGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlot(itemName);
 
@@ -105,7 +101,7 @@ public class InventoryController extends Controller {
     }
 
     private Result inventoryTrash(String itemName) {
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+        User player = repo.getCurrentGame().getCurrentPlayer();
         Inventory inventory = repo.getCurrentGame().getCurrentPlayer().getInventory();
         Slot slot = inventory.getSlot(itemName);
 
@@ -137,7 +133,7 @@ public class InventoryController extends Controller {
         String itemCountStr = extractValue(command, "-c", null);
         int itemCount = Integer.parseInt(itemCountStr);
 
-        Player player = repo.getCurrentUser().getPlayer();
+        User player = repo.getCurrentUser().getPlayer();
         Inventory inventory = player.getInventory();
         Item item = inventory.getNewItem(itemName);
 

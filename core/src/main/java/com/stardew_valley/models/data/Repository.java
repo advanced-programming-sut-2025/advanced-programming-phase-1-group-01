@@ -1,8 +1,13 @@
 package com.stardew_valley.models.data;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.models.Game;
+import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.commands.View;
+import com.stardew_valley.network.GameClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +22,8 @@ public class Repository {
     private View currentView;
     private Game currentGame;
     private static Map<String, User> users;
+    private float otherX = 0.0f;
+    private float otherY = 0.0f;
 
     public Repository() {
         games = new ArrayList<>();
@@ -72,5 +79,56 @@ public class Repository {
     public void addGame(Game game) {
         games.add(game);
     }
+
+    public float getOtherX() {
+        return otherX;
+    }
+
+    public float getOtherY() {
+        return otherY;
+    }
+
+    public void setOtherX(float otherX) {
+        this.otherX = otherX;
+    }
+
+    public void setOtherY(float otherY) {
+        this.otherY = otherY;
+    }
+
+
+    public String toUserInfoJson() {
+        User user = getCurrentUser();
+
+        JsonObject json = new JsonObject();
+        json.addProperty("username", user.getUsername());
+        json.addProperty("nickname", user.getNickname());
+        json.addProperty("email", user.getEmail());
+        json.addProperty("gender", user.getGender() != null ? user.getGender().toString() : "");
+
+        return new Gson().toJson(json);
+    }
+
+    public static User fromUserInfoJson(String jsonString) {
+        JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+
+        String username = json.has("username") ? json.get("username").getAsString() : "";
+        String nickname = json.has("nickname") ? json.get("nickname").getAsString() : "";
+        String email = json.has("email") ? json.get("email").getAsString() : "";
+        String genderStr = json.has("gender") ? json.get("gender").getAsString() : "";
+        String avatarPath = json.has("avatarPath") ? json.get("avatarPath").getAsString() : "";
+
+        Gender gender = null;
+        if (!genderStr.isEmpty()) {
+            try {
+                gender = Gender.valueOf(genderStr);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid gender: " + genderStr);
+            }
+        }
+
+        return new User(username, "", nickname, email, gender, null, "", avatarPath);
+    }
+
 
 }

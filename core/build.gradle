@@ -72,6 +72,7 @@ dependencies {
 //  implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx:1.13.5"
   implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
+  implementation 'com.google.code.gson:gson:2.11.0'
 }
 
 eclipse.project.name = 'StardewValley' + '-parent'

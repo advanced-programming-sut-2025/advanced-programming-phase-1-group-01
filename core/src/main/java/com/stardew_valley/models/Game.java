@@ -8,7 +8,7 @@ import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.building.Maps;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCVillage;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.dateTime.TimeManager;
 import com.stardew_valley.models.farming.FarmingManager;
 import com.stardew_valley.models.foraging.ForagingManager;
@@ -23,9 +23,9 @@ public class Game {
     public final static Position PLAYER2_FINISHED_POSITION = new Position(2480, 1280);
     public final static Position PLAYER3_FINISHED_POSITION = new Position(1280, 80);
     public final static Position PLAYER4_FINISHED_POSITION = new Position(1280, 2480);
-    private Player currentPlayer;
-    private final List<Player> players;
-    private final HashMap<Player, Position> playerPositions;
+    private User currentPlayer;
+    private final List<User> players;
+    private final HashMap<User, Position> playerPositions;
     private final TimeManager timeManager;
     private final WeatherManager weatherManager;
     private final FarmingManager farmingManager;
@@ -44,10 +44,10 @@ public class Game {
     private final MarnieRanch marnieRanch = new MarnieRanch(72,12);
     private final TheStardropSaloon theStarDropSaloon = new TheStardropSaloon(72,14);
 
-    public Game(List<Player> players) {
+    public Game(List<User> players) {
         this.players = players;
         currentPlayer = players.get(0);
-        for (Player player : players) {
+        for (User player : players) {
             player.setGame(this);
         }
 //        currentMap = currentPlayer.getFarm();
@@ -61,7 +61,7 @@ public class Game {
     }
 
 
-    public List<Player> getPlayers() {
+    public List<User> getPlayers() {
         return players;
     }
 
@@ -73,11 +73,11 @@ public class Game {
         return timeManager;
     }
 
-    public Player getCurrentPlayer() {
+    public User getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
+    public void setCurrentPlayer(User currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
@@ -137,8 +137,8 @@ public class Game {
 //        this.currentMap = currentMap;
 //    }
 
-    private void initializeGame(List<Player> players) {
-        for (Player player : players) {
+    private void initializeGame(List<User> players) {
+        for (User player : players) {
 //            player.setFarm(FarmInitializer.initializeFarm(3, 5)); FIXME : Phony
             player.setPosition(PLAYER1_STARTING_POSITION);
         }
@@ -177,7 +177,7 @@ public class Game {
     }
 
     public boolean isAnyoneHere(int x, int y) {
-        for (Player player : players) {
+        for (User player : players) {
             if (player.getPosition().x() == x && player.getPosition().y() == y) {
                 return true;
             }
@@ -196,7 +196,7 @@ public class Game {
     }
 
     public String returnSymbol(int x, int y) {
-        for (Player player : players) {
+        for (User player : players) {
             for (Animal animal : player.getFarm().getAnimals()) {
                 if (animal.getPosition().x() == x && animal.getPosition().y() == y) {
                     return animal.getAnimalInfo().getSymbol();
@@ -236,7 +236,7 @@ public class Game {
     private void initializePosition(int numOfPlayers) {
 
         for (int i = 0; i < numOfPlayers; i++) {
-            Player player = players.get(i);
+            User player = players.get(i);
             Position pos;
             switch (i) {
                 case 0:

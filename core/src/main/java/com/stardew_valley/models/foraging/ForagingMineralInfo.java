@@ -7,7 +7,7 @@ import com.stardew_valley.models.farming.FarmingEnum;
 
 import java.util.Random;
 
-public enum ForagingMineralInfo {
+public enum ForagingMineralInfo implements FarmingEnum {
     QUARTZ("A clear crystal commonly found in caves and mines.", 25, AssetManager.getAssetManager().getQuartz()),
     EARTH_CRISTAL("A resinous substance found near the surface.", 50, AssetManager.getAssetManager().getEarthCrystal()),
     FROZEN_TEAR("A crystal fabled to be the frozen tears of a yeti.", 75, AssetManager.getAssetManager().getFrozenTear()),
@@ -84,5 +84,28 @@ public enum ForagingMineralInfo {
 
     public Item toItem() {
         return new ForagingMineral(this);
+    }
+
+    public static ForagingMineralInfo getMineralByNumber(int num) {
+        switch (num) {
+            case 66: return ForagingMineralInfo.QUARTZ;
+            case 67: return ForagingMineralInfo.EARTH_CRISTAL;
+            case 68: return ForagingMineralInfo.FROZEN_TEAR;
+            case 69: return ForagingMineralInfo.FIRE_QUARTZ;
+            case 70: return ForagingMineralInfo.EMERALD;
+            case 71: return ForagingMineralInfo.AQUAMARINE;
+            case 72: return ForagingMineralInfo.RUBY;
+            case 73: return ForagingMineralInfo.AMETHYST;
+            case 74: return ForagingMineralInfo.TOPAZ;
+            case 75: return ForagingMineralInfo.JADE;
+            case 76: return ForagingMineralInfo.DIAMOND;
+            case 77: return ForagingMineralInfo.PRISMATIC_SHARD;
+            case 78: return ForagingMineralInfo.COPPER;
+            case 79: return ForagingMineralInfo.IRON;
+            case 80: return ForagingMineralInfo.GOLD;
+            case 81: return ForagingMineralInfo.IRIDIUM;
+            case 82: return ForagingMineralInfo.COAL;
+            default: return null;
+        }
     }
 }

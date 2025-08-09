@@ -10,6 +10,12 @@ public class Tile {
     private Building building;
     private TileObject object;
 
+
+    //boolean isPlowed    -> boolean
+    //boolean isMovable   -> boolean
+    //TileObject object   -> m/c/s name
+    //TileType type       -> name
+    //Position position   -> x and y
     public Tile(Builder builder) {
         this.position = builder.getPosition();
         this.type = builder.getType();

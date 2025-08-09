@@ -4,16 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.stardew_valley.controllers.*;
 import com.stardew_valley.models.building.Farm;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.User;
 import com.stardew_valley.models.data.Repository;
-import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.enums.SecurityQuestion;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.initializer.VillageInitializer;
 import com.stardew_valley.views.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,17 +39,17 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         main = this;
-        user();
-        //setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
+        //user();
+        setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
         //setScreen(new GameMenuView(new GameMenuController(Repository.getRepo())));
         //setScreen(new TempLogin(new Repository()));
-        setScreen(new CookingView(new CookingController(Repository.getRepo())));
+        //setScreen(new CookingView(new CookingController(Repository.getRepo())));
         //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
-        try {
-            setScreen(new GameView(new GameController(Repository.getRepo())));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            setScreen(new GameView(new GameController(Repository.getRepo())));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         //setScreen(new GameView(new GameController(Repository.getRepo())));
     }
 
@@ -68,7 +66,7 @@ public class Main extends Game {
     public void user() {
         if (Repository.getRepo().getUserByUsername("1") == null) {
             String path = "avatars/avatar1.png";
-            User user = new User("1", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("1", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
             Repository.getRepo().setCurrentUser(user);
@@ -76,26 +74,26 @@ public class Main extends Game {
 
         if (Repository.getRepo().getUserByUsername("2") == null) {
             String path = "avatars/avatar1.png";
-            User user = new User("2", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("2", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
         }
 
         if (Repository.getRepo().getUserByUsername("3") == null) {
             String path = "avatars/avatar1.png";
-            User user = new User("3", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("3", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
         }
 
         if (Repository.getRepo().getUserByUsername("4") == null) {
             String path = "avatars/avatar1.png";
-            User user = new User("4", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
+            com.stardew_valley.models.data.User user = new com.stardew_valley.models.data.User("4", "a", "a", "a", Gender.MALE, SecurityQuestion.QUESTION1, "a", path);
 
             Repository.getRepo().addUser(user);
         }
 
-        List<Player> playerList = new ArrayList<>();
+        List<User> playerList = new ArrayList<>();
         playerList.add(Repository.getRepo().getUserByUsername("1").getPlayer());
         playerList.add(Repository.getRepo().getUserByUsername("2").getPlayer());
         playerList.add(Repository.getRepo().getUserByUsername("3").getPlayer());
@@ -109,7 +107,7 @@ public class Main extends Game {
 
         Farm farm = FarmInitializer.initializeFarm();
 
-        for (Player player : playerList) {
+        for (User player : playerList) {
             player.setFarm(farm);
             player.setCurrentMap(farm);
             if (player.getUser().getUsername().equals("4"))
