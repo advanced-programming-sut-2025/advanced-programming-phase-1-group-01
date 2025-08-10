@@ -55,28 +55,16 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
         recentBtn.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                for (LobbyData lobby : controller.getLobbies()) {
-                    System.out.println("((((");
-                    System.out.println(lobby.getName());
-                    System.out.println(lobby.getPlayers().size() + "000");
-                    for (User user : lobby.getPlayers()) {
-                        System.out.println(lobby.getPlayers().size() + "999");
-                        System.out.println(user.getUsername());
-                    }
-                    System.out.println("))))))))");
-                }
                 List<LobbyData> recent = controller.loadRecentLobbies();
                 refreshLobbyList(recent);
-                for (LobbyData lobby : controller.getLobbies()) {
-                    System.out.println("((((");
-                    System.out.println(lobby.getName());
-                    System.out.println(lobby.getPlayers().size() + "000");
-                    for (User user : lobby.getPlayers()) {
-                        System.out.println(lobby.getPlayers().size() + "999");
-                        System.out.println(user.getUsername());
-                    }
-                    System.out.println("))))))))");
-                }
+            }
+        });
+
+        TextButton startBtn = new TextButton("Start", skin);
+        startBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                //
             }
         });
 
@@ -86,9 +74,11 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
         root.top().pad(10);
         root.add(createLobbyBtn).pad(5);
         root.add(recentBtn).pad(5);
+        root.add(startBtn).pad(5);
         root.row();
-        root.add(scrollPane).colspan(2).expand().fill();
+        root.add(scrollPane).colspan(3).expand().fill();
     }
+
 
     private void refreshLobbyList(List<LobbyData> lobbyList) {
         lobbyTable.clear();
