@@ -12,6 +12,7 @@ import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.LobbyData;
 import com.stardew_valley.models.Result;
+import com.stardew_valley.models.data.User;
 
 import java.util.List;
 
@@ -51,8 +52,28 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
         recentBtn.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                for (LobbyData lobby : controller.getLobbies()) {
+                    System.out.println("((((");
+                    System.out.println(lobby.getName());
+                    System.out.println(lobby.getPlayers().size() + "000");
+                    for (User user : lobby.getPlayers()) {
+                        System.out.println(lobby.getPlayers().size() + "999");
+                        System.out.println(user.getUsername());
+                    }
+                    System.out.println("))))))))");
+                }
                 List<LobbyData> recent = controller.loadRecentLobbies();
                 refreshLobbyList(recent);
+                for (LobbyData lobby : controller.getLobbies()) {
+                    System.out.println("((((");
+                    System.out.println(lobby.getName());
+                    System.out.println(lobby.getPlayers().size() + "000");
+                    for (User user : lobby.getPlayers()) {
+                        System.out.println(lobby.getPlayers().size() + "999");
+                        System.out.println(user.getUsername());
+                    }
+                    System.out.println("))))))))");
+                }
             }
         });
 

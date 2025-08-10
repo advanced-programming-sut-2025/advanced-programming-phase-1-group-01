@@ -55,6 +55,7 @@ public class LobbyController {
         }
         User currentPlayer = getCurrentUser();
         if (lobby.addUser(currentPlayer)) {
+            GameClient.getInstance().joinLobby(id, password);
             return new Result(true, "Joined lobby successfully.");
         } else {
             return new Result(false, "You are already in the lobby.");
@@ -72,9 +73,11 @@ public class LobbyController {
     public Result createLobby(String name, boolean isPrivate, String password, boolean isVisible) {
         int id = generateUniqueId();
         User admin = getCurrentUser();
+        System.out.println(admin.getUsername());
 
         LobbyData newLobby = new LobbyData(name, isPrivate, isVisible, password, id, admin);
         lobbies.add(newLobby);
+        newLobby.addUser(admin);
         GameClient client = GameClient.getInstance();
 
         client.createLobby(name, isPrivate, password, isVisible);
@@ -91,7 +94,15 @@ public class LobbyController {
         return id;
     }
 
-    private LobbyData findLobbyById(int id) {
+    public LobbyData findLobbyById(int id) {
+
+        for (LobbyData lobby : lobbies) {
+            System.out.println(lobby.getId() + ": " + lobby.getName());
+        }
+
+        System.out.println(lobbies.size());
+
+        System.out.println("Lobby " + id + " found.");
         return lobbies.stream()
             .filter(l -> l.getId() == id)
             .findFirst()

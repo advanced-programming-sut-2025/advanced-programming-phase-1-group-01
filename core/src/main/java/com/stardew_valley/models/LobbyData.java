@@ -30,6 +30,7 @@ public class LobbyData {
         this.password = password;
         this.id = id;
         this.admin = admin;
+        System.out.println((admin == null) + "yes?");
         this.players.add(admin);
         this.createdTime = System.currentTimeMillis();
     }

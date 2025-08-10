@@ -57,6 +57,7 @@ public class LoginMenuController extends Controller {
         }
 
         repo.setCurrentUser(user);
+        System.out.println(user.getUsername() + " logged in youi");
 
         messageLabel.setText("Login successful!");
         Timer.schedule(new Timer.Task() {

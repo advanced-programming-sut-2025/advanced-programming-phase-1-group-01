@@ -21,6 +21,8 @@ public class Network {
         kryo.register(LobbyListResponse.class);
         kryo.register(String.class);
         kryo.register(LobbyInfo[].class);
+        kryo.register(String[].class);
+
 
     }
 
@@ -57,6 +59,7 @@ public class Network {
     public static class JoinLobbyResponse {
         public boolean success;
         public String message;
+        public int lobbyId;
     }
 
     public static class RequestLobbyList {

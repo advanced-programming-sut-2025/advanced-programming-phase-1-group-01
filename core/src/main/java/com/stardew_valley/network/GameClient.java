@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.data.User;
 
 import java.io.IOException;
 
@@ -34,10 +35,14 @@ public class GameClient {
 
             @Override
             public void received(com.esotericsoftware.kryonet.Connection connection, Object object) {
+                System.out.println(Repository.getRepo().getUsers().size());
                 if (object instanceof Network.CreateLobbyResponse resp) {
                     System.out.println("Create Lobby Response: " + resp.message);
                 } else if (object instanceof Network.JoinLobbyResponse resp) {
                     System.out.println("Join Lobby Response: " + resp.message);
+                    User user = Repository.fromUserInfoJson(resp.message);
+                    Repository.getRepo().addUser(user);
+                    System.out.println(LobbyController.getInstance().findLobbyById(resp.lobbyId).addUser(user));
                 } else if (object instanceof Network.LobbyListResponse resp) {
                     LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies);
                 }

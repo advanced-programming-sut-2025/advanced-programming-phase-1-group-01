@@ -240,7 +240,8 @@ public class SignUpMenuController extends Controller {
     }
 
     private boolean isUsernameValid(String username) {
-        return username.matches("^[a-zA-Z0-9\\-]+$");
+        return true;
+//            username.matches("^[a-zA-Z0-9\\-]+$");
     }
 
     private boolean isEmailValid(String email) {
