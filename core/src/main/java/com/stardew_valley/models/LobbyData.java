@@ -6,6 +6,7 @@ package com.stardew_valley.models;
 
 //import com.stardew_valley.models.character.player.User;
 
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.User;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class LobbyData {
         this.id = id;
         this.admin = admin;
         System.out.println((admin == null) + "yes?");
+        System.out.println(admin.getUsername());
         this.players.add(admin);
         this.createdTime = System.currentTimeMillis();
     }
@@ -74,4 +76,24 @@ public class LobbyData {
         if (!isPrivate) return true;
         return password != null && password.equals(input);
     }
+
+    public List<Player> getPlayersReadyToPlay() {
+        List<Player> ready = new ArrayList<>();
+        for (User player : players) {
+            ready.add(player.getPlayer());
+        }
+        return ready;
+    }
+
+    public static LobbyData findLobbyByUsername(List<LobbyData> lobbies, String username) {
+        for (LobbyData lobby : lobbies) {
+            for (User player : lobby.getPlayers()) {
+                if (player.getUsername().equals(username)) {
+                    return lobby;
+                }
+            }
+        }
+        return null;
+    }
+
 }

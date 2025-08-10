@@ -8,11 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.stardew_valley.Main;
+import com.stardew_valley.controllers.GameController;
 import com.stardew_valley.controllers.LobbyController;
-import com.stardew_valley.models.AssetManager;
-import com.stardew_valley.models.LobbyData;
-import com.stardew_valley.models.Result;
+import com.stardew_valley.models.*;
+import com.stardew_valley.models.building.Farm;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.models.initializer.FarmInitializer;
 
 import java.util.List;
 
@@ -107,8 +110,10 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
                     } else {
                         Result result = controller.joinLobby(lobby.getId(), null);
                         showMessage(result.message());
+
                         if (result.success()) {
                             refreshLobbyList(controller.getLobbies());
+                            //startGame(lobby);
                         }
                     }
                 }
@@ -261,5 +266,24 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public static void startGame(LobbyData lobby) {
+        List<Player> playerList = LobbyController.getInstance().findLobbyById(lobby.getId()).getPlayersReadyToPlay();
+
+        Game game = new Game(playerList);
+        LobbyController.getInstance().getRepository().addGame(game);
+        LobbyController.getInstance().getRepository().setCurrentGame(game);
+        LobbyController.getInstance().getRepository().getCurrentUser().getPlayer().setPosition(new Position(80, 1280));
+
+        Farm farm = FarmInitializer.initializeFarm();
+
+        for (Player player : playerList) {
+            player.setFarm(farm);
+            player.setCurrentMap(farm);
+        }
+
+
+        Main.getMain().setScreen(new GameView(new GameController(LobbyController.getInstance().getRepository())));
     }
 }

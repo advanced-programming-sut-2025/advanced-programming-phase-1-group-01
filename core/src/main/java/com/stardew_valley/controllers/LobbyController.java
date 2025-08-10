@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class LobbyController {
 
-    private List<LobbyData> lobbies;
+    private List<LobbyData> lobbies = new ArrayList<>();
     private static LobbyController instance;
     private Repository repo;
 
@@ -80,7 +80,7 @@ public class LobbyController {
         newLobby.addUser(admin);
         GameClient client = GameClient.getInstance();
 
-        client.createLobby(name, isPrivate, password, isVisible);
+        client.createLobby(name, isPrivate, password, isVisible, admin.getUsername());
 
         return new Result(true, "Lobby created successfully with ID: " + id);
     }
@@ -96,13 +96,13 @@ public class LobbyController {
 
     public LobbyData findLobbyById(int id) {
 
-        for (LobbyData lobby : lobbies) {
-            System.out.println(lobby.getId() + ": " + lobby.getName());
-        }
-
-        System.out.println(lobbies.size());
-
-        System.out.println("Lobby " + id + " found.");
+//        for (LobbyData lobby : lobbies) {
+//            System.out.println(lobby.getId() + ": " + lobby.getName());
+//        }
+//
+//        System.out.println(lobbies.size());
+//
+//        System.out.println("Lobby " + id + " found.");
         return lobbies.stream()
             .filter(l -> l.getId() == id)
             .findFirst()
@@ -124,6 +124,7 @@ public class LobbyController {
             }
 
             User admin = users.isEmpty() ? null : users.get(0);
+            System.out.println(admin == null ? "null" : admin.getUsername());
 
             LobbyData lobby = new LobbyData(
                 info.name,

@@ -119,7 +119,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion highlightBoxLight = AssetManager.getAssetManager().getWhiteTexture();
 
     private final DateTimeView dateTimeView;
-    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    //private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Actor miniMapActor = null;
 
     private final static int TILE_SIZE = 16;
@@ -1018,10 +1018,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 0, alpha);
-        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        shapeRenderer.end();
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(0, 0, 0, alpha);
+//        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        shapeRenderer.end();
 
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
@@ -1547,26 +1547,26 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             public void draw(Batch batch, float parentAlpha) {
                 batch.end();
 
-                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+//                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
                 for (int y = 0; y < tiles.size(); y++) {
                     for (int x = 0; x < tiles.get(y).size(); x++) {
                         Tile tile = tiles.get(y).get(x);
-                        shapeRenderer.setColor(getColorForTileType(tile.getType()));
-                        shapeRenderer.rect(getX() + x * tileSize, getY() + y * tileSize, tileSize, tileSize);
+//                        shapeRenderer.setColor(getColorForTileType(tile.getType()));
+//                        shapeRenderer.rect(getX() + x * tileSize, getY() + y * tileSize, tileSize, tileSize);
                     }
                 }
 
                 int playerTileX = (int) player.getX() / 16;
                 int playerTileY = (int) player.getY() / 16;
 
-                shapeRenderer.setColor(Color.RED);
+//                shapeRenderer.setColor(Color.RED);
                 float centerX = getX() + playerTileX * tileSize + tileSize / 2f;
                 float centerY = getY() + playerTileY * tileSize + tileSize / 2f;
-                shapeRenderer.circle(centerX, centerY, (int) (tileSize * 3));
+//                shapeRenderer.circle(centerX, centerY, (int) (tileSize * 3));
 
-                shapeRenderer.end();
+//                shapeRenderer.end();
                 batch.begin();
             }
 

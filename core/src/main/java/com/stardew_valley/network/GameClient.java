@@ -1,12 +1,15 @@
 package com.stardew_valley.network;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.controllers.LobbyController;
+import com.stardew_valley.models.LobbyData;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.views.LobbyView;
 
 import java.io.IOException;
 
@@ -44,7 +47,22 @@ public class GameClient {
                     Repository.getRepo().addUser(user);
                     System.out.println(LobbyController.getInstance().findLobbyById(resp.lobbyId).addUser(user));
                 } else if (object instanceof Network.LobbyListResponse resp) {
+                    System.out.println("at least one lobby response" + resp.lobbies.length);
+                    for (Network.LobbyInfo n : resp.lobbies) {
+                        for (String name : n.playerNames) {
+                            System.out.println(name + "#");
+                        }
+                    }
                     LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies);
+                } else if (object instanceof Network.StartGameRequest) {
+                    Gdx.app.postRunnable(() -> {
+                        LobbyData lobby = LobbyData.findLobbyByUsername(
+                            LobbyController.getInstance().getLobbies(),
+                            LobbyController.getInstance().getRepository().getCurrentUser().getUsername()
+                        );
+                        LobbyView.startGame(lobby);
+                    });
+
                 }
             }
 
@@ -61,12 +79,13 @@ public class GameClient {
         pClient.connect(5000, ip, Network.PORT);
     }
 
-    public void createLobby(String name, boolean isPrivate, String password, boolean isVisible) {
+    public void createLobby(String name, boolean isPrivate, String password, boolean isVisible, String admin) {
         Network.CreateLobbyRequest req = new Network.CreateLobbyRequest();
         req.name = name;
         req.isPrivate = isPrivate;
         req.password = password;
         req.isVisible = isVisible;
+        req.admin = admin;
         pClient.sendTCP(req);
     }
 
