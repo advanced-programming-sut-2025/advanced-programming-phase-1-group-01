@@ -14,12 +14,13 @@ public class Lobby {
     final Map<Integer, String> userJsons = new HashMap<>();
     private final List<Integer> playerConnectionIds = new ArrayList<>();
 
-    public Lobby(int id, String name, boolean isPrivate, String password, boolean isVisible) {
+    public Lobby(int id, String name, boolean isPrivate, String password, boolean isVisible, int connectionId) {
         this.id = id;
         this.name = name;
         this.isPrivate = isPrivate;
         this.password = password;
         this.isVisible = isVisible;
+        playerConnectionIds.add(connectionId);
     }
 
     public int getId() { return id; }

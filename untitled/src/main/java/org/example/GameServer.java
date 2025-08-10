@@ -22,9 +22,13 @@ public class GameServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
+                System.out.println("players received: " + connectionUsers.size());
+                for (Integer connectionId : connectionUsers.keySet()) {
+                    System.out.println("User: " + connectionUsers.get(connectionId));
+                }
                 if (object instanceof Network.CreateLobbyRequest req) {
                     int newId = lobbyCounter++;
-                    Lobby lobby = new Lobby(newId, req.name, req.isPrivate, req.password, req.isVisible);
+                    Lobby lobby = new Lobby(newId, req.name, req.isPrivate, req.password, req.isVisible, connection.getID());
                     lobbies.put(newId, lobby);
 
                     Network.CreateLobbyResponse resp = new Network.CreateLobbyResponse();
@@ -35,7 +39,7 @@ public class GameServer {
                 } else if (object instanceof Network.JoinLobbyRequest req) {
                     Lobby lobby = lobbies.get(req.lobbyId);
                     Network.JoinLobbyResponse resp = new Network.JoinLobbyResponse();
-
+                    System.out.println("lobby: test joined");
                     if (lobby == null) {
                         resp.success = false;
                         resp.message = "Lobby not found";
@@ -44,11 +48,15 @@ public class GameServer {
                         resp.message = "Wrong password";
                     } else {
                         playerLobbyMap.put(connection.getID(), req.lobbyId);
+                        lobbies.get(req.lobbyId).addPlayer(connection.getID(), connectionUsers.get(connection.getID()));
                         resp.success = true;
-                        resp.message = "Joined lobby " + lobby.getName();
+                        resp.message = connectionUsers.get(connection.getID());
+                        resp.lobbyId = req.lobbyId;
+                        server.sendToAllTCP(new Network.StartGameRequest());
                     }
                     connection.sendTCP(resp);
                 } else if (object instanceof Network.RequestLobbyList) {
+                    System.out.println("request lobby received");
                     sendLobbyListToClient(connection);
                 } else if (object instanceof Network.JsonMessage msg && "userInfo".equals(msg.type)) {
                     String user = msg.json;
@@ -101,10 +109,12 @@ public class GameServer {
         List<Network.LobbyInfo> lobbyInfos = new ArrayList<>();
 
         for (Lobby lobby : lobbies.values()) {
+
             List<String> playerJsons = lobby.getPlayerConnectionIds().stream()
                     .map(connectionUsers::get)
                     .filter(Objects::nonNull)
                     .toList();
+            System.out.println("Lobby: " + playerJsons.size());
 
             Network.LobbyInfo info = new Network.LobbyInfo();
             info.id = lobby.getId();
