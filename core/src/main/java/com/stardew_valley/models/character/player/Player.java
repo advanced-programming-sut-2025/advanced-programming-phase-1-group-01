@@ -922,6 +922,10 @@ public class Player extends Character {
         isMoving = moving;
     }
 
+    public boolean getMoving() {
+        return isMoving;
+    }
+
     public boolean isFainting() {
         return whileFainting;
     }
@@ -999,6 +1003,41 @@ public class Player extends Character {
         } else {
             foods.remove(item);
         }
+    }
+
+    public static Direction numToDirection(int num) {
+        switch (num) {
+            case 0:
+                return Direction.UP;
+            case 1:
+                return Direction.DOWN;
+            case 2:
+                return Direction.LEFT;
+            default:
+                return Direction.RIGHT;
+        }
+    }
+
+    public static int directionToNum(Direction direction) {
+        switch (direction) {
+            case UP:
+                return 0;
+            case DOWN:
+                return 1;
+            case LEFT:
+                return 2;
+            default:
+                return 3;
+        }
+    }
+
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public float getStateTime() {
+        return stateTime;
     }
 
     public void addReaction(Reaction reaction) {

@@ -47,7 +47,9 @@ public class Game {
 
     public Game(List<Player> players) {
         this.players = players;
-        currentPlayer = players.get(0);
+        currentPlayer = Repository.getRepo().getCurrentUser().getPlayer();
+        System.out.println(currentPlayer.getUser().toString());
+        System.out.println(Repository.getRepo().getCurrentUser().toString());
         for (Player player : players) {
             player.setGame(this);
         }
@@ -256,5 +258,16 @@ public class Game {
     public int getCurrentIndex() {
         return currentIndex;
     }
+
+    public Player getPlayerByUsername(String username) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().equals(username)) {
+                return player;
+            }
+        }
+        System.out.println("Player not found for username: " + username);
+        return null;
+    }
+
 
 }

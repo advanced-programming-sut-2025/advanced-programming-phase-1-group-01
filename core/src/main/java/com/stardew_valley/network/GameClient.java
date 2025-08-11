@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.controllers.VotingController;
 import com.stardew_valley.models.LobbyData;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.Voting;
 import com.stardew_valley.models.character.player.Inventory;
@@ -46,7 +48,7 @@ public class GameClient {
 
             @Override
             public void received(com.esotericsoftware.kryonet.Connection connection, Object object) {
-                System.out.println(Repository.getRepo().getUsers().size());
+                //System.out.println(Repository.getRepo().getUsers().size());
                 if (object instanceof Network.CreateLobbyResponse resp) {
                     System.out.println("Create Lobby Response: " + resp.message);
                 } else if (object instanceof Network.JoinLobbyResponse resp) {
@@ -55,21 +57,48 @@ public class GameClient {
                     Repository.getRepo().addUser(user);
                     System.out.println(LobbyController.getInstance().findLobbyById(resp.lobbyId).addUser(user));
                 } else if (object instanceof Network.LobbyListResponse resp) {
-                    System.out.println("at least one lobby response" + resp.lobbies.length);
                     for (Network.LobbyInfo n : resp.lobbies) {
                         for (String name : n.playerNames) {
                             System.out.println(name + "#");
                         }
                     }
-                    LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies);
+                    LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies, resp.isForOnlinePlayersList);
                 } else if (object instanceof Network.StartGameRequest) {
                     Gdx.app.postRunnable(() -> {
                         LobbyData lobby = LobbyData.findLobbyByUsername(
-                                LobbyController.getInstance().getLobbies(),
-                                LobbyController.getInstance().getRepository().getCurrentUser().getUsername()
+                            LobbyController.getInstance().getLobbies(),
+                            LobbyController.getInstance().getRepository().getCurrentUser().getUsername()
                         );
                         LobbyView.startGame(lobby);
                     });
+                } else if (object instanceof Network.PlayerStatus playerStatus) {
+                    Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(playerStatus.username);
+                    if (player != null) {
+                        if (!playerStatus.username.equals(Repository.getRepo().getCurrentUser().getUsername())) {
+                            player.setX(playerStatus.x);
+                            player.setY(playerStatus.y);
+                            player.setDirection(Player.numToDirection(playerStatus.direction));
+                            player.setStateTime(playerStatus.stateTime);
+                            player.setMoving(playerStatus.isWalking);
+                            System.out.println("set " + playerStatus.username);
+                            System.out.println("in " + Repository.getRepo().getCurrentUser().getUsername());
+                        } else {
+                            //System.out.println("that was yourself");
+                        }
+                    } else {
+                        System.out.println("Warning: player not found for username: " + playerStatus.username);
+                    }
+                } else if (object instanceof Network.LeaveLobbyResponse resp) {
+                    System.out.println("Leave Lobby Response: " + resp.message);
+                    if (resp.success) {
+                        //Repository.getRepo().removeUserFromLobby(resp.lobbyId);
+                        //LobbyController.getInstance().findLobbyById(resp.lobbyId).removeUser(/* شناسه کاربر فعلی */);
+                    }
+                } else if (object instanceof Network.DeleteLobbyResponse resp) {
+                    System.out.println("Delete Lobby Response: " + resp.message);
+                    if (resp.success) {
+                        LobbyController.getInstance().deleteLobby(resp.lobbyId);
+                    }
 
                 } else if (object instanceof Network.ResponseUsername resp) {
                     System.out.println(resp.message);
@@ -181,13 +210,14 @@ public class GameClient {
         pClient.connect(5000, ip, Network.PORT);
     }
 
-    public void createLobby(String name, boolean isPrivate, String password, boolean isVisible, String admin) {
+    public void createLobby(String name, boolean isPrivate, String password, boolean isVisible, String admin, int id) {
         Network.CreateLobbyRequest req = new Network.CreateLobbyRequest();
         req.name = name;
         req.isPrivate = isPrivate;
         req.password = password;
         req.isVisible = isVisible;
         req.admin = admin;
+        req.id = id;
         pClient.sendTCP(req);
     }
 
@@ -205,8 +235,45 @@ public class GameClient {
         return instance;
     }
 
-    public void requestLobbyList() {
+    public void requestLobbyList(boolean isForOnlinePlayersList) {
         Network.RequestLobbyList req = new Network.RequestLobbyList();
+        req.isForOnlinePlayersList = isForOnlinePlayersList;
+        pClient.sendTCP(req);
+    }
+
+
+    public void gameStart(int lobbyId) {
+        Network.GameStart req = new Network.GameStart();
+        req.lobbyId = lobbyId;
+        pClient.sendTCP(req);
+    }
+
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void sendStatus(Player player) {
+        Network.PlayerStatus status = new Network.PlayerStatus();
+        status.username = player.getUser().getUsername();
+        status.x = player.getX();
+        status.y = player.getY();
+        status.direction = Player.directionToNum(player.getDirection());
+        status.stateTime = player.getStateTime();
+        status.isWalking = player.getMoving();
+        pClient.sendTCP(status);
+
+    }
+
+    public void leaveLobby(int lobbyId) {
+        Network.LeaveLobbyRequest req = new Network.LeaveLobbyRequest();
+        req.lobbyId = lobbyId;
+        pClient.sendTCP(req);
+    }
+
+    public void deleteLobby(int lobbyId) {
+        Network.DeleteLobbyRequest req = new Network.DeleteLobbyRequest();
+        req.lobbyId = lobbyId;
         pClient.sendTCP(req);
     }
 

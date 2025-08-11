@@ -132,7 +132,9 @@ public class CookingView extends View {
                     public void run() {
                         messageLabel.setText("");
                     }
-                }, 1);
+                },  //1
+                    0.01f
+                );
             }
         });
 
@@ -146,7 +148,9 @@ public class CookingView extends View {
                     public void run() {
                         messageLabel.setText("");
                     }
-                }, 1);
+                },  //1
+                    0.01f
+                );
             }
         });
 
@@ -160,7 +164,9 @@ public class CookingView extends View {
                     public void run() {
                         messageLabel.setText("");
                     }
-                }, 1);
+                },  //1
+                    0.01f
+                );
             }
         });
 

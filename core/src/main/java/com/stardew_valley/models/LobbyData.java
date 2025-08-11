@@ -74,6 +74,8 @@ public class LobbyData {
 
     public boolean checkPassword(String input) {
         if (!isPrivate) return true;
+        System.out.println(password);
+        System.out.println(input);
         return password != null && password.equals(input);
     }
 

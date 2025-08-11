@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class LobbyController {
 
     private List<LobbyData> lobbies = new ArrayList<>();
+    private List<LobbyData> lobbiesForOnlinePlayers = new ArrayList<>();
     private static LobbyController instance;
     private Repository repo;
 
@@ -38,31 +39,46 @@ public class LobbyController {
 
 
     public List<LobbyData> getLobbies() {
-        GameClient.getInstance().requestLobbyList();
+        GameClient.getInstance().requestLobbyList(false);
         return lobbies;
+    }
+
+    public List<LobbyData> getLobbiesForOnlinePlayers() {
+        GameClient.getInstance().requestLobbyList(true);
+        return lobbiesForOnlinePlayers;
+    }
+
+    public void setLobbyListForOnlinePlayers(List<LobbyData> lobbiesForOnlinePlayers) {
+        this.lobbiesForOnlinePlayers = lobbiesForOnlinePlayers;
     }
 
     public Result joinLobby(int id, String password) {
         LobbyData lobby = findLobbyById(id);
         if (lobby == null) {
+            System.out.println("Failed to join lobby 3 yse");
             return new Result(false, "Lobby not found.");
         }
         if (lobby.isFull()) {
+            System.out.println("Failed to join lobby 4 yse");
             return new Result(false, "Lobby is full.");
         }
         if (lobby.isPrivate() && !lobby.checkPassword(password)) {
+            System.out.println("Failed to join lobby 2 yse");
             return new Result(false, "Wrong password.");
         }
         User currentPlayer = getCurrentUser();
         if (lobby.addUser(currentPlayer)) {
             GameClient.getInstance().joinLobby(id, password);
+            System.out.println("Joined lobby yse" + id);
             return new Result(true, "Joined lobby successfully.");
         } else {
+            System.out.println("Failed to join lobby 1 yse");
             return new Result(false, "You are already in the lobby.");
         }
     }
 
     public List<LobbyData> loadRecentLobbies() {
+        GameClient.getInstance().requestLobbyList(false);
         return lobbies.stream()
             .filter(LobbyData::isVisible)
             .sorted(Comparator.comparingLong(LobbyData::getCreatedTime).reversed())
@@ -70,8 +86,7 @@ public class LobbyController {
             .collect(Collectors.toList());
     }
 
-    public Result createLobby(String name, boolean isPrivate, String password, boolean isVisible) {
-        int id = generateUniqueId();
+    public Result createLobby(int id, String name, boolean isPrivate, String password, boolean isVisible) {
         User admin = getCurrentUser();
         System.out.println(admin.getUsername());
 
@@ -80,10 +95,39 @@ public class LobbyController {
         newLobby.addUser(admin);
         GameClient client = GameClient.getInstance();
 
-        client.createLobby(name, isPrivate, password, isVisible, admin.getUsername());
+        client.createLobby(name, isPrivate, password, isVisible, admin.getUsername(), id);
 
         return new Result(true, "Lobby created successfully with ID: " + id);
     }
+
+    public Result deleteLobby(int id) {
+        User currentUser = getCurrentUser();
+        System.out.println(currentUser.getUsername());
+
+        LobbyData lobbyToDelete = null;
+        for (LobbyData lobby : lobbies) {
+            if (lobby.getId() == id) {
+                lobbyToDelete = lobby;
+                break;
+            }
+        }
+
+        if (lobbyToDelete == null) {
+            return new Result(false, "Lobby not found with ID: " + id);
+        }
+
+        if (!lobbyToDelete.getAdmin().equals(currentUser)) {
+            return new Result(false, "Only the admin can delete the lobby");
+        }
+
+        lobbies.remove(lobbyToDelete);
+
+        GameClient client = GameClient.getInstance();
+        client.deleteLobby(id);
+
+        return new Result(true, "Lobby deleted successfully with ID: " + id);
+    }
+
 
     private int generateUniqueId() {
         Random random = new Random();
@@ -95,14 +139,6 @@ public class LobbyController {
     }
 
     public LobbyData findLobbyById(int id) {
-
-//        for (LobbyData lobby : lobbies) {
-//            System.out.println(lobby.getId() + ": " + lobby.getName());
-//        }
-//
-//        System.out.println(lobbies.size());
-//
-//        System.out.println("Lobby " + id + " found.");
         return lobbies.stream()
             .filter(l -> l.getId() == id)
             .findFirst()
@@ -114,23 +150,26 @@ public class LobbyController {
     }
 
 
-    public void updateLobbyListFromNetwork(Network.LobbyInfo[] lobbyInfos) {
+    public void updateLobbyListFromNetwork(Network.LobbyInfo[] lobbyInfos, boolean isForOnlinePlayersList) {
         List<LobbyData> lobbyDataList = new ArrayList<>();
 
         for (Network.LobbyInfo info : lobbyInfos) {
             List<User> users = new ArrayList<>();
             for (String playerJson : info.playerNames) {
+                System.out.println(Repository.fromUserInfoJson(playerJson).getUsername() + " hey ui");
                 users.add(Repository.fromUserInfoJson(playerJson));
             }
+            if (users.isEmpty()) {
+                continue;
+            }
 
-            User admin = users.isEmpty() ? null : users.get(0);
-            System.out.println(admin == null ? "null" : admin.getUsername());
+            User admin = users.get(0);
 
             LobbyData lobby = new LobbyData(
                 info.name,
                 info.isPrivate,
                 info.isVisible,
-                "",
+                info.password,
                 info.id,
                 admin
             );
@@ -141,11 +180,25 @@ public class LobbyController {
 
             lobbyDataList.add(lobby);
         }
-        setLobbies(lobbyDataList);
+        if (isForOnlinePlayersList) {
+            setLobbyListForOnlinePlayers(lobbyDataList);
+        } else {
+            setLobbies(lobbyDataList);
+        }
     }
 
     private void setLobbies(List<LobbyData> lobbyDataList) {
         this.lobbies = lobbyDataList;
     }
+
+    public LobbyData searchLobbyById(String id) {
+        for (LobbyData lobby : lobbies) {
+            if (String.valueOf(lobby.getId()).equals(id)) {
+                return lobby;
+            }
+        }
+        return null;
+    }
+
 
 }

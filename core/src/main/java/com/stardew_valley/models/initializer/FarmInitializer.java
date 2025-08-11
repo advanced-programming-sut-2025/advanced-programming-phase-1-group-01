@@ -117,7 +117,7 @@ public class FarmInitializer {
 
         for (int i = xStart; i <= xEnd; i++) {
             for (int j = yStart; j <= yEnd; j++) {
-                System.out.println((i - additionalX) + " " +  (j - additionalY));
+                //System.out.println((i - additionalX) + " " +  (j - additionalY));
                 if ((i == 5 + additionalX || i == 6 + additionalX || i == 7 + additionalX) &&
                     (j == 12 + additionalY)) {
                     continue;
@@ -479,7 +479,7 @@ public class FarmInitializer {
     }
 
     private static void debugPrint(int x, int y, TileType type, String source) {
-        System.out.println("[" + source + "] Setting tile at (" + x + ", " + y + ") to " + type);
+        //System.out.println("[" + source + "] Setting tile at (" + x + ", " + y + ") to " + type);
     }
 
 

@@ -66,7 +66,9 @@ public class MainMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new GameMenuView(new GameMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     public void profileMenu(Label messageLabel) {
@@ -76,7 +78,9 @@ public class MainMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new ProfileMenuView(new ProfileMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     public void logout(Label messageLabel) {
@@ -87,7 +91,9 @@ public class MainMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     public void exit(Label messageLabel) {
@@ -97,7 +103,9 @@ public class MainMenuController extends Controller {
             public void run() {
                 Gdx.app.exit();
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
 }

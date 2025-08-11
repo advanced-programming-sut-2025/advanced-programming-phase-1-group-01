@@ -155,4 +155,19 @@ public class User implements Serializable {
         return sb.toString();
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+            "username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", nickname='" + nickname + '\'' +
+            ", email='" + email + '\'' +
+            ", gender=" + gender +
+            ", securityQuestion=" + securityQuestion +
+            ", securityAnswer='" + securityAnswer + '\'' +
+            ", avatarPath='" + avatarPath + '\'' +
+            ", player=" + player +
+            '}';
+    }
+
 }

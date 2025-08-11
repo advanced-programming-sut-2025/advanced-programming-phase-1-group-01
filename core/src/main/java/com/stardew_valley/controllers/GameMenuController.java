@@ -99,6 +99,8 @@ public class GameMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new MainMenuView(new MainMenuController(repo)));
             }
-        }, 2);
+        }, //2
+            0.01f
+        );
     }
 }

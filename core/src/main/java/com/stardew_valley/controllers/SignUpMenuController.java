@@ -184,7 +184,9 @@ public class SignUpMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     private void handleUsernameTaken(String baseUsername, Label messageLabel) {
@@ -226,7 +228,9 @@ public class SignUpMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     public void exit(Label messageLabel) {
@@ -236,7 +240,9 @@ public class SignUpMenuController extends Controller {
             public void run() {
                 Gdx.app.exit();
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     private boolean isUsernameValid(String username) {
