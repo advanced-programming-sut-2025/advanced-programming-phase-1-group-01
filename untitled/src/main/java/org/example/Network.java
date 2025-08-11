@@ -99,8 +99,6 @@ public class Network {
         public LobbyInfo[] lobbies;
     }
 
-    public static class StartGameRequest {
-    }
 
     public static class RequestUsername {
         public String username;
