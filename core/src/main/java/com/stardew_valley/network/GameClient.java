@@ -1,3 +1,4 @@
+
 package com.stardew_valley.network;
 
 import com.badlogic.gdx.Gdx;
@@ -20,12 +21,15 @@ import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.relations.Gift;
 import com.stardew_valley.views.GameView;
 import com.stardew_valley.views.LobbyView;
+import com.stardew_valley.views.LoginMenuView;
 import com.stardew_valley.views.ReactionView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GameClient {
     private final Repository repo = Repository.getRepo();
+    private LoginMenuView loginMenuView;
     private static GameClient instance;
     private final Client pClient;
     private int playerId;
@@ -53,7 +57,8 @@ public class GameClient {
                     System.out.println("Create Lobby Response: " + resp.message);
                 } else if (object instanceof Network.JoinLobbyResponse resp) {
                     System.out.println("Join Lobby Response: " + resp.message);
-                    User user = Repository.fromUserInfoJson(resp.message);
+                    User user = null;
+                    user = Repository.fromUserInfoJson(resp.message);
                     Repository.getRepo().addUser(user);
                     System.out.println(LobbyController.getInstance().findLobbyById(resp.lobbyId).addUser(user));
                 } else if (object instanceof Network.LobbyListResponse resp) {
@@ -65,7 +70,8 @@ public class GameClient {
                     LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies, resp.isForOnlinePlayersList);
                 } else if (object instanceof Network.StartGameRequest) {
                     Gdx.app.postRunnable(() -> {
-                        LobbyData lobby = LobbyData.findLobbyByUsername(
+                        LobbyData lobby = null;
+                        lobby = LobbyData.findLobbyByUsername(
                             LobbyController.getInstance().getLobbies(),
                             LobbyController.getInstance().getRepository().getCurrentUser().getUsername()
                         );
@@ -168,8 +174,10 @@ public class GameClient {
                     }
                 } else if (object instanceof Network.Vote req) {
                     VotingController.getCurrentVoting().vote(req.voterUsername, Voting.Vote.valueOf(req.vote));
+                } else if (object instanceof Network.ResponseCheckToLogin resp) {
+                    System.out.println("received response check to login");
+                    loginMenuView.getController().login(List.of(resp.username, resp.password, "Yes"), loginMenuView.getMessageLabel());
                 }
-
             }
 
             @Override
@@ -214,6 +222,11 @@ public class GameClient {
     public static synchronized GameClient getInstance() {
         if (instance == null) {
             instance = new GameClient();
+            try {
+                instance.connect("127.0.0.1");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return instance;
     }
@@ -352,4 +365,24 @@ public class GameClient {
 
         pClient.sendTCP(req);
     }
+
+    public void sendAddRequest(User user) {
+        Network.RequestAddSignedInUser req = new Network.RequestAddSignedInUser();
+        req.username = user.getUsername();
+        req.password = user.getPassword();
+        req.securityQuestionType = user.getSecurityQuestion().name();
+        req.securityQuestionAnswer = user.getSecurityAnswer();
+        pClient.sendTCP(req);
+    }
+
+    public void sendCheckLoginRequest(String username, String password, LoginMenuView view) {
+        System.out.println("sendCheckLoginRequest");
+        this.loginMenuView = view;
+        Network.RequestCheckToLogin req = new Network.RequestCheckToLogin();
+        req.username = username;
+        req.password = password;
+        pClient.sendTCP(req);
+    }
+
+
 }

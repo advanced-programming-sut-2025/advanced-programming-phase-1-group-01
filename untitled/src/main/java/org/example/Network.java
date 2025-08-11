@@ -1,3 +1,5 @@
+
+
 package org.example;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -40,6 +42,9 @@ public class Network {
         kryo.register(AddReaction.class);
         kryo.register(Vote.class);
         kryo.register(StartVoting.class);
+        kryo.register(RequestAddSignedInUser.class);
+        kryo.register(RequestCheckToLogin.class);
+        kryo.register(ResponseCheckToLogin.class);
     }
 
     public static class JsonMessage {
@@ -182,6 +187,29 @@ public class Network {
         public int lobbyId;
     }
 
+    public static class RequestAddSignedInUser {
+        public String username;
+        public String password;
+        public String securityQuestionType;
+        public String securityQuestionAnswer;
+    }
 
+    public static class RequestCheckToLogin {
+        public String username;
+        public String password;
+    }
+
+    public static class ResponseCheckToLogin {
+        public boolean canLogin;
+        public String username;
+        public String password;
+    }
 
 }
+
+
+
+
+
+
+

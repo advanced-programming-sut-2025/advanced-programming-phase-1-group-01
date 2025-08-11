@@ -165,4 +165,12 @@ public class LoginMenuView extends View {
             }
         });
     }
+
+    public LoginMenuController getController() {
+        return controller;
+    }
+
+    public Label getMessageLabel() {
+        return messageLabel;
+    }
 }

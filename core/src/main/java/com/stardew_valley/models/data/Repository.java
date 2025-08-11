@@ -100,6 +100,8 @@ public class Repository {
     public String toUserInfoJson() {
         User user = getCurrentUser();
 
+        if (user == null) return "{}";
+
         JsonObject json = new JsonObject();
         json.addProperty("username", user.getUsername());
         json.addProperty("nickname", user.getNickname());

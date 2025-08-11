@@ -19,6 +19,7 @@ public class GameServer {
     private final Map<Integer, String> connectionUsers = new HashMap<>();
     private final Map<String, Integer> usernameToIdMap = new HashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final List<UserInfo> signedInUsers = new ArrayList<>();
 
     public GameServer() throws IOException {
         server = new Server(6553600, 6553600);
@@ -60,6 +61,11 @@ public class GameServer {
                         server.sendToAllExceptTCP(connection.getID(), req);
                     } else if (object instanceof Network.Vote req) {
                         server.sendToAllExceptTCP(connection.getID(), req);
+                    } else if (object instanceof Network.RequestAddSignedInUser req) {
+                        handleAddUserToSignedInUsers(req);
+                    } else if (object instanceof Network.RequestCheckToLogin req) {
+                        System.out.println("requestCheckToLogin in server");
+                        handleCheckToLoginRequest(connection, req);
                     }
                 } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
@@ -290,4 +296,33 @@ public class GameServer {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    private void addUserToSignedInUsers(String username, String password, String securityQuestionType, String securityQuestionAnswer) {
+        UserInfo userInfo = new UserInfo(username, password, securityQuestionType, securityQuestionAnswer);
+        if (!signedInUsers.contains(userInfo)) {
+            signedInUsers.add(userInfo);
+        }
+    }
+
+    private boolean isInSignedInUser(String username, String password) {
+        return signedInUsers.stream()
+            .anyMatch(user -> user.getUsername().equals(username) && user.getPassword().equals(password));
+    }
+
+    private void handleAddUserToSignedInUsers(Network.RequestAddSignedInUser req) {
+        String username = req.username;
+        String password = req.password;
+        String securityQuestionType = req.securityQuestionType;
+        String securityQuestionAnswer = req.securityQuestionAnswer;
+        addUserToSignedInUsers(username, password, securityQuestionType, securityQuestionAnswer);
+    }
+
+    private void handleCheckToLoginRequest(Connection connection, Network.RequestCheckToLogin req) {
+        Network.ResponseCheckToLogin resp = new Network.ResponseCheckToLogin();
+        resp.canLogin = isInSignedInUser(req.username, req.password);
+        resp.username = req.username;
+        resp.password = req.password;
+        connection.sendTCP(resp);
+    }
+
 }
