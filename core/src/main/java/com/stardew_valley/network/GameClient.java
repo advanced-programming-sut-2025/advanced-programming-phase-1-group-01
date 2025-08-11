@@ -370,8 +370,8 @@ public class GameClient {
         Network.RequestAddSignedInUser req = new Network.RequestAddSignedInUser();
         req.username = user.getUsername();
         req.password = user.getPassword();
-        req.securityQuestionType = user.getSecurityQuestion().name();
-        req.securityQuestionAnswer = user.getSecurityAnswer();
+        if (user.getSecurityQuestion() != null) req.securityQuestionType = user.getSecurityQuestion().name();
+        if (user.getSecurityAnswer() != null) req.securityQuestionAnswer = user.getSecurityAnswer();
         pClient.sendTCP(req);
     }
 
