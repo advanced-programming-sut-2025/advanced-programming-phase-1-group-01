@@ -139,7 +139,25 @@ public class GameClient {
                     }
                 } else if (object instanceof Network.Vote req) {
                     VotingController.getCurrentVoting().vote(req.voterUsername, Voting.Vote.valueOf(req.vote));
+                } else if (object instanceof Network.TradeRequest req) {
+                    Player player = repo.getCurrentUser().getPlayer();
+                    User user = repo.getUserByUsername(req.senderUsername);
+                    player.getTradeProposalService().createProposal(req.senderUsername, req.receiverUsername);
+                    player.setTradeRequester(user);
+                } else if (object instanceof Network.TradeResponse req) {
+                    Player player = repo.getCurrentUser().getPlayer();
+                    if (req.accepted) {
+                        player.getTradeProposalService().acceptProposal(req.receiverUsername, req.senderUsername);
+                        player.getTradeProposalService().setMessage("your trade request accepted");
+                        player.getTradeProposalService().setTradeAccepted(true);
+                    }
+                    else {
+                        player.getTradeProposalService().rejectProposal(req.receiverUsername, req.senderUsername);
+                        player.getTradeProposalService().setMessage("your trade request rejected");
+                        player.getTradeProposalService().setTradeAccepted(false);
+                    }
                 }
+
             }
 
             @Override
@@ -283,5 +301,19 @@ public class GameClient {
         req.voterUsername = Repository.getRepo().getCurrentUser().getUsername();
 
         pClient.sendTCP(req);
+    }
+
+    public void sendTradeRequest(String receiverUsername) {
+        Network.TradeRequest req = new Network.TradeRequest();
+        req.senderUsername = repo.getCurrentUser().getUsername();
+        req.receiverUsername = receiverUsername;
+        pClient.sendTCP(req);
+    }
+
+    public void sendTradeResponse(String receiverUsername, boolean response) {
+        Network.TradeResponse req = new Network.TradeResponse();
+        req.accepted = response;
+        req.receiverUsername = receiverUsername;
+        req.senderUsername = repo.getCurrentUser().getUsername();
     }
 }

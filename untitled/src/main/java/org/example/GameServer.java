@@ -107,6 +107,12 @@ public class GameServer {
                     server.sendToAllExceptTCP(connection.getID(), req);
                 } else if (object instanceof Network.Vote req) {
                     server.sendToAllExceptTCP(connection.getID(), req);
+                } else if (object instanceof Network.TradeRequest req) {
+                    int receiverId = usernameToIdMap.get(req.receiverUsername);
+                    server.sendToTCP(receiverId, req);
+                } else if (object instanceof Network.TradeResponse req) {
+                    int receiverId = usernameToIdMap.get(req.receiverUsername);
+                    server.sendToTCP(receiverId, req);
                 }
             }
 

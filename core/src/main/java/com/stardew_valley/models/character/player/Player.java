@@ -71,6 +71,8 @@ public class Player extends Character {
 
     private float globalDelta = 0f;
     private Map<String,Integer> foods;
+    private User tradeRequester;
+    private TradeProposalService tradeProposalService;
 
 
     public Player(User user) {
@@ -83,6 +85,7 @@ public class Player extends Character {
         energy = new Energy();
         abilityService = new AbilityService(this);
         relationshipService = new RelationshipService(this);
+        tradeProposalService = new TradeProposalService();
         gender = user.getGender();
         notifications = new LinkedHashMap<>();
         craftingRecipes = new HashSet<>();
@@ -1021,5 +1024,17 @@ public class Player extends Character {
         public String getReaction() {
             return reaction;
         }
+    }
+
+    public User getTradeRequester() {
+        return tradeRequester;
+    }
+
+    public void setTradeRequester(User tradeRequester) {
+        this.tradeRequester = tradeRequester;
+    }
+
+    public TradeProposalService getTradeProposalService() {
+        return tradeProposalService;
     }
 }

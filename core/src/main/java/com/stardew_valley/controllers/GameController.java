@@ -39,6 +39,7 @@ public class GameController extends Controller {
     private final TheStardropSaloonController theStardropSaloonController;
     private final PierreGeneralStoreController pierreGeneralStoreController;
     private final SettingsController settingsController;
+    private final TradeController tradeController;
 
     public GameController(Repository repo) {
         super(repo);
@@ -66,6 +67,7 @@ public class GameController extends Controller {
         theStardropSaloonController = new TheStardropSaloonController(repo);
         pierreGeneralStoreController = new PierreGeneralStoreController(repo);
         settingsController = new SettingsController(repo);
+        tradeController = new TradeController(repo);
         commands = new ArrayList<>();
         initCommands();
     }
@@ -276,6 +278,10 @@ public class GameController extends Controller {
 
     public SettingsController getSettingsController() {
         return settingsController;
+    }
+
+    public TradeController getTradeController() {
+        return tradeController;
     }
 
 //    public GameClient getGameClient() {

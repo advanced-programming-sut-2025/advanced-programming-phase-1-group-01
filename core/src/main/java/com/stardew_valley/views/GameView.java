@@ -169,6 +169,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final VotingView votingView;
     private final TextButton votingButton = new TextButton("Voting", AssetManager.getAssetManager().getSkin());
 
+    private final TradeMenuView tradeMenuView;
+    private final TradeView tradeView;
+    private final TradeRequest tradeRequest;
+    private final TradeHistory tradeHistory;
+
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
         this.controller = controller;
@@ -190,6 +195,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.votingView = new VotingView(stage);
         this.reactionsButton = new TextButton("Reactions", AssetManager.getAssetManager().getSkin());
         this.settingsView = new SettingsView(controller.getSettingsController(), stage);
+        this.tradeMenuView = new TradeMenuView(stage);
+        this.tradeView = new TradeView(stage);
+        this.tradeRequest = new TradeRequest(stage);
+        this.tradeHistory = new TradeHistory(stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
         giftView = new GiftView(controller.getRelationshipController(), stage, inventoryView);
         friendshipView = new FriendshipView(controller.getRelationshipController(), Repository.getRepo().getCurrentUser().getPlayer().getRelationService(), stage, giftView);
@@ -224,7 +233,31 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         inventoryMenu.showWindow(inventoryView);
 
         stage.addActor(shippingBinView);
+        stage.addActor(tradeMenuView);
+        stage.addActor(tradeView);
+        stage.addActor(tradeRequest);
+        stage.addActor(tradeHistory);
         stage.addActor(foodMenuView);
+
+        tradeMenuView.setOnTradeStart(() -> {
+            tradeView.setShown(true);
+            tradeView.setVisible(true);
+        });
+
+        tradeMenuView.setOnTradeHistory(() -> {
+            tradeHistory.setShown(true);
+            tradeHistory.setVisible(true);
+        });
+
+        tradeView.setOnBack(() -> {
+            tradeMenuView.setShown(true);
+            tradeMenuView.setVisible(true);
+        });
+
+        tradeHistory.setOnBack(() -> {
+            tradeMenuView.setShown(true);
+            tradeMenuView.setVisible(true);
+        });
 
         stage.addActor(friendshipView);
         friendshipsButton.setSize(150, 80);
@@ -305,6 +338,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         votingView.update();
         friendshipView.update();
         notificationsView.update();
+        tradeRequest.update();
+        tradeHistory.update();
         giftView.update();
         foodMenuView.update();
         eatFood();
@@ -352,7 +387,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             votingView.setVisible(!votingView.isVisible());
             return true;
         }
-
+        if (i == Input.Keys.Y) {
+            toggleTradeMenu();
+            return true;
+        }
         return false;
     }
 
@@ -1037,6 +1075,20 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             foodMenuView.setVisible(false);
         }
         isShown = !isShown;
+    }
+
+    public void toggleTradeMenu() {
+        if (!tradeMenuView.isVisible() && !tradeView.isVisible() && !tradeHistory.isVisible()) {
+            tradeMenuView.setShown(true);
+            tradeMenuView.setVisible(true);
+        } else {
+            tradeMenuView.setShown(false);
+            tradeMenuView.setVisible(false);
+            tradeView.setShown(false);
+            tradeView.setVisible(false);
+            tradeHistory.setShown(false);
+            tradeHistory.setVisible(false);
+        }
     }
 
     private void showMessage(String text) {

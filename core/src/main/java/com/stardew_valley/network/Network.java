@@ -32,6 +32,8 @@ public class Network {
         kryo.register(AddReaction.class);
         kryo.register(Vote.class);
         kryo.register(StartVoting.class);
+        kryo.register(TradeRequest.class);
+        kryo.register(TradeResponse.class);
     }
 
     public static class JsonMessage {
@@ -136,6 +138,17 @@ public class Network {
     public static class StartVoting {
         public String type;
         public String votingUsername;
+    }
+
+    public static class TradeRequest {
+        public String senderUsername;
+        public String receiverUsername;
+    }
+
+    public static class TradeResponse {
+        public String senderUsername;
+        public String receiverUsername;
+        public boolean accepted;
     }
 }
 
