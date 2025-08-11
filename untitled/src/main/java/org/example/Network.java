@@ -23,6 +23,12 @@ public class Network {
         kryo.register(LobbyInfo[].class);
         kryo.register(String[].class);
         kryo.register(StartGameRequest.class);
+        kryo.register(GameStart.class);
+        kryo.register(PlayerStatus.class);
+        kryo.register(LeaveLobbyRequest.class);
+        kryo.register(LeaveLobbyResponse.class);
+        kryo.register(DeleteLobbyRequest.class);
+        kryo.register(DeleteLobbyResponse.class);
 
 
     }
@@ -45,6 +51,7 @@ public class Network {
         public String password;
         public boolean isVisible;
         public String admin;
+        public int id;
     }
 
     public static class CreateLobbyResponse {
@@ -75,6 +82,7 @@ public class Network {
         public boolean isVisible;
         public int playerCount;
         public String[] playerNames;
+        public String password;
     }
 
     public static class LobbyListResponse {
@@ -82,4 +90,40 @@ public class Network {
     }
 
     public static class StartGameRequest {}
+
+    public static class GameStart {
+        public int lobbyId;
+    }
+
+    public static class PlayerStatus {
+        public String username;
+        public float x;
+        public float y;
+        public int direction;
+        public float stateTime;
+        public boolean isWalking;
+    }
+
+    public static class LeaveLobbyRequest {
+        public int lobbyId;
+    }
+
+    public static class LeaveLobbyResponse {
+        public boolean success;
+        public String message;
+        public int lobbyId;
+    }
+
+    public static class DeleteLobbyRequest {
+        public int lobbyId;
+    }
+
+    public static class DeleteLobbyResponse {
+        public boolean success;
+        public String message;
+        public int lobbyId;
+    }
+
+
+
 }

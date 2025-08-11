@@ -9,6 +9,7 @@ import com.stardew_valley.models.building.Maps;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.TimeManager;
 import com.stardew_valley.models.farming.FarmingManager;
 import com.stardew_valley.models.foraging.ForagingManager;
@@ -46,7 +47,9 @@ public class Game {
 
     public Game(List<Player> players) {
         this.players = players;
-        currentPlayer = players.get(0);
+        currentPlayer = Repository.getRepo().getCurrentUser().getPlayer();
+        System.out.println(currentPlayer.getUser().toString());
+        System.out.println(Repository.getRepo().getCurrentUser().toString());
         for (Player player : players) {
             player.setGame(this);
         }
@@ -254,5 +257,16 @@ public class Game {
     public int getCurrentIndex() {
         return currentIndex;
     }
+
+    public Player getPlayerByUsername(String username) {
+        for (Player player : players) {
+            if (player.getUser().getUsername().equals(username)) {
+                return player;
+            }
+        }
+        System.out.println("Player not found for username: " + username);
+        return null;
+    }
+
 
 }

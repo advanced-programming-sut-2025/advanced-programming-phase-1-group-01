@@ -65,7 +65,9 @@ public class LoginMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new MainMenuView(new MainMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     public void loadGame(Label messageLabel) {
@@ -84,7 +86,9 @@ public class LoginMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new MainMenuView(new MainMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 
     public void back(Label messageLabel) {
@@ -94,6 +98,8 @@ public class LoginMenuController extends Controller {
             public void run() {
                 Main.getMain().setScreen(new SignUpMenuView(new SignUpMenuController(repo)));
             }
-        }, 2);
+        },  //2
+            0.01f
+        );
     }
 }

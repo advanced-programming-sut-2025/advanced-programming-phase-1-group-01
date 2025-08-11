@@ -26,6 +26,7 @@ import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CookingController;
 import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
+import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -57,6 +58,7 @@ import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.shop.enums.Shop;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
+import com.stardew_valley.network.GameClient;
 
 import java.io.IOException;
 import java.util.Random;
@@ -169,6 +171,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.controller = controller;
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //player = controller.getRepo().getCurrentUser().getPlayer();
         player = controller.getRepo().getCurrentGame().getCurrentPlayer();
         npcs = controller.getRepo().getCurrentGame().getFarm().getNPCs();
         player.setAnimals(animals);
@@ -252,6 +255,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         drawWorld();
+        //controller.getRepo().getCurrentGame().setCurrentPlayer(player);
+        GameClient.getInstance().sendStatus(LobbyController.getInstance().getRepository().getCurrentUser().getPlayer());
+        //System.out.println(LobbyController.getInstance().getRepository().getCurrentUser().getUsername() + "#$%^&*");
         dateTimeView.update();
         energyView.updateEnergy();
         energyView.render(delta);
@@ -533,9 +539,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void drawPlayers() {
-        for (Player p : controller.getRepo().getCurrentGame().getPlayers())
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-        //System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+            if (System.currentTimeMillis() % 1000 < 5) System.out.println(p.getUser().getUsername() + " " + p.getX() + " " + p.getY());
+        }
+        //System.out.println(player.getUser().getUsername());
     }
 
     private void drawNPCs() {
