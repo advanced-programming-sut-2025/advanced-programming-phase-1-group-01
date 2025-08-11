@@ -1,27 +1,36 @@
 package com.stardew_valley.models.relations;
 
-import com.stardew_valley.models.Item;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
 
 public class Gift {
-    private final Player sender;
-    private final Player receiver;
-    private final Item item;
+    private transient final Player sender;
+    private transient final Player receiver;
+    private final String itemName;
     private final int amount;
-    private final DateTime sentTime;
     private final int giftNumber;
     private int rate;
 
     private static int nextGiftNumber = 1;
 
-    public Gift(Player sender, Player receiver, Item item, int amount, DateTime sentTime) {
+    public Gift(Player sender, Player receiver, String itemName, int amount) {
         this.sender = sender;
         this.receiver = receiver;
-        this.item = item;
+        this.itemName = itemName;
         this.amount = amount;
-        this.sentTime = sentTime;
         this.giftNumber = nextGiftNumber++;
+    }
+
+    public Gift(Player sender, Player receiver, String itemName, int amount, int giftNumber) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.itemName = itemName;
+        this.amount = amount;
+        this.giftNumber = giftNumber;
     }
 
     public Player sender() {
@@ -32,16 +41,12 @@ public class Gift {
         return receiver;
     }
 
-    public Item item() {
-        return item;
+    public String itemName() {
+        return itemName;
     }
 
     public int amount() {
         return amount;
-    }
-
-    public DateTime sentTime() {
-        return sentTime;
     }
 
     public int giftNumber() {
@@ -64,19 +69,46 @@ public class Gift {
 
     @Override
     public String toString() {
-        return "%s sent %s, %d number of %s".formatted(sender.getUser().getUsername(), receiver.getUser().getUsername(), amount, item.getName());
+        return "%s sent %s, %d number of %s".formatted(sender.getUser().getUsername(), receiver.getUser().getUsername(), amount, itemName);
     }
 
     public int getGiftXp() {
         return (rate - 3) * 30 + 15;
     }
 
+    public String toJson() {
+        Gift gift = this;
+
+        JsonObject json = new JsonObject();
+        json.addProperty("sender", sender.getUser().getUsername());
+        json.addProperty("receiver", receiver.getUser().getUsername());
+        json.addProperty("item", itemName);
+        json.addProperty("amount", amount);
+        json.addProperty("number", giftNumber);
+
+        return new Gson().toJson(json);
+    }
+
+    public static Gift fromJson(String jsonString) {
+        JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+
+        String senderUN = json.has("sender") ? json.get("sender").getAsString() : "";
+        String receiverUN = json.has("receiver") ? json.get("receiver").getAsString() : "";
+        String itemName = json.has("item") ? json.get("item").getAsString() : "";
+        int amount = json.has("amount") ? json.get("amount").getAsInt() : 0;
+        int giftNumber = json.has("number") ? json.get("number").getAsInt() : 0;
+
+        Player sender = Repository.getRepo().getUserByUsername(senderUN).getPlayer();
+        Player receiver = Repository.getRepo().getUserByUsername(receiverUN).getPlayer();
+
+        return new Gift(sender, receiver, itemName, amount, giftNumber);
+    }
+
     public static class Builder {
         private Player sender;
         private Player receiver;
-        private Item item;
+        private String item;
         private int amount;
-        private DateTime sentTime;
 
         public Gift.Builder setSender(Player sender) {
             this.sender = sender;
@@ -88,7 +120,7 @@ public class Gift {
             return this;
         }
 
-        public Gift.Builder setItem(Item item) {
+        public Gift.Builder setItem(String item) {
             this.item = item;
             return this;
         }
@@ -98,13 +130,8 @@ public class Gift {
             return this;
         }
 
-        public Gift.Builder setSentTime(DateTime sentTime) {
-            this.sentTime = sentTime;
-            return this;
-        }
-
         public Gift build() {
-            return new Gift(sender, receiver, item, amount, sentTime);
+            return new Gift(sender, receiver, item, amount);
         }
     }
 }

@@ -309,7 +309,7 @@ public class GiftView extends GameWindow {
 
                 receivedGiftDescriptions.get(i).setText("Sender: %s, Gift: %s, Amount: %d, Rate: %d of 5".formatted(
                     gift.sender().getUser().getUsername(),
-                    gift.item().getName(),
+                    gift.itemName(),
                     gift.amount(),
                     gift.rate()));
                 receivedGiftDescriptions.get(i).setFontScale(0.7f);

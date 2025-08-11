@@ -1,19 +1,28 @@
 package com.stardew_valley.models.relations;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
+import com.stardew_valley.network.GameClient;
+import com.stardew_valley.network.JsonUtils;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Friendship extends Relationship {
-    private final Character firstFriend;
-    private final Character secondFriend;
+    private transient final Character firstFriend;
+    private transient final Character secondFriend;
 
     private final Map<MessageEntry, Boolean> messages;
     private final Map<Integer, Gift> gifts;
+
+    private static final List<MessageEntry> publicMessages = new ArrayList<>();
 
     private int lastHugDay;
     private int lastTalkDay;
@@ -70,27 +79,29 @@ public class Friendship extends Relationship {
 
     public void sendMessage(Player sender, String message) {
         messages.put(new MessageEntry(sender, message), false);
+        GameClient.getInstance().sendMessageToFriend(((Player) getFriend(sender)).getUser().getUsername(), message);
     }
 
     public Map<MessageEntry, Boolean> getMessages() {
         return messages;
     }
 
-    public void addGift(Player sender, Player receiver, Item item, int amount, DateTime now) {
+    public void addGift(Player sender, Player receiver, String itemName, int amount) {
         Gift gift = new Gift.Builder()
                 .setSender(sender)
                 .setReceiver(receiver)
-                .setItem(item)
+                .setItem(itemName)
                 .setAmount(amount)
-                .setSentTime(now)
                 .build();
         gifts.put(gift.giftNumber(), gift);
+
+        GameClient.getInstance().sendGift(gift);
     }
 
     public List<Gift> getReceivedGifts(Player receiver) {
         List<Gift> receivedGifts = new ArrayList<>();
         for (Gift gift : gifts.values()) {
-            if (gift.receiver() == receiver) {
+            if (gift.receiver().getUser().getUsername().equals(receiver.getUser().getUsername())) {
                 receivedGifts.add(gift);
             }
         }
@@ -139,5 +150,43 @@ public class Friendship extends Relationship {
 
     public int getLastTradeDay() {
         return lastTradeDay;
+    }
+
+    public String toJson() {
+        return JsonUtils.getInstance().toJson(this);
+    }
+
+    public static Friendship fromJson(String json) {
+        return JsonUtils.getInstance().fromJson(json, Friendship.class);
+    }
+
+//    public void updateMessages(Map<MessageEntry, Boolean> messages) {
+//        this.messages.clear();
+//        for (MessageEntry messageEntry : messages.keySet()) {
+//            this.messages.put(messageEntry, messages.get(messageEntry));
+//        }
+//    }
+
+    public static void sendPublicMessage(Player sender, String message) {
+        publicMessages.add(new MessageEntry(sender, message));
+        GameClient.getInstance().sendPublicMessage(message);
+
+        Pattern pattern = Pattern.compile("@(\\w+)");
+        Matcher matcher = pattern.matcher(message);
+
+        while (matcher.find()) {
+            String username = matcher.group(1);
+            Player player = Repository.getRepo()
+                .getUserByUsername(username)
+                .getPlayer();
+
+            if (player != null) {
+                player.addNotification(sender, "tagged you in public chat!");
+            }
+        }
+    }
+
+    public static List<MessageEntry> getPublicMessages() {
+        return publicMessages;
     }
 }
