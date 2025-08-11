@@ -31,11 +31,21 @@ public class Network {
         kryo.register(DeleteLobbyResponse.class);
 
 
+        kryo.register(RequestUsername.class);
+        kryo.register(ResponseUsername.class);
+        kryo.register(AddFriendRequest.class);
+        kryo.register(AddFriendResponse.class);
+        kryo.register(SendMessageEntry.class);
+        kryo.register(AddInventoryItem.class);
+        kryo.register(AddReaction.class);
+        kryo.register(Vote.class);
+        kryo.register(StartVoting.class);
     }
 
     public static class JsonMessage {
         public String type;
         public String json;
+        public String receiver;
     }
 
     public static class InitStatusRequest {
@@ -89,6 +99,55 @@ public class Network {
         public LobbyInfo[] lobbies;
     }
 
+    public static class StartGameRequest {
+    }
+
+    public static class RequestUsername {
+        public String username;
+    }
+
+    public static class ResponseUsername {
+        public String message;
+    }
+
+    public static class AddFriendRequest {
+        public String selfUsername;
+        public String friendUsername;
+        public String friendshipJson;
+    }
+
+    public static class AddFriendResponse {
+        public String newFriendUsername;
+        public String friendshipJson;
+    }
+
+    public static class SendMessageEntry {
+        public String type;
+        public String senderUsername;
+        public String receiverUsername;
+        public String message;
+    }
+
+    public static class AddInventoryItem {
+        public String itemName;
+        public int amount;
+        public String username;
+    }
+
+    public static class AddReaction {
+        public String username;
+        public String reaction;
+    }
+
+    public static class Vote {
+        public String vote;
+        public String voterUsername;
+    }
+
+    public static class StartVoting {
+        public String type;
+        public String votingUsername;
+    }
     public static class StartGameRequest {}
 
     public static class GameStart {

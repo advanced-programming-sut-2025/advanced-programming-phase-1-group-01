@@ -77,6 +77,7 @@ public class Game {
     }
 
     public Player getCurrentPlayer() {
+//        return Repository.getRepo().getCurrentUser().getPlayer();
         return currentPlayer;
     }
 

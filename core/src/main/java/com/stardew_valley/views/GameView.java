@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -40,11 +39,11 @@ import com.stardew_valley.models.character.player.MarriageRequest;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.enums.*;
-import com.stardew_valley.models.enums.commands.DateTimeCommands;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.ArtisanStatus;
 import com.stardew_valley.models.enums.ArtisanType;
@@ -61,12 +60,9 @@ import com.stardew_valley.models.weather.Weather;
 import com.stardew_valley.network.GameClient;
 
 import java.io.IOException;
-import java.util.Random;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
@@ -166,6 +162,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private float shakeIntensity = 0f;
     private Vector3 originalCameraPos = new Vector3();
 
+    private final TextButton reactionsButton;
+    private final ReactionView reactionView;
+
+    private static  Map<Player, Label> reactionLabels = new HashMap<>();
+
+    private final VotingView votingView;
+    private final TextButton votingButton = new TextButton("Voting", AssetManager.getAssetManager().getSkin());
+
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
         this.controller = controller;
@@ -184,10 +188,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.inventoryView = new InventoryView(stage);
         this.socialView = new SocialView(stage);
         this.miniMapView = new MiniMapView(stage);
+        this.reactionView = new ReactionView(stage, player);
+        this.votingView = new VotingView(stage);
+        this.reactionsButton = new TextButton("Reactions", AssetManager.getAssetManager().getSkin());
         this.settingsView = new SettingsView(controller.getSettingsController(), stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
         giftView = new GiftView(controller.getRelationshipController(), stage, inventoryView);
-        friendshipView = new FriendshipView(controller.getRelationshipController(), player.getRelationService(), stage, giftView);
+        friendshipView = new FriendshipView(controller.getRelationshipController(), Repository.getRepo().getCurrentUser().getPlayer().getRelationService(), stage, giftView);
         notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
@@ -196,6 +203,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         darknessRenderer = new ShapeRenderer();
         energyMessageLabel = new Label("", AssetManager.getAssetManager().getSkin());
 //        messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        for (User user : Repository.getRepo().getUsers().values()) {
+            Player player = user.getPlayer();
+            reactionLabels.put(player, new Label("", AssetManager.getAssetManager().getSkin()));
+        }
     }
 
     @Override
@@ -237,6 +248,34 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         messageLabel.setPosition(60, 60);
         stage.addActor(messageLabel);
+        for (User user : Repository.getRepo().getUsers().values()) {
+            Player player = user.getPlayer();
+            stage.addActor(reactionLabels.get(player));
+        }
+        stage.addActor(reactionView);
+        reactionsButton.setSize(150, 80);
+        reactionsButton.getLabel().setFontScale(0.8f);
+        reactionsButton.setPosition(Gdx.graphics.getWidth() - 170, 120);
+        stage.addActor(reactionsButton);
+        reactionsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                reactionView.setVisible(!reactionView.isVisible());
+//                if (!reactionView.isVisible()) stage.setKeyboardFocus(null);
+            }
+        });
+
+        votingButton.setSize(150, 80);
+        votingButton.getLabel().setFontScale(0.8f);
+        votingButton.setPosition(Gdx.graphics.getWidth() - 170, 220);
+        stage.addActor(votingButton);
+        votingButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                votingView.setVisible(!votingView.isVisible());
+                if (!votingView.isVisible()) stage.setKeyboardFocus(null);
+            }
+        });
     }
 
     @Override
@@ -248,8 +287,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             throw new RuntimeException(e);
         }
         ScreenUtils.clear(0.15f, 0.15f, 0.15f, 1);
+        for (Player player : Repository.getRepo().getCurrentGame().getPlayers()) {
+            Player player1 = Repository.getRepo().getUserByUsername(player.getUser().getUsername()).getPlayer();
+            reactionLabels.get(player1).setPosition(player.getX() * delta + Gdx.graphics.getWidth() / 2f - 10, player.getY() * delta + Gdx.graphics.getHeight() / 2f + 45);
+        }
         camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         camera.zoom = 0.5f;
+//        GameClient.getInstance().update();
         updateCameraShake(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -263,6 +307,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         energyView.render(delta);
         inventoryMenu.update();
         skillsView.update();
+        votingView.update();
         friendshipView.update();
         notificationsView.update();
         giftView.update();
@@ -302,6 +347,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
         if (i == Input.Keys.NUM_0) {
             controller.getFarmingController().cheatPlowNineTiles(player.getTilesPosition());
+            return true;
+        }
+        if (i == Input.Keys.NUM_1) {
+            GameClient.getInstance().requestUsername();
+            return true;
+        }
+        if (i == Input.Keys.V) {
+            votingView.setVisible(!votingView.isVisible());
+            return true;
         }
 
         return false;
@@ -702,12 +756,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawShopping() {
 
-        for (Shop shop: Shop.values()) {
+        for (Shop shop : Shop.values()) {
             Position BL = shop.getBottomLeft();
             Texture texture = shop.getTexture();
-            batch.draw(texture,getTilePixel(BL.x()),getTilePixel(BL.y()),160f,160f);
+            batch.draw(texture, getTilePixel(BL.x()), getTilePixel(BL.y()), 160f, 160f);
         }
-     }
+    }
 
     private boolean isDialogOpen = false;
 
@@ -976,11 +1030,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     boolean isShown = false;
+
     public void toggleFoodMenu() {
         if (!isShown) {
             foodMenuView.setVisible(true);
-        }
-        else {
+        } else {
             foodMenuView.setVisible(false);
         }
         isShown = !isShown;
@@ -1045,12 +1099,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         shakeTime += delta;
         if (shakeTime < shakeDuration) {
             float currentIntensity = shakeIntensity * (1 - shakeTime / shakeDuration);
-            float offsetX = (float)((Math.random() - 0.5) * 2 * currentIntensity);
-            float offsetY = (float)((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetX = (float) ((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetY = (float) ((Math.random() - 0.5) * 2 * currentIntensity);
 
             camera.position.set(originalCameraPos.x + offsetX, originalCameraPos.y + offsetY, 0);
-        }
-        else {
+        } else {
             camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         }
     }
@@ -1132,8 +1185,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private float faintingTimer = 0f;
+
     public void handleMovement(float delta) throws IOException {
-        if (friendshipView.isVisible()) return;
+        if (friendshipView.isVisible() || votingView.isVisible()) return;
 
         boolean moving = false;
 
@@ -2210,6 +2264,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public GameController getController() {
         return controller;
     }
+
     public static Label getMessageLabel() {
         return messageLabel;
     }
@@ -2217,6 +2272,20 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public static void setMessage(String message) {
         messageLabel.setText(message);
         messageLabel.addAction(Actions.sequence(
+            Actions.delay(5f),
+            Actions.run(() -> {
+                messageLabel.setText("");
+            })
+        ));
+    }
+
+    public static void setReaction(Player player, String reaction) {
+        if (reaction.length() >= 10) return;
+
+        Label reactionLabel = reactionLabels.get(Repository.getRepo().getUserByUsername(player.getUser().getUsername()).getPlayer());
+
+        reactionLabel.setText(reaction);
+        reactionLabel.addAction(Actions.sequence(
             Actions.delay(5f),
             Actions.run(() -> {
                 messageLabel.setText("");

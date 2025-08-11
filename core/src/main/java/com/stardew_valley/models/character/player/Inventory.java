@@ -22,6 +22,7 @@ import com.stardew_valley.models.ingredients.QuestItemType;
 import com.stardew_valley.models.tool.*;
 import com.stardew_valley.models.tool.enums.BackpackType;
 import com.stardew_valley.models.tool.enums.FishingPoleInfo;
+import com.stardew_valley.network.GameClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,10 @@ public class Inventory {
         List<Slot> result = new ArrayList<>(slots);
         result.remove(0);
         return result;
+    }
+
+    public void addSlot(Slot slot) {
+        slots.add(slot);
     }
 
     public Slot getSlot(String itemName) {
@@ -83,12 +88,14 @@ public class Inventory {
         for (Slot slot : slots) {
             if (slot.getItem() != null && slot.getItem().getName().trim().equalsIgnoreCase(itemName)) {
                 slot.addQuantity(quantity);
+                GameClient.getInstance().addInventoryItem(itemName, quantity, player.getUser().getUsername());
                 return true;
             }
         }
 
         if (hasCapacity()) {
             slots.add(new Slot(this, itemName, quantity));
+            GameClient.getInstance().addInventoryItem(itemName, quantity, player.getUser().getUsername());
             return true;
         }
 

@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     java
 }
@@ -13,6 +15,7 @@ dependencies {
     implementation("com.esotericsoftware:kryonet:2.22.0-RC1")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.test {
