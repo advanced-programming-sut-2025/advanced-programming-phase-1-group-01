@@ -53,6 +53,7 @@ public class Repository {
     }
 
     public void addUser(User user) {
+        GameClient.getInstance().sendAddRequest(user);
         users.put(user.getUsername(), user);
     }
 

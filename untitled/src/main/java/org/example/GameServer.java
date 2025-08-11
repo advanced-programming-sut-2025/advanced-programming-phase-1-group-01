@@ -28,6 +28,11 @@ public class GameServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
+
+                for (UserInfo userInfo : signedInUsers) {
+                    System.out.println(userInfo.getUsername());
+                }
+
                 try {
                     if (object instanceof Network.CreateLobbyRequest req) {
                         handleCreateLobby(connection, req);
