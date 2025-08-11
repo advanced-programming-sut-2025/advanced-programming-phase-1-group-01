@@ -82,7 +82,7 @@ public class Network {
     }
 
     public static class RequestLobbyList {
-
+        public boolean isForOnlinePlayersList;
     }
 
     public static class LobbyInfo {
@@ -97,6 +97,7 @@ public class Network {
 
     public static class LobbyListResponse {
         public LobbyInfo[] lobbies;
+        public boolean isForOnlinePlayersList;
     }
 
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,14 +19,22 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.network.GameClient;
-import com.stardew_valley.network.Network;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LobbyView extends ScreenAdapter implements InputProcessor {
     private final Stage stage;
     private final LobbyController controller;
+
+    private Dialog playersDialog;
+    private Table playersTable;
+    private ScheduledExecutorService playersUpdateExecutor;
 
     //private static Thread thread;
 
@@ -87,20 +96,30 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
             }
         });
 
+        TextButton showPlayersBtn = new TextButton("Show Online Players", skin);
+        showPlayersBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                showPlayersDialog(skin);
+            }
+        });
+
 
 
         lobbyTable = new Table(skin);
         ScrollPane scrollPane = new ScrollPane(lobbyTable, skin);
 
+
         root.top().pad(10);
 
-
-        root.add(createLobbyBtn).pad(5).left();
-        root.add(recentBtn).pad(5).left();
-        root.add(searchField).width(200).pad(5, 20, 5, 5);
-        root.add(searchBtn).pad(5).right();
+        root.add(createLobbyBtn).pad(5);
+        root.add(recentBtn).pad(5);
+        root.add(showPlayersBtn).pad(5);
         root.row();
 
+        root.add(searchField).width(200).pad(5);
+        root.add(searchBtn).pad(5);
+        root.row();
 
         root.add(scrollPane)
             .colspan(4)
@@ -108,7 +127,98 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
             .fill()
             .padTop(10);
 
+
     }
+
+    private void showPlayersDialog(Skin skin) {
+        if (playersDialog == null) {
+            playersDialog = new Dialog("Online Players", skin) {
+                @Override
+                public void result(Object object) {
+                    if (playersUpdateExecutor != null) {
+                        playersUpdateExecutor.shutdownNow();
+                        playersUpdateExecutor = null;
+                    }
+                }
+            };
+
+            playersTable = new Table(skin);
+            playersTable.pad(10).top();
+
+            ScrollPane scrollPane = new ScrollPane(playersTable, skin);
+            scrollPane.setFadeScrollBars(false);
+            scrollPane.setScrollingDisabled(true, false);
+
+            playersDialog.getContentTable().add(scrollPane).width(400).height(300);
+            playersDialog.button("Close");
+
+            playersDialog.show(stage);
+
+            playersUpdateExecutor = Executors.newSingleThreadScheduledExecutor();
+            playersUpdateExecutor.scheduleAtFixedRate(() -> {
+                Gdx.app.postRunnable(this::updatePlayersList);
+            }, 0, 2, TimeUnit.SECONDS);
+        } else {
+            playersDialog.show(stage);
+        }
+    }
+
+    private void updatePlayersList() {
+        playersTable.clear();
+
+        Map<String, String> userToLobbyMap = new LinkedHashMap<>();
+
+        for (LobbyData lobby : controller.getLobbiesForOnlinePlayers()) {
+            for (User user : lobby.getPlayers()) {
+                String username = user.getUsername();
+                userToLobbyMap.put(username, lobby.getName());
+            }
+        }
+
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        if (userToLobbyMap.isEmpty()) {
+            Label noPlayerLabel = new Label("No players online", skin);
+            noPlayerLabel.setColor(Color.RED);
+            playersTable.add(noPlayerLabel).pad(10);
+            return;
+        }
+
+        Label playerHeader = new Label("Player Name", skin);
+        playerHeader.setFontScale(1.1f);
+        playerHeader.setColor(Color.ORANGE);
+        Label lobbyHeader = new Label("Lobby Name", skin);
+        lobbyHeader.setFontScale(1.1f);
+        lobbyHeader.setColor(Color.ORANGE);
+
+        playersTable.add(playerHeader).left().pad(5).expandX();
+        playersTable.add(lobbyHeader).left().pad(5).expandX();
+        playersTable.row();
+
+        boolean alternate = false;
+        for (Map.Entry<String, String> entry : userToLobbyMap.entrySet()) {
+            String username = entry.getKey();
+            String lobbyName = entry.getValue();
+
+            Label playerLabel = new Label(username, skin);
+            Label lobbyLabel = new Label(lobbyName, skin);
+
+
+            if (alternate) {
+                playerLabel.setColor(Color.DARK_GRAY);
+                lobbyLabel.setColor(Color.DARK_GRAY);
+            } else {
+                playerLabel.setColor(Color.WHITE);
+                lobbyLabel.setColor(Color.WHITE);
+            }
+            alternate = !alternate;
+
+            playersTable.add(playerLabel).left().pad(5).expandX();
+            playersTable.add(lobbyLabel).left().pad(5).expandX();
+            playersTable.row();
+        }
+    }
+
 
 
     private void refreshLobbyList(List<LobbyData> lobbyList) {
@@ -140,8 +250,12 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
                     if (lobby.isPrivate()) {
                         showPasswordDialog(lobby);
                     } else {
+                        refreshLobbyList(controller.getLobbies());
+                        refreshLobbyList(controller.getLobbies());
                         Result result = controller.joinLobby(lobby.getId(), null);
                         showMessage(result.message());
+                        refreshLobbyList(controller.getLobbies());
+                        refreshLobbyList(controller.getLobbies());
 
                         if (result.success()) {
                             refreshLobbyList(controller.getLobbies());
@@ -204,6 +318,7 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
                     controller.joinLobby(id, passwordField.getText());
                     showMessage(result.message());
                     if (result.success()) {
+                        refreshLobbyList(controller.getLobbies());
                         refreshLobbyList(controller.getLobbies());
                     }
                 }
@@ -336,7 +451,7 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
     }
 
     public static void startGame(LobbyData lobby) {
-        GameClient.getInstance().requestLobbyList();
+        GameClient.getInstance().requestLobbyList(false);
         List<Player> playerList = LobbyController.getInstance().findLobbyById(lobby.getId()).getPlayersReadyToPlay();
         String currentUsername = Repository.getRepo().getCurrentUser().getUsername();
 
@@ -429,19 +544,4 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
         dialog.button("Close");
         dialog.show(stage);
     }
-
-//    private void startUpdateThread() {
-//        thread = new Thread(() -> {
-//            try {
-//                while (!Thread.currentThread().isInterrupted()) {
-//                    refreshLobbyList(controller.getLobbies());
-//                    Thread.sleep(1000);
-//                }
-//            } catch (InterruptedException e) {
-//                Thread.currentThread().interrupt();
-//            }
-//        });
-//        thread.start();
-//    }
-
 }

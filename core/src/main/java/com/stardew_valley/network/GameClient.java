@@ -57,13 +57,12 @@ public class GameClient {
                     Repository.getRepo().addUser(user);
                     System.out.println(LobbyController.getInstance().findLobbyById(resp.lobbyId).addUser(user));
                 } else if (object instanceof Network.LobbyListResponse resp) {
-                    System.out.println("at least one lobby response" + resp.lobbies.length);
                     for (Network.LobbyInfo n : resp.lobbies) {
                         for (String name : n.playerNames) {
                             System.out.println(name + "#");
                         }
                     }
-                    LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies);
+                    LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies, resp.isForOnlinePlayersList);
                 } else if (object instanceof Network.StartGameRequest) {
                     Gdx.app.postRunnable(() -> {
                         LobbyData lobby = LobbyData.findLobbyByUsername(
@@ -219,10 +218,12 @@ public class GameClient {
         return instance;
     }
 
-    public void requestLobbyList() {
+    public void requestLobbyList(boolean isForOnlinePlayersList) {
         Network.RequestLobbyList req = new Network.RequestLobbyList();
+        req.isForOnlinePlayersList = isForOnlinePlayersList;
         pClient.sendTCP(req);
     }
+
 
     public void gameStart(int lobbyId) {
         Network.GameStart req = new Network.GameStart();

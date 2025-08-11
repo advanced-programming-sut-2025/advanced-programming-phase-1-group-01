@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class LobbyController {
 
     private List<LobbyData> lobbies = new ArrayList<>();
+    private List<LobbyData> lobbiesForOnlinePlayers = new ArrayList<>();
     private static LobbyController instance;
     private Repository repo;
 
@@ -38,8 +39,17 @@ public class LobbyController {
 
 
     public List<LobbyData> getLobbies() {
-        GameClient.getInstance().requestLobbyList();
+        GameClient.getInstance().requestLobbyList(false);
         return lobbies;
+    }
+
+    public List<LobbyData> getLobbiesForOnlinePlayers() {
+        GameClient.getInstance().requestLobbyList(true);
+        return lobbiesForOnlinePlayers;
+    }
+
+    public void setLobbyListForOnlinePlayers(List<LobbyData> lobbiesForOnlinePlayers) {
+        this.lobbiesForOnlinePlayers = lobbiesForOnlinePlayers;
     }
 
     public Result joinLobby(int id, String password) {
@@ -68,7 +78,7 @@ public class LobbyController {
     }
 
     public List<LobbyData> loadRecentLobbies() {
-        GameClient.getInstance().requestLobbyList();
+        GameClient.getInstance().requestLobbyList(false);
         return lobbies.stream()
             .filter(LobbyData::isVisible)
             .sorted(Comparator.comparingLong(LobbyData::getCreatedTime).reversed())
@@ -129,14 +139,6 @@ public class LobbyController {
     }
 
     public LobbyData findLobbyById(int id) {
-
-//        for (LobbyData lobby : lobbies) {
-//            System.out.println(lobby.getId() + ": " + lobby.getName());
-//        }
-//
-//        System.out.println(lobbies.size());
-//
-//        System.out.println("Lobby " + id + " found.");
         return lobbies.stream()
             .filter(l -> l.getId() == id)
             .findFirst()
@@ -148,7 +150,7 @@ public class LobbyController {
     }
 
 
-    public void updateLobbyListFromNetwork(Network.LobbyInfo[] lobbyInfos) {
+    public void updateLobbyListFromNetwork(Network.LobbyInfo[] lobbyInfos, boolean isForOnlinePlayersList) {
         List<LobbyData> lobbyDataList = new ArrayList<>();
 
         for (Network.LobbyInfo info : lobbyInfos) {
@@ -162,7 +164,6 @@ public class LobbyController {
             }
 
             User admin = users.get(0);
-            //System.out.println(admin == null ? "null" : admin.getUsername());
 
             LobbyData lobby = new LobbyData(
                 info.name,
@@ -179,7 +180,11 @@ public class LobbyController {
 
             lobbyDataList.add(lobby);
         }
-        setLobbies(lobbyDataList);
+        if (isForOnlinePlayersList) {
+            setLobbyListForOnlinePlayers(lobbyDataList);
+        } else {
+            setLobbies(lobbyDataList);
+        }
     }
 
     private void setLobbies(List<LobbyData> lobbyDataList) {

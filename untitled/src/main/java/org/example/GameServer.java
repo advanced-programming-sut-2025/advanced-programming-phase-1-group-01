@@ -32,8 +32,8 @@ public class GameServer {
                         handleCreateLobby(connection, req);
                     } else if (object instanceof Network.JoinLobbyRequest req) {
                         handleJoinLobby(connection, req);
-                    } else if (object instanceof Network.RequestLobbyList) {
-                        sendLobbyListToClient(connection);
+                    } else if (object instanceof Network.RequestLobbyList requestLobbyList) {
+                        sendLobbyListToClient(connection, requestLobbyList.isForOnlinePlayersList);
                     } else if (object instanceof Network.JsonMessage msg && "userInfo".equals(msg.type)) {
                         handleUserInfo(connection, msg);
                     } else if (object instanceof Network.GameStart gameStart) {
@@ -257,7 +257,7 @@ public class GameServer {
     }
 
 
-    private void sendLobbyListToClient(Connection connection) {
+    private void sendLobbyListToClient(Connection connection, boolean isForOnlinePlayersList) {
         List<Network.LobbyInfo> lobbyInfos = new ArrayList<>();
         for (Lobby lobby : lobbies.values()) {
             if (!lobby.isVisible()) continue;
@@ -279,6 +279,7 @@ public class GameServer {
         }
         Network.LobbyListResponse response = new Network.LobbyListResponse();
         response.lobbies = lobbyInfos.toArray(new Network.LobbyInfo[0]);
+        response.isForOnlinePlayersList = isForOnlinePlayersList;
         connection.sendTCP(response);
     }
 
