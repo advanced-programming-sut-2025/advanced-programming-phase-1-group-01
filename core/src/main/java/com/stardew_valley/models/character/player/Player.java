@@ -19,6 +19,8 @@ import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
 import com.stardew_valley.models.relations.RelationshipService;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.network.GameClient;
+import com.stardew_valley.views.GameView;
 
 import java.util.*;
 import java.util.List;
@@ -221,6 +223,7 @@ public class Player extends Character {
 
     public void addNotification(Player sender, String message) {
         notifications.put(new MessageEntry(sender, message), false);
+        GameClient.getInstance().sendNotification(this.getUser().getUsername(), sender.getUser().getUsername(), message);
     }
 
     public void readNotification(MessageEntry notification) {
@@ -992,6 +995,31 @@ public class Player extends Character {
             foods.put(item, count);
         } else {
             foods.remove(item);
+        }
+    }
+
+    public void addReaction(Reaction reaction) {
+        GameView.setReaction(this, reaction.getReaction());
+        GameClient.getInstance().addReaction(this, reaction);
+    }
+
+    public enum Reaction {
+        LAUGH("(:"),
+        HI("Hi"),
+        OK("OK"),
+        LIKE("\uD83D\uDC4D"),
+        DISLIKE("\uD83D\uDC4E"),
+        HEART("<3"),
+        ;
+
+        private String reaction;
+
+        Reaction(String reaction) {
+            this.reaction = reaction;
+        }
+
+        public String getReaction() {
+            return reaction;
         }
     }
 }

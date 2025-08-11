@@ -34,8 +34,8 @@ public class NotificationsView extends GameWindow {
         super("Notifications", AssetManager.getAssetManager().getSkin(), "Letter", stage);
 
         notifsTable = new Table(getSkin());
-        notifsMap = repo.getCurrentGame().getCurrentPlayer().getNotifications();
-        player = repo.getCurrentGame().getCurrentPlayer();
+        notifsMap = repo.getCurrentUser().getPlayer().getNotifications();
+        player = repo.getCurrentUser().getPlayer();
 
         add(notifsTable).expand().fill().padTop(30);
 

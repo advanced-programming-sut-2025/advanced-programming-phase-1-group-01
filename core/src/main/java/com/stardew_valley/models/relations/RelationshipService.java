@@ -2,6 +2,7 @@ package com.stardew_valley.models.relations;
 
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.network.GameClient;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -56,6 +57,8 @@ public class RelationshipService {
         if (!friend.getRelationService().isFriendWith(character)) {
             friend.getRelationService().getFriendships().putIfAbsent(character, friendship);
         }
+//        if (friend instanceof Player player)
+//            GameClient.getInstance().updateFriendshipRequest(player.getUser().getUsername());
     }
 
     public Friendship getFriendship(Character friend) {

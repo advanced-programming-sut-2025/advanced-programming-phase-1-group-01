@@ -9,6 +9,7 @@ import com.stardew_valley.models.building.Maps;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.NPC.NPCVillage;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.TimeManager;
 import com.stardew_valley.models.farming.FarmingManager;
 import com.stardew_valley.models.foraging.ForagingManager;
@@ -74,6 +75,7 @@ public class Game {
     }
 
     public Player getCurrentPlayer() {
+//        return Repository.getRepo().getCurrentUser().getPlayer();
         return currentPlayer;
     }
 

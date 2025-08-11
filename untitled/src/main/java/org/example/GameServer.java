@@ -3,6 +3,8 @@ package org.example;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,7 +15,7 @@ public class GameServer {
     private int lobbyCounter = 1;
     private final Map<Integer, Integer> playerLobbyMap = new HashMap<>();
     private final Map<Integer, String> connectionUsers = new HashMap<>();
-
+    private final Map<String, Integer> usernameToIdMap = new HashMap<>();
 
     public GameServer() throws IOException {
         server = new Server(6553600, 6553600);
@@ -61,10 +63,51 @@ public class GameServer {
                 } else if (object instanceof Network.JsonMessage msg && "userInfo".equals(msg.type)) {
                     String user = msg.json;
                     connectionUsers.put(connection.getID(), user);
+
+                    JsonObject json = JsonParser.parseString(user).getAsJsonObject();
+                    String username = json.get("username").getAsString();
+
+                    usernameToIdMap.put(username, connection.getID());
+
                     System.out.println("User info received: " + user);
+                } else if (object instanceof Network.RequestUsername req) {
+                    String username = req.username;
+
+                    Network.ResponseUsername resp = new Network.ResponseUsername();
+                    resp.message = username;
+
+                    server.sendToAllTCP(resp);
+                } else if (object instanceof Network.AddFriendRequest req) {
+                    String selfUsername = req.selfUsername;
+                    String friendUsername = req.friendUsername;
+                    String friendshipJson = req.friendshipJson;
+
+                    Network.AddFriendResponse resp = new Network.AddFriendResponse();
+                    resp.newFriendUsername = selfUsername;
+                    resp.friendshipJson = friendshipJson;
+
+                    server.sendToTCP(usernameToIdMap.get(friendUsername), resp);
+                } else if (object instanceof Network.SendMessageEntry req && !req.type.equals("message to all")) {
+                    server.sendToTCP(usernameToIdMap.get(req.receiverUsername), req);
+                } else if (object instanceof Network.SendMessageEntry req) {
+                    server.sendToAllExceptTCP(connection.getID(), req);
+                } else if (object instanceof Network.JsonMessage req && req.type.equals("gift")) {
+                    String receiverUN = req.receiver;
+                    int receiverId = usernameToIdMap.get(receiverUN);
+
+                    server.sendToTCP(receiverId, req);
+                } else if (object instanceof Network.AddInventoryItem req) {
+                    int userId = usernameToIdMap.get(req.username);
+
+                    if (connection.getID() == userId) return;
+                    server.sendToTCP(userId, req);
+                } else if (object instanceof Network.AddReaction req) {
+                    server.sendToAllTCP(req);
+                } else if (object instanceof Network.StartVoting req) {
+                    server.sendToAllExceptTCP(connection.getID(), req);
+                } else if (object instanceof Network.Vote req) {
+                    server.sendToAllExceptTCP(connection.getID(), req);
                 }
-
-
             }
 
 
@@ -88,6 +131,8 @@ public class GameServer {
                 for (Integer connectionId : connectionUsers.keySet()) {
                     System.out.println("User: " + connectionUsers.get(connectionId));
                 }
+
+                connection.setTimeout(300000);
             }
         });
 

@@ -43,6 +43,9 @@ public class FriendshipView extends GameWindow {
     private final TextButton backButton;
     private Player chatFriend;
 
+    private boolean isChatPublic = false;
+    private final TextButton publicChatButton;
+
     private final GiftView giftView;
     private final RelationshipService relationshipService;
     private final RelationshipController controller;
@@ -70,6 +73,8 @@ public class FriendshipView extends GameWindow {
         sendButton = new TextButton("send", getSkin());
         backButton = new TextButton(">", getSkin());
 
+        publicChatButton = new TextButton("Public Chat", getSkin());
+
         stack.add(friendshipTable);
 
         chatTable.add(backButton).size(90, 70).expandX().right().padBottom(10).row();
@@ -86,12 +91,13 @@ public class FriendshipView extends GameWindow {
                 friendshipTable.setVisible(true);
                 chatTable.setVisible(false);
                 stage.setKeyboardFocus(null);
+                if (isChatPublic) isChatPublic = false;
             }
         });
 
         messageField.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 stage.setKeyboardFocus(messageField);
             }
         });
@@ -125,10 +131,29 @@ public class FriendshipView extends GameWindow {
         this.add(stack);
 
         // temp code
-        if (repo.getCurrentUser().getUsername().equals("1"))
+        if (repo.getCurrentUser().getUsername().equals("1")) {
             relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-//        relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
-//        relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+        }
+
+        if (repo.getCurrentUser().getUsername().equals("2")) {
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+        }
+
+        if (repo.getCurrentUser().getUsername().equals("3")) {
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+        }
+
+        if (repo.getCurrentUser().getUsername().equals("4")) {
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+        }
     }
 
     @Override
@@ -139,6 +164,17 @@ public class FriendshipView extends GameWindow {
 //        stack.clear();
         friendshipTable.clear();
 //        chatTable.clear();
+
+        friendshipTable.add(publicChatButton).center().row();
+
+        publicChatButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                friendshipTable.setVisible(false);
+                chatTable.setVisible(true);
+                isChatPublic = true;
+            }
+        });
 
         if (friendshipTable.isVisible()) {
             Map<Character, Friendship> friendships = relationshipService.getFriendships();
@@ -175,11 +211,30 @@ public class FriendshipView extends GameWindow {
                 });
 
                 friendshipTable.add(friendshipsRows.get(i)).fill().expand();
+                friendshipTable.row();
 //                stack.add(friendshipTable);
             }
         }
 
-        if (chatTable.isVisible()) {
+        sendButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!isChatPublic) {
+                    if (messageField.getText().isBlank()) return;
+                    String message = messageField.getText();
+                    Result result = controller.talk(chatFriend.getUser().getUsername(), message);
+                    GameView.setMessage(result.message());
+                    messageField.setText("");
+                } else {
+                    if (messageField.getText().isBlank()) return;
+                    String message = messageField.getText();
+                    Friendship.sendPublicMessage(repo.getCurrentUser().getPlayer(), message);
+                    messageField.setText("");
+                }
+            }
+        });
+
+        if (chatTable.isVisible() && !isChatPublic) {
             if (input.isKeyPressed(Input.Keys.ENTER)) {
                 if (messageField.getText().isBlank()) return;
                 String message = messageField.getText();
@@ -193,17 +248,42 @@ public class FriendshipView extends GameWindow {
             Result result = controller.talkHistory(chatFriend.getUser().getUsername());
             messagesLabel.setText(result.message());
 
-            sendButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    if (messageField.getText().isBlank()) return;
-                    String message = messageField.getText();
-                    Result result = controller.talk(chatFriend.getUser().getUsername(), message);
-                    GameView.setMessage(result.message());
-                    messageField.setText("");
-                }
-            });
+//            sendButton.addListener(new ChangeListener() {
+//                @Override
+//                public void changed(ChangeEvent event, Actor actor) {
+//                    if (messageField.getText().isBlank()) return;
+//                    String message = messageField.getText();
+//                    Result result = controller.talk(chatFriend.getUser().getUsername(), message);
+//                    GameView.setMessage(result.message());
+//                    messageField.setText("");
+//                }
+//            });
         }
+
+        if (chatTable.isVisible() && isChatPublic) {
+            if (input.isKeyPressed(Input.Keys.ENTER)) {
+                if (messageField.getText().isBlank()) return;
+                String message = messageField.getText();
+                Friendship.sendPublicMessage(repo.getCurrentUser().getPlayer(), message);
+                messageField.setText("");
+            }
+
+            stage.setKeyboardFocus(messageField);
+
+            String result = controller.talkHistory();
+            messagesLabel.setText(result);
+
+//            sendButton.addListener(new ChangeListener() {
+//                @Override
+//                public void changed(ChangeEvent event, Actor actor) {
+//                    if (messageField.getText().isBlank()) return;
+//                    String message = messageField.getText();
+//                    Friendship.sendPublicMessage(repo.getCurrentUser().getPlayer(), message);
+//                    messageField.setText("");
+//                }
+//            });
+        }
+
         add(stack);
     }
 }

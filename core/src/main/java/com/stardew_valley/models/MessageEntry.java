@@ -2,7 +2,14 @@ package com.stardew_valley.models;
 
 import com.stardew_valley.models.character.player.Player;
 
-public record MessageEntry(Player sender, String message) {
+public class MessageEntry {
+    private final transient Player sender;
+    private final transient String message;
+
+    public MessageEntry(Player sender, String message) {
+        this.sender = sender;
+        this.message = message;
+    }
 
     @Override
     public String toString() {
@@ -17,5 +24,13 @@ public record MessageEntry(Player sender, String message) {
     @Override
     public int hashCode() {
         return System.identityHashCode(this);
+    }
+
+    public Player sender() {
+        return sender;
+    }
+
+    public String message() {
+        return message;
     }
 }
