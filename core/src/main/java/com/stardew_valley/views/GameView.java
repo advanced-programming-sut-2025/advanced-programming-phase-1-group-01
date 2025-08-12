@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
@@ -59,6 +60,7 @@ import com.stardew_valley.models.shop.enums.Shop;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
 import com.stardew_valley.network.GameClient;
+import com.badlogic.gdx.utils.Timer;
 
 import java.io.IOException;
 import java.util.*;
@@ -357,6 +359,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
         if (i == Input.Keys.NUM_2) {
             player.getReactionUI().setStarted(ReactionType.HI);
+            return true;
+        }
+        if (i == Input.Keys.NUM_9) {
+            showLeaderboard(stage);
             return true;
         }
         if (i == Input.Keys.V) {
@@ -2325,6 +2331,80 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             })
         ));
     }
+
+    public void showLeaderboard(Stage stage) {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        Dialog dialog = new Dialog("🏆 Leaderboard", skin);
+
+        final SelectBox<String> criteriaBox = new SelectBox<>(skin);
+        criteriaBox.setItems("Coins", "Missions", "Skills");
+
+        final Table table = new Table(skin);
+        table.align(Align.topLeft);
+        table.defaults().pad(5);
+
+        // تبدیل Runnable به متد
+        Runnable updateTable = () -> updateTable(table, criteriaBox);
+
+        criteriaBox.addListener(event -> {
+            updateTable.run();
+            return false;
+        });
+
+        dialog.getContentTable().add(new Label("Sort by: ", skin)).padRight(10);
+        dialog.getContentTable().add(criteriaBox).row();
+        dialog.getContentTable().add(table).colspan(2);
+
+        updateTable.run();
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (dialog.getStage() != null) {
+                    updateTable.run();
+                }
+            }
+        }, 1, 1);
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+
+    private void updateTable(Table table, SelectBox<String> criteriaBox) {
+        table.clear();
+        table.add("Rank").padRight(10);
+        table.add("Player").padRight(50);
+        table.add("Coins").padRight(30);
+        table.add("Missions").padRight(30);
+        table.add("Skills").padRight(30);
+        table.row();
+
+        Array<Player> sortedPlayers = new Array<>();
+        for (Player p : Repository.getRepo().getCurrentGame().getPlayers()) {
+            sortedPlayers.add(p);
+        }
+
+        String selected = criteriaBox.getSelected();
+
+        switch (selected) {
+            case "Coins" -> sortedPlayers.sort(Comparator.comparingInt(Player::getNumOfCoins).reversed());
+            case "Missions" -> sortedPlayers.sort(Comparator.comparingInt(Player::getTotalNumOfQuests));
+            case "Skills" -> sortedPlayers.sort(Comparator.comparingInt(Player::getTotalNumOfLevels));
+        }
+
+        int rank = 1;
+        for (Player p : sortedPlayers) {
+            table.add(String.valueOf(rank++)).padRight(10);
+            table.add(p.getUser().getUsername()).padRight(50);
+            table.add(String.valueOf(p.getNumOfCoins())).padRight(30);
+            table.add(p.getTotalNumOfQuests() + " Quests").padRight(30);
+            table.add(p.getAbilityService().getForaging().getLevel() + " Foraging").padRight(30);
+            table.row();
+        }
+    }
+
 }
 
 

@@ -14,6 +14,7 @@ import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Color;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
@@ -1071,5 +1072,29 @@ public class Player extends Character {
             }
         }
     }
+
+    public int getTotalNumOfQuests() {
+        final int[] count = {0};
+
+        Repository.getRepo().getCurrentGame().getFarm().getNPCs().forEach(npc -> {
+            npc.getQuests().forEach(quest -> {
+                if (quest.getOwner() != null) {
+                    if (quest.getOwner().getUser().getUsername().equals(this.getUser().getUsername())) {
+                        count[0]++;
+                    }
+                }
+            });
+        });
+
+        return count[0];
+    }
+
+    public int getTotalNumOfLevels() {
+        return getAbilityService().getFarming().getLevel() +
+            getAbilityService().getMining().getLevel() +
+            getAbilityService().getFishing().getLevel() +
+            getAbilityService().getForaging().getLevel();
+    }
+
 
 }
