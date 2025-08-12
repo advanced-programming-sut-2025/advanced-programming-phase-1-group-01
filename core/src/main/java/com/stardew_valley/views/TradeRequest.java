@@ -25,11 +25,13 @@ public class TradeRequest extends GameWindow {
         acceptButton = new TextButton("Accept", AssetManager.getAssetManager().getSkin());
         rejectButton = new TextButton("Reject", AssetManager.getAssetManager().getSkin());
 
-        acceptButton.addListener(new ChangeListener() {
+        acceptButton.addListener(
+            new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                int num = player.getTradeProposalService().findProposals(player.getTradeRequester().getUsername(), player.getUser().getUsername()).size();
+                player.getTradeProposalService().acceptProposal(player.getTradeRequester().getUsername(), player.getUser().getUsername(),num);
                 GameClient.getInstance().sendTradeResponse(player.getTradeRequester().getUsername(),true);
-                player.getTradeProposalService().acceptProposal(player.getTradeRequester().getUsername(), player.getUser().getUsername());
                 player.setTradeRequester(null);
             }
         });
@@ -37,8 +39,9 @@ public class TradeRequest extends GameWindow {
         rejectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                int num = player.getTradeProposalService().findProposals(player.getTradeRequester().getUsername(), player.getUser().getUsername()).size();
+                player.getTradeProposalService().rejectProposal(player.getTradeRequester().getUsername(), player.getUser().getUsername(),num);
                 GameClient.getInstance().sendTradeResponse(player.getTradeRequester().getUsername(),false);
-                player.getTradeProposalService().rejectProposal(player.getTradeRequester().getUsername(), player.getUser().getUsername());
                 player.setTradeRequester(null);
             }
         });

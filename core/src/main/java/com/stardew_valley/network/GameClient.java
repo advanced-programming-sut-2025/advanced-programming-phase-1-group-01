@@ -8,12 +8,10 @@ import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.controllers.VotingController;
 import com.stardew_valley.models.LobbyData;
-import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.character.player.*;
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.Voting;
-import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Player;
-import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.relations.Friendship;
@@ -175,16 +173,28 @@ public class GameClient {
                     player.setTradeRequester(user);
                 } else if (object instanceof Network.TradeResponse req) {
                     Player player = repo.getCurrentUser().getPlayer();
+                    int num = player.getTradeProposalService().findProposals(req.receiverUsername, req.senderUsername).size();
                     if (req.accepted) {
-                        player.getTradeProposalService().acceptProposal(req.receiverUsername, req.senderUsername);
-                        player.getTradeProposalService().setMessage("your trade request accepted");
-                        player.getTradeProposalService().setTradeAccepted(true);
+                        player.getTradeProposalService().acceptProposal(req.receiverUsername, req.senderUsername, num);
+                        player.getTradeProposalService().setMessage("your request has been accepted");
+                        player.getTradeProposalService().setMessageShown(false);
                     }
                     else {
-                        player.getTradeProposalService().rejectProposal(req.receiverUsername, req.senderUsername);
-                        player.getTradeProposalService().setMessage("your trade request rejected");
-                        player.getTradeProposalService().setTradeAccepted(false);
+                        player.getTradeProposalService().rejectProposal(req.receiverUsername, req.senderUsername, num);
+                        player.getTradeProposalService().setMessage("your request has been rejected");
+                        player.getTradeProposalService().setMessageShown(false);
                     }
+                } else if (object instanceof Network.HugEvent req) {
+                    Player player = repo.getCurrentUser().getPlayer();
+                    player.setHug(true);
+                } else if (object instanceof Network.MarriageEvent req) {
+                    MarriageRequest request = new MarriageRequest(repo.getUserByUsername(req.senderUsername));
+                    Player player = repo.getCurrentUser().getPlayer();
+                    player.addMarriageRequest(request);
+                } else if (object instanceof Network.ResponseMarriageEvent req) {
+                    Player player = repo.getCurrentUser().getPlayer();
+                    player.setRelatedUser(player.getUser());
+                    player.setResponse(req.success);
                 }
 
             }
@@ -382,5 +392,34 @@ public class GameClient {
         req.accepted = response;
         req.receiverUsername = receiverUsername;
         req.senderUsername = repo.getCurrentUser().getUsername();
+        pClient.sendTCP(req);
+    }
+
+    public void sendHugAction(Player player) {
+        if (player != null) {
+            Network.HugEvent hug = new Network.HugEvent();
+            hug.senderUsername = Repository.getRepo().getCurrentUser().getUsername();
+            hug.targetUsername = player.getUser().getUsername();
+            pClient.sendTCP(hug);
+        }
+    }
+
+    public void sendMarriageEvent(Player player) {
+        if (player != null) {
+            Network.MarriageEvent marriage = new Network.MarriageEvent();
+            marriage.senderUsername = Repository.getRepo().getCurrentUser().getUsername();
+            marriage.targetUsername = player.getUser().getUsername();
+            pClient.sendTCP(marriage);
+        }
+    }
+
+    public void sendResponseMarriageEvent(Player player, boolean response) {
+        if (player != null) {
+            Network.ResponseMarriageEvent marriage = new Network.ResponseMarriageEvent();
+            marriage.senderUsername = Repository.getRepo().getCurrentUser().getUsername();
+            marriage.targetUsername = player.getUser().getUsername();
+            marriage.success = response;
+            pClient.sendTCP(marriage);
+        }
     }
 }

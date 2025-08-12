@@ -1,19 +1,19 @@
 package com.stardew_valley.models;
 
-import java.util.UUID;
-
 public class TradeProposal {
     private String senderUsername;
     private String receiverUsername;
+    private int tradeNumber;
     private ProposalStatus status;
 
     public enum ProposalStatus {
         PENDING, ACCEPTED, REJECTED
     }
 
-    public TradeProposal(String senderUsername, String receiverUsername) {
+    public TradeProposal(String senderUsername, String receiverUsername, int tradeNumber) {
         this.senderUsername = senderUsername;
         this.receiverUsername = receiverUsername;
+        this.tradeNumber = tradeNumber;
         this.status = ProposalStatus.PENDING;
     }
 
@@ -23,6 +23,10 @@ public class TradeProposal {
 
     public String getReceiverUsername() {
         return receiverUsername;
+    }
+
+    public int getTradeNumber() {
+        return tradeNumber;
     }
 
     public ProposalStatus getStatus() {

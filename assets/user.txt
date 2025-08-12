@@ -1,8 +1,8 @@
-Username: 2
+Username: 1
 Password: a
 Nickname: a
 Email: a
 Gender: MALE
 securityQuestion: QUESTION1
 securityAnswer: a
-avatarPath: avatars/avatar6.png
+avatarPath: avatars/avatar7.png

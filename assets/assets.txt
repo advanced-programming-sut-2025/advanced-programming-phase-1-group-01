@@ -4332,6 +4332,7 @@ mineral/Tigerseye.png
 mineral/Topaz.png
 relationship/heart.png
 relationship/messageBackground.png
+relationship/ring.png
 shipping bin/1.png
 shipping bin/10.png
 shipping bin/11.png

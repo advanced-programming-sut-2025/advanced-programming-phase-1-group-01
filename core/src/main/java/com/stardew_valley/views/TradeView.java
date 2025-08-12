@@ -21,6 +21,7 @@ public class TradeView extends GameWindow {
     private SelectBox<String> playersBox;
     private TextButton selectPlayerButton;
     private TextButton backButton;
+    private Label messageLabel;
     private boolean isShown = true;
     private Runnable onBack;
 
@@ -32,13 +33,21 @@ public class TradeView extends GameWindow {
         selectPlayerButton = new TextButton("Select", getSkin());
         playersBox.setItems("1", "2", "3", "4");
         backButton = new TextButton("Back", getSkin());
+        messageLabel = new Label("", getSkin());
 
         selectPlayerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 repo.getCurrentUser().getPlayer().getTradeProposalService().createProposal(repo.getCurrentUser().getUsername(), repo.getUserByUsername(playersBox.getSelected()).getUsername());
-                repo.getCurrentUser().getPlayer().getTradeProposalService().setMessage("your trade request send to " + playersBox.getSelected());
+                messageLabel.setText("your request send!");
                 GameClient.getInstance().sendTradeRequest(repo.getUserByUsername(playersBox.getSelected()).getUsername());
+                Timer.schedule(new Timer.Task() {
+                                   @Override
+                                   public void run() {
+                                       messageLabel.setText("");
+                                   }
+                               },
+                2f);
             }
         });
 

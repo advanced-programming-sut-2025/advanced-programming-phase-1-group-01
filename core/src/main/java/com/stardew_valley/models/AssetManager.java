@@ -4694,6 +4694,10 @@ public class AssetManager {
         return new Texture("relationship/heart.png");
     }
 
+    public Texture getRing() {
+        return new Texture("relationship/ring.png");
+    }
+
     private final Texture blackSmithOut = new Texture("shopping/blacksmith_out.png");
     private final Texture blackSmithIn = new Texture("shopping/blacksmith_in.png");
 

@@ -42,6 +42,9 @@ public class Network {
         kryo.register(StartVoting.class);
         kryo.register(TradeRequest.class);
         kryo.register(TradeResponse.class);
+        kryo.register(HugEvent.class);
+        kryo.register(MarriageEvent.class);
+        kryo.register(ResponseMarriageEvent.class);
     }
 
     public static class JsonMessage {
@@ -196,6 +199,22 @@ public class Network {
         public String senderUsername;
         public String receiverUsername;
         public boolean accepted;
+    }
+
+    public static class HugEvent {
+        public String senderUsername;
+        public String targetUsername;
+    }
+
+    public static class MarriageEvent {
+        public String senderUsername;
+        public String targetUsername;
+    }
+
+    public static class ResponseMarriageEvent {
+        public String senderUsername;
+        public String targetUsername;
+        public boolean success;
     }
 }
 

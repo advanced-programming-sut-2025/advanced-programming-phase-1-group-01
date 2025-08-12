@@ -17,6 +17,7 @@ import com.stardew_valley.models.foraging.ForagingCrop;
 import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.foraging.ForagingMineralInfo;
 import com.stardew_valley.models.foraging.ForagingTreeInfo;
+import com.stardew_valley.models.relations.Ring;
 import com.stardew_valley.models.shop.enums.*;
 import com.stardew_valley.models.ingredients.QuestItemType;
 import com.stardew_valley.models.tool.*;
@@ -130,7 +131,7 @@ public class Inventory {
             case "shear" -> new Shear(this);
             case "trash can" -> new TrashCan(this);
             case "watering can" -> new WateringCan(this);
-
+            case "ring" -> new Ring();
             case "bee house" -> new BeeHouse();
             case "cheese press" -> new CheesePress();
             case "keg" -> new Keg();

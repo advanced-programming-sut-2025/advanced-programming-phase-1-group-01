@@ -72,6 +72,15 @@ public class GameServer {
                     } else if (object instanceof Network.TradeResponse req) {
                         int receiverId = usernameToIdMap.get(req.receiverUsername);
                         server.sendToTCP(receiverId, req);
+                    } else if (object instanceof Network.HugEvent req) {
+                        int senderId = usernameToIdMap.get(req.targetUsername);
+                        server.sendToTCP(senderId, req);
+                    } else if (object instanceof Network.MarriageEvent req) {
+                        int senderId = usernameToIdMap.get(req.targetUsername);
+                        server.sendToTCP(senderId, req);
+                    } else if (object instanceof Network.ResponseMarriageEvent req) {
+                        int senderId = usernameToIdMap.get(req.targetUsername);
+                        server.sendToTCP(senderId, req);
                     }
                 } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());

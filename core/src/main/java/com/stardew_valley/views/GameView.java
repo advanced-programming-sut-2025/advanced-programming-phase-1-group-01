@@ -143,6 +143,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private Image backgroundImage;
     private Image heartImage;
+    private Image ringImage;
     private Label energyMessageLabel;
 
     private final EnergyView energyView;
@@ -207,6 +208,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         notificationsView = new NotificationsView(stage);
         this.energyView = new EnergyView(player);
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
+        ringImage = new Image(AssetManager.getAssetManager().getRing());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
         darknessRenderer = new ShapeRenderer();
@@ -275,9 +277,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         });
 
         heartImage.setSize(64, 64);
+        ringImage.setSize(64, 64);
         heartImage.setVisible(false);
+        ringImage.setVisible(false);
 
         stage.addActor(heartImage);
+        stage.addActor(ringImage);
 
         messageLabel.setPosition(60, 60);
         stage.addActor(messageLabel);
@@ -348,6 +353,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         giftView.update();
         foodMenuView.update();
         eatFood();
+        tradeShow();
 //        notificationsView.update();
         batch.end();
         if (controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour() >= 18) {
@@ -362,6 +368,28 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         stage.act(delta);
         stage.draw();
+    }
+
+    private void tradeShow() {
+        if (player.isHug()) {
+            hug();
+            player.setHug(false);
+        }
+
+        if (player.getRelatedUser() != null) {
+            if (player.isResponse()) {
+                marriage();
+            }
+            else {
+                showMessage("reject");
+            }
+            player.setRelatedUser(null);
+        }
+
+        if (!player.getTradeProposalService().isMessageShown()) {
+            showMessage(player.getTradeProposalService().getMessage());
+            player.getTradeProposalService().setMessageShown(true);
+        }
     }
 
     @Override
@@ -843,7 +871,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
     }
 
-    public void hug() {
+    public void networkHug() {
         boolean isNear = false;
         Player anotherPlayer = null;
 
@@ -875,6 +903,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             friendship.increaseXp(Friendship.HUG_XP);
         }
 
+        GameClient.getInstance().sendHugAction(anotherPlayer);
+        player.setHug(true);
+    }
+
+    public void hug() {
+
         int worldX = player.getPosition().x();
         int worldY = player.getPosition().y();
 
@@ -898,7 +932,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     }
 
-    private void marriage() {
+    private void networkMarriage() {
         boolean isNear = false;
         Player anotherPlayer = null;
 
@@ -922,7 +956,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
         if (anotherPlayer.getGender() == Gender.MALE) {
-            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
+            showMessage(anotherPlayer.getUser().getNickname() + " is a boy!");
             return;
         }
 
@@ -936,10 +970,32 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             showMessage("you don't have ring in your inventory");
             return;
         }
-        //send message
-        MarriageRequest request = new MarriageRequest(player.getUser());
-        anotherPlayer.addMarriageRequest(request);
+
         showMessage("your request sent to " + anotherPlayer.getUser().getNickname());
+
+        GameClient.getInstance().sendMarriageEvent(anotherPlayer);
+    }
+
+    public void marriage() {
+
+        int worldX = player.getPosition().x();
+        int worldY = player.getPosition().y();
+
+        Vector3 screenPos = camera.project(new Vector3(worldX, worldY, 0));
+
+        ringImage.setPosition(screenPos.x - 20, screenPos.y + 60);
+        ringImage.getColor().a = 1f;
+        ringImage.setVisible(true);
+        ringImage.clearActions();
+
+        ringImage.addAction(Actions.sequence(
+            Actions.delay(0.2f),
+            Actions.parallel(
+                Actions.moveBy(0, 50, 1f),
+                Actions.fadeOut(1.5f)
+            ),
+            Actions.run(() -> ringImage.setVisible(false))
+        ));
     }
 
     private Window marriageRequestsWindow = null;
@@ -970,13 +1026,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         currentPlayer.removeMarriageRequest(request);
                         showMessage("you married with " + request.getFrom().getNickname());
                         friendship.setLevel(4);
-                        anotherPlayer.getInventory().getSlot("ring").removeQuantity(1);
-                        currentPlayer.getInventory().getSlot("ring").addQuantity(1);
 
-                        currentPlayer.getRelationService().marry(anotherPlayer);
-                        currentPlayer.updateOfMarriage(anotherPlayer);
+//                        currentPlayer.getRelationService().marry(anotherPlayer);
+//                        currentPlayer.updateOfMarriage(anotherPlayer);
                         marriageRequestsWindow.remove();
                         isNpressed = false;
+                        player.setRelatedUser(anotherPlayer.getUser());
+                        player.setResponse(true);
+                        GameClient.getInstance().sendResponseMarriageEvent(anotherPlayer, true);
                     }
                 });
 
@@ -993,6 +1050,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         anotherPlayer.setEnergyHalved(true);
                         marriageRequestsWindow.remove();
                         isNpressed = false;
+                        player.setRelatedUser(anotherPlayer.getUser());
+                        player.setResponse(false);
+                        GameClient.getInstance().sendResponseMarriageEvent(anotherPlayer, false);
                     }
                 });
 
@@ -1366,11 +1426,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         //controller.updatePlayerPosition(player.getX(), player.getY());
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
-            hug();
+            networkHug();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            marriage();
+            networkMarriage();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {

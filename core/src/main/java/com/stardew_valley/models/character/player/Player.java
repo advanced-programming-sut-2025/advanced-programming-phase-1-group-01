@@ -74,6 +74,9 @@ public class Player extends Character {
     private User tradeRequester;
     private TradeProposalService tradeProposalService;
 
+    private boolean hug = false;
+    private User relatedUser = null;
+    private boolean response = false;
 
     public Player(User user) {
         this.user = user;
@@ -1043,6 +1046,30 @@ public class Player extends Character {
     public void addReaction(Reaction reaction) {
         GameView.setReaction(this, reaction.getReaction());
         GameClient.getInstance().addReaction(this, reaction);
+    }
+
+    public boolean isHug() {
+        return hug;
+    }
+
+    public void setHug(boolean hug) {
+        this.hug = hug;
+    }
+
+    public User getRelatedUser() {
+        return relatedUser;
+    }
+
+    public void setRelatedUser(User relatedUser) {
+        this.relatedUser = relatedUser;
+    }
+
+    public boolean isResponse() {
+        return response;
+    }
+
+    public void setResponse(boolean response) {
+        this.response = response;
     }
 
     public enum Reaction {
