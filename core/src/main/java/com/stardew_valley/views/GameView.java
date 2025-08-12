@@ -530,6 +530,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawReaction();
 
         drawReactionText();
+
     }
 
     private void drawReaction() {
