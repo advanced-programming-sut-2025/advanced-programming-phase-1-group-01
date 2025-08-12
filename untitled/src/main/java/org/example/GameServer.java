@@ -73,6 +73,8 @@ public class GameServer {
                         handleCheckToLoginRequest(connection, req);
                     } else if (object instanceof Network.CTSReaction reaction) {
                         handleReaction(connection, reaction);
+                    } else if (object instanceof Network.RequestStartGroupQuest req) {
+                        handleStartQuest(req);
                     }
                 } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
@@ -347,6 +349,16 @@ public class GameServer {
                 }
                 break;
             }
+        }
+    }
+
+    private void handleStartQuest(Network.RequestStartGroupQuest request) {
+        Lobby lobby = lobbies.get(request.lobbyId);
+        Network.ResponseStartGroupQuest resp = new Network.ResponseStartGroupQuest();
+        resp.questName = request.questName;
+
+        for (int id : lobby.getPlayerConnectionIds()) {
+            server.sendToTCP(id, resp);
         }
     }
 

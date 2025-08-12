@@ -8,6 +8,7 @@ package com.stardew_valley.models;
 
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.models.enums.GroupQuestType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class LobbyData {
     private User admin;
     private final int maxPlayers = 8;
     private final long createdTime;
+    private List<GroupQuest> groupQuestList = new ArrayList<>();
 
     public LobbyData(String name, boolean isPrivate, boolean isVisible, String password, int id, User admin) {
         this.name = name;
@@ -33,6 +35,7 @@ public class LobbyData {
         this.admin = admin;
         this.players.add(admin);
         this.createdTime = System.currentTimeMillis();
+        createAllGroupQuests();
     }
 
     public String getName() { return name; }
@@ -94,6 +97,18 @@ public class LobbyData {
             }
         }
         return null;
+    }
+
+    private void createAllGroupQuests() {
+        List<GroupQuest> quests = new ArrayList<>();
+        for (GroupQuestType type : GroupQuestType.values()) {
+            quests.add(new GroupQuest(type));
+        }
+        groupQuestList = quests;
+    }
+
+    public List<GroupQuest> getGroupQuestList() {
+        return groupQuestList;
     }
 
 }

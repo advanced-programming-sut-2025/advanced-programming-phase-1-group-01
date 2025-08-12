@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.controllers.VotingController;
+import com.stardew_valley.models.GroupQuest;
 import com.stardew_valley.models.LobbyData;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.MessageEntry;
@@ -185,6 +186,16 @@ public class GameClient {
                         player.setReactionText(resp.text);
                     } else {
                         player.getReactionUI().setStarted(ReactionType.fromId(resp.reactionNum));
+                    }
+                } else if (object instanceof Network.ResponseStartGroupQuest resp) {
+                    for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+                        if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                            GroupQuest quest = lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().orElse(null);
+                            if (quest != null) {
+                                quest.setStarted();
+                                quest.addPlayer(Repository.getRepo().getCurrentUser().getUsername());
+                            }
+                        }
                     }
                 }
             }
@@ -399,6 +410,13 @@ public class GameClient {
         req.isText = isText;
         req.text = text;
         req.reactionNum = reactionNum;
+        pClient.sendTCP(req);
+    }
+
+    public void sendStartGroupQuest(int lobbyId, String questType) {
+        Network.RequestStartGroupQuest req = new Network.RequestStartGroupQuest();
+        req.lobbyId = lobbyId;
+        req.questName = questType;
         pClient.sendTCP(req);
     }
 }

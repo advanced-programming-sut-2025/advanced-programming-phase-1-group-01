@@ -47,6 +47,8 @@ public class Network {
         kryo.register(ResponseCheckToLogin.class);
         kryo.register(CTSReaction.class);
         kryo.register(STCReaction.class);
+        kryo.register(RequestStartGroupQuest.class);
+        kryo.register(ResponseStartGroupQuest.class);
     }
 
     public static class JsonMessage {
@@ -219,6 +221,15 @@ public class Network {
         public boolean isText;
         public String text;
         public int reactionNum;
+    }
+
+    public static class RequestStartGroupQuest {
+        public int lobbyId;
+        public String questName;
+    }
+
+    public static class ResponseStartGroupQuest {
+        public String questName;
     }
 
 }
