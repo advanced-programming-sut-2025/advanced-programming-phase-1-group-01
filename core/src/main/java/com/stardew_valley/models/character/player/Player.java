@@ -17,10 +17,10 @@ import com.stardew_valley.models.crafting.enums.CraftingRecipes;
 import com.stardew_valley.models.enums.Color;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
+import com.stardew_valley.models.enums.ReactionType;
 import com.stardew_valley.models.relations.RelationshipService;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.network.GameClient;
-import com.stardew_valley.views.GameView;
 
 import java.util.*;
 import java.util.List;
@@ -62,6 +62,7 @@ public class Player extends Character {
     private int artisanId = 0;
     private int id;
     private String mapJson;
+    private ReactionUI reaction;
 
     List<Animal> animals;
 
@@ -89,6 +90,7 @@ public class Player extends Character {
         cookingRecipes = new HashSet<>();
         foods = new HashMap<>();
         initializeRecipes();
+        reaction = new ReactionUI();
     }
 
     public Player(Game game, User user) {
@@ -1037,28 +1039,37 @@ public class Player extends Character {
         return stateTime;
     }
 
-    public void addReaction(Reaction reaction) {
-        GameView.setReaction(this, reaction.getReaction());
-        GameClient.getInstance().addReaction(this, reaction);
+    public void setReaction(ReactionType react) {
+        reaction.setStarted(react);
     }
 
-    public enum Reaction {
-        LAUGH("(:"),
-        HI("Hi"),
-        OK("OK"),
-        LIKE("\uD83D\uDC4D"),
-        DISLIKE("\uD83D\uDC4E"),
-        HEART("<3"),
-        ;
+    public ReactionUI getReactionUI() {
+        return reaction;
+    }
 
-        private String reaction;
+    private String reactionText;
+    private float reactionTextTime = 0f;
 
-        Reaction(String reaction) {
-            this.reaction = reaction;
-        }
+    public void setReactionText(String text) {
+        this.reactionText = text;
+        this.reactionTextTime = 0f;
+    }
 
-        public String getReaction() {
-            return reaction;
+    public String getReactionText() {
+        return reactionText;
+    }
+
+    public boolean isReactionTextActive() {
+        return reactionText != null && reactionTextTime < 5f;
+    }
+
+    public void updateReactionText(float delta) {
+        if (reactionText != null) {
+            reactionTextTime += delta;
+            if (reactionTextTime >= 5f) {
+                reactionText = null;
+            }
         }
     }
+
 }

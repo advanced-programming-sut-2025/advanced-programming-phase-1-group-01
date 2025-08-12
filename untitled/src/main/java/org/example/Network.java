@@ -45,6 +45,8 @@ public class Network {
         kryo.register(RequestAddSignedInUser.class);
         kryo.register(RequestCheckToLogin.class);
         kryo.register(ResponseCheckToLogin.class);
+        kryo.register(CTSReaction.class);
+        kryo.register(STCReaction.class);
     }
 
     public static class JsonMessage {
@@ -203,6 +205,20 @@ public class Network {
         public boolean canLogin;
         public String username;
         public String password;
+    }
+
+    public static class CTSReaction {
+        public String username;
+        public boolean isText;
+        public String text;
+        public int reactionNum;
+    }
+
+    public static class STCReaction {
+        public String username;
+        public boolean isText;
+        public String text;
+        public int reactionNum;
     }
 
 }

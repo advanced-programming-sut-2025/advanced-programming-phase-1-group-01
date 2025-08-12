@@ -71,6 +71,8 @@ public class GameServer {
                     } else if (object instanceof Network.RequestCheckToLogin req) {
                         System.out.println("requestCheckToLogin in server");
                         handleCheckToLoginRequest(connection, req);
+                    } else if (object instanceof Network.CTSReaction reaction) {
+                        handleReaction(connection, reaction);
                     }
                 } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
@@ -328,6 +330,24 @@ public class GameServer {
         resp.username = req.username;
         resp.password = req.password;
         connection.sendTCP(resp);
+    }
+
+    private void handleReaction(Connection connection, Network.CTSReaction reaction) {
+        Network.STCReaction reactionAnswer = new Network.STCReaction();
+        reactionAnswer.username = reaction.username;
+        reactionAnswer.isText = reaction.isText;
+        reactionAnswer.text = reaction.text;
+        reactionAnswer.reactionNum = reaction.reactionNum;
+        for (Lobby lobby : lobbies.values()) {
+            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                for (int id : lobby.getPlayerConnectionIds()) {
+                    if (id != connection.getID()) {
+                        server.sendToTCP(id, reactionAnswer);
+                    }
+                }
+                break;
+            }
+        }
     }
 
 }

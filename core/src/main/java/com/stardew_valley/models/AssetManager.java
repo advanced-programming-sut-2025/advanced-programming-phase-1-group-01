@@ -18,6 +18,76 @@ public class AssetManager {
 
     private final Texture PlowedTile = new Texture("farming/Plowed_Tile.png");
 
+    private final Texture sleepTex = new Texture("images/emojis/sleep.png");
+    public Texture getSleepTex() {
+        return sleepTex;
+    }
+
+    private final Texture thanksTex = new Texture("images/emojis/thanks.png");
+    public Texture getThanksTex() {
+        return thanksTex;
+    }
+
+    private final Texture thinkingTex = new Texture("images/emojis/thinking.png");
+    public Texture getThinkingTex() {
+        return thinkingTex;
+    }
+
+    private final Texture partyTex = new Texture("images/emojis/party.png");
+    public Texture getPartyTex() {
+        return partyTex;
+    }
+
+    private final Texture confusedTex = new Texture("images/emojis/confused.png");
+    public Texture getConfusedTex() {
+        return confusedTex;
+    }
+
+    private final Texture sadFaceTex = new Texture("images/emojis/sad-face.png");
+    public Texture getSadFaceTex() {
+        return sadFaceTex;
+    }
+
+    private final Texture surprisedTex = new Texture("images/emojis/surprised.png");
+    public Texture getSurprisedTex() {
+        return surprisedTex;
+    }
+
+    private final Texture okHandTex = new Texture("images/emojis/ok-hand.png");
+    public Texture getOkHandTex() {
+        return okHandTex;
+    }
+
+    private final Texture wavingHandTex = new Texture("images/emojis/waving-hand.png");
+    public Texture getWavingHandTex() {
+        return wavingHandTex;
+    }
+
+    private final Texture smileyTex = new Texture("images/emojis/smiley.png");
+    public Texture getSmileyTex() {
+        return smileyTex;
+    }
+
+    private final Texture sadTex = new Texture("images/emojis/sad.png");
+    public Texture getSadTex() {
+        return sadTex;
+    }
+
+    private final Texture dislikedTex = new Texture("images/emojis/disliked.png");
+    public Texture getDislikedTex() {
+        return dislikedTex;
+    }
+
+    private final Texture thumbUpTex = new Texture("images/emojis/thumb-up.png");
+    public Texture getThumbUpTex() {
+        return thumbUpTex;
+    }
+
+    private final Texture happyFaceTex = new Texture("images/emojis/happy-face.png");
+    public Texture getHappyFaceTex() {
+        return happyFaceTex;
+    }
+
     private final String black = "images/black.png";
     private final String white = "images/white.png";
 

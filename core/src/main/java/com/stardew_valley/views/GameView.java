@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -78,6 +79,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
     private final TextureRegion houseTop = AssetManager.getAssetManager().getHouseTop();
+    private final BitmapFont fontText = new BitmapFont();
 
     private final TextureRegion sebastianHouseTexture = AssetManager.getAssetManager().getNpcHouse1Full();
     private final TextureRegion abigailHouseTexture = AssetManager.getAssetManager().getNpcHouse2Full();
@@ -188,7 +190,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.inventoryView = new InventoryView(stage);
         this.socialView = new SocialView(stage);
         this.miniMapView = new MiniMapView(stage);
-        this.reactionView = new ReactionView(stage, player);
+        this.reactionView = new ReactionView(stage);
         this.votingView = new VotingView(stage);
         this.reactionsButton = new TextButton("Reactions", AssetManager.getAssetManager().getSkin());
         this.settingsView = new SettingsView(controller.getSettingsController(), stage);
@@ -353,6 +355,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             GameClient.getInstance().requestUsername();
             return true;
         }
+        if (i == Input.Keys.NUM_2) {
+            player.getReactionUI().setStarted(ReactionType.HI);
+            return true;
+        }
         if (i == Input.Keys.V) {
             votingView.setVisible(!votingView.isVisible());
             return true;
@@ -514,7 +520,34 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawHouseTop();
 
         drawTrees();
+
+        drawReaction();
+
+        drawReactionText();
     }
+
+    private void drawReaction() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
+            ReactionUI reactionUI = p.getReactionUI();
+            //if (reactionUI.isShowed()) System.out.println("################################################################");
+            reactionUI.update(globalDelta);
+            if (reactionUI.isShowed()) {
+                batch.draw(reactionUI.getTexture(), p.getX() - 2, p.getY() + 35, 20, 20);
+            }
+        }
+    }
+
+
+    private void drawReactionText() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
+            p.updateReactionText(globalDelta);
+            if (p.isReactionTextActive()) {
+                fontText.getData().setScale(0.6f);
+                fontText.draw(batch, p.getReactionText(), p.getX() - 10, p.getY() + 55);
+            }
+        }
+    }
+
 
     private void drawEquippedTool() {
         if (player.getInventory().getEquippedSlot() == null) return;

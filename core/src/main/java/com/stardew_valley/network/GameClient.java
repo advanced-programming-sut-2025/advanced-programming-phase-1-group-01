@@ -17,6 +17,7 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.models.enums.ReactionType;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.relations.Gift;
 import com.stardew_valley.views.GameView;
@@ -162,9 +163,9 @@ public class GameClient {
                     }
                 } else if (object instanceof Network.AddReaction req) {
                     Player player = repo.getUserByUsername(req.username).getPlayer();
-                    Player.Reaction reaction = Player.Reaction.valueOf(req.reaction.toUpperCase());
-
-                    GameView.setReaction(player, reaction.getReaction());
+//                    Player.Reaction reaction = Player.Reaction.valueOf(req.reaction.toUpperCase());
+//
+//                    GameView.setReaction(player, reaction.getReaction());
                 } else if (object instanceof Network.StartVoting req) {
                     if (req.type.equals("ban player")) {
                         String username = req.votingUsername;
@@ -177,6 +178,14 @@ public class GameClient {
                 } else if (object instanceof Network.ResponseCheckToLogin resp) {
                     System.out.println("received response check to login");
                     loginMenuView.getController().login(List.of(resp.username, resp.password, "Yes"), loginMenuView.getMessageLabel());
+                } else if (object instanceof Network.STCReaction resp) {
+                    Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(resp.username);
+                    System.out.println(resp.username + " yessssssssssssss");
+                    if (resp.isText) {
+                        player.setReactionText(resp.text);
+                    } else {
+                        player.getReactionUI().setStarted(ReactionType.fromId(resp.reactionNum));
+                    }
                 }
             }
 
@@ -335,13 +344,13 @@ public class GameClient {
         pClient.sendTCP(req);
     }
 
-    public void addReaction(Player player, Player.Reaction reaction) {
-        Network.AddReaction req = new Network.AddReaction();
-        req.reaction = reaction.name();
-        req.username = player.getUser().getUsername();
-
-        pClient.sendTCP(req);
-    }
+//    public void addReaction(Player player, Player.Reaction reaction) {
+//        Network.AddReaction req = new Network.AddReaction();
+//        req.reaction = reaction.name();
+//        req.username = player.getUser().getUsername();
+//
+//        pClient.sendTCP(req);
+//    }
 
     public void startBanPlayerVoting(String username) {
         Network.StartVoting req = new Network.StartVoting();
@@ -384,5 +393,12 @@ public class GameClient {
         pClient.sendTCP(req);
     }
 
-
+    public void sendReactionToServer(String username, boolean isText, String text, int reactionNum) {
+        Network.CTSReaction req = new Network.CTSReaction();
+        req.username = username;
+        req.isText = isText;
+        req.text = text;
+        req.reactionNum = reactionNum;
+        pClient.sendTCP(req);
+    }
 }
