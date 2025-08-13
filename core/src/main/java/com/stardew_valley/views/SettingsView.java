@@ -11,6 +11,8 @@ import com.stardew_valley.models.AssetManager;
 public class SettingsView extends GameWindow {
     private Table table;
     private TextButton nextTurnButton;
+    private TextButton deletePlayerButton;
+    private TextButton exitButton;
 
     private final SettingsController controller;
 
@@ -20,6 +22,8 @@ public class SettingsView extends GameWindow {
         this.controller = controller;
         table = new Table(getSkin());
         nextTurnButton = new TextButton("Next Turn", getSkin());
+        deletePlayerButton = new TextButton("Delete Player", getSkin());
+        exitButton = new TextButton("Exit", getSkin());
 
         nextTurnButton.addListener(new ChangeListener() {
             @Override
@@ -28,7 +32,26 @@ public class SettingsView extends GameWindow {
             }
         });
 
+
+        deletePlayerButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SettingsView.this.controller.nextTurn();
+            }
+        });
+
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SettingsView.this.controller.exitGame();
+            }
+        });
+
         table.add(nextTurnButton);
+        table.row();
+        table.add(deletePlayerButton);
+        table.row();
+        table.add(exitButton);
         table.setFillParent(true);
         table.center();
         addActor(table);

@@ -1,5 +1,7 @@
 package com.stardew_valley.models.crafting.enums;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public enum AllCraftedProductsType {
     HONEY(350),
     CHEESE(230),
@@ -35,5 +37,13 @@ public enum AllCraftedProductsType {
 
     public int getPrice() {
         return price;
+    }
+
+    public Texture getTexture() {
+        String fileName = name().toLowerCase()
+            .replace("_", "")
+            .replace(" ", "")
+            + ".png";
+        return new Texture("crafted/" + fileName);
     }
 }

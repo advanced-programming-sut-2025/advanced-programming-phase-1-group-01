@@ -98,7 +98,6 @@ public class TimeManager {
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
 
-        game.getBlacksmith().resetDailyStock();
         game.getJojaMart().resetDailyStock();
         game.getPierreGeneralStore().resetDailyStock();
         game.getCarpenterShop().resetDailyStock();

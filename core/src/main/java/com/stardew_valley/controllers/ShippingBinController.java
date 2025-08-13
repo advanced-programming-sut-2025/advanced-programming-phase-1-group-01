@@ -1,5 +1,6 @@
 package com.stardew_valley.controllers;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.animal.ProductQuality;
@@ -33,80 +34,38 @@ public class ShippingBinController extends Controller {
             return new Result(false, "invalid command");
         }
 
-        switch (matchedCommand) {
-            case SELL:
-                return sell(command);
-        }
+//        switch (matchedCommand) {
+//            case SELL:
+//                return sell(command);
+//        }
         return null;
     }
 
-    private Result sell(String command) {
-        String productName;
-        String countStr;
-        int count;
-        if (command.contains("-n")) {
-            productName = extractValue(command,"sell","-n");
-            countStr = extractValue(command,"-n",null);
-        }
-
-        else {
-            productName = extractValue(command,"sell",null);
-            countStr = "1";
-        }
-
-        count = Integer.parseInt(countStr);
+    public void sell(String product, int quantity, Label message) {
+        String[] parts = product.split(" ");
+        String productName = parts[0];
 
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        if (!player.isNearToSellBucket(player.getPosition().x(), player.getPosition().y())) {
-            return new Result(false, "You are not near a Sell Bucket!");
-        }
-
         Item item = player.getInventory().getNewItem(productName);
-
-        if (item == null) {
-            return new Result(false, productName + "does not exist");
-        }
 
         Inventory inventory = player.getInventory();
         Slot slot = inventory.getSlot(productName);
 
-        if (slot == null) {
-            return new Result(false, "You don't have " + productName + " in your inventory.");
-        }
-
-        if (inventory.getSlot(productName).getQuantity() < count) {
-            return new Result(false, "You don't have enough " + productName + " in your inventory.");
-        }
-
         if (BanSellItem.isBanned(item.getName().toLowerCase())) {
-            return new Result(false, "You can't sell " + productName + " because it is already banned.");
+            message.setText("You can't sell " + productName);
+            return;
         }
 
-        slot.removeQuantity(count);
-        ProductQuality quality = ProductQuality.getRandomProductQuality();
-        double finalPrice = item.getPrice() * quality.getPriceCoefficient() * count;
+        if (slot.getQuantity() < quantity) {
+            message.setText("You don't have enough " + productName + " in your inventory.");
+            return;
+        }
+
+        slot.removeQuantity(quantity);
+        double finalPrice = item.getPrice() * quantity;
         int totalPrice = (int) finalPrice;
-        repo.getCurrentGame().getDelayedPaymentSystem().addPendingSale(player, productName, count, totalPrice);
+        repo.getCurrentGame().getDelayedPaymentSystem().addPendingSale(player, productName, quantity, totalPrice);
 
-        return new Result(true, count + "x " + quality + " " + productName + " have been sold for " + totalPrice + " coins!");
-    }
-
-    private String extractValue(String command, String startFlag, String endFlag) {
-        String patternString;
-
-        if (endFlag != null) {
-            patternString = startFlag + " (.*?) " + endFlag;
-        } else {
-            patternString = startFlag + " (.*)";
-        }
-
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(command);
-
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-
-        return null;
+        message.setText(quantity + "x " + productName + " have been sold for " + totalPrice + " coins!");
     }
 }

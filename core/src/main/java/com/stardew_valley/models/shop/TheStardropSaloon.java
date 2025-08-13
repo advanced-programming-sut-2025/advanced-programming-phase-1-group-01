@@ -4,33 +4,30 @@ import com.stardew_valley.models.shop.enums.TheStardropSaloonProducts;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class TheStardropSaloon extends Shop {
-    private final Map<TheStardropSaloonProducts, Integer> theStardropSaloonProducts = new HashMap<>();
+public class TheStardropSaloon {
 
-    public TheStardropSaloon(int x, int y) {
-        super(x,y);
-        this.shopkeeperName = ShopkeeperName.GUS;
-        resetDailyStock();
-    }
+    private final Map<TheStardropSaloonProducts, Integer> saloonProducts = new HashMap<>();
+
+    public TheStardropSaloon() {
+    resetDailyStock();}
+
 
     public void resetDailyStock() {
         for (TheStardropSaloonProducts product : TheStardropSaloonProducts.values()) {
-            theStardropSaloonProducts.put(product, product.getDailyLimit());
+            saloonProducts.put(product, product.getDailyLimit());
         }
     }
 
-    public Set<TheStardropSaloonProducts> getAllProducts() {
-        return theStardropSaloonProducts.keySet();
+    public Map<TheStardropSaloonProducts, Integer> getAllProducts() {
+        return saloonProducts;
     }
 
-    public int getProductStock(TheStardropSaloonProducts item) {
-        return theStardropSaloonProducts.getOrDefault(item, 0);
+    public int getProductStock(TheStardropSaloonProducts product) {
+        return saloonProducts.getOrDefault(product, 0);
     }
 
-    public void updateProductPurchase(TheStardropSaloonProducts item, int amount) {
-        theStardropSaloonProducts.put(item, getProductStock(item) - amount);
+    public void updateProductPurchase(TheStardropSaloonProducts product, int amount) {
+        saloonProducts.put(product, getProductStock(product) - amount);
     }
 }
-

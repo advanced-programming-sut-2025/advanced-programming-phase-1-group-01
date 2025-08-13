@@ -6,12 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class MarnieRanch extends Shop {
+public class MarnieRanch {
     private final Map<MarnieRanchProducts, Integer> marnieRanchShopProducts = new HashMap<>();
 
-    public MarnieRanch(int x, int y) {
-        super(x,y);
-        this.shopkeeperName = ShopkeeperName.MARNIE;
+    public MarnieRanch() {
         resetDailyStock();
     }
 

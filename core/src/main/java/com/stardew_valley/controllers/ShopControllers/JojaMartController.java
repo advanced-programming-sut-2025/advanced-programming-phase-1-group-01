@@ -1,5 +1,6 @@
 package com.stardew_valley.controllers.ShopControllers;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Player;
@@ -8,7 +9,6 @@ import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.shop.JojaMart;
 import com.stardew_valley.models.shop.enums.JojaMartCommands;
 import com.stardew_valley.models.shop.enums.JojaMartProducts;
-import com.stardew_valley.models.shop.Shop;
 
 public class JojaMartController extends ShopController {
 
@@ -18,17 +18,6 @@ public class JojaMartController extends ShopController {
 
     @Override
     public Result handleCommand(String command) {
-        int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        Player player = repo.getCurrentGame().getCurrentPlayer();
-        Shop shop = repo.getCurrentGame().getFishShop();
-
-        if (!isNear(player, shop)) {
-            return new Result(false, "you are not near the shop");
-        }
-
-        if (!isShopOpen(hour)) {
-            return new Result(false, "shop is closed");
-        }
 
         JojaMartCommands matchedCommand = null;
 
@@ -43,141 +32,63 @@ public class JojaMartController extends ShopController {
             return new Result(false, "invalid command");
         }
 
-        switch (matchedCommand) {
-            case SHOW_ALL_PRODUCTS:
-                return showAllProducts();
-            case SHOW_ALL_AVAILABLE_PRODUCTS:
-                return showAllAvailableProducts();
-            case JOJA_MART:
-                return purchase(command);
-        }
+//        switch (matchedCommand) {
+//            case SHOW_ALL_PRODUCTS:
+//                return showAllProducts();
+//            case SHOW_ALL_AVAILABLE_PRODUCTS:
+//                return showAllAvailableProducts();
+//            case JOJA_MART:
+//                return purchase(command);
+//        }
 
         return null;
     }
 
+
+    @Override
     protected Result showAllProducts() {
-        JojaMart shop = repo.getCurrentGame().getJojaMart();
-        StringBuilder info = new StringBuilder();
-
-        // Permanent Stock
-        info.append("Permanent Stock:\n");
-        for (JojaMartProducts product : shop.getAllProducts()) {
-            if (product.getSeason() == Season.SPECIAL) {
-                info.append(product.getName())
-                        .append(": ")
-                        .append(product.getPrice())
-                        .append("g (")
-                        .append(")\n");
-            }
-        }
-
-        // Seasonal Stocks
-        for (Season season : Season.values()) {
-            if (season == Season.SPECIAL) continue;
-
-            info.append("\n").append(season.name().toLowerCase()).append(" Stock:\n");
-
-            for (JojaMartProducts product : shop.getAllProducts()) {
-                if (product.getSeason() == season) {
-                    info.append(product.getName())
-                            .append(": ")
-                            .append(product.getPrice())
-                            .append("g (")
-                            .append(product.getDailyLimit() == -1 ? "unlimited" : product.getDailyLimit() + " per day")
-                            .append(")\n");
-                }
-            }
-        }
-
-        return new Result(true, info.toString());
-    }
-
-    protected Result showAllAvailableProducts() {
-        JojaMart shop = repo.getCurrentGame().getJojaMart();
-        String currentSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason().toString();
-        StringBuilder info = new StringBuilder();
-
-        info.append("Permanent Stock:\n");
-        for (JojaMartProducts product : shop.getAllProducts()) {
-            if (!product.getSeason().name().equalsIgnoreCase("SPECIAL")) continue;
-
-            int stock = shop.getProductStock(product);
-            if (product.getDailyLimit() == -1 || stock > 0) {
-                info.append(product.getName())
-                        .append(": ")
-                        .append(product.getPrice())
-                        .append("g (")
-                        .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
-                        .append(")\n");
-            }
-        }
-
-        info.append("\n").append(currentSeason.substring(0, 1).toUpperCase()).append(currentSeason.substring(1).toLowerCase()).append(" Stock:\n");
-        for (JojaMartProducts product : shop.getAllProducts()) {
-            if (!product.getSeason().name().equalsIgnoreCase(currentSeason)) continue;
-
-            int stock = shop.getProductStock(product);
-            if (product.getDailyLimit() == -1 || stock > 0) {
-                info.append(product.getName())
-                        .append(": ")
-                        .append(product.getPrice())
-                        .append("g (")
-                        .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
-                        .append(")\n");
-            }
-        }
-
-        return new Result(true, info.toString());
+        return null;
     }
 
     protected Result purchase(String command) {
-        String itemName;
-        String countStr;
-        int count;
+        return null;
+    }
 
-        if (command.contains("-n")) {
-            itemName = extractValue(command, "jojamart", "-n");
-            countStr = extractValue(command, "-n", null);
-        }
-
-        else {
-            itemName = extractValue(command, "jojamart", null);
-            countStr = "1";
-        }
-        count = Integer.parseInt(countStr);
-
+    public void buy(String itemName, int quantity, Label messageLabel) {
 
         JojaMart shop = repo.getCurrentGame().getJojaMart();
         Player player = repo.getCurrentGame().getCurrentPlayer();
-        String currentSeason = repo.getCurrentGame().getTimeManager().getNow().getSeason().toString();
+        String[] parts = itemName.split(" ");
 
         for (JojaMartProducts product : JojaMartProducts.values()) {
-            if (product.getName().equalsIgnoreCase(itemName)) {
-                int totalCost = product.getPrice() * count;
-                int stock = shop.getProductStock(product);
+            int totalCost = product.getPrice() * quantity;
+            int stock = shop.getProductStock(product);
+            if (product.getName().equals(itemName)) {
 
-                if (!product.getSeason().name().equalsIgnoreCase( currentSeason)) {
-                    return new Result(false, "You don't have enough stock to purchase");
-                }
-
-                if (product.getDailyLimit() != -1 && stock < count) {
-                    return new Result(false, "not enough stock for this product");
+                if (product.getDailyLimit() != -1 && stock < quantity) {
+                    messageLabel.setText("not enough stock for this product");
+                    return;
                 }
 
                 if (player.getNumOfCoins() < totalCost) {
-                    return new Result(false, "not enough coins");
+                    messageLabel.setText("not enough coins");
+                    return;
                 }
 
                 player.setNumOfCoins(player.getNumOfCoins() - totalCost);
                 if (product.getDailyLimit() != -1) {
-                    shop.updateProductPurchase(product, count);
+                    shop.updateProductPurchase(product, quantity);
                 }
                 Inventory inventory = player.getInventory();
-                inventory.addItem(itemName, count);
-                return new Result(true, "purchased " + count + "x " + product.getName());
+                inventory.addItem(itemName, quantity);
+                messageLabel.setText("purchased " + quantity + "x " + product.getName());
             }
         }
-        return new Result(false, "product not found");
+    }
+
+    @Override
+    protected Result showAllAvailableProducts() {
+        return null;
     }
 
     @Override

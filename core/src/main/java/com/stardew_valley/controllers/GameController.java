@@ -82,7 +82,6 @@ public class GameController extends Controller {
         commands.addAll(Arrays.stream(CookingCommands.values()).toList());
         commands.addAll(Arrays.stream(CraftingCommands.values()).toList());
         commands.addAll(Arrays.stream(ProcessingCommands.values()).toList());
-        commands.addAll(Arrays.stream(BlackSmithCommands.values()).toList());
         commands.addAll(Arrays.stream(CarpenterCommands.values()).toList());
         commands.addAll(Arrays.stream(FishShopCommands.values()).toList());
         commands.addAll(Arrays.stream(JojaMartCommands.values()).toList());
@@ -120,7 +119,6 @@ public class GameController extends Controller {
             case CookingCommands cookingCommands -> cookingController.handleCommand(commandLine);
             case CraftingCommands craftingCommands -> craftingController.handleCommand(commandLine);
             case ProcessingCommands processingCommands -> artisanController.handleCommand(commandLine);
-            case BlackSmithCommands blackSmithCommands -> blackSmithController.handleCommand(commandLine);
             case CarpenterCommands carpenterCommands -> carpenterController.handleCommand(commandLine);
             case FishShopCommands fishShopCommands -> fishShopController.handleCommand(commandLine);
             case JojaMartCommands jojaMartCommands -> jojaMartController.handleCommand(commandLine);

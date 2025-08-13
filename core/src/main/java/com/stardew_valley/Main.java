@@ -2,7 +2,11 @@ package com.stardew_valley;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.stardew_valley.controllers.*;
+import com.stardew_valley.controllers.ShopControllers.BlackSmithController;
+import com.stardew_valley.controllers.ShopControllers.JojaMartController;
 import com.stardew_valley.models.building.Farm;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
@@ -47,6 +51,8 @@ public class Main extends Game {
         //setScreen(new CookingView(new CookingController(Repository.getRepo())));
         //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
         setScreen(new GameView(new GameController(Repository.getRepo())));
+        //setScreen(new JojamartView(new JojaMartController(Repository.getRepo())));
+        //setScreen(new BlacksmithView(new BlackSmithController(Repository.getRepo())));
     }
 
     @Override
