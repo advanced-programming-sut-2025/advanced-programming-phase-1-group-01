@@ -189,7 +189,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.skillsView = new SkillsView(stage);
         this.inventoryView = new InventoryView(stage);
         this.socialView = new SocialView(stage);
-        this.miniMapView = new MiniMapView(stage);
+        this.miniMapView = new MiniMapView(stage, Repository.getRepo().getCurrentGame().getFarm().getTiles(), Repository.getRepo().getCurrentGame().getCurrentPlayer());
         this.settingsView = new SettingsView(controller.getSettingsController(), stage);
         friendshipsButton = new TextButton("Friendships", AssetManager.getAssetManager().getSkin());
         giftView = new GiftView(controller.getRelationshipController(), stage, inventoryView);
@@ -1261,12 +1261,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            if (miniMapActor == null) {
-                showMiniMap(stage);
-            } else {
-                miniMapActor.remove();
-                miniMapActor = null;
-            }
+            miniMapView.toggleMiniMap();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
