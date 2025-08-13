@@ -7,13 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class CarpenterShop extends Shop {
+public class CarpenterShop {
     private final Map<CarpenterShopProducts, Integer> carpenterShopProducts = new HashMap<>();
     private final Map<CarpenterShopBuildings, Integer> carpenterShopBuildings = new HashMap<>();
 
-    public CarpenterShop(int x, int y) {
-        super(x,y);
-        this.shopkeeperName = ShopkeeperName.ROBIN;
+    public CarpenterShop() {
         resetDailyStock();
     }
 

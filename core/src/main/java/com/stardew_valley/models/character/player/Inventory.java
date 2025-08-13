@@ -18,6 +18,7 @@ import com.stardew_valley.models.foraging.ForagingCrop;
 import com.stardew_valley.models.foraging.ForagingCropInfo;
 import com.stardew_valley.models.foraging.ForagingMineralInfo;
 import com.stardew_valley.models.foraging.ForagingTreeInfo;
+import com.stardew_valley.models.relations.Ring;
 import com.stardew_valley.models.shop.enums.*;
 import com.stardew_valley.models.ingredients.QuestItemType;
 import com.stardew_valley.models.tool.*;
@@ -41,6 +42,7 @@ public class Inventory {
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "hoe", 1));
         slots.add(new Slot(this, "pickaxe", 1));
+        slots.add(new Slot(this, "backpack", 1));
     }
 
     public List<Slot> getSlots() {
@@ -136,6 +138,7 @@ public class Inventory {
             case "preserves jar" -> new PreservesJar();
             case "fish smoker" -> new FishSmoker();
             case "furnace" -> new Furnace();
+            case "ring" -> new Ring();
             case "egg" -> new AnimalProduct(AnimalProductType.EGG, ProductQuality.getRandomProductQuality());
             case "big egg" -> new AnimalProduct(AnimalProductType.BIG_EGG, ProductQuality.getRandomProductQuality());
             case "duck egg" -> new AnimalProduct(AnimalProductType.DUCK_EGG, ProductQuality.getRandomProductQuality());
@@ -260,12 +263,6 @@ public class Inventory {
                 for (FoodsEnum foodEnum : FoodsEnum.values()) {
                     if (foodEnum.getName().equalsIgnoreCase(itemName)) {
                         yield foodEnum.toFood();
-                    }
-                }
-
-                for (BlacksmithProducts products : BlacksmithProducts.values()) {
-                    if (products.getName().equalsIgnoreCase(itemName)) {
-                        yield products.toItem();
                     }
                 }
 

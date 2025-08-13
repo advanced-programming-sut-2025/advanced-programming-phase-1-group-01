@@ -1,32 +1,30 @@
 package com.stardew_valley.models.shop.enums;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.shop.TheStardropSaloonItem;
 
 public enum TheStardropSaloonProducts {
-    BEER("beer", 400, -1),
-    SALAD("salad", 220, -1),
-    BREAD("bread", 120, -1),
-    SPAGHETTI("spaghetti", 240, -1),
-    PIZZA("pizza", 600, -1),
-    COFFEE("coffee", 300, -1),
-    HASHBROWNS_RECIPE("hashbrowns", 50, 1),
-    OMELET_RECIPE("omelet", 100, 1),
-    PANCAKES_RECIPE("pancakes", 100, 1),
-    BREAD_RECIPE("bread", 100, 1),
-    TORTILLA_RECIPE("tortilla", 100, 1),
-    PIZZA_RECIPE("Pizza", 150, 1),
-    MAKI_ROLL_RECIPE("maki poll", 300, 1),
-    TRIPLE_SHOT_ESPRESSO_RECIPE("triple shot espresso", 5000, 1),
-    COOKIE_RECIPE("cookie", 300, 1);
+    BEER("beer", 400, 5, AssetManager.getAssetManager().getBeer(),true),
+    SALAD("salad", 220, 5, AssetManager.getAssetManager().getSalad(), true),
+    BREAD("bread", 120, 5, AssetManager.getAssetManager().getBread(), true),
+    SPAGHETTI("pasta", 240, 5, AssetManager.getAssetManager().getSpaghetti(), true),
+    PIZZA("pizza", 600, 5, AssetManager.getAssetManager().getPizza(), true),
+    COFFEE("coffee", 300, 5, AssetManager.getAssetManager().getCoffee(), true),;
 
     private final String name;
     private final int price;
-    private final int dailyLimit;
+    private int dailyLimit;
+    private final Texture texture;
+    private boolean isAvailable;
 
-    TheStardropSaloonProducts(String name, int price, int dailyLimit) {
+    TheStardropSaloonProducts(String name, int price, int dailyLimit, Texture texture, boolean isAvailable) {
         this.name = name;
         this.price = price;
         this.dailyLimit = dailyLimit;
+        this.texture = texture;
+        this.isAvailable = isAvailable;
     }
 
     public String getName() {
@@ -42,7 +40,7 @@ public enum TheStardropSaloonProducts {
     }
 
     public TheStardropSaloonItem toItem() {
-        return new TheStardropSaloonItem(name,price);
+        return new TheStardropSaloonItem(name,price,texture);
     }
 }
 

@@ -4,8 +4,8 @@ import com.stardew_valley.models.Item;
 import com.stardew_valley.models.dateTime.Season;
 
 public class JojaMartItem implements Item {
-    private String name;
-    private int price;
+    private final String name;
+    private final int price;
     private Season season;
 
     public JojaMartItem(String name, int price, Season season) {

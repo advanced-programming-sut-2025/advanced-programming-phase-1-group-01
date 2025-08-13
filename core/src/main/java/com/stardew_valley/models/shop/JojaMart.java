@@ -1,16 +1,16 @@
 package com.stardew_valley.models.shop;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArraySupplier;
 import com.stardew_valley.models.shop.enums.JojaMartProducts;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
-public class JojaMart extends Shop {
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class JojaMart {
     private final Map<JojaMartProducts, Integer> jojaMartProducts = new HashMap<>();
 
-    public JojaMart(int x, int y) {
-        super(x,y);
-        this.shopkeeperName = ShopkeeperName.MORRIS;
+    public JojaMart() {
         resetDailyStock();
     }
 
@@ -20,8 +20,8 @@ public class JojaMart extends Shop {
         }
     }
 
-    public Set<JojaMartProducts> getAllProducts() {
-        return jojaMartProducts.keySet();
+    public Map<JojaMartProducts, Integer> getAllProducts() {
+        return jojaMartProducts;
     }
 
     public int getProductStock(JojaMartProducts product) {

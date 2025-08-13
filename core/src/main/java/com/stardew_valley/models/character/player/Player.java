@@ -73,7 +73,7 @@ public class Player extends Character {
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
-        numOfCoins = 0;
+        numOfCoins = 100000;
         inventory = new Inventory(this);
         refrigerator = new Refrigerator(this);
         energy = new Energy();
@@ -92,7 +92,7 @@ public class Player extends Character {
         this.user = user;
         position = new Position(INITIAL_PLAYER_X, INITIAL_PLAYER_Y);
         direction = Direction.UP;
-        numOfCoins = 0;
+        numOfCoins = 1000;
         inventory = new Inventory(this);
         refrigerator = new Refrigerator(this);
         energy = new Energy();

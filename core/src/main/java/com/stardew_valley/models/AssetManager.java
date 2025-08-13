@@ -4924,6 +4924,29 @@ public class AssetManager {
         return stone;
     }
 
+    public Texture getBeer() {
+        return new Texture("shopping/beer.png");
+    }
+
+    public Texture getSalad() {
+        return new Texture("shopping/salad.png");
+    }
+
+    public Texture getBread() {
+        return new Texture("shopping/bread.png");
+    }
+
+    public Texture getSpaghetti() {
+        return new Texture("shopping/spaghetti.png");
+    }
+
+    public Texture getPizza() {
+        return new Texture("shopping/pizza.png");
+    }
+
+    public Texture getCrown() {
+        return new Texture("fishing/crown.png");
+    }
     public static AssetManager getAssetManager() {
         if (assetManager == null) {
             assetManager = new AssetManager();
