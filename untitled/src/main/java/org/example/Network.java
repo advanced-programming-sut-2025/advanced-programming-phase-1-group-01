@@ -228,21 +228,25 @@ public class Network {
     public static class RequestStartGroupQuest {
         public int lobbyId;
         public String questName;
+        public String username;
     }
 
     public static class ResponseStartGroupQuest {
         public String questName;
+        public String username;
     }
 
     public static class RequestAddAmount {
         public int lobbyId;
         public int amount;
         public String questName;
+        public String username;
     }
 
     public static class ResponseAddAmount {
         public String questName;
         public int amount;
+        public String username;
     }
 
 }

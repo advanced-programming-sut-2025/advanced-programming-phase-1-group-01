@@ -358,6 +358,7 @@ public class GameServer {
         Lobby lobby = lobbies.get(request.lobbyId);
         Network.ResponseStartGroupQuest resp = new Network.ResponseStartGroupQuest();
         resp.questName = request.questName;
+        resp.username = request.username;
 
         for (int id : lobby.getPlayerConnectionIds()) {
             server.sendToTCP(id, resp);
@@ -369,6 +370,7 @@ public class GameServer {
         Network.ResponseAddAmount resp = new Network.ResponseAddAmount();
         resp.questName = req.questName;
         resp.amount = req.amount;
+        resp.username = req.username;
         for (int id : lobby.getPlayerConnectionIds()) {
             server.sendToTCP(id, resp);
         }

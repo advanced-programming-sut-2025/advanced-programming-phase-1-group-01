@@ -192,18 +192,13 @@ public class GameClient {
                     for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
                         if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
                             lobbyData.isThatOne = true;
-                            GroupQuest quest = lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().orElse(null);
-                            if (quest != null) {
-                                System.out.println("and started");
-                                quest.setStarted();
-                                quest.addPlayer(Repository.getRepo().getCurrentUser().getUsername());
-                            }
+                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addToGroup(resp.username));
                         }
                     }
                 } else if (object instanceof Network.ResponseAddAmount resp) {
                     for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
                         if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
-                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addAmount(resp.amount));
+                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addAmount(resp.amount, resp.username));
                         }
                     }
                 }
@@ -424,17 +419,44 @@ public class GameClient {
     }
 
     public void sendStartGroupQuest(int lobbyId, String questType) {
-        Network.RequestStartGroupQuest req = new Network.RequestStartGroupQuest();
-        req.lobbyId = lobbyId;
-        req.questName = questType;
-        pClient.sendTCP(req);
+        LobbyData lobby = null;
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                lobby = lobbyData;
+            }
+        }
+        if (lobby != null) {
+            int attended = 0;
+            for (GroupQuest groupQuest : lobby.getGroupQuestList()) {
+                if (groupQuest.isInList(repo.getCurrentUser().getUsername())) {
+                    attended++;
+                }
+            }
+            if (attended <= 3) {
+                Network.RequestStartGroupQuest req = new Network.RequestStartGroupQuest();
+                req.lobbyId = lobbyId;
+                req.questName = questType;
+                req.username = repo.getCurrentUser().getUsername();
+                pClient.sendTCP(req);
+            }
+        }
     }
 
-    public void sendAddAmountRequest(int lobbyId, int amount, String questName) {
-        Network.RequestAddAmount req = new Network.RequestAddAmount();
-        req.lobbyId = lobbyId;
-        req.amount = amount;
-        req.questName = questName;
-        pClient.sendTCP(req);
+    public void sendAddAmountRequest(int amount, String questName) {
+        int lobbyId = -1;
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                lobbyId = lobbyData.getId();
+            }
+        }
+        if (lobbyId != -1) {
+            Network.RequestAddAmount req = new Network.RequestAddAmount();
+            req.lobbyId = lobbyId;
+            req.amount = amount;
+            req.questName = questName;
+            req.username = Repository.getRepo().getCurrentUser().getUsername();
+            pClient.sendTCP(req);
+        }
     }
+
 }

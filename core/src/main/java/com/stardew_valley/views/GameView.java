@@ -2530,6 +2530,104 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dialog.show(stage);
     }
 
+    public void showActiveGroupQuestsDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        User currentPlayer = Repository.getRepo().getCurrentUser();
+
+        Dialog dialog = new Dialog("Active Group Quests", skin);
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(5);
+
+        List<LobbyData> lobbies = LobbyController.getInstance().getLobbies();
+
+        LobbyData currentLobby = null;
+
+        for (LobbyData lobby : lobbies) {
+            if (lobby.getPlayers().stream()
+                .anyMatch(player -> player.getUsername().equals(currentPlayer.getUsername()))) {
+                currentLobby = lobby;
+                break;
+            }
+        }
+
+        if (currentLobby == null) {
+            content.add(new Label("You are not in any lobby!", skin));
+        } else {
+            content.add(new Label("Lobby: " + currentLobby.getName(), skin))
+                .colspan(3).center().padBottom(10).row();
+
+            List<GroupQuest> quests = currentLobby.getGroupQuestList();
+
+            Table questsTable = new Table(skin);
+            questsTable.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+
+            boolean hasActiveQuests = false;
+
+            for (GroupQuest quest : quests) {
+                if (quest.isStarted()) {
+
+                    hasActiveQuests = true;
+                    GroupQuestType type = quest.getType();
+
+                    float totalDuration = type.getDuration();
+                    float doneHours = quest.getHourCounter();
+                    float totalDoneRatio = doneHours / totalDuration;
+
+                    Label descLabel = new Label(type.getDescription(), skin);
+                    Label progressLabel = new Label(String.format("Progress: %.1f%% (%d / %d hours)",
+                        totalDoneRatio * 100, (int) doneHours, (int) totalDuration), skin);
+
+                    Table playerProgressTable = new Table(skin);
+                    playerProgressTable.defaults().pad(2);
+
+
+                    for (String player : quest.getPlayerUsernames().keySet()) {
+                        float playerDone = quest.getPlayerUsernames().get(player);
+                        float playerRatio = playerDone / quest.getDoneAmount();
+
+                        Label playerLabel = new Label(player, skin);
+                        Label playerProgress = new Label(String.format("%.1f%%", playerRatio * 100), skin);
+
+                        playerProgressTable.add(playerLabel).width(150);
+                        playerProgressTable.add(playerProgress).width(80);
+                        playerProgressTable.row();
+                    }
+
+                    Table row = new Table(skin);
+                    row.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+
+                    row.add(descLabel).width(300).padRight(20).padLeft(20).row();
+                    row.add(progressLabel).colspan(2).padBottom(10).row();
+                    row.add(playerProgressTable).colspan(3).row();
+
+                    questsTable.add(row).colspan(3).row();
+                }
+            }
+
+            if (!hasActiveQuests) {
+                questsTable.add(new Label("No active quests found.", skin))
+                    .colspan(3).center().pad(10);
+            }
+
+            ScrollPane scrollPane = new ScrollPane(questsTable, skin);
+            scrollPane.setFadeScrollBars(false);
+            scrollPane.setScrollingDisabled(true, false);
+
+            content.add(scrollPane).maxWidth(1000).maxHeight(600).fill().expandX().expandY().colspan(3).row();
+        }
+
+        dialog.button("Close", true);
+
+        dialog.pack();
+        dialog.setResizable(true);
+        dialog.setMovable(true);
+
+        dialog.show(stage);
+    }
+
+
 
 
 
