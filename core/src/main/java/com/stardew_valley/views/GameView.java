@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -26,6 +26,8 @@ import com.stardew_valley.Main;
 import com.stardew_valley.controllers.CookingController;
 import com.stardew_valley.controllers.CraftingController;
 import com.stardew_valley.controllers.GameController;
+import com.stardew_valley.controllers.ShopControllers.BlackSmithController;
+import com.stardew_valley.controllers.ShopControllers.JojaMartController;
 import com.stardew_valley.models.animal.Animal;
 import com.stardew_valley.models.animal.AnimalInfo;
 import com.stardew_valley.models.*;
@@ -42,8 +44,6 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.enums.*;
-import com.stardew_valley.models.enums.commands.DateTimeCommands;
 import com.stardew_valley.models.enums.AreaType;
 import com.stardew_valley.models.enums.ArtisanStatus;
 import com.stardew_valley.models.enums.ArtisanType;
@@ -51,6 +51,7 @@ import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
+import com.stardew_valley.models.fish.FishInfo;
 import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
@@ -135,6 +136,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private final ShippingBinView shippingBinView;
     private final FoodMenuView foodMenuView;
+    private SaloonView saloon;
+    private FishingShopView fishShop;
+    private FishingWindow fishingWindow;
+    private FishSelectWindow fishSelectWindow;
 
     private final FriendshipView friendshipView;
     private final TextButton friendshipsButton;
@@ -175,7 +180,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch = Main.getBatch();
         this.dateTimeView = new DateTimeView(controller.getDateTimeController());
         this.inventoryMenu = new WindowManager(stage);
-        this.shippingBinView = new ShippingBinView(stage);
+        this.shippingBinView = new ShippingBinView(controller.getShippingBinController(), stage);
         this.foodMenuView = new FoodMenuView(stage);
         this.skillsView = new SkillsView(stage);
         this.inventoryView = new InventoryView(stage);
@@ -258,11 +263,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         notificationsView.update();
         giftView.update();
         foodMenuView.update();
+        shippingBinView.update();
         eatFood();
 //        notificationsView.update();
         batch.end();
         if (controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour() >= 18) {
-            drawDark(0.85f);
+            drawDark(0.7f);
         }
 
         if (shakeTime < shakeDuration) {
@@ -284,7 +290,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     public void dispose() {
     }
 
-
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.ESCAPE) {
@@ -293,6 +298,51 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
         if (i == Input.Keys.NUM_0) {
             controller.getFarmingController().cheatPlowNineTiles(player.getTilesPosition());
+            return true;
+        }
+
+        if (i == Input.Keys.NUM_5) {
+            Main.getMain().setScreen(new JojamartView(new JojaMartController(Repository.getRepo())));
+            return true;
+        }
+
+        if (i == Input.Keys.NUM_6) {
+            Main.getMain().setScreen(new BlacksmithView(new BlackSmithController(Repository.getRepo())));
+            return true;
+        }
+
+        if (i == Input.Keys.NUM_7) {
+            if (saloon == null) {
+                saloon = new SaloonView(stage);
+                saloon.setPosition(700, 300);
+                saloon.setSize(650, 600);
+                stage.addActor(saloon);
+            } else {
+                saloon.remove();
+                saloon = null;
+            }
+            return true;
+        }
+
+        if (i == Input.Keys.NUM_8) {
+            if (fishShop == null) {
+                fishShop = new FishingShopView(stage);
+                fishShop.setPosition(700, 300);
+                fishShop.setSize(850, 600);
+                stage.addActor(fishShop);
+            } else {
+                fishShop.remove();
+                fishShop = null;
+            }
+            return true;
+        }
+
+        if (i == Input.Keys.U) {
+            fishSelectWindow = new FishSelectWindow(stage);
+            fishSelectWindow.setPosition(500, 160);
+            fishSelectWindow.setSize(1000, 800);
+            stage.addActor(fishSelectWindow);
+            return true;
         }
 
         return false;
@@ -745,6 +795,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         foundNearby = true;
                         if (!isDialogOpen) {
                             shippingBinView.setVisible(true);
+                            shippingBinView.setTouchable(Touchable.enabled);
+                            shippingBinView.reset();
                             isDialogOpen = true;
                         }
                         break;
@@ -756,6 +808,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (!foundNearby && isDialogOpen) {
             shippingBinView.setVisible(false);
+            shippingBinView.setTouchable(Touchable.disabled);
             isDialogOpen = false;
         }
     }
@@ -833,26 +886,26 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
-        if (player.getGender() == Gender.FEMALE) {
-            showMessage("you are girl and you can't request marriage");
-            return;
-        }
-
-        if (anotherPlayer.getGender() == Gender.MALE) {
-            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
-            return;
-        }
-
-        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
-        if (friendship.getLevel() != 3) {
-            showMessage("you don't have enough level!");
-            return;
-        }
-
-        if (player.getInventory().getSlot("ring") == null) {
-            showMessage("you don't have ring in your inventory");
-            return;
-        }
+//        if (player.getGender() == Gender.FEMALE) {
+//            showMessage("you are girl and you can't request marriage");
+//            return;
+//        }
+//
+//        if (anotherPlayer.getGender() == Gender.MALE) {
+//            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
+//            return;
+//        }
+//
+//        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+//        if (friendship.getLevel() != 3) {
+//            showMessage("you don't have enough level!");
+//            return;
+//        }
+//
+//        if (player.getInventory().getSlot("ring") == null) {
+//            showMessage("you don't have ring in your inventory");
+//            return;
+//        }
         //send message
         MarriageRequest request = new MarriageRequest(player.getUser());
         anotherPlayer.addMarriageRequest(request);

@@ -19,7 +19,7 @@ public class Fish implements Item {
 
     @Override
     public int getPrice() {
-        return 0;
+        return info.getBasePrice();
     }
 
     public FishInfo getInfo() {

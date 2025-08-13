@@ -6,6 +6,7 @@ import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.views.GameView;
+import com.stardew_valley.views.MainMenuView;
 
 import java.util.List;
 
@@ -32,5 +33,10 @@ public class SettingsController extends Controller {
         }
         Main.getMain().setScreen(new GameView(new GameController(repo)));
         //hi
+    }
+
+    public void exitGame() {
+        repo.setCurrentGame(null);
+        Main.getMain().setScreen(new MainMenuView(new MainMenuController(repo)));
     }
 }

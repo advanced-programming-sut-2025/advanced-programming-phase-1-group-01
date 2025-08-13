@@ -30,8 +30,14 @@ public class Backpack extends Tool {
     @Override
     public void upgrade() {
         switch (type) {
-            case SMALL -> inventory.setCapacity(BackpackType.BIG.getCapacity());
-            case BIG -> inventory.setCapacity(BackpackType.DELUXE.getCapacity());
+            case SMALL:
+                inventory.setCapacity(BackpackType.BIG.getCapacity());
+                type = BackpackType.BIG;
+                break;
+            case BIG:
+                 inventory.setCapacity(BackpackType.DELUXE.getCapacity());
+                 type = BackpackType.DELUXE;
+                 break;
         }
     }
 

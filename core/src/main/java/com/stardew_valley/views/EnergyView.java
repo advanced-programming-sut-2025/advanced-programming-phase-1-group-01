@@ -18,6 +18,7 @@ public class EnergyView {
     private final Stage stage;
     private final Image heartImage;
     private final Label energyLabel;
+    private final Label moneyLabel;
     private final Texture[] heartTextures;
 
     public EnergyView(Player player) {
@@ -32,11 +33,16 @@ public class EnergyView {
         energyLabel.setPosition(1570, 1030);
         energyLabel.setColor(Color.RED);
 
+        moneyLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        moneyLabel.setPosition(1570, 980);
+        moneyLabel.setColor(Color.GREEN);
+
         heartImage = new Image(new TextureRegionDrawable(heartTextures[10]));
         heartImage.setPosition(1670, 1020);
         heartImage.setScale(2f,2f);
 
         stage.addActor(energyLabel);
+        stage.addActor(moneyLabel);
         stage.addActor(heartImage);
     }
 
@@ -54,6 +60,7 @@ public class EnergyView {
             energyLabel.setPosition(1500,1030);
             energyLabel.setText("unlimited!");
         }
+        moneyLabel.setText("coins: " + player.getNumOfCoins());
     }
 
     public void render(float delta) {

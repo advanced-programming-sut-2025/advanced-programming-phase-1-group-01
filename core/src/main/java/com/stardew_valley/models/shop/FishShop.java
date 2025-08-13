@@ -6,12 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class FishShop extends Shop {
+public class FishShop {
     private final Map<FishShopProducts, Integer> fishShopProducts = new HashMap<>();
 
-    public FishShop(int x, int y) {
-        super(x,y);
-        this.shopkeeperName = ShopkeeperName.WILLY;
+    public FishShop() {
         resetDailyStock();
     }
 
@@ -31,5 +29,9 @@ public class FishShop extends Shop {
 
     public void updateProductPurchase(FishShopProducts product) {
         fishShopProducts.put(product, getProductStock(product) - 1);
+    }
+
+    public Map<FishShopProducts, Integer> getFishShopProducts() {
+        return fishShopProducts;
     }
 }

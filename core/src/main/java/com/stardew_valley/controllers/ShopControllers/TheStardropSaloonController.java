@@ -4,12 +4,8 @@ import com.stardew_valley.models.Result;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
-import com.stardew_valley.models.shop.TheStardropSaloon;
 import com.stardew_valley.models.shop.enums.StardropSallonCommands;
 import com.stardew_valley.models.shop.enums.TheStardropSaloonProducts;
-import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.shop.Blacksmith;
-import com.stardew_valley.models.shop.Shop;
 
 public class TheStardropSaloonController extends ShopController {
 
@@ -19,17 +15,6 @@ public class TheStardropSaloonController extends ShopController {
 
     @Override
     public Result handleCommand(String command) {
-        int hour = repo.getCurrentGame().getTimeManager().getNow().getHour();
-        Player player = repo.getCurrentGame().getCurrentPlayer();
-        Shop shop = repo.getCurrentGame().getTheStardropSaloon();
-
-        if (!isNear(player, shop)) {
-            return new Result(false, "you are not near the shop");
-        }
-
-        if (!isShopOpen(hour)) {
-            return new Result(false, "shop is closed");
-        }
 
         StardropSallonCommands matchedCommand = null;
 
@@ -57,39 +42,11 @@ public class TheStardropSaloonController extends ShopController {
     }
 
     protected Result showAllProducts() {
-        StringBuilder info = new StringBuilder();
-        TheStardropSaloon shop = repo.getCurrentGame().getTheStardropSaloon();
-
-        for (TheStardropSaloonProducts product : shop.getAllProducts()) {
-            int stock = shop.getProductStock(product);
-            info.append(product.getName())
-                    .append(": ")
-                    .append(product.getPrice())
-                    .append("g (")
-                    .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
-                    .append(")\n");
-        }
-
-        return new Result(true, info.toString());
+        return null;
     }
 
     protected Result showAllAvailableProducts() {
-        StringBuilder info = new StringBuilder();
-        TheStardropSaloon shop = repo.getCurrentGame().getTheStardropSaloon();
-
-        for (TheStardropSaloonProducts product : shop.getAllProducts()) {
-            int stock = shop.getProductStock(product);
-            if (product.getDailyLimit() == -1 || stock > 0) {
-                info.append(product.getName())
-                        .append(": ")
-                        .append(product.getPrice())
-                        .append("g (")
-                        .append(product.getDailyLimit() == -1 ? "unlimited" : stock + " left")
-                        .append(")\n");
-            }
-        }
-
-        return new Result(true, info.toString());
+       return null;
     }
 
     protected Result purchase(String command) {
@@ -108,34 +65,31 @@ public class TheStardropSaloonController extends ShopController {
         }
         count = Integer.parseInt(countStr);
 
-        TheStardropSaloon shop = repo.getCurrentGame().getTheStardropSaloon();
-        Player player = repo.getCurrentGame().getCurrentPlayer();
+//        TheStardropSaloon shop = repo.getCurrentGame().getTheStardropSaloon();
+//        Player player = repo.getCurrentGame().getCurrentPlayer();
+//
+//        for (TheStardropSaloonProducts product : TheStardropSaloonProducts.values()) {
+//            if (product.getName().equalsIgnoreCase(itemName)) {
+//                int totalCost = product.getPrice() * count;
+//                int stock = shop.getProductStock(product);
+//
+//                if (product.getDailyLimit() != -1 && stock < count) {
+//                    return new Result(false, "not enough stock for this product");
+//                }
+//
+//                if (player.getNumOfCoins() < totalCost) {
+//                    return new Result(false, "not enough coins");
+//                }
+//
+//                Inventory inventory = player.getInventory();
+//                inventory.addItem(itemName, count);
+//
+//                player.setNumOfCoins(player.getNumOfCoins() - totalCost);
+//                if (product.getDailyLimit() != -1) {
+//                    shop.updateProductPurchase(product, count);
+//                }
 
-        for (TheStardropSaloonProducts product : TheStardropSaloonProducts.values()) {
-            if (product.getName().equalsIgnoreCase(itemName)) {
-                int totalCost = product.getPrice() * count;
-                int stock = shop.getProductStock(product);
-
-                if (product.getDailyLimit() != -1 && stock < count) {
-                    return new Result(false, "not enough stock for this product");
-                }
-
-                if (player.getNumOfCoins() < totalCost) {
-                    return new Result(false, "not enough coins");
-                }
-
-                Inventory inventory = player.getInventory();
-                inventory.addItem(itemName, count);
-
-                player.setNumOfCoins(player.getNumOfCoins() - totalCost);
-                if (product.getDailyLimit() != -1) {
-                    shop.updateProductPurchase(product, count);
-                }
-
-                return new Result(true, "purchased " + count + "x " + product.getName());
-            }
-        }
-        return new Result(false, "product not found");
+                return new Result(true, "purchased " + count + "x ");
     }
 
     @Override

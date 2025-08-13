@@ -36,13 +36,12 @@ public class Game {
     private DelayedPaymentSystem delayedPaymentSystem = new DelayedPaymentSystem();
     private final Farm farm;
 
-    private final Blacksmith blacksmith = new Blacksmith(72,2);
-    private final JojaMart jojaMart = new JojaMart(72,4);
-    private final PierreGeneralStore pierreGeneralStore = new PierreGeneralStore(72,6);
-    private final CarpenterShop carpenterShop = new CarpenterShop(72,8);
-    private final FishShop fishShop = new FishShop(72,10);
-    private final MarnieRanch marnieRanch = new MarnieRanch(72,12);
-    private final TheStardropSaloon theStarDropSaloon = new TheStardropSaloon(72,14);
+    private final JojaMart jojaMart = new JojaMart();
+    private final PierreGeneralStore pierreGeneralStore = new PierreGeneralStore();
+    private final CarpenterShop carpenterShop = new CarpenterShop();
+    private final FishShop fishShop = new FishShop();
+    private final MarnieRanch marnieRanch = new MarnieRanch();
+    private final TheStardropSaloon theStardropSaloon = new TheStardropSaloon();
 
     public Game(List<Player> players) {
         this.players = players;
@@ -85,10 +84,6 @@ public class Game {
         return farmingManager;
     }
 
-    public Blacksmith getBlacksmith() {
-        return blacksmith;
-    }
-
     public JojaMart getJojaMart() {
         return jojaMart;
     }
@@ -110,7 +105,7 @@ public class Game {
     }
 
     public TheStardropSaloon getTheStardropSaloon() {
-        return theStarDropSaloon;
+        return theStardropSaloon;
     }
 
     public ForagingManager getForagingManager() {
