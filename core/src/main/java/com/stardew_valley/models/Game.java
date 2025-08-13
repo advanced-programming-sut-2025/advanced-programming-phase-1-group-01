@@ -221,7 +221,7 @@ public class Game {
         return farm;
     }
 
-    private void initializePosition(int numOfPlayers) {
+    public void initializePosition(int numOfPlayers) {
 
         for (int i = 0; i < numOfPlayers; i++) {
             Player player = players.get(i);
@@ -244,6 +244,19 @@ public class Game {
             }
             playerPositions.put(player, pos);
             player.setPosition(pos);
+        }
+    }
+
+    public Position initializePositionReturn(int numOfPlayers) {
+            switch (numOfPlayers) {
+                case 1:
+                    return PLAYER2_FINISHED_POSITION;
+                case 2:
+                    return PLAYER3_FINISHED_POSITION;
+                case 3:
+                    return PLAYER4_FINISHED_POSITION;
+                default:
+                    return PLAYER1_STARTING_POSITION;
         }
     }
 

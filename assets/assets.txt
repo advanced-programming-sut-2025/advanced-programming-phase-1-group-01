@@ -4226,6 +4226,7 @@ images/lake.png
 images/lake_water.png
 images/light_rect_1.png
 images/map_1.png
+images/map_winter.png
 images/plus_16x16.png
 images/r_lake.png
 images/resized_mine.png

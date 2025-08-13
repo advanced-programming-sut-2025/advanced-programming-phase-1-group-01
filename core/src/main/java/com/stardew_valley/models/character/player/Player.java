@@ -979,6 +979,8 @@ public class Player extends Character {
     }
 
     public void setGreenHouseActivated() {
-        isGreenHouseActivated = true;
+        if (numOfCoins >= 10) {
+            isGreenHouseActivated = true;
+        }
     }
 }

@@ -557,10 +557,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             batch.draw(lakeWater, lakeX + 16, lakeY + 16);
             batch.draw(lake, lakeX, lakeY);
 
-
-            int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i));
-            int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i));
-
+            int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX()) + Repository.getRepo().getCurrentGame().initializePositionReturn(i).x() - 80;
+            int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY()) + Repository.getRepo().getCurrentGame().initializePositionReturn(i).y() - 80;
             if (Repository.getRepo().getCurrentGame().getPlayers().size() > i && Repository.getRepo().getCurrentGame().getPlayers().get(i).isGreenHouseActivated()) {
                 batch.draw(greenhouse, greenhouseX, greenhouseY);
             } else {
@@ -568,10 +566,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             }
 
 
-
             //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
 
         }
+
+
+
+
 
         int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
         int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
