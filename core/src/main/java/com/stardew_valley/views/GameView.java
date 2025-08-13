@@ -72,7 +72,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final OrthographicCamera camera;
     private Player player;
     private final Batch batch;
-    private final TextureRegion background = AssetManager.getAssetManager().getSpringBackground();
+    private final TextureRegion springBackground = AssetManager.getAssetManager().getSpringBackground();
+    private final TextureRegion summerBackground = AssetManager.getAssetManager().getSummerBackground();
+    private final TextureRegion fallBackground = AssetManager.getAssetManager().getFallBackground();
+    private final TextureRegion winterBackground = AssetManager.getAssetManager().getWinterBackground();
+
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
     private final TextureRegion house = AssetManager.getAssetManager().getHouse();
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
@@ -467,7 +471,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private void drawWorld() {
-        drawSpringBackgroundTile();
+        drawBackgroundTile();
 
         drawBuilding();
 
@@ -1183,8 +1187,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
 
-    private void drawSpringBackgroundTile() {
-        batch.draw(background, 0, 0);
+    private void drawBackgroundTile() {
+        switch (Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason()) {
+            case WINTER:
+                batch.draw(winterBackground, 0, 0);
+            case SUMMER:
+                batch.draw(summerBackground, 0, 0);
+            case FALL:
+                batch.draw(fallBackground, 0, 0);
+            default:
+                batch.draw(springBackground, 0, 0);
+        }
     }
 
     public void updateGame(float delta) {

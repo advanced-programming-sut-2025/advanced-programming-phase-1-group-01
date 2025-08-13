@@ -22,6 +22,9 @@ public class AssetManager {
     private final String white = "images/white.png";
 
     private final String spring_background = "images/all_dirt.png";
+    private final String summer_background = "images/map_summer.png";
+    private final String winter_background = "images/map_winter.png";
+    private final String fall_background = "images/map_fall.png";
 
     private final String wood_fence = "images/wood_fence_16x16.png";
     private final String barn_fence = "images/barn_fence_16x16.png";
@@ -1560,6 +1563,9 @@ public class AssetManager {
     }
 
     private final TextureRegion spring_background_tex = new TextureRegion(new Texture(spring_background));
+    private final TextureRegion summer_background_tex = new TextureRegion(new Texture(summer_background));
+    private final TextureRegion winter_background_tex = new TextureRegion(new Texture(winter_background));
+    private final TextureRegion fall_background_tex = new TextureRegion(new Texture(fall_background));
 
     private final TextureRegion black_tex = new TextureRegion(new Texture(black));
     private final TextureRegion white_tex = new TextureRegion(new Texture(white));
@@ -1567,6 +1573,19 @@ public class AssetManager {
     public TextureRegion getSpringBackground() {
         return spring_background_tex;
     }
+
+    public TextureRegion getSummerBackground() {
+        return summer_background_tex;
+    }
+
+    public TextureRegion getFallBackground() {
+        return fall_background_tex;
+    }
+
+    public TextureRegion getWinterBackground() {
+        return winter_background_tex;
+    }
+
 
     public TextureRegion getBlackTexture() {
         return black_tex;
