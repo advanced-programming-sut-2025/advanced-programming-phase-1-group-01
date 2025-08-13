@@ -91,7 +91,7 @@ public class FriendshipView extends GameWindow {
 
         messageField.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 stage.setKeyboardFocus(messageField);
             }
         });
@@ -125,10 +125,13 @@ public class FriendshipView extends GameWindow {
         this.add(stack);
 
         // temp code
-        if (repo.getCurrentUser().getUsername().equals("1"))
+        if (Repository.getRepo().getCurrentUser().getUsername().equals("1")) {
             relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-//        relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
-//        relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(0));
+            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(1));
+            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(2));
+            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(3));
+        }
     }
 
     @Override
@@ -136,46 +139,56 @@ public class FriendshipView extends GameWindow {
         if (!isVisible()) return;
 
         this.clear();
-//        stack.clear();
         friendshipTable.clear();
-//        chatTable.clear();
 
         if (friendshipTable.isVisible()) {
             Map<Character, Friendship> friendships = relationshipService.getFriendships();
             List<Character> friends = new ArrayList<>(friendships.keySet());
 
             for (int i = 0; i < Math.min(friendships.size(), 3); i++) {
-                if (friends.get(i) instanceof NPC) continue;
+                Character character = friends.get(i);
+                Friendship friendship = friendships.get(character);
 
-                Player player = (Player) friends.get(i);
-                Friendship friendship = friendships.get(friends.get(i));
+                String name;
+                if (character instanceof Player) {
+                    name = ((Player) character).getUser().getUsername();
+                } else if (character instanceof NPC) {
+                    name = ((NPC) character).getType().getName();
+                } else {
+                    continue;
+                }
 
-                friendNameLabels.get(i).setText("Friend: " + player.getUser().getUsername());
+                friendNameLabels.get(i).setText("Friend: " + name);
                 friendshipLevelLabels.get(i).setText("Level: " + friendship.getLevel());
                 levelXpBars.get(i).setRange(0, friendship.getMaxXp());
                 levelXpBars.get(i).setValue(friendship.getXp());
 
+                giftButtons.get(i).clearListeners();
                 giftButtons.get(i).addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         setVisible(false);
                         giftView.setVisible(true);
-                        giftView.setFriend(player);
+                        giftView.setFriend(character);
                     }
                 });
 
-                chatButtons.get(i).addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        chatFriend = player;
-                        friendshipTable.setVisible(false);
-                        chatTable.setVisible(true);
-                        stage.setKeyboardFocus(messageField);
-//                        chatTable.toFront();
-                    }
-                });
+                if (character instanceof Player) {
+                    chatButtons.get(i).clearListeners();
+                    chatButtons.get(i).setVisible(true);
+                    chatButtons.get(i).addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            chatFriend = (Player) character;
+                            friendshipTable.setVisible(false);
+                            chatTable.setVisible(true);
+                            stage.setKeyboardFocus(messageField);
+                        }
+                    });
+                } else {
+                    chatButtons.get(i).setVisible(false);
+                }
 
                 friendshipTable.add(friendshipsRows.get(i)).fill().expand();
-//                stack.add(friendshipTable);
             }
         }
 
@@ -193,6 +206,7 @@ public class FriendshipView extends GameWindow {
             Result result = controller.talkHistory(chatFriend.getUser().getUsername());
             messagesLabel.setText(result.message());
 
+            sendButton.clearListeners();
             sendButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {

@@ -593,6 +593,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawNPCs() {
         for (NPC npc : npcs) {
             npc.draw(batch);
+            npc.update(globalDelta);
         }
     }
 
@@ -1739,7 +1740,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         String[] actions = {
             "Chat",
-            "Give Gift",
             "View Quests"
         };
 
@@ -1789,9 +1789,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         switch (action.toLowerCase()) {
             case "chat":
                 handleTalkNpc(npc);
-                break;
-            case "give gift":
-                npc.handleGifting(player);
                 break;
             case "view quests":
                 showQuestDialog(stage, AssetManager.getAssetManager().getSkin(), npc, player);

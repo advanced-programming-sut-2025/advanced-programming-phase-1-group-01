@@ -4,11 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.stardew_valley.models.AI.AIChat;
 import com.stardew_valley.models.AssetManager;
+import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.building.Building;
 import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.weather.Weather;
@@ -117,12 +119,13 @@ public class NPC extends Character {
     }
 
 
-    public void handleGifting(Player player) {
+    public void handleGifting(Item giftItem) {
         if (isBeingGifted) return;
 
         isBeingGifted = true;
         giftingStateTime = 0f;
-        //@ add gift
+        Player player = Repository.getRepo().getCurrentGame().getCurrentPlayer();
+        friendshipLevels.put(player, friendshipLevels.getOrDefault(player, 0));
         giftingOffset = 0f;
     }
 
