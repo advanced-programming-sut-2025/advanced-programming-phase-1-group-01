@@ -26,6 +26,8 @@ public class LobbyData {
     private final long createdTime;
     private List<GroupQuest> groupQuestList = new ArrayList<>();
 
+    public boolean isThatOne;
+
     public LobbyData(String name, boolean isPrivate, boolean isVisible, String password, int id, User admin) {
         this.name = name;
         this.isPrivate = isPrivate;
@@ -36,6 +38,7 @@ public class LobbyData {
         this.players.add(admin);
         this.createdTime = System.currentTimeMillis();
         createAllGroupQuests();
+        System.out.println("LobbyData created000000000000000000000000000000");
     }
 
     public String getName() { return name; }

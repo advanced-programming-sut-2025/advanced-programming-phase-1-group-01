@@ -47,6 +47,8 @@ public class Network {
         kryo.register(STCReaction.class);
         kryo.register(RequestStartGroupQuest.class);
         kryo.register(ResponseStartGroupQuest.class);
+        kryo.register(RequestAddAmount.class);
+        kryo.register(ResponseAddAmount.class);
     }
 
     public static class JsonMessage {
@@ -231,5 +233,16 @@ public class Network {
 
     public static class ResponseStartGroupQuest {
         public String questName;
+    }
+
+    public static class RequestAddAmount {
+        public int lobbyId;
+        public int amount;
+        public String questName;
+    }
+
+    public static class ResponseAddAmount {
+        public String questName;
+        public int amount;
     }
 }

@@ -39,12 +39,14 @@ public class LobbyController {
 
 
     public List<LobbyData> getLobbies() {
-        GameClient.getInstance().requestLobbyList(false);
+        //GameClient.getInstance().requestLobbyList(false);
+        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 5");
         return lobbies;
     }
 
     public List<LobbyData> getLobbiesForOnlinePlayers() {
         GameClient.getInstance().requestLobbyList(true);
+        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 4");
         return lobbiesForOnlinePlayers;
     }
 
@@ -79,6 +81,7 @@ public class LobbyController {
 
     public List<LobbyData> loadRecentLobbies() {
         GameClient.getInstance().requestLobbyList(false);
+        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 3");
         return lobbies.stream()
             .filter(LobbyData::isVisible)
             .sorted(Comparator.comparingLong(LobbyData::getCreatedTime).reversed())
@@ -90,6 +93,8 @@ public class LobbyController {
         User admin = getCurrentUser();
         System.out.println(admin.getUsername());
 
+
+        System.out.println("# # # # ## # # # # ## # # # # # ## # # # # # # ## ## # # # # # # # ##  ## *");
         LobbyData newLobby = new LobbyData(name, isPrivate, isVisible, password, id, admin);
         lobbies.add(newLobby);
         newLobby.addUser(admin);
@@ -165,6 +170,7 @@ public class LobbyController {
 
             User admin = users.get(0);
 
+            System.out.println(" & & & & & & &  & & & & 77 & & & 7 & 7&&&&& & && & & & & & & & & & ");
             LobbyData lobby = new LobbyData(
                 info.name,
                 info.isPrivate,

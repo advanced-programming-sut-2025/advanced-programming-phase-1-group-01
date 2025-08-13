@@ -188,13 +188,22 @@ public class GameClient {
                         player.getReactionUI().setStarted(ReactionType.fromId(resp.reactionNum));
                     }
                 } else if (object instanceof Network.ResponseStartGroupQuest resp) {
+                    System.out.println("received response start group quest");
                     for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
                         if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                            lobbyData.isThatOne = true;
                             GroupQuest quest = lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().orElse(null);
                             if (quest != null) {
+                                System.out.println("and started");
                                 quest.setStarted();
                                 quest.addPlayer(Repository.getRepo().getCurrentUser().getUsername());
                             }
+                        }
+                    }
+                } else if (object instanceof Network.ResponseAddAmount resp) {
+                    for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+                        if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addAmount(resp.amount));
                         }
                     }
                 }
@@ -253,6 +262,7 @@ public class GameClient {
 
     public void requestLobbyList(boolean isForOnlinePlayersList) {
         Network.RequestLobbyList req = new Network.RequestLobbyList();
+        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 2");
         req.isForOnlinePlayersList = isForOnlinePlayersList;
         pClient.sendTCP(req);
     }
@@ -417,6 +427,14 @@ public class GameClient {
         Network.RequestStartGroupQuest req = new Network.RequestStartGroupQuest();
         req.lobbyId = lobbyId;
         req.questName = questType;
+        pClient.sendTCP(req);
+    }
+
+    public void sendAddAmountRequest(int lobbyId, int amount, String questName) {
+        Network.RequestAddAmount req = new Network.RequestAddAmount();
+        req.lobbyId = lobbyId;
+        req.amount = amount;
+        req.questName = questName;
         pClient.sendTCP(req);
     }
 }

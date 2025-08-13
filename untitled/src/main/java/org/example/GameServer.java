@@ -75,6 +75,8 @@ public class GameServer {
                         handleReaction(connection, reaction);
                     } else if (object instanceof Network.RequestStartGroupQuest req) {
                         handleStartQuest(req);
+                    } else if (object instanceof Network.RequestAddAmount req) {
+                        handleAddAmount(req);
                     }
                 } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
@@ -357,6 +359,16 @@ public class GameServer {
         Network.ResponseStartGroupQuest resp = new Network.ResponseStartGroupQuest();
         resp.questName = request.questName;
 
+        for (int id : lobby.getPlayerConnectionIds()) {
+            server.sendToTCP(id, resp);
+        }
+    }
+
+    private void handleAddAmount(Network.RequestAddAmount req) {
+        Lobby lobby = lobbies.get(req.lobbyId);
+        Network.ResponseAddAmount resp = new Network.ResponseAddAmount();
+        resp.questName = req.questName;
+        resp.amount = req.amount;
         for (int id : lobby.getPlayerConnectionIds()) {
             server.sendToTCP(id, resp);
         }

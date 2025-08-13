@@ -365,6 +365,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             showLeaderboard(stage);
             return true;
         }
+        if (i == Input.Keys.NUM_8) {
+            showQuestMenu();
+            return true;
+        }
         if (i == Input.Keys.V) {
             votingView.setVisible(!votingView.isVisible());
             return true;
@@ -2345,7 +2349,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         table.align(Align.topLeft);
         table.defaults().pad(5);
 
-        // تبدیل Runnable به متد
         Runnable updateTable = () -> updateTable(table, criteriaBox);
 
         criteriaBox.addListener(event -> {
@@ -2405,6 +2408,130 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             table.row();
         }
     }
+
+
+    public void showQuestMenu() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Quest Menu", skin);
+
+        Table content = dialog.getContentTable();
+
+        content.add(new Label("Select an option:", skin)).padBottom(20).row();
+
+        TextButton startNewQuestBtn = new TextButton("Start New Quest", skin);
+        TextButton viewActiveQuestsBtn = new TextButton("View Active Quests", skin);
+
+        content.add(startNewQuestBtn).width(200).padBottom(10).row();
+        content.add(viewActiveQuestsBtn).width(200).padBottom(10).row();
+
+
+        startNewQuestBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showGroupQuestDialog();
+                dialog.hide();
+            }
+        });
+
+        viewActiveQuestsBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                dialog.hide();
+            }
+        });
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+    public void showGroupQuestDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        User currentPlayer = Repository.getRepo().getCurrentUser();
+
+        Dialog dialog = new Dialog("Available Group Quests", skin);
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(5);
+
+        List<LobbyData> lobbies = LobbyController.getInstance().getLobbies();
+
+        LobbyData currentLobby = null;
+
+        for (LobbyData lobby : lobbies) {
+            if (lobby.getPlayers().stream()
+                .anyMatch(player -> player.getUsername().equals(currentPlayer.getUsername()))) {
+                currentLobby = lobby;
+                break;
+            }
+        }
+
+        if (currentLobby == null) {
+            content.add(new Label("You are not in any lobby!", skin));
+        } else {
+            content.add(new Label("Lobby: " + currentLobby.getName(), skin))
+                .colspan(3).center().padBottom(10).row();
+
+            List<GroupQuest> quests = currentLobby.getGroupQuestList();
+
+            Table questsTable = new Table(skin);
+            questsTable.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+
+            boolean hasQuestsToStart = false;
+            for (GroupQuest quest : quests) {
+                if (!quest.isStarted()) {
+                    hasQuestsToStart = true;
+
+                    GroupQuestType type = quest.getType();
+
+                    Label descLabel = new Label(type.getDescription(), skin);
+                    Label durationLabel = new Label("Duration: " + type.getDuration() + " hours", skin);
+                    TextButton startBtn = new TextButton("Start", skin);
+
+                    Table row = new Table(skin);
+                    row.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+                    row.add(descLabel).width(300).padRight(120).padLeft(20);
+                    row.add(durationLabel).width(150).padRight(20).padLeft(20);
+                    row.add(startBtn).width(155).padRight(20).padLeft(200);
+
+                    LobbyData finalCurrentLobby = currentLobby;
+                    startBtn.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            GameClient.getInstance().sendStartGroupQuest(finalCurrentLobby.getId(), quest.getType().name());
+                            dialog.hide();
+                        }
+                    });
+
+                    questsTable.add(row).colspan(3).row();
+                }
+            }
+
+            if (!hasQuestsToStart) {
+                questsTable.add(new Label("No quests available to start.", skin))
+                    .colspan(3).center().pad(10);
+            }
+
+            ScrollPane scrollPane = new ScrollPane(questsTable, skin);
+            scrollPane.setFadeScrollBars(false);
+
+            scrollPane.setScrollingDisabled(true, false);
+
+            content.add(scrollPane).maxWidth(1000).maxHeight(600).fill().expandX().expandY().colspan(3).row();
+        }
+
+        dialog.button("Close", true);
+
+        dialog.pack();
+        dialog.setResizable(true);
+        dialog.setMovable(true);
+
+        dialog.show(stage);
+    }
+
+
+
 
 }
 
