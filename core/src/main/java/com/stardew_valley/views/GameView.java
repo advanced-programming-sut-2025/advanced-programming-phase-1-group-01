@@ -75,6 +75,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion woodFence = AssetManager.getAssetManager().getWoodFence();
     private final TextureRegion house = AssetManager.getAssetManager().getHouse();
     private final TextureRegion greenhouse = AssetManager.getAssetManager().getGreenhouse();
+    private final TextureRegion greenhouse_broken = AssetManager.getAssetManager().getGreenhouseBroken();
     private final TextureRegion lake = AssetManager.getAssetManager().getLake();
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
@@ -246,6 +247,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        checkGreenHouseActivated();
         drawWorld();
         dateTimeView.update();
         energyView.updateEnergy();
@@ -381,8 +383,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     artisan.finish();
                 }
             }
-
-
+            if (player.getFarm().getTiles().get(tileX).get(tileY).getType() == TileType.GREENHOUSE) {
+                showActivateCancelDialog();
+            }
         }
 
         return false;
@@ -557,7 +560,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             int greenhouseX = getTilePixel(FarmInitializer.getGreenhouseStartingPointX() + FarmInitializer.getAdditionalX(i));
             int greenhouseY = getTilePixel(FarmInitializer.getGreenhouseStartingPointY() + FarmInitializer.getAdditionalY(i));
-            batch.draw(greenhouse, greenhouseX, greenhouseY);
+
+            if (Repository.getRepo().getCurrentGame().getPlayers().size() > i && Repository.getRepo().getCurrentGame().getPlayers().get(i).isGreenHouseActivated()) {
+                batch.draw(greenhouse, greenhouseX, greenhouseY);
+            } else {
+                batch.draw(greenhouse_broken, greenhouseX, greenhouseY);
+            }
+
+
 
             //System.out.println("Lake position: " + lakeX / 16 + ", " + lakeY / 16);
 
@@ -580,6 +590,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         batch.draw(harveyHouseTexture, harveyX, harveyY);
 
 
+    }
+
+    private void checkGreenHouseActivated() {
+        List<Player> players = controller.getRepo().getCurrentGame().getPlayers();
+        for (int i = 0; i < players.size(); i++) {
+            if (!players.get(i).isGreenHouseActivated()) {
+                 FarmInitializer.setSpecialTilesUnmovable(i);
+            } else {
+                FarmInitializer.setSpecialTilesMovable(i);
+            }
+        }
     }
 
     private void drawHouseTop() {
@@ -2205,6 +2226,40 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             })
         ));
     }
+
+    public void showActivateCancelDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        Dialog dialog = new Dialog("Activate Greenhouse", skin);
+
+        TextButton activateBtn = new TextButton("Activate", skin);
+        activateBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                player.setGreenHouseActivated();
+                dialog.hide();
+            }
+        });
+
+
+        TextButton cancelBtn = new TextButton("Cancel", skin);
+        cancelBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dialog.hide();
+            }
+        });
+
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(10);
+        content.add(activateBtn).width(150).row();
+        content.add(cancelBtn).width(150).row();
+
+        dialog.pack();
+        dialog.show(stage);
+    }
+
 }
 
 

@@ -4198,6 +4198,7 @@ images/artisans/Oil_Maker.png
 images/artisans/Preserves_Jar.png
 images/barn_fence_16x16.png
 images/black.png
+images/broken_greenhouse.png
 images/cabins/1_full.png
 images/cabins/1_top.png
 images/cabins/2_full.png

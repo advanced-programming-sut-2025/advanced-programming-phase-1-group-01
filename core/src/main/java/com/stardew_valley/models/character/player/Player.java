@@ -58,6 +58,7 @@ public class Player extends Character {
     private boolean isMoving = false;
     private final List<Artisan> artisans = new ArrayList<>();
     private int artisanId = 0;
+    private boolean isGreenHouseActivated = false;
 
     List<Animal> animals;
 
@@ -971,5 +972,13 @@ public class Player extends Character {
         } else {
             foods.remove(item);
         }
+    }
+
+    public boolean isGreenHouseActivated() {
+        return isGreenHouseActivated;
+    }
+
+    public void setGreenHouseActivated() {
+        isGreenHouseActivated = true;
     }
 }

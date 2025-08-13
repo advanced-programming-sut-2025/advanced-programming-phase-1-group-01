@@ -25,8 +25,8 @@ public class FarmInitializer {
     private final static Position RIVER_TR = new Position(53, 12);
     private final static Position MINE_TP = new Position(1, 1);
     private final static Position MINE_BR = new Position(13, 10);
-    private final static Position GREENHOUSE_BL = new Position(6, 5);
-    private final static Position GREENHOUSE_TR = new Position(20, 22);
+    public final static Position GREENHOUSE_BL = new Position(6, 5);
+    public final static Position GREENHOUSE_TR = new Position(20, 22);
     private final static Position MINE_BL = new Position(3, 57);
     private final static Position MINE_TR = new Position(22 - 7, 70);
     private final static Position COTTAGE_BL = new Position(50, 35);
@@ -120,7 +120,7 @@ public class FarmInitializer {
 
         for (int i = xStart; i <= xEnd; i++) {
             for (int j = yStart; j <= yEnd; j++) {
-                System.out.println((i - additionalX) + " " +  (j - additionalY));
+                //System.out.println((i - additionalX) + " " +  (j - additionalY));
                 if ((i == 5 + additionalX || i == 6 + additionalX || i == 7 + additionalX) &&
                     (j == 12 + additionalY)) {
                     continue;
@@ -144,6 +144,49 @@ public class FarmInitializer {
             }
         }
     }
+
+    public static void setSpecialTilesUnmovable(int greenhouseId) {
+        int additionalX = getAdditionalX(greenhouseId);
+        int additionalY = getAdditionalY(greenhouseId);
+
+        int[][] coords = {
+            {5 + additionalX, 12 + additionalY},
+            {6 + additionalX, 12 + additionalY},
+            {7 + additionalX, 12 + additionalY}
+        };
+
+        for (int[] co : coords) {
+            int i = co[0];
+            int j = co[1];
+
+            Tile tile = tiles.get(i).get(j);
+            if (tile != null) {
+                tile.setMovable(false);
+            }
+        }
+    }
+
+    public static void setSpecialTilesMovable(int greenhouseId) {
+        int additionalX = getAdditionalX(greenhouseId);
+        int additionalY = getAdditionalY(greenhouseId);
+
+        int[][] coords = {
+            {5 + additionalX, 12 + additionalY},
+            {6 + additionalX, 12 + additionalY},
+            {7 + additionalX, 12 + additionalY}
+        };
+
+        for (int[] co : coords) {
+            int i = co[0];
+            int j = co[1];
+
+            Tile tile = tiles.get(i).get(j);
+            if (tile != null) {
+                tile.setMovable(true);
+            }
+        }
+    }
+
 
 
     private static void divideMapWithFence() {

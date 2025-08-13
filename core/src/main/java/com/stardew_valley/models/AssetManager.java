@@ -56,6 +56,8 @@ public class AssetManager {
 
     private final String greenhouse = "images/map_1.png";
 
+    private final String greenhouse_broken = "images/broken_greenhouse.png";
+
     private final String clock = "images/clock.png";
     private final String arrow = "images/arrow.png";
 
@@ -389,6 +391,7 @@ public class AssetManager {
     private final TextureRegion lake_tex = new TextureRegion(new Texture(lake));
 
     private final TextureRegion greenhouse_tex = new TextureRegion(new Texture(greenhouse));
+    private final TextureRegion greenhouse_broken_tex = new TextureRegion(new Texture(greenhouse_broken));
 
     private final TextureRegion clock_tex = new TextureRegion(new Texture(clock));
     private final TextureRegion arrow_tex = new TextureRegion(new Texture(arrow));
@@ -1252,6 +1255,10 @@ public class AssetManager {
 
     public TextureRegion getGreenhouse() {
         return greenhouse_tex;
+    }
+
+    public TextureRegion getGreenhouseBroken() {
+        return greenhouse_broken_tex;
     }
 
     public TextureRegion getClock() {
