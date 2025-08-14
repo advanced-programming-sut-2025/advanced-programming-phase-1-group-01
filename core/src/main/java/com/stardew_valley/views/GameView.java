@@ -285,6 +285,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         stage.draw();
     }
 
+    public MiniMapView getMiniMapView() {
+        return miniMapView;
+    }
+
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -1192,10 +1196,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         switch (Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason()) {
             case WINTER:
                 batch.draw(winterBackground, 0, 0);
+                break;
             case SUMMER:
                 batch.draw(summerBackground, 0, 0);
+                break;
             case FALL:
                 batch.draw(fallBackground, 0, 0);
+                break;
             default:
                 batch.draw(springBackground, 0, 0);
         }
@@ -1276,7 +1283,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (player.isFainting()) {
             faintingTimer += delta;
-            float FAINTING_DURATION = 3.0f;
+            float FAINTING_DURATION = 1.5f;
             if (faintingTimer >= FAINTING_DURATION) {
                 player.setFainting(false);
                 faintingTimer = 0f;
