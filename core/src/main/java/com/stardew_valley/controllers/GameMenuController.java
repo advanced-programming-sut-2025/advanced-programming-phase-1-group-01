@@ -101,7 +101,6 @@ public class GameMenuController extends Controller {
             }
 
             playerList = new ArrayList<>();
-            playerList.add(repo.getCurrentUser().getPlayer());
 
             for (String username : playerSet) {
                 playerList.add(repo.getUserByUsername(username).getPlayer());
@@ -110,6 +109,9 @@ public class GameMenuController extends Controller {
 
         //phony
         Game game = new Game(playerList);
+        for (Player p: playerList) {
+            System.out.println(p.getUser().getUsername());
+        }
         repo.addGame(game);
         repo.setCurrentGame(game);
         repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));
