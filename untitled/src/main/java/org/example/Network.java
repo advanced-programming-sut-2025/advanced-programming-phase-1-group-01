@@ -51,6 +51,15 @@ public class Network {
         kryo.register(ResponseStartGroupQuest.class);
         kryo.register(RequestAddAmount.class);
         kryo.register(ResponseAddAmount.class);
+        kryo.register(UploadAudioRequest.class);
+        kryo.register(JoinRadioRequest.class);
+        kryo.register(AudioChunk.class);
+        kryo.register(RadioChannelList.class);
+        kryo.register(ChangeAudio.class);
+        kryo.register(byte[].class);
+        kryo.register(RequestRadioFiles.class);
+        kryo.register(RadioFilesList.class);
+
     }
 
     public static class JsonMessage {
@@ -249,6 +258,41 @@ public class Network {
         public String username;
     }
 
+    public static class UploadAudioRequest {
+        public String hostPlayer;
+        public String fileName;
+        public byte[] fileData;
+    }
+
+    public static class JoinRadioRequest {
+        public String targetUsername;
+    }
+
+    public static class AudioChunk {
+        public String hostPlayer;
+        public byte[] data;
+        public int seq;
+        public boolean isLast;
+        public String fileName;
+    }
+
+    public static class RadioChannelList {
+        public String[] channelNames;
+    }
+
+    public static class ChangeAudio {
+        public String hostPlayer;
+        public String fileName;
+    }
+
+    public static class RequestRadioFiles {
+        public String hostPlayer;
+    }
+
+    public static class RadioFilesList {
+        public String hostPlayer;
+        public String[] fileNames;
+    }
 }
 
 

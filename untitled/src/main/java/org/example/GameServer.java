@@ -6,7 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,19 +20,17 @@ public class GameServer {
     private final Map<String, Integer> usernameToIdMap = new HashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final List<UserInfo> signedInUsers = new ArrayList<>();
+    private final Map<String, Map<String, File>> radioFiles = new HashMap<>();
+    private final Map<String, List<Connection>> channelMembers = new HashMap<>();
+    private final Map<String, Thread> sendingThreads = new HashMap<>();
 
     public GameServer() throws IOException {
-        server = new Server(6553600, 6553600);
+        server = new Server(65536000, 65536000);
         Network.register(server);
 
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-
-                for (UserInfo userInfo : signedInUsers) {
-                    System.out.println(userInfo.getUsername());
-                }
-
                 try {
                     if (object instanceof Network.CreateLobbyRequest req) {
                         handleCreateLobby(connection, req);
@@ -77,6 +75,36 @@ public class GameServer {
                         handleStartQuest(req);
                     } else if (object instanceof Network.RequestAddAmount req) {
                         handleAddAmount(req);
+                    } else if (object instanceof Network.UploadAudioRequest req) {
+                        try {
+                            handleUpload(req);
+                            //sendSavedFile(req.hostPlayer, req.fileName);
+//                            channelMembers.put(req.hostPlayer, new ArrayList<>());
+//                            if (!channelMembers.get(req.hostPlayer).contains(connection)) {
+//                                channelMembers.get(req.hostPlayer).add(connection);
+//                            }
+                        } catch (IOException e) {
+                            System.out.println("Upload failed: " + e.getMessage());
+                            connection.sendTCP("Upload failed: " + req.fileName);
+                        }
+                    } else if (object instanceof Network.RequestRadioFiles req) {
+                            Map<String, File> userFiles = radioFiles.getOrDefault(req.hostPlayer, new HashMap<>());
+                            Network.RadioFilesList response = new Network.RadioFilesList();
+                            response.hostPlayer = req.hostPlayer;
+                            response.fileNames = userFiles.keySet().toArray(new String[0]);
+
+                            connection.sendTCP(response);
+                            System.out.println("Sent radio file list to client for user: " + req.hostPlayer);
+                    } else if (object instanceof Network.ChangeAudio req) {
+                        channelMembers.putIfAbsent(req.hostPlayer, new ArrayList<>());
+                        List<Connection> members = channelMembers.get(req.hostPlayer);
+                        if (!members.contains(connection)) {
+                            members.add(connection);
+                        }
+                        sendSavedFile(req.hostPlayer, req.fileName);
+                    } else if (object instanceof Network.JoinRadioRequest req) {
+                        channelMembers.values().forEach(list -> list.remove(connection));
+                        channelMembers.computeIfAbsent(req.targetUsername, k -> new ArrayList<>()).add(connection);
                     }
                 } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
@@ -375,5 +403,94 @@ public class GameServer {
             server.sendToTCP(id, resp);
         }
     }
+
+    private void handleUpload(Network.UploadAudioRequest req) throws IOException {
+        File hostDir = new File("radio_uploads/" + req.hostPlayer);
+        if (!hostDir.exists()) hostDir.mkdirs();
+
+        File savedFile = new File(hostDir, req.fileName);
+        try (FileOutputStream fos = new FileOutputStream(savedFile)) {
+            fos.write(req.fileData);
+        }
+
+        radioFiles.computeIfAbsent(req.hostPlayer, k -> new HashMap<>())
+            .put(req.fileName, savedFile);
+
+        System.out.println("Received file " + req.fileName + " from host " + req.hostPlayer);
+    }
+
+
+    private void sendSavedFile(String hostPlayer, String fileName) {
+        File file = radioFiles.getOrDefault(hostPlayer, new HashMap<>()).get(fileName);
+        if (file == null || !file.exists()) {
+            System.out.println("File not found for host " + hostPlayer + ": " + fileName);
+            return;
+        }
+
+        Thread previousThread = sendingThreads.get(hostPlayer);
+        if (previousThread != null && previousThread.isAlive()) {
+            previousThread.interrupt();
+            System.out.println("Stopped previous file for host " + hostPlayer);
+        }
+
+        Thread thread = new Thread(() -> {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                int sampleRate = 44100;
+                int channels = 2;
+                int bytesPerSample = 2;
+                int chunkDurationMs = 100;
+                int bytesPerChunk = (int)(sampleRate * channels * bytesPerSample * (chunkDurationMs / 1000.0));
+
+                byte[] buffer = new byte[bytesPerChunk];
+                int seq = 0;
+                long startTime = System.currentTimeMillis();
+                int read;
+
+                while ((read = fis.read(buffer)) != -1) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Sending file interrupted: " + fileName + " for host " + hostPlayer);
+                        return;
+                    }
+
+                    Network.AudioChunk chunk = new Network.AudioChunk();
+                    chunk.hostPlayer = hostPlayer;
+                    chunk.seq = seq;
+                    chunk.data = Arrays.copyOf(buffer, read);
+                    chunk.isLast = (fis.available() == 0);
+                    chunk.fileName = fileName;
+
+                    broadcastChunk(hostPlayer, chunk);
+
+                    long expectedTime = startTime + (long) seq * chunkDurationMs;
+                    seq++;
+                    long now = System.currentTimeMillis();
+                    long sleepTime = expectedTime - now;
+                    if (sleepTime > 0) Thread.sleep(sleepTime);
+                }
+
+                System.out.println("Finished sending file " + fileName + " for host " + hostPlayer);
+            } catch (InterruptedException e) {
+                System.out.println("Sending file interrupted: " + fileName + " for host " + hostPlayer);
+            } catch (Exception e) {
+                System.out.println("Error sending file " + fileName + " for host " + hostPlayer);
+                System.out.println("Error: " + e);
+            }
+        });
+
+        sendingThreads.put(hostPlayer, thread);
+        thread.start();
+    }
+
+    private void broadcastChunk(String hostPlayer, Network.AudioChunk chunk) {
+        List<Connection> members = channelMembers.getOrDefault(hostPlayer, new ArrayList<>());
+        for (Connection c : members) {
+            c.sendTCP(chunk);
+        }
+    }
+
+
+
+
+
 
 }

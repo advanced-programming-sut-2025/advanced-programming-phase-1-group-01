@@ -175,6 +175,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextButton votingButton = new TextButton("Voting", AssetManager.getAssetManager().getSkin());
 
     public GameView(GameController controller) {
+//        try {
+//            GameClient.getInstance().uploadAudioFile("hoi", "C:\\Users\\Afra\\Downloads\\4_5767007997435842492.wav");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         stage = new Stage(new ScreenViewport());
         this.controller = controller;
         this.camera = new OrthographicCamera();
@@ -1289,6 +1294,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 miniMapActor.remove();
                 miniMapActor = null;
             }
+            showRadioMenu();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
@@ -2445,6 +2451,99 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         dialog.show(stage);
     }
 
+    public void showRadioMenu() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Radio Menu", skin);
+
+        Table content = dialog.getContentTable();
+
+        content.add(new Label("Select an option:", skin)).padBottom(20).row();
+
+        TextButton uploadButton = new TextButton("Upload File", skin);
+        TextButton changeChannelButton = new TextButton("Change Channel", skin);
+        TextButton showPlayersButton = new TextButton("Show Players", skin);
+        TextButton closeButton = new TextButton("Close", skin);
+
+        content.add(uploadButton).width(200).padBottom(10).row();
+        content.add(changeChannelButton).width(200).padBottom(10).row();
+        content.add(showPlayersButton).width(200).padBottom(10).row();
+        content.add(closeButton).width(200).padBottom(10).row();
+
+        uploadButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+                    Thread thread = new Thread(() -> {
+                        try {
+                            javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+                            chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
+                            chooser.setAcceptAllFileFilterUsed(false);
+                            chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("WAV files", "wav"));
+                            int result = chooser.showOpenDialog(null);
+                            if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+                                java.io.File file = chooser.getSelectedFile();
+                                String hostPlayer = Repository.getRepo().getCurrentUser().getUsername();
+                                GameClient.getInstance().uploadAudioFile(hostPlayer, file.getAbsolutePath());
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    });
+                    thread.start();
+                }
+            }
+        });
+
+        changeChannelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showRadioFilesDialog(Repository.getRepo().getCurrentUser().getFilesList());
+                dialog.hide();
+            }
+        });
+
+        showPlayersButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showPlayersDialog();
+                dialog.hide();
+            }
+        });
+
+        closeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dialog.hide();
+            }
+        });
+
+        dialog.show(stage);
+    }
+
+    public void showPlayersDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Players", skin);
+        Table content = dialog.getContentTable();
+        content.add(new Label("Players:", skin)).padBottom(20).row();
+
+        for (Player player : Repository.getRepo().getCurrentGame().getPlayers()) {
+            TextButton playerButton = new TextButton(player.getUser().getUsername(), skin);
+            playerButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    GameClient.getInstance().joinRadioRequest(player.getUser().getUsername());
+                    dialog.hide();
+                }
+            });
+            content.add(playerButton).width(200).padBottom(10).row();
+        }
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+
+
     public void showGroupQuestDialog() {
         Skin skin = AssetManager.getAssetManager().getSkin();
 
@@ -2626,6 +2725,36 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         dialog.show(stage);
     }
+
+    public void showRadioFilesDialog(String[] fileNames) {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Radio Files", skin);
+
+        Table content = dialog.getContentTable();
+        content.row().padBottom(10);
+        content.add(new Label("Select a file to play:", skin)).row();
+
+        Table filesTable = new Table();
+        for (String fileName : fileNames) {
+            TextButton fileBtn = new TextButton(fileName, skin);
+            fileBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    GameClient.getInstance().setFileForHost(Repository.getRepo().getCurrentUser().getUsername(), fileName);
+                    dialog.hide();
+                }
+            });
+            filesTable.add(fileBtn).pad(5).fillX().row();
+        }
+
+        ScrollPane scrollPane = new ScrollPane(filesTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        content.add(scrollPane).width(500).height(300).row();
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
 
 
 

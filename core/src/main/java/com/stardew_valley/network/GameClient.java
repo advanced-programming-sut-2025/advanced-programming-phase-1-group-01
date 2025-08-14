@@ -2,6 +2,8 @@
 package com.stardew_valley.network;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.audio.Sound;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -26,8 +28,13 @@ import com.stardew_valley.views.LobbyView;
 import com.stardew_valley.views.LoginMenuView;
 import com.stardew_valley.views.ReactionView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameClient {
     private final Repository repo = Repository.getRepo();
@@ -35,9 +42,11 @@ public class GameClient {
     private static GameClient instance;
     private final Client pClient;
     private int playerId;
+    private Map<String, ByteArrayOutputStream> channelBuffers = new HashMap<>();
+    private final Map<String, AudioDevice> channelDevices = new HashMap<>();
 
     public GameClient() {
-        pClient = new Client(6553600, 6553600);
+        pClient = new Client(65536000, 65536000);
         Network.register(pClient);
 
         pClient.addListener(new Listener() {
@@ -201,6 +210,11 @@ public class GameClient {
                             lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addAmount(resp.amount, resp.username));
                         }
                     }
+                } else if (object instanceof Network.AudioChunk chunk) {
+                    handleChunk(chunk);
+                    System.out.println("dfsj");
+                } else if (object instanceof Network.RadioFilesList list) {
+                    Repository.getRepo().getCurrentUser().setFilesList(list.fileNames);
                 }
             }
 
@@ -457,6 +471,81 @@ public class GameClient {
             req.username = Repository.getRepo().getCurrentUser().getUsername();
             pClient.sendTCP(req);
         }
+    }
+
+
+    public void uploadAudioFile(String hostPlayer, String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("File not found!");
+            return;
+        }
+
+        byte[] fileData = Files.readAllBytes(file.toPath());
+
+
+        Network.UploadAudioRequest req = new Network.UploadAudioRequest();
+        req.hostPlayer = hostPlayer;
+        req.fileName = file.getName();
+        req.fileData = fileData;
+
+
+        pClient.sendTCP(req);
+
+        System.out.println("File " + file.getName() + " uploaded for host: " + hostPlayer);
+    }
+
+    public void handleChunk(Network.AudioChunk chunk) {
+        channelBuffers.putIfAbsent(chunk.hostPlayer, new ByteArrayOutputStream());
+        channelDevices.putIfAbsent(chunk.hostPlayer,
+            Gdx.audio.newAudioDevice(44100, true));
+
+        try {
+            channelBuffers.get(chunk.hostPlayer).write(chunk.data);
+
+            byte[] pcm = chunk.data;
+            short[] samples = new short[pcm.length / 2];
+            for (int i = 0; i < samples.length; i++) {
+                int lsb = pcm[i * 2] & 0xFF;
+                int msb = pcm[i * 2 + 1];
+                samples[i] = (short) ((msb << 8) | lsb);
+            }
+
+            channelDevices.get(chunk.hostPlayer).writeSamples(samples, 0, samples.length);
+
+        } catch (Exception e) {
+            System.out.println("Error handling chunk from " + chunk.hostPlayer + ": " + e.getMessage());
+            System.out.println(e.getMessage());
+        }
+
+        if (chunk.isLast) {
+            AudioDevice device = channelDevices.get(chunk.hostPlayer);
+            if (device != null) {
+                device.dispose();
+                channelDevices.remove(chunk.hostPlayer);
+            }
+            channelBuffers.remove(chunk.hostPlayer);
+        }
+
+    }
+
+    public void requestRadioFiles(String hostPlayer) {
+        Network.RequestRadioFiles req = new Network.RequestRadioFiles();
+        req.hostPlayer = hostPlayer;
+        pClient.sendTCP(req);
+    }
+
+    public void setFileForHost(String hostPlayer, String fileName) {
+        Network.ChangeAudio req = new Network.ChangeAudio();
+        req.hostPlayer = hostPlayer;
+        req.fileName = fileName;
+        pClient.sendTCP(req);
+    }
+
+    public void joinRadioRequest(String hostPlayer) {
+        Network.JoinRadioRequest req = new Network.JoinRadioRequest();
+        req.targetUsername = hostPlayer;
+        pClient.sendTCP(req);
     }
 
 }
