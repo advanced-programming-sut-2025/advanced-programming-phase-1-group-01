@@ -34,6 +34,7 @@ public class FriendshipView extends GameWindow {
     private List<TextButton> giftButtons;
     private List<TextButton> chatButtons;
     private final Table friendshipTable;
+    private final ScrollPane friendshipPane;
 
     private final Table chatTable;
     private final Label messagesLabel;
@@ -61,6 +62,8 @@ public class FriendshipView extends GameWindow {
         giftButtons = new ArrayList<>();
         chatButtons = new ArrayList<>();
         friendshipTable = new Table(getSkin());
+        friendshipPane = new ScrollPane(friendshipTable);
+        friendshipPane.setScrollingDisabled(true, false);
 
         chatTable = new Table(getSkin());
         messagesLabel = new Label("", getSkin());
@@ -70,7 +73,7 @@ public class FriendshipView extends GameWindow {
         sendButton = new TextButton("send", getSkin());
         backButton = new TextButton(">", getSkin());
 
-        stack.add(friendshipTable);
+        stack.add(friendshipPane);
 
         chatTable.add(backButton).size(90, 70).expandX().right().padBottom(10).row();
         chatTable.add(messagesPane).size(600, 380).center().colspan(2).padBottom(20);
@@ -100,7 +103,7 @@ public class FriendshipView extends GameWindow {
 
         setVisible(false);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 7; i++) {
             friendNameLabels.add(new Label("", getSkin()));
             friendshipLevelLabels.add(new Label("", getSkin()));
             levelXpBars.add(new ProgressBar(0, 100, 1, false, getSkin()));
@@ -124,14 +127,34 @@ public class FriendshipView extends GameWindow {
 
         this.add(stack);
 
-        // temp code
         if (Repository.getRepo().getCurrentUser().getUsername().equals("1")) {
             relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(0));
-            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(1));
-            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(2));
-            relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(3));
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
         }
+
+        if (Repository.getRepo().getCurrentUser().getUsername().equals("2")) {
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+        }
+
+        if (Repository.getRepo().getCurrentUser().getUsername().equals("3")) {
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
+        }
+
+        if (Repository.getRepo().getCurrentUser().getUsername().equals("4")) {
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
+            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+        }
+
+        relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(0));
+        relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(1));
+        relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(2));
+        relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(3));
     }
 
     @Override
@@ -145,7 +168,7 @@ public class FriendshipView extends GameWindow {
             Map<Character, Friendship> friendships = relationshipService.getFriendships();
             List<Character> friends = new ArrayList<>(friendships.keySet());
 
-            for (int i = 0; i < Math.min(friendships.size(), 3); i++) {
+            for (int i = 0; i < Math.min(friendships.size(), 7); i++) {
                 Character character = friends.get(i);
                 Friendship friendship = friendships.get(character);
 
@@ -188,7 +211,8 @@ public class FriendshipView extends GameWindow {
                     chatButtons.get(i).setVisible(false);
                 }
 
-                friendshipTable.add(friendshipsRows.get(i)).fill().expand();
+                friendshipTable.add(friendshipsRows.get(i)).fill().expand().pad(50);
+                friendshipTable.row();
             }
         }
 
