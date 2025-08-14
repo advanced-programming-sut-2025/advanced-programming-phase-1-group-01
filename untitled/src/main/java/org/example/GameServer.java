@@ -23,6 +23,7 @@ public class GameServer {
     private final Map<String, Map<String, File>> radioFiles = new HashMap<>();
     private final Map<String, List<Connection>> channelMembers = new HashMap<>();
     private final Map<String, Thread> sendingThreads = new HashMap<>();
+    private final UserRepository userRepository = new UserRepository();
 
     public GameServer() throws IOException {
         server = new Server(65536000, 65536000);
@@ -183,15 +184,26 @@ public class GameServer {
     }
 
     private void handleUserInfo(Connection connection, Network.JsonMessage msg) {
-        String user = msg.json;
-        connectionUsers.put(connection.getID(), user);
+        String userJson = msg.json;
+        connectionUsers.put(connection.getID(), userJson);
 
-        JsonObject json = JsonParser.parseString(user).getAsJsonObject();
+        JsonObject json = JsonParser.parseString(userJson).getAsJsonObject();
         String username = json.get("username").getAsString();
+        String password = json.get("password").getAsString();
+        String nickname = json.get("nickname").getAsString();
+        String email = json.get("email").getAsString();
+        String gender = json.get("gender").getAsString();
 
         usernameToIdMap.put(username, connection.getID());
+        System.out.println("User info received: " + userJson);
 
-        System.out.println("User info received: " + user);
+        if (!userRepository.checkUserExists(username)) {
+            userRepository.registerUserFull(username, password, nickname, email, gender);
+            System.out.println("User saved to database: " + username);
+        } else {
+            System.out.println("User already exists: " + username);
+        }
+        userRepository.printAllUsers();
     }
 
     private void handleGameStart(Network.GameStart gameStart) {

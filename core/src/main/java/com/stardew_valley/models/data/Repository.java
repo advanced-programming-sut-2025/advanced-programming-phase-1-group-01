@@ -105,6 +105,7 @@ public class Repository {
 
         JsonObject json = new JsonObject();
         json.addProperty("username", user.getUsername());
+        json.addProperty("password", user.getPassword());
         json.addProperty("nickname", user.getNickname());
         json.addProperty("email", user.getEmail());
         json.addProperty("gender", user.getGender() != null ? user.getGender().toString() : "");
