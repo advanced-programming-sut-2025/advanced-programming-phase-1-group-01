@@ -37,7 +37,9 @@ public class ShippingBinView extends GameWindow {
         sell.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.sell(items.getSelected(), Integer.parseInt(count.getText()), messageLabel);
+                try {
+                    controller.sell(items.getSelected(), Integer.parseInt(count.getText()), messageLabel);
+                } catch (Exception ignored) {}
             }
         });
 

@@ -6,6 +6,7 @@ import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.WeatherCommands;
 import com.stardew_valley.models.weather.Weather;
+import com.stardew_valley.views.GameView;
 
 public class WeatherController extends Controller {
     public WeatherController(Repository repo) {
@@ -59,6 +60,7 @@ public class WeatherController extends Controller {
     }
 
     private Result handleCheatThor(Position position) {
+        GameView.startCameraShake(3f, 10f, Repository.getRepo().getCurrentUser().getPlayer());
         Tile tile = repo.getCurrentGame().getCurrentPlayer().getFarm().getTile(position);
         repo.getCurrentGame().getWeatherManager().invokeThor(tile);
         return new Result(true, "cheat thor applied on <%d, %d> tile.".formatted(position.x(), position.y()));

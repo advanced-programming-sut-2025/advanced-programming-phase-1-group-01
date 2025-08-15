@@ -30,6 +30,7 @@ public class GiftView extends GameWindow {
     private final Table sendGiftTable;
     private final Image giftImage;
     private final Label giftName;
+    private final Label quantityLabel;
     private final TextField giftQuantityField;
     private final TextButton sendButton;
     private final TextButton backButton1;
@@ -67,6 +68,7 @@ public class GiftView extends GameWindow {
         sendGiftTable = new Table(getSkin());
         giftImage = new Image();
         giftName = new Label("", getSkin());
+        quantityLabel = new Label("Enter Quantity:", getSkin());
         giftQuantityField = new TextField("1", getSkin());
         sendButton = new TextButton("Send", getSkin());
         backButton1 = new TextButton(">", getSkin());
@@ -104,6 +106,25 @@ public class GiftView extends GameWindow {
 
                 mainTable.setVisible(false);
                 sendGiftTable.setVisible(true);
+            }
+        });
+
+        receivedGiftsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                receivedGiftsMainTable.setVisible(true);
+                mainTable.setVisible(false);
+                giftHistoryPane.setVisible(false);
+                sendGiftTable.setVisible(false);
+            }
+        });
+
+        giftHistoryButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                giftHistoryPane.setVisible(true);
+                mainTable.setVisible(false);
+                sendGiftTable.setVisible(false);
             }
         });
 
@@ -160,15 +181,56 @@ public class GiftView extends GameWindow {
                     NPC npc = (NPC) friend;
                     npc.handleGifting(giftItem);
                     GameView.setMessage("Gift sent to NPC: " + npc.getType().getName());
-                } else if (friend instanceof Player) {
-                    Player player = (Player) friend;
-                    Result result = controller.gift(player.getUser().getUsername(), giftItem.getName(), amount);
+                } else if (friend instanceof Player player) {
+                    Result result;
+                    if (giftName.getText().equalsIgnoreCase("sunflower")) {
+                        result = controller.flower(player.getUser().getUsername());
+                    } else {
+                        result = controller.gift(player.getUser().getUsername(), giftName.getText().toString(), amount);
+                    }
                     GameView.setMessage(result.message());
                 }
 
                 giftItem = null;
                 setVisible(false);
                 stage.setKeyboardFocus(null);
+            }
+        });
+
+        receivedGiftsMainTable.add(rateField).pad(5).size(100, 60).center();
+        receivedGiftsMainTable.add(backButton3).pad(5).size(90, 70).expandX().right();
+        receivedGiftsMainTable.row();
+        receivedGiftsMainTable.center();
+        receivedGiftsPane.setScrollingDisabled(true, false);
+        receivedGiftsMainTable.add(receivedGiftsPane);
+        receivedGiftsMainTable.setVisible(false);
+        stack.add(receivedGiftsMainTable);
+
+        backButton3.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mainTable.setVisible(true);
+                receivedGiftsMainTable.setVisible(false);
+                stage.setKeyboardFocus(null);
+            }
+        });
+
+        for (int i = 0; i < 200; i++) {
+            rateFields.add(new TextField("", getSkin()));
+            rateButtons.add(new TextButton("rate", getSkin()));
+        }
+
+        giftHistoryTable.add(backButton2).padLeft(700).padBottom(50).size(90, 70);
+        giftHistoryTable.row();
+        giftHistoryTable.add(giftHistoryLabel).center();
+        giftHistoryPane.setScrollingDisabled(true, false);
+        stack.add(giftHistoryPane);
+        giftHistoryPane.setVisible(false);
+        backButton2.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mainTable.setVisible(true);
+                giftHistoryPane.setVisible(false);
             }
         });
 
@@ -202,16 +264,14 @@ public class GiftView extends GameWindow {
 
         if (friend != null && friend instanceof Player player) {
             String giftHistory;
-            if (friend != null) {
-                giftHistory = controller.giftHistory(player.getUser().getUsername()).message();
-                giftHistoryLabel.setText(giftHistory);
-            }
+
+            giftHistory = controller.giftHistory(player.getUser().getUsername()).message();
+            giftHistoryLabel.setText(giftHistory);
 
             if (receivedGiftsPane.isVisible()) {
                 getTitleLabel().setText("All Received Gifts");
             } else {
-                if (friend != null)
-                    getTitleLabel().setText("Gift Menu of Your Friend: " + player.getUser().getUsername());
+                getTitleLabel().setText("Gift Menu of Your Friend: " + player.getUser().getUsername());
             }
 
             if (receivedGiftsPane.isVisible()) {

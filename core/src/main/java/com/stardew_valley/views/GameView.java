@@ -44,10 +44,7 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.enums.AreaType;
-import com.stardew_valley.models.enums.ArtisanStatus;
-import com.stardew_valley.models.enums.ArtisanType;
-import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
@@ -59,12 +56,9 @@ import com.stardew_valley.models.shop.enums.Shop;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
 
-import java.util.Random;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 public class GameView extends ScreenAdapter implements InputProcessor {
     private Stage stage;
@@ -168,10 +162,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private float maxEnergyTimer = 0f;
     private ShapeRenderer darknessRenderer;
 
-    private float shakeTime = 0f;
-    private float shakeDuration = 0f;
-    private float shakeIntensity = 0f;
-    private Vector3 originalCameraPos = new Vector3();
+    private static float shakeTime = 0f;
+    private static float shakeDuration = 0f;
+    private static float shakeIntensity = 0f;
+    private static Vector3 originalCameraPos = new Vector3();
 
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
@@ -587,7 +581,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayers() {
         for (Player p : controller.getRepo().getCurrentGame().getPlayers())
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-        //System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -626,9 +620,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
 
-
-
-
         int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
         int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
         batch.draw(sebastianHouseTexture, sebastianX, sebastianY);
@@ -652,7 +643,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         List<Player> players = controller.getRepo().getCurrentGame().getPlayers();
         for (int i = 0; i < players.size(); i++) {
             if (!players.get(i).isGreenHouseActivated()) {
-                 FarmInitializer.setSpecialTilesUnmovable(i);
+                FarmInitializer.setSpecialTilesUnmovable(i);
             } else {
                 FarmInitializer.setSpecialTilesMovable(i);
             }
@@ -766,12 +757,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawShopping() {
 
-        for (Shop shop: Shop.values()) {
+        for (Shop shop : Shop.values()) {
             Position BL = shop.getBottomLeft();
             Texture texture = shop.getTexture();
-            batch.draw(texture,getTilePixel(BL.x()),getTilePixel(BL.y()),160f,160f);
+            batch.draw(texture, getTilePixel(BL.x()), getTilePixel(BL.y()), 160f, 160f);
         }
-     }
+    }
 
     private boolean isDialogOpen = false;
 
@@ -813,6 +804,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (!foundNearby && isDialogOpen) {
             shippingBinView.setVisible(false);
+            stage.setKeyboardFocus(null);
             shippingBinView.setTouchable(Touchable.disabled);
             isDialogOpen = false;
         }
@@ -891,27 +883,27 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
-//        if (player.getGender() == Gender.FEMALE) {
-//            showMessage("you are girl and you can't request marriage");
-//            return;
-//        }
-//
-//        if (anotherPlayer.getGender() == Gender.MALE) {
-//            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
-//            return;
-//        }
-//
-//        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
-//        if (friendship.getLevel() != 3) {
-//            showMessage("you don't have enough level!");
-//            return;
-//        }
-//
-//        if (player.getInventory().getSlot("ring") == null) {
-//            showMessage("you don't have ring in your inventory");
-//            return;
-//        }
-        //send message
+        if (player.getGender() == Gender.FEMALE) {
+            showMessage("you are girl and you can't request marriage");
+            return;
+        }
+
+        if (anotherPlayer.getGender() == Gender.MALE) {
+            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
+            return;
+        }
+
+        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+        if (friendship.getLevel() != 3) {
+            showMessage("you don't have enough level!");
+            return;
+        }
+
+        if (player.getInventory().getSlot("ring") == null) {
+            showMessage("you don't have ring in your inventory");
+            return;
+        }
+
         MarriageRequest request = new MarriageRequest(player.getUser());
         anotherPlayer.addMarriageRequest(request);
         showMessage("your request sent to " + anotherPlayer.getUser().getNickname());
@@ -1043,11 +1035,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     boolean isShown = false;
+
     public void toggleFoodMenu() {
         if (!isShown) {
             foodMenuView.setVisible(true);
-        }
-        else {
+        } else {
             foodMenuView.setVisible(false);
         }
         isShown = !isShown;
@@ -1101,7 +1093,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    public void startCameraShake(float duration, float intensity) {
+    public static void startCameraShake(float duration, float intensity, Player player) {
         shakeDuration = duration;
         shakeIntensity = intensity;
         shakeTime = 0f;
@@ -1112,12 +1104,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         shakeTime += delta;
         if (shakeTime < shakeDuration) {
             float currentIntensity = shakeIntensity * (1 - shakeTime / shakeDuration);
-            float offsetX = (float)((Math.random() - 0.5) * 2 * currentIntensity);
-            float offsetY = (float)((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetX = (float) ((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetY = (float) ((Math.random() - 0.5) * 2 * currentIntensity);
 
             camera.position.set(originalCameraPos.x + offsetX, originalCameraPos.y + offsetY, 0);
-        }
-        else {
+        } else {
             camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         }
     }
@@ -1208,6 +1199,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private float faintingTimer = 0f;
+
     public void handleMovement(float delta) {
         if (friendshipView.isVisible()) return;
 
@@ -1276,7 +1268,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (player.isFainting()) {
             faintingTimer += delta;
-            float FAINTING_DURATION = 3.0f;
+            float FAINTING_DURATION = 1.8f;
             if (faintingTimer >= FAINTING_DURATION) {
                 player.setFainting(false);
                 faintingTimer = 0f;
@@ -1345,7 +1337,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            startCameraShake(1f, 10f);
+            startCameraShake(1f, 10f, player);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
@@ -1388,8 +1380,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         SelectBox<String> selectBox = new SelectBox<>(skin);
         selectBox.setItems(
-            "A",
-            "B",
+            "Barn",
+            "Cage",
             "Bee House",
             "Charcoal Kiln",
             "Cheese Press",
@@ -1416,14 +1408,23 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             protected void result(Object object) {
                 if (Boolean.TRUE.equals(object)) {
                     String selected = selectBox.getSelected();
+                    Slot selectedSlot = player.getInventory().getSlot(selected);
+                    if (selectedSlot == null && !"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
+                        GameView.setMessage("You don't have this item!");
+                        return;
+                    } else if (!"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
+                        selectedSlot.removeQuantity(1);
+                    }
                     switch (selected) {
-                        case "A":
-                            if (!isPixelDialogVisible)
-                                togglePixelDialog(6, 7, "A");
+                        case "Barn":
+                            if (!isPixelDialogVisible) {
+                                togglePixelDialog(6, 7, "Barn");
+                            }
                             break;
-                        case "B":
-                            if (!isPixelDialogVisible)
-                                togglePixelDialog(4, 4, "B");
+                        case "Cage":
+                            if (!isPixelDialogVisible) {
+                                togglePixelDialog(4, 4, "Cage");
+                            }
                             break;
                         case "Bee House":
                         case "Charcoal Kiln":
@@ -1524,7 +1525,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         System.out.println(r + " " + c);
 
                         switch (type) {
-                            case "A":
+                            case "Barn":
                                 tile.setObject(new CageFence());
                                 tile.setMovable(false);
                                 break;
@@ -1579,10 +1580,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (type.equals("A") || type.equals("B")) {
+                if (type.equals("Barn") || type.equals("Cage")) {
                     if (isPlantableArea(row, col, height, width)) {
                         setObject(row, col, height, width, type);
-                        areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
+                        areas.add(new Area(row, col, height, width, type.equals("Barn") ? AreaType.BARN : AreaType.CAGE));
                     }
                 } else {
                     createArtisan(row, col, type);
@@ -1687,6 +1688,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 public void clicked(InputEvent event, float x, float y) {
                     handleAnimalAction(action, animal);
                     System.out.println("Action performed: " + action);
+                    dialog.hide();
                 }
             });
 
@@ -1973,6 +1975,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         animal.collectProduct();
+                        Repository.getRepo().getCurrentUser().getPlayer().getInventory().addItem(product, 1);
                         label.setText(info + " | Collected");
                         getButton.setDisabled(true);
                     }
@@ -2125,7 +2128,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         Table content = dialog.getContentTable();
 
-        Label descriptionLabel = new Label("This device can produce: " + String.join(", ", artisan.getItems()), skin);
+        List<String> items = artisan.getItems() != null ? artisan.getItems() : Collections.emptyList();
+        Label descriptionLabel = new Label("This device can produce: " + String.join(", ", items), skin);
         descriptionLabel.setWrap(true);
         descriptionLabel.setAlignment(Align.center);
 
@@ -2134,22 +2138,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         content.add(descriptionLabel).width(maxWidth).pad(10);
         content.row();
 
-
         if (artisan.getStatus() == ArtisanStatus.WORKING) {
-            String productInfo = "Product: " + artisan.getWorkingProduct();
-            String timeInfo = "Time left (h): " + (artisan.getHoursLeft());
-
-            Label productLabel = new Label(productInfo, skin);
+            Label productLabel = new Label("Product: " + artisan.getWorkingProduct(), skin);
             productLabel.setAlignment(Align.center);
             content.add(productLabel).pad(5);
             content.row();
 
-            Label timeLabel = new Label(timeInfo, skin);
+            Label timeLabel = new Label("Time left (h): " + artisan.getHoursLeft(), skin);
             timeLabel.setAlignment(Align.center);
             content.add(timeLabel).pad(5);
             content.row();
         }
-
 
         TextButton useButton = new TextButton("Use", skin);
         useButton.addListener(new ClickListener() {
@@ -2159,12 +2158,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 showSelectItemDialog(stage, skin, artisan);
             }
         });
+        content.add(useButton).pad(10);
+        content.row();
 
         dialog.button("Close", true);
 
         dialog.show(stage);
     }
-
     public void showSelectItemDialog(Stage stage, Skin skin, Artisan artisan) {
         Dialog dialog = new Dialog("Select Item", skin);
 
@@ -2182,7 +2182,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String selectedItem = selectBox.getSelected();
-                //onItemSelected(selectedItem);
+//                onItemSelected(selectedItem);
                 dialog.hide();
             }
         });

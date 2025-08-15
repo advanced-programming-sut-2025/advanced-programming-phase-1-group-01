@@ -33,8 +33,8 @@ public class FriendshipView extends GameWindow {
     private List<ProgressBar> levelXpBars;
     private List<TextButton> giftButtons;
     private List<TextButton> chatButtons;
-    private final Table friendshipTable;
-    private final ScrollPane friendshipPane;
+        private final Table friendshipTable;
+        private final ScrollPane friendshipPane;
 
     private final Table chatTable;
     private final Label messagesLabel;
