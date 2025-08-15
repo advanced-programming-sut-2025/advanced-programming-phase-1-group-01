@@ -7,12 +7,13 @@ import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.SeedInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class ForagingManager {
     private final Game game;
-
+    private final List<Tile> crowsTiles = new ArrayList<>();
     private static final Random RANDOM = new Random();
 
     public ForagingManager(Game game) {
@@ -32,6 +33,7 @@ public class ForagingManager {
                             tile.setObject(new Seed(currSeason.getRandomForagingSeed()));
                         } else {
                             tile.setObject(new ForagingCrop(currSeason.getRandomForagingCrop()));
+                            crowsTiles.add(tile);
 //                        System.out.println(tile.getPosition().x() + " " + tile.getPosition().y() + " " + "FC");
                         }
                     }
@@ -46,5 +48,9 @@ public class ForagingManager {
                 }
             }
             }
+        }
+
+        public List<Tile> getCrowsTiles() {
+            return crowsTiles;
         }
     }

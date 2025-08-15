@@ -4983,6 +4983,16 @@ public class AssetManager {
         return new Texture("shopping/pizza.png");
     }
 
+    private final Texture crow = new Texture("crow.png");
+    public Texture getCrow() {
+        return crow;
+    }
+
+    private Texture dropWater = new Texture("dropwater.png");
+    public Texture getDropWater() {
+        return dropWater;
+    }
+
     public Texture getCrown() {
         return new Texture("fishing/crown.png");
     }

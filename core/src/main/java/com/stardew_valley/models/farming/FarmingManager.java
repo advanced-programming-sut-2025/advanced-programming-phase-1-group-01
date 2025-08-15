@@ -13,6 +13,7 @@ import java.util.Random;
 
 public class FarmingManager {
     private final Game game;
+    private Tile wateringTile;
 
     public FarmingManager(Game game) {
         this.game = game;
@@ -106,5 +107,13 @@ public class FarmingManager {
                 tilesMap.get(plant).removeObject();
             }
         }
+    }
+
+    public void setWateringTile(Tile wateringTile) {
+        this.wateringTile = wateringTile;
+    }
+
+    public Tile getWateringTile() {
+        return wateringTile;
     }
 }

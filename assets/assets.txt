@@ -91,6 +91,8 @@ crafting/Sprinkler.png
 crafting/background.png
 crafting/recipe.png
 crafting/workshop.png
+crow.png
+dropwater.png
 energy/0.png
 energy/1.png
 energy/10.png

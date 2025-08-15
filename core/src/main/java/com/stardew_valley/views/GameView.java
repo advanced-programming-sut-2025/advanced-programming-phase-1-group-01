@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -44,6 +41,7 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
+import com.stardew_valley.models.dateTime.TimeManager;
 import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
@@ -159,13 +157,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private float buff = 1f;
     private float buffTimer = 0f;
-    private float maxEnergyTimer = 0f;
-    private ShapeRenderer darknessRenderer;
 
     private static float shakeTime = 0f;
     private static float shakeDuration = 0f;
     private static float shakeIntensity = 0f;
     private static Vector3 originalCameraPos = new Vector3();
+
+    private final List<Crow> crows = new ArrayList<>();
+    private final Texture crowTexture = AssetManager.getAssetManager().getCrow();
+    private float crowTime = 0f;
+    private int day;
+    private Random rand = new Random();
 
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
@@ -193,9 +195,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
-        darknessRenderer = new ShapeRenderer();
         energyMessageLabel = new Label("", AssetManager.getAssetManager().getSkin());
 //        messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        day = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getDay();
     }
 
     @Override
@@ -249,6 +251,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         updateCameraShake(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        handleCrows(delta);
+        showWateringTile();
         batch.begin();
         checkGreenHouseActivated();
         drawWorld();
@@ -264,6 +268,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         shippingBinView.update();
         eatFood();
 //        notificationsView.update();
+        for (Crow crow : crows) {
+            crow.draw(batch);
+        }
         batch.end();
         if (controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour() >= 18) {
             drawDark(0.7f);
@@ -1029,7 +1036,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         if (foodEnergy.getName().equals(CookingRecipes.OMELET.getName())) {
             setBuff(2.5f);
             player.getEnergy().setMaxEnergy(player.getEnergy().getMaxEnergy() + 100);
-            maxEnergyTimer = 0f;
             buffTimer = 0f;
         }
     }
@@ -1116,6 +1122,73 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         }
     }
+
+    private void handleCrows(float delta) {
+        int hour = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getHour();
+        List<Tile> tiles = Repository.getRepo().getCurrentGame().getForagingManager().getCrowsTiles();
+        TimeManager time = Repository.getRepo().getCurrentGame().getTimeManager();
+        if (hour == 17 && !time.getCrowsActive()) {
+         for (int i = 0; i < 70; i++) {
+                crows.add(new Crow(crowTexture));
+            }
+            time.setCrowsActive(true);
+            crowTime = 0f;
+            day = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getDay();
+            for (Tile tile : tiles) {
+                int prob = rand.nextInt(4);
+                if (prob == 0) {
+                    tile.removeObject();
+                }
+            }
+        }
+
+        if (time.getCrowsActive()) {
+            crowTime += delta;
+
+            for (Crow crow : crows) {
+                if (crowTime >= 1f) {
+                    crow.fadingOut = true;
+                }
+                crow.update(delta);
+            }
+
+            crows.removeIf(Crow::isInvisible);
+        }
+
+        if (day != Repository.getRepo().getCurrentGame().getTimeManager().getNow().getDay()) {
+            time.setCrowsActive(false);
+        }
+    }
+
+    public void showWateringTile() {
+        Tile wateredTile = Repository.getRepo().getCurrentGame().getFarmingManager().getWateringTile();
+        if (wateredTile == null) return;
+        Image dropWater = new Image(AssetManager.getAssetManager().getDropWater());
+        dropWater.setSize(16f,16f);
+        dropWater.setVisible(false);
+        stage.addActor(dropWater);
+
+        int worldX = player.getPosition().x();
+        int worldY = player.getPosition().y();
+
+        Vector3 screenPos = camera.project(new Vector3(worldX, worldY, 0));
+
+        dropWater.setPosition(screenPos.x + 40, screenPos.y + 10);
+        dropWater.getColor().a = 1f;
+        dropWater.setVisible(true);
+        dropWater.clearActions();
+
+        dropWater.addAction(Actions.sequence(
+            Actions.delay(0.2f),
+            Actions.parallel(
+                Actions.moveBy(0, -20, 1f),
+                Actions.fadeOut(2.5f)
+            ),
+            Actions.run(() -> dropWater.setVisible(false))
+        ));
+        Repository.getRepo().getCurrentGame().getFarmingManager().setWateringTile(null);
+    }
+
 
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
@@ -1212,17 +1285,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         boolean moving = false;
 
-        maxEnergyTimer += delta;
-
-        if (buffTimer > 5f) {
+        if (buffTimer > 10f) {
             setBuff(1f);
-        }
-
-        if (maxEnergyTimer > 20f) {
-            player.getEnergy().setMaxEnergy(200f);
-            if (player.getEnergy().getAmount() >= 200f) {
-                player.getEnergy().setAmount(200f);
-            }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
