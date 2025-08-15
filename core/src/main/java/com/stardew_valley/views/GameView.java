@@ -46,7 +46,6 @@ import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
-import com.stardew_valley.models.fish.FishInfo;
 import com.stardew_valley.models.foraging.ForagingMineral;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
@@ -435,11 +434,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 }
             }
             for (Artisan artisan : player.getArtisans()) {
+                System.out.println((worldCoords.x - artisan.getX()) + "  " + (worldCoords.y - artisan.getY()));
                 if (artisan.isArtisanClicked(worldCoords.x, worldCoords.y)) {
                     showArtisanDialog(stage, AssetManager.getAssetManager().getSkin(), artisan);
                 }
                 if (artisan.isDoneClicked(worldCoords.x, worldCoords.y)) {
-                    artisan.finish();
+                    artisan.addToInventory(player.getInventory());
                 }
             }
             if (player.getFarm().getTiles().get(tileX).get(tileY).getType() == TileType.GREENHOUSE) {
@@ -1421,6 +1421,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
+
         player.setMoving(moving);
 
     }
@@ -1582,6 +1583,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void setObject(int row, int col, int height, int width, String type) {
         List<List<Tile>> tiles = controller.getRepo().getCurrentGame().getFarm().getTiles();
 
+        int doorCol = col + width / 2;
+        int doorRow = row + height;
+
         for (int r = row; r <= row + height; r++) {
             for (int c = col; c <= col + width; c++) {
 
@@ -1592,6 +1596,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
                 if (isTop || isBottom || isLeft || isRight) {
                     if (r >= 0 && r < tiles.size() && c >= 0 && c < tiles.get(r).size()) {
+
+                        if (r == doorRow && c == doorCol) {
+                            continue;
+                        }
+
                         Tile tile = tiles.get(r).get(c);
                         System.out.println(r + " " + c);
 
@@ -1611,6 +1620,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             }
         }
     }
+
 
 
     private boolean isPlantableArea(int row, int col, int height, int width) {
@@ -2049,6 +2059,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         Repository.getRepo().getCurrentUser().getPlayer().getInventory().addItem(product, 1);
                         label.setText(info + " | Collected");
                         getButton.setDisabled(true);
+                        Repository.getRepo().getCurrentGame().getCurrentPlayer().getInventory().addItem(product, 1);
                     }
                 });
 
@@ -2236,6 +2247,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         dialog.show(stage);
     }
+
+
     public void showSelectItemDialog(Stage stage, Skin skin, Artisan artisan) {
         Dialog dialog = new Dialog("Select Item", skin);
 
@@ -2253,6 +2266,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String selectedItem = selectBox.getSelected();
+                //onItemSelected(selectedItem);
+                showSelectItemDialogToCraft(skin, selectedItem, artisan);
+
 //                onItemSelected(selectedItem);
                 dialog.hide();
             }
@@ -2271,6 +2287,104 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         dialog.show(stage);
     }
+
+    public void showSelectItemDialogToCraft(Skin skin, String product, Artisan artisan) {
+        Dialog dialog = new Dialog("Select Items", skin);
+        Table content = dialog.getContentTable();
+        List<String> selectedItems = new ArrayList<>();
+        //List<Map<String, Integer>> gredients = artisan.getIngredients(product);
+
+        List<Slot> slots = Repository.getRepo()
+            .getCurrentGame()
+            .getCurrentPlayer()
+            .getInventory()
+            .getSlots();
+
+        for (Slot slot : slots) {
+            if (slot.getItem() == null) continue;
+            String itemName = slot.getItem().getName();
+
+            Label nameLabel = new Label(itemName, skin);
+            TextButton actionButton = new TextButton("Select", skin);
+
+            actionButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (selectedItems.contains(itemName)) {
+                        selectedItems.remove(itemName);
+                        actionButton.setText("Select");
+                    } else {
+                        selectedItems.add(itemName.toLowerCase());
+                        actionButton.setText("Remove");
+                    }
+                }
+            });
+
+            content.add(nameLabel).pad(5);
+            content.add(actionButton).pad(5);
+            content.row();
+        }
+
+        TextButton craftButton = new TextButton("Craft", skin);
+        craftButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Selected items for crafting: " + selectedItems);
+                boolean can = canCraft(artisan, product, selectedItems, player);
+                if (can) {
+                    artisan.setWorking(product);
+                    System.out.println("Selected items for crafting: " + selectedItems);
+                }
+                dialog.hide();
+            }
+        });
+
+        TextButton cancelButton = new TextButton("Cancel", skin);
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+            }
+        });
+
+        content.row();
+        content.add(craftButton).pad(10);
+        content.add(cancelButton).pad(10);
+        dialog.show(stage);
+    }
+
+    public boolean canCraft(Artisan artisan, String product, List<String> selectedItems, Player player) {
+        List<Map<String, Integer>> ingredientsList = artisan.getIngredients(product);
+
+        for (Map<String, Integer> ingredients : ingredientsList) {
+            boolean hasAll = true;
+            for (Map.Entry<String, Integer> entry : ingredients.entrySet()) {
+                String itemName = entry.getKey();
+                int requiredQty = entry.getValue();
+
+                if (!selectedItems.contains(itemName)) {
+                    hasAll = false;
+                    System.out.println(itemName + Arrays.toString(selectedItems.toArray()));
+
+                    break;
+                }
+
+                Slot slot = player.getInventory().getSlot(itemName);
+                if (slot == null || slot.getQuantity() < requiredQty) {
+                    hasAll = false;
+                    System.out.println("Selected item: 11111111111222222");
+                    break;
+                }
+            }
+            if (hasAll) {
+                return true;
+            }
+        }
+        System.out.println("Selected item: 111111111112222223333");
+        return false;
+    }
+
+
 
 
     public void showSimpleDialog(Stage stage, Skin skin, String title, String message) {
