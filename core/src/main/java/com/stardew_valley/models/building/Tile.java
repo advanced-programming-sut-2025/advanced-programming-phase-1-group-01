@@ -41,15 +41,15 @@ public class Tile {
 
     public void setType(TileType type) {
         this.type = type;
-        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                Network.SetTileTypeRequest req = new Network.SetTileTypeRequest();
-                req.x = position.x();
-                req.y = position.y();
-                req.typeNum = type.ordinal();
-                GameClient.getInstance().sendTileType(req);
-            }
-        }
+        Network.SetTileTypeRequest req = new Network.SetTileTypeRequest();
+        req.x = position.x();
+        req.y = position.y();
+        req.typeNum = type.ordinal();
+        GameClient.getInstance().sendTileType(req);
+    }
+
+    public void setTypeC(TileType type) {
+        this.type = type;
     }
 
     public boolean isMovable() {
@@ -63,15 +63,11 @@ public class Tile {
     public boolean plow() {
         if (type != TileType.RIVER && isEmpty()) {
             isPlowed = true;
-            for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-                if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                    Network.SetTilePlowedRequest plowedReq = new Network.SetTilePlowedRequest();
-                    plowedReq.x = position.x();
-                    plowedReq.y = position.y();
-                    plowedReq.plowed = true;
-                    GameClient.getInstance().sendTilePlowed(plowedReq);
-                }
-            }
+            Network.SetTilePlowedRequest plowedReq = new Network.SetTilePlowedRequest();
+            plowedReq.x = position.x();
+            plowedReq.y = position.y();
+            plowedReq.plowed = true;
+            GameClient.getInstance().sendTilePlowed(plowedReq);
             return true;
         }
         return false;
@@ -79,28 +75,28 @@ public class Tile {
 
     public void unPlow() {
         isPlowed = false;
-        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                Network.SetTilePlowedRequest plowedReq = new Network.SetTilePlowedRequest();
-                plowedReq.x = position.x();
-                plowedReq.y = position.y();
-                plowedReq.plowed = false;
-                GameClient.getInstance().sendTilePlowed(plowedReq);
-            }
-        }
+        Network.SetTilePlowedRequest plowedReq = new Network.SetTilePlowedRequest();
+        plowedReq.x = position.x();
+        plowedReq.y = position.y();
+        plowedReq.plowed = false;
+        GameClient.getInstance().sendTilePlowed(plowedReq);
+    }
+
+    public void setPlowedC(boolean plowed) {
+        isPlowed = plowed;
     }
 
     public void setMovable(boolean movable) {
         isMovable = movable;
-        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                Network.SetTileMovableRequest movableReq = new Network.SetTileMovableRequest();
-                movableReq.x = position.x();
-                movableReq.y = position.y();
-                movableReq.movable = movable;
-                GameClient.getInstance().sendTileMovable(movableReq);
-            }
-        }
+        Network.SetTileMovableRequest movableReq = new Network.SetTileMovableRequest();
+        movableReq.x = position.x();
+        movableReq.y = position.y();
+        movableReq.movable = movable;
+        GameClient.getInstance().sendTileMovable(movableReq);
+    }
+
+    public void setMovableC(boolean movable) {
+        isMovable = movable;
     }
 
     public Building getBuilding() {
@@ -117,29 +113,25 @@ public class Tile {
 
     public void setObject(TileObject object) {
         this.object = object;
-        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                Network.SetObjectRequest req = new Network.SetObjectRequest();
-                req.x = position.x();
-                req.y = position.y();
-                req.object = FarmInitializer.getNumberFromTileObject(object);
-                GameClient.getInstance().sendTileObject(req);
-            }
-        }
+        Network.SetObjectRequest req = new Network.SetObjectRequest();
+        req.x = position.x();
+        req.y = position.y();
+        req.object = FarmInitializer.getNumberFromTileObject(object);
+        GameClient.getInstance().sendTileObject(req);
+    }
+
+    public void setObjectC(TileObject object) {
+        this.object = object;
     }
 
     public void removeObject() {
         this.object = null;
         isMovable = true;
-        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                Network.SetTileMovableRequest movableReq = new Network.SetTileMovableRequest();
-                movableReq.x = position.x();
-                movableReq.y = position.y();
-                movableReq.movable = true;
-                GameClient.getInstance().sendTileMovable(movableReq);
-            }
-        }
+        Network.SetTileMovableRequest movableReq = new Network.SetTileMovableRequest();
+        movableReq.x = position.x();
+        movableReq.y = position.y();
+        movableReq.movable = true;
+        GameClient.getInstance().sendTileMovable(movableReq);
     }
 
     public boolean isEmpty() {
@@ -160,29 +152,21 @@ public class Tile {
 
         public Builder setType(TileType type) {
             this.type = type;
-            for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-                if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                    Network.SetTileTypeRequest req = new Network.SetTileTypeRequest();
-                    req.x = position.x();
-                    req.y = position.y();
-                    req.typeNum = type.ordinal();
-                    GameClient.getInstance().sendTileType(req);
-                }
-            }
+            Network.SetTileTypeRequest req = new Network.SetTileTypeRequest();
+            req.x = position.x();
+            req.y = position.y();
+            req.typeNum = type.ordinal();
+            GameClient.getInstance().sendTileType(req);
             return this;
         }
 
         public Builder setMovable(boolean movable) {
             isMovable = movable;
-            for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-                if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                    Network.SetTileMovableRequest movableReq = new Network.SetTileMovableRequest();
-                    movableReq.x = position.x();
-                    movableReq.y = position.y();
-                    movableReq.movable = movable;
-                    GameClient.getInstance().sendTileMovable(movableReq);
-                }
-            }
+            Network.SetTileMovableRequest movableReq = new Network.SetTileMovableRequest();
+            movableReq.x = position.x();
+            movableReq.y = position.y();
+            movableReq.movable = movable;
+            GameClient.getInstance().sendTileMovable(movableReq);
             return this;
         }
 
@@ -217,15 +201,12 @@ public class Tile {
 
         public Builder setObject(TileObject object) {
             this.object = object;
-            for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
-                if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                    Network.SetObjectRequest req = new Network.SetObjectRequest();
-                    req.x = position.x();
-                    req.y = position.y();
-                    req.object = FarmInitializer.getNumberFromTileObject(object);
-                    GameClient.getInstance().sendTileObject(req);
-                }
-            }
+            Network.SetObjectRequest req = new Network.SetObjectRequest();
+            req.x = position.x();
+            req.y = position.y();
+            req.object = FarmInitializer.getNumberFromTileObject(object);
+            //System.out.println("Object: T" + req.object);
+            GameClient.getInstance().sendTileObject(req);
             return this;
         }
     }

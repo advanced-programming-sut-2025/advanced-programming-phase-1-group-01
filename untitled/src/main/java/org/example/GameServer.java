@@ -107,6 +107,7 @@ public class GameServer {
                         channelMembers.values().forEach(list -> list.remove(connection));
                         channelMembers.computeIfAbsent(req.targetUsername, k -> new ArrayList<>()).add(connection);
                     } else if (object instanceof Network.NPCPosition position) {
+                        System.out.println("333");
                         Network.NPCPositionResponse resp = new Network.NPCPositionResponse();
                         resp.adminPlayer = position.adminPlayer;
                         resp.x = position.x;
@@ -115,6 +116,7 @@ public class GameServer {
                             if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
                                 for (int id : lobby.getPlayerConnectionIds()) {
                                     server.sendToTCP(id, resp);
+                                    System.out.println("444");
                                 }
                             }
                         }
@@ -128,6 +130,7 @@ public class GameServer {
                                 for (int id : lobby.getPlayerConnectionIds()) {
                                     if (id != connection.getID()) {
                                         server.sendToTCP(id, res);
+                                        System.out.println("setObjectRequest in server");
                                     }
                                 }
                             }
@@ -146,9 +149,40 @@ public class GameServer {
                             }
                         }
                     }
-                }
+                } else if (object instanceof Network.SetTileMovableRequest req) {
+                        Network.SetTileMovableResponse res = new Network.SetTileMovableResponse();
+                        res.x = req.x;
+                        res.y = req.y;
+                        res.movable = req.movable;
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    if (id != connection.getID()) {
+                                        server.sendToTCP(id, res);
+                                    }
+                                }
+                            }
+                        }
+                    }
 
-            } catch (Exception e) {
+                    else if (object instanceof Network.SetTilePlowedRequest req) {
+                        Network.SetTilePlowedResponse res = new Network.SetTilePlowedResponse();
+                        res.x = req.x;
+                        res.y = req.y;
+                        res.plowed = req.plowed;
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    if (id != connection.getID()) {
+                                        server.sendToTCP(id, res);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
                 }
             }
@@ -262,8 +296,8 @@ public class GameServer {
                 for (int id : lobby.getPlayerConnectionIds()) {
                     if (id != connection.getID()) {
                         server.sendToTCP(id, playerStatus);
-                        System.out.println("Relayed PlayerStatus from "
-                            + playerStatus.username + " to connection " + id);
+                        //System.out.println("Relayed PlayerStatus from "
+//                            + playerStatus.username + " to connection " + id);
                     }
                 }
                 break;

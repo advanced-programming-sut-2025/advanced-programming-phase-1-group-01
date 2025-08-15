@@ -2,6 +2,7 @@ package com.stardew_valley.models.character.NPC;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.stardew_valley.models.AI.AIChat;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
@@ -195,7 +196,10 @@ public class NPC extends Character {
     public void draw(Batch batch, float delta) {
         globalStateTime += delta;
         globalDelta = delta;
-        batch.draw(getTexture(), getX(), getY() + giftingOffset);
+        batch.draw(getTextureRegion(), getX(), getY() + giftingOffset);
+        if (hasWalk) {
+            moveTo(targetPositionX, targetPositionY);
+        }
 
         batch.draw(plus_tex, plusX(), plusY(), 9, 9);
 
@@ -205,32 +209,67 @@ public class NPC extends Character {
 
     }
 
-    public Texture getTexture() {
+    public TextureRegion getTextureRegion() {
         float frameTime = isMoving ? globalStateTime : 0f;
 
         switch (type) {
             case SEBASTIAN:
-                return AssetManager.getAssetManager()
-                    .getSebastianLeftAnimation()
-                    .getKeyFrame(frameTime)
-                    .getTexture();
+                return getDirectionFrame(
+                    AssetManager.getAssetManager().getSebastianUpAnimation(),
+                    AssetManager.getAssetManager().getSebastianDownAnimation(),
+                    AssetManager.getAssetManager().getSebastianLeftAnimation(),
+                    AssetManager.getAssetManager().getSebastianRightAnimation(),
+                    frameTime
+                );
             case ABIGAIL:
-                return AssetManager.getAssetManager()
-                    .getAbigailLeftAnimation()
-                    .getKeyFrame(frameTime)
-                    .getTexture();
+                return getDirectionFrame(
+                    AssetManager.getAssetManager().getAbigailUpAnimation(),
+                    AssetManager.getAssetManager().getAbigailDownAnimation(),
+                    AssetManager.getAssetManager().getAbigailLeftAnimation(),
+                    AssetManager.getAssetManager().getAbigailRightAnimation(),
+                    frameTime
+                );
             case HARVEY:
-                return AssetManager.getAssetManager()
-                    .getHarveyLeftAnimation()
-                    .getKeyFrame(frameTime)
-                    .getTexture();
+                return getDirectionFrame(
+                    AssetManager.getAssetManager().getHarveyUpAnimation(),
+                    AssetManager.getAssetManager().getHarveyDownAnimation(),
+                    AssetManager.getAssetManager().getHarveyLeftAnimation(),
+                    AssetManager.getAssetManager().getHarveyRightAnimation(),
+                    frameTime
+                );
             default:
-                return AssetManager.getAssetManager()
-                    .getLeahLeftAnimation()
-                    .getKeyFrame(frameTime)
-                    .getTexture();
+                return getDirectionFrame(
+                    AssetManager.getAssetManager().getLeahUpAnimation(),
+                    AssetManager.getAssetManager().getLeahDownAnimation(),
+                    AssetManager.getAssetManager().getLeahLeftAnimation(),
+                    AssetManager.getAssetManager().getLeahRightAnimation(),
+                    frameTime
+                );
         }
     }
+
+    private TextureRegion getDirectionFrame(
+        com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> upAnim,
+        com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> downAnim,
+        com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> leftAnim,
+        com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> rightAnim,
+        float frameTime
+    ) {
+        switch (direction) {
+            case UP:
+                return upAnim.getKeyFrame(frameTime, true);
+            case DOWN:
+                return downAnim.getKeyFrame(frameTime, true);
+            case LEFT:
+                return leftAnim.getKeyFrame(frameTime, true);
+            case RIGHT:
+                return rightAnim.getKeyFrame(frameTime, true);
+            default:
+                return downAnim.getKeyFrame(frameTime, true);
+        }
+    }
+
+
 
     public float getX() {
         return x;
@@ -278,25 +317,18 @@ public class NPC extends Character {
 
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0) {
-                if (dy > 0) direction = Direction.UP_RIGHT;
-                else if (dy < 0) direction = Direction.DOWN_RIGHT;
-                else direction = Direction.RIGHT;
-            } else {
-                if (dy > 0) direction = Direction.UP_LEFT;
-                else if (dy < 0) direction = Direction.DOWN_LEFT;
-                else direction = Direction.LEFT;
+                direction = Direction.RIGHT;
+            } else if (dx < 0) {
+                direction = Direction.LEFT;
             }
         } else {
             if (dy > 0) {
-                if (dx > 0) direction = Direction.UP_RIGHT;
-                else if (dx < 0) direction = Direction.UP_LEFT;
-                else direction = Direction.UP;
-            } else {
-                if (dx > 0) direction = Direction.DOWN_RIGHT;
-                else if (dx < 0) direction = Direction.DOWN_LEFT;
-                else direction = Direction.DOWN;
+                direction = Direction.UP;
+            } else if (dy < 0) {
+                direction = Direction.DOWN;
             }
         }
+
 
         List<List<Tile>> tiles = Repository.getRepo().getCurrentGame().getFarm().getTiles();
         int startX = (int) (this.x / 16);
@@ -336,6 +368,8 @@ public class NPC extends Character {
             }
         } else {
             isMoving = false;
+            hasWalk = false;
+            System.out.println("555");
         }
     }
 
@@ -347,7 +381,7 @@ public class NPC extends Character {
     }
 
     public boolean isWalking() {
-        return hasWalk;
+        return isMoving;
     }
 
 }

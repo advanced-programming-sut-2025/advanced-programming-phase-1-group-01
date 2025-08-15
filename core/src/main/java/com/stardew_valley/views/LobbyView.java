@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
 import com.stardew_valley.controllers.GameController;
@@ -19,6 +20,7 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.network.GameClient;
+import com.stardew_valley.network.Network;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -481,6 +483,16 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
 
         }
         //thread.interrupt();
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.getForagingManager().prepareNewDayForaging();
+                    }
+                }, 5);
+            }
+        }
         Main.getMain().setScreen(new GameView(new GameController(LobbyController.getInstance().getRepository())));
     }
 

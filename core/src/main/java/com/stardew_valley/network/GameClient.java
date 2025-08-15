@@ -92,21 +92,25 @@ public class GameClient {
                         LobbyView.startGame(lobby);
                     });
                 } else if (object instanceof Network.PlayerStatus playerStatus) {
-                    Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(playerStatus.username);
-                    if (player != null) {
-                        if (!playerStatus.username.equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                            player.setX(playerStatus.x);
-                            player.setY(playerStatus.y);
-                            player.setDirection(Player.numToDirection(playerStatus.direction));
-                            player.setStateTime(playerStatus.stateTime);
-                            player.setMoving(playerStatus.isWalking);
-                            System.out.println("set " + playerStatus.username);
-                            System.out.println("in " + Repository.getRepo().getCurrentUser().getUsername());
+                    try {
+                        Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(playerStatus.username);
+                        if (player != null) {
+                            if (!playerStatus.username.equals(Repository.getRepo().getCurrentUser().getUsername())) {
+                                player.setX(playerStatus.x);
+                                player.setY(playerStatus.y);
+                                player.setDirection(Player.numToDirection(playerStatus.direction));
+                                player.setStateTime(playerStatus.stateTime);
+                                player.setMoving(playerStatus.isWalking);
+                                //System.out.println("set " + playerStatus.username);
+                                //System.out.println("in " + Repository.getRepo().getCurrentUser().getUsername());
+                            } else {
+                                //System.out.println("that was yourself");
+                            }
                         } else {
-                            //System.out.println("that was yourself");
+                            System.out.println("Warning: player not found for username: " + playerStatus.username);
                         }
-                    } else {
-                        System.out.println("Warning: player not found for username: " + playerStatus.username);
+                    } catch (Exception ignored) {
+
                     }
                 } else if (object instanceof Network.LeaveLobbyResponse resp) {
                     System.out.println("Leave Lobby Response: " + resp.message);
@@ -219,19 +223,47 @@ public class GameClient {
                 } else if (object instanceof Network.RadioFilesList list) {
                     Repository.getRepo().getCurrentUser().setFilesList(list.fileNames);
                 } else if (object instanceof Network.NPCPositionResponse resp) {
+                    System.out.println("222");
                     for (NPC npc : Repository.getRepo().getCurrentGame().getFarm().getNPCs()) {
                         if (npc.getType().name().equalsIgnoreCase(resp.adminPlayer)) {
+                            System.out.println("111");
                             npc.setHasWalk(resp.x, resp.y);
                             break;
                         }
                     }
                 } else if (object instanceof Network.SetObjectResponse resp) {
-                    Repository.getRepo().getCurrentGame().getFarm().getTiles().get(resp.x).get(resp.y).setObject(FarmInitializer.getTileObjectFromNumber(resp.object));
+                    try {
+                        //System.out.println("set 00000000000000000000000000");
+                        Repository.getRepo().getCurrentGame().getFarm().getTiles().get(resp.x).get(resp.y).setObjectC(FarmInitializer.getTileObjectFromNumber(resp.object));
+                    } catch (Exception ignored) {
+
+                    }
                 } else if (object instanceof Network.SetTileTypeResponse resp) {
-                    Repository.getRepo().getCurrentGame().getFarm()
-                        .getTiles().get(resp.x).get(resp.y)
-                        .setType(TileType.values()[resp.typeNum]);
+                    try {
+                        Repository.getRepo().getCurrentGame().getFarm()
+                            .getTiles().get(resp.x).get(resp.y)
+                            .setTypeC(TileType.values()[resp.typeNum]);
+                    } catch (Exception ignored) {
+
+                    }
+                } else if (object instanceof Network.SetTileMovableResponse resp) {
+                    try {
+                        Repository.getRepo().getCurrentGame().getFarm()
+                                .getTiles().get(resp.x).get(resp.y)
+                                .setMovableC(resp.movable);
+                    } catch (Exception ignored) {
+
+                    }
+                } else if (object instanceof Network.SetTilePlowedResponse resp) {
+                    try {
+                        Repository.getRepo().getCurrentGame().getFarm()
+                                .getTiles().get(resp.x).get(resp.y)
+                                .setPlowedC(resp.plowed);
+                    } catch (Exception ignored) {
+
+                    }
                 }
+
 
             }
 
@@ -565,9 +597,9 @@ public class GameClient {
         pClient.sendTCP(req);
     }
 
-    public void sendNPCPosition(float x, float y) {
+    public void sendNPCPosition(float x, float y, String npcType) {
         Network.NPCPosition position = new Network.NPCPosition();
-        position.adminPlayer = repo.getCurrentUser().getUsername();
+        position.adminPlayer = npcType;
         position.x = x;
         position.y = y;
         pClient.sendTCP(position);

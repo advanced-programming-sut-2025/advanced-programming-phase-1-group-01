@@ -62,6 +62,7 @@ import com.stardew_valley.models.weather.Weather;
 import com.stardew_valley.network.GameClient;
 import com.badlogic.gdx.utils.Timer;
 
+
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -97,6 +98,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion abigailHouseTopTexture = AssetManager.getAssetManager().getNpcHouse2Top();
     private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
     private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
+    private final Map<NPC, Long> npcNextMoveTime = new HashMap<>();
 
     private final List<NPC> npcs;
 
@@ -644,12 +646,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayers() {
         for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-            if (System.currentTimeMillis() % 1000 < 5) System.out.println(p.getUser().getUsername() + " " + p.getX() + " " + p.getY());
+            //if (System.currentTimeMillis() % 1000 < 5) System.out.println(p.getUser().getUsername() + " " + p.getX() + " " + p.getY());
         }
         //System.out.println(player.getUser().getUsername());
     }
 
     private void drawNPCs() {
+        sendNPCPositionAsAdmin();
         for (NPC npc : npcs) {
             npc.draw(batch, globalDelta);
         }
@@ -2757,20 +2760,62 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
 
+
+
     private void sendNPCPositionAsAdmin() {
         for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
             if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                for (NPC npc : npcs) {
-                    if (!npc.isWalking()) {
+
+                int hour = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getHour();
+
+                float[][] morningPositions = {
+                    {FarmInitializer.getSebastianStartingPointX(), FarmInitializer.getSebastianStartingPointY()},
+                    {FarmInitializer.getAbigailStartingPointX(), FarmInitializer.getAbigailStartingPointY()},
+                    {FarmInitializer.getHarveyStartingPointX(), FarmInitializer.getHarveyStartingPointY()},
+                    {FarmInitializer.getLeahStartingPointX(), FarmInitializer.getLeahStartingPointY()},
+                };
+
+                float[][] workingPositions = {
+                    {1700f, 1700f},
+                    {1900f, 1700f},
+                    {1900f, 1900f},
+                    {1700f, 1900f}
+                };
+
+
+
+
+                for (int i = 0; i < npcs.size(); i++) {
+                    NPC npc = npcs.get(i);
+
+                    if (hour < 12) {
+                        float[] pos = morningPositions[i % morningPositions.length];
+                        GameClient.getInstance().sendNPCPosition(pos[0], pos[1], npc.getType().name());
+                        continue;
+                    }
+
+                    if (hour < 15) {
+                        float[] pos = workingPositions[i % workingPositions.length];
+                        GameClient.getInstance().sendNPCPosition(pos[0], pos[1], npc.getType().name());
+                        continue;
+                    }
+
+                    long currentTime = System.currentTimeMillis();
+                    long nextMoveTime = npcNextMoveTime.getOrDefault(npc, 0L);
+
+                    if (currentTime >= nextMoveTime) {
                         float targetX = 1200 + (float) (Math.random() * (2400 - 1200));
                         float targetY = 1200 + (float) (Math.random() * (2400 - 1200));
-                        //npc.setHasWalk(targetX, targetY);
-                        GameClient.getInstance().sendNPCPosition(targetX, targetY);
+                        GameClient.getInstance().sendNPCPosition(targetX, targetY, npc.getType().name());
+
+                        long waitTime = 2000 + (long) (Math.random() * 3000);
+                        npcNextMoveTime.put(npc, currentTime + waitTime);
                     }
                 }
             }
         }
     }
+
 
 
 
