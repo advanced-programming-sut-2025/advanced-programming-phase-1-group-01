@@ -20,7 +20,7 @@ public class MiniMapView extends GameWindow {
     private Actor miniMapActor;
     private List<List<Tile>> tiles;
     private Player player;
-    private boolean isMiniMapVisible = false; // پیش‌فرض مخفی
+    private boolean isMiniMapVisible = false;
 
     public MiniMapView(Stage stage, List<List<Tile>> tiles, Player player) {
         super("Map", AssetManager.getAssetManager().getSkin(), "Letter", stage);

@@ -1,6 +1,7 @@
 package com.stardew_valley.controllers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.stardew_valley.models.Artisan;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
@@ -11,6 +12,7 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.CraftingDevices;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
+import com.stardew_valley.models.enums.ArtisanStatus;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.commands.CraftingCommands;
 import com.stardew_valley.models.data.Repository;
@@ -46,6 +48,8 @@ public class CraftingController extends Controller {
                 return cheatAddRecipe(command);
             case PLACE_ITEM:
                 return placeItem(command);
+            case CHEAT_FINISH:
+                return cheatFinish();
         }
         return null;
     }
@@ -135,6 +139,16 @@ public class CraftingController extends Controller {
         player.addCraftingRecipe(recipeToLearn);
 
         return new Result(true, "Recipe added");
+    }
+
+    private Result cheatFinish() {
+        for (Artisan artisan : Repository.getRepo().getCurrentGame().getCurrentPlayer().getArtisans()) {
+            if (artisan.getStatus() == ArtisanStatus.WORKING) {
+                artisan.finish();
+                return new Result(true, "Artisan is done.");
+            }
+        }
+        return new Result(false, "no artisan working");
     }
 
     private Result placeItem(String command) {

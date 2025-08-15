@@ -125,7 +125,7 @@ public class NPC extends Character {
         isBeingGifted = true;
         giftingStateTime = 0f;
         Player player = Repository.getRepo().getCurrentGame().getCurrentPlayer();
-        friendshipLevels.put(player, friendshipLevels.getOrDefault(player, 0));
+        friendshipLevels.put(player, friendshipLevels.getOrDefault(player, 0) + 1);
         giftingOffset = 0f;
     }
 

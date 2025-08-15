@@ -72,7 +72,7 @@ public class Animal extends Character implements TileObject {
         this.position = position;
         this.x = x;
         this.y = y;
-        setProduct(AnimalProductType.EGG);
+        setProduct(animalInfo.getProducts().get(0));
     }
 
     public AnimalProductType getAnimalProductType() {

@@ -2,6 +2,7 @@ package com.stardew_valley.models;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.ArtisanStatus;
 import com.stardew_valley.models.enums.ArtisanType;
@@ -215,6 +216,7 @@ public class Artisan {
         int onCount = Math.round((getPercentage() / 100f) * 10);
 
         if (status == ArtisanStatus.WORKING) {
+            //System.out.println("meoooo");
             for (int i = 0; i < onCount; i++) {
                 float x = getProgressX() + i * (black.getRegionWidth() + 1);
                 batch.draw(light, x, getProgressY());
@@ -232,10 +234,12 @@ public class Artisan {
     }
 
     public void advanceHourCounter() {
-        hourCounter++;
+        if (status == ArtisanStatus.WORKING) {
+            hourCounter++;
 
-        if (hourCounter >= totalHours) {
-            finish();
+            if (hourCounter >= totalHours) {
+                finish();
+            }
         }
     }
 
@@ -270,8 +274,8 @@ public class Artisan {
     }
 
     public boolean isArtisanClicked(float x, float y) {
-        float px = getProgressX();
-        float py = getProgressY();
+        float px = this.x;
+        float py = this.y;
         return x >= px && x < px + 96 && y >= py && y < py + 48;
     }
 
@@ -300,5 +304,19 @@ public class Artisan {
             repository.getCurrentGame().getCurrentPlayer().getInventory().addItem(workingProduct, 1);
             this.status = ArtisanStatus.FINISHED;
         }
+    }
+
+    public void addToInventory(Inventory inventory) {
+        inventory.addItem(workingProduct, 1);
+        this.status = ArtisanStatus.EMPTY;
+        hourCounter = 0;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 }

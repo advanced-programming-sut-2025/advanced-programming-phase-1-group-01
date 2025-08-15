@@ -1,7 +1,10 @@
 package com.stardew_valley.models.dateTime;
 
+import com.stardew_valley.models.Artisan;
 import com.stardew_valley.models.Game;
 import com.stardew_valley.models.character.NPC.NPC;
+import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 
 import java.util.List;
 
@@ -31,6 +34,11 @@ public class DateTime implements Cloneable {
     public void advanceHour() {
         hour++;
         timeManager.prepareForNewHour();
+        for (Player p: Repository.getRepo().getCurrentGame().getPlayers()) {
+            for (Artisan artisan: p.getArtisans()) {
+                artisan.advanceHourCounter();
+            }
+        }
 
         if (hour == TimeManager.DAY_END_HOUR) {
             timeManager.skipToMorning();
