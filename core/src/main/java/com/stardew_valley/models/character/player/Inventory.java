@@ -39,15 +39,16 @@ public class Inventory {
         capacity = BackpackType.SMALL.getCapacity();
         slots = new ArrayList<>();
         slots.add(new Slot(this, "trash can", 1));
+        slots.add(new Slot(this, "backpack", 1));
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "hoe", 1));
         slots.add(new Slot(this, "pickaxe", 1));
-        slots.add(new Slot(this, "backpack", 1));
     }
 
     public List<Slot> getSlots() {
         List<Slot> result = new ArrayList<>(slots);
-        result.remove(0);
+        result.removeFirst();
+        result.removeFirst();
         return result;
     }
 

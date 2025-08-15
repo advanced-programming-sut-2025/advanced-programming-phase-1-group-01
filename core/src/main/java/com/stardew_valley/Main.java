@@ -45,14 +45,7 @@ public class Main extends Game {
         batch = new SpriteBatch();
         main = this;
         user();
-        //setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
-        //setScreen(new GameMenuView(new GameMenuController(Repository.getRepo())));
-        //setScreen(new TempLogin(new Repository()));
-        //setScreen(new CookingView(new CookingController(Repository.getRepo())));
-        //setScreen(new CraftingView(new CraftingController(Repository.getRepo())));
-        setScreen(new GameView(new GameController(Repository.getRepo())));
-        //setScreen(new JojamartView(new JojaMartController(Repository.getRepo())));
-        //setScreen(new BlacksmithView(new BlackSmithController(Repository.getRepo())));
+        setScreen(new SignUpMenuView(new SignUpMenuController(Repository.getRepo())));
     }
 
     @Override

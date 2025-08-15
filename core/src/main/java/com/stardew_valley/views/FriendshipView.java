@@ -15,6 +15,7 @@ import com.stardew_valley.models.character.Character;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.relations.RelationshipService;
 
@@ -127,28 +128,10 @@ public class FriendshipView extends GameWindow {
 
         this.add(stack);
 
-        if (Repository.getRepo().getCurrentUser().getUsername().equals("1")) {
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
-        }
-
-        if (Repository.getRepo().getCurrentUser().getUsername().equals("2")) {
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
-        }
-
-        if (Repository.getRepo().getCurrentUser().getUsername().equals("3")) {
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("4").getPlayer());
-        }
-
-        if (Repository.getRepo().getCurrentUser().getUsername().equals("4")) {
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("1").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("2").getPlayer());
-            relationshipService.addFriend(Repository.getRepo().getUserByUsername("3").getPlayer());
+        for (User user : Repository.getRepo().getUsers().values()) {
+            if (!user.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
+                relationshipService.addFriend(user.getPlayer());
+            }
         }
 
         relationshipService.addFriend(Repository.getRepo().getCurrentGame().getFarm().getNPCs().get(0));
