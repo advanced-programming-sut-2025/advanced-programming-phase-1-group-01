@@ -68,6 +68,7 @@ public class Tile {
             plowedReq.y = position.y();
             plowedReq.plowed = true;
             GameClient.getInstance().sendTilePlowed(plowedReq);
+            GameClient.getInstance().sendAddAmountRequest(1f, "PLOW");
             return true;
         }
         return false;

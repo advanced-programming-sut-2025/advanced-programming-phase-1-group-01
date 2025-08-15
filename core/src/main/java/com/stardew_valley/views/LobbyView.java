@@ -103,6 +103,7 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 showPlayersDialog(skin);
+                System.out.println("I am showing online players");
             }
         });
 
@@ -161,11 +162,19 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
                 Gdx.app.postRunnable(this::updatePlayersList);
             }, 0, 2, TimeUnit.SECONDS);
         } else {
-            playersDialog.show(stage);
+        playersDialog.show(stage);
+        if (playersUpdateExecutor == null || playersUpdateExecutor.isShutdown()) {
+            playersUpdateExecutor = Executors.newSingleThreadScheduledExecutor();
+            playersUpdateExecutor.scheduleAtFixedRate(() -> {
+                Gdx.app.postRunnable(this::updatePlayersList);
+            }, 0, 2, TimeUnit.SECONDS);
         }
     }
 
+}
+
     private void updatePlayersList() {
+        System.out.println("I am updating players list");
         playersTable.clear();
 
         Map<String, String> userToLobbyMap = new LinkedHashMap<>();
@@ -490,7 +499,7 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
                     public void run() {
                         game.getForagingManager().prepareNewDayForaging();
                     }
-                }, 5);
+                }, 3);
             }
         }
         Main.getMain().setScreen(new GameView(new GameController(LobbyController.getInstance().getRepository())));

@@ -34,10 +34,12 @@ public class GameServer {
             public void received(Connection connection, Object object) {
                 try {
                     if (object instanceof Network.CreateLobbyRequest req) {
+                        System.out.println("CreateLobbyRequest");
                         handleCreateLobby(connection, req);
                     } else if (object instanceof Network.JoinLobbyRequest req) {
                         handleJoinLobby(connection, req);
                     } else if (object instanceof Network.RequestLobbyList requestLobbyList) {
+                        System.out.println("RequestLobbyList");
                         sendLobbyListToClient(connection, requestLobbyList.isForOnlinePlayersList);
                     } else if (object instanceof Network.JsonMessage msg && "userInfo".equals(msg.type)) {
                         handleUserInfo(connection, msg);
@@ -59,12 +61,6 @@ public class GameServer {
                         handleGift(req);
                     } else if (object instanceof Network.AddInventoryItem req) {
                         handleAddInventoryItem(connection, req);
-                    } else if (object instanceof Network.AddReaction req) {
-                        server.sendToAllTCP(req);
-                    } else if (object instanceof Network.StartVoting req) {
-                        server.sendToAllExceptTCP(connection.getID(), req);
-                    } else if (object instanceof Network.Vote req) {
-                        server.sendToAllExceptTCP(connection.getID(), req);
                     } else if (object instanceof Network.AddReaction req) {
                         server.sendToAllTCP(req);
                     } else if (object instanceof Network.StartVoting req) {
@@ -111,6 +107,7 @@ public class GameServer {
                         }
                     } else if (object instanceof Network.RequestRadioFiles req) {
                         Map<String, File> userFiles = radioFiles.getOrDefault(req.hostPlayer, new HashMap<>());
+                        System.out.println(radioFiles.size() + " radio files found");
                         Network.RadioFilesList response = new Network.RadioFilesList();
                         response.hostPlayer = req.hostPlayer;
                         response.fileNames = userFiles.keySet().toArray(new String[0]);
@@ -128,7 +125,7 @@ public class GameServer {
                         channelMembers.values().forEach(list -> list.remove(connection));
                         channelMembers.computeIfAbsent(req.targetUsername, k -> new ArrayList<>()).add(connection);
                     } else if (object instanceof Network.NPCPosition position) {
-                        System.out.println("333");
+                        //System.out.println("333");
                         Network.NPCPositionResponse resp = new Network.NPCPositionResponse();
                         resp.adminPlayer = position.adminPlayer;
                         resp.x = position.x;
@@ -137,7 +134,7 @@ public class GameServer {
                             if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
                                 for (int id : lobby.getPlayerConnectionIds()) {
                                     server.sendToTCP(id, resp);
-                                    System.out.println("444");
+                                    //System.out.println("444");
                                 }
                             }
                         }
@@ -198,7 +195,24 @@ public class GameServer {
                                     }
                                 }
                             }
+                        } else if (object instanceof Network.SearchLobbyRequest req) {
+                            for (Lobby lobby : lobbies.values()) {
+                                if (String.valueOf(lobby.getId()).equals(req.id)) {
+                                    Network.SearchLobbyResponse res = new Network.SearchLobbyResponse();
+                                }
+                            }
+
+                    } else if (object instanceof Network.ShareCoins req) {
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    if (id != connection.getID()) {
+                                        server.sendToTCP(id, req);
+                                    }
+                                }
+                            }
                         }
+                    }
                 } catch(Exception e){
                     System.out.println("Error handling message: " + e.getMessage());
                 }
@@ -239,6 +253,11 @@ public class GameServer {
         Lobby lobby = new Lobby(req.id, req.name, req.isPrivate, req.password, req.isVisible, connection.getID());
         lobbies.put(req.id, lobby);
         playerLobbyMap.put(connection.getID(), req.id);
+        for (Lobby lobby1 : lobbies.values()) {
+            System.out.println("lobby: " + lobby1.getName());
+            System.out.println("lobby1: " + lobby1.isVisible());
+            System.out.println("lobby1: " + lobby1.getId());
+        }
 
         scheduler.schedule(() -> {
             if (lobby.getPlayerConnectionIds().size() <= 1) {
@@ -409,7 +428,7 @@ public class GameServer {
     private void sendLobbyListToClient(Connection connection, boolean isForOnlinePlayersList) {
         List<Network.LobbyInfo> lobbyInfos = new ArrayList<>();
         for (Lobby lobby : lobbies.values()) {
-            if (!lobby.isVisible()) continue;
+            //if (!lobby.isVisible()) continue;
 
             List<String> playerJsons = lobby.getPlayerConnectionIds().stream()
                 .map(connectionUsers::get)
@@ -426,6 +445,7 @@ public class GameServer {
 
             lobbyInfos.add(info);
         }
+        System.out.println(lobbies.size());
         Network.LobbyListResponse response = new Network.LobbyListResponse();
         response.lobbies = lobbyInfos.toArray(new Network.LobbyInfo[0]);
         response.isForOnlinePlayersList = isForOnlinePlayersList;

@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class GroupQuest {
     private final GroupQuestType type;
-    private final Map<String, Integer> playerUsernames = new HashMap<>();
-    private int doneAmount = 0;
+    private final Map<String, Float> playerUsernames = new HashMap<>();
+    private float doneAmount = 0;
     private boolean isFinished = false;
     private boolean isStarted = false;
     private int hourCounter = 0;
@@ -26,7 +26,7 @@ public class GroupQuest {
 
     public void addPlayer(String username) {
         if (!playerUsernames.containsKey(username)) {
-            playerUsernames.put(username, 0);
+            playerUsernames.put(username, 0f);
         }
     }
 
@@ -34,9 +34,9 @@ public class GroupQuest {
         return playerUsernames.containsKey(username);
     }
 
-    public void addAmount(int amount, String username) {
+    public void addAmount(float amount, String username) {
         doneAmount += amount;
-        playerUsernames.put(username, playerUsernames.getOrDefault(username, 0) + amount);
+        playerUsernames.put(username, playerUsernames.getOrDefault(username, 0f) + amount);
         if (doneAmount > type.getRequiredAmount()) {
             isFinished = true;
             isStarted = false;
@@ -60,7 +60,7 @@ public class GroupQuest {
 
     public void addToGroup(String username) {
         addPlayer(username);
-        if (playerUsernames.size() > type.getGroupSize()) {
+        if (playerUsernames.size() >= type.getGroupSize()) {
             isStarted = true;
         }
     }
@@ -75,11 +75,11 @@ public class GroupQuest {
         }
     }
 
-    public Map<String, Integer> getPlayerUsernames() {
+    public Map<String, Float> getPlayerUsernames() {
         return playerUsernames;
     }
 
-    public int getDoneAmount() {
+    public float getDoneAmount() {
         return doneAmount;
     }
 

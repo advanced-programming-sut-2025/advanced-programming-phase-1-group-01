@@ -20,7 +20,7 @@ public class VotingController {
             return new Result(false, "Wrong username!");
         }
 
-        currentVoting = new Voting(username, Repository.getRepo().getUsers().size());
+        currentVoting = new Voting(username, Repository.getRepo().getCurrentGame().getPlayers().size());
         return new Result(true, "New Ban Player voting started for " + username + "!");
     }
 
@@ -29,7 +29,7 @@ public class VotingController {
             return new Result(false, "We have a active voting!");
         }
 
-        currentVoting = new Voting(Repository.getRepo().getUsers().size());
+        currentVoting = new Voting(Repository.getRepo().getCurrentGame().getPlayers().size());
         return new Result(true, "New Force Terminate voting started!");
     }
 
@@ -51,7 +51,7 @@ public class VotingController {
     }
 
     public static void forceTerminate() {
-        // TODO : implement force terminate for voting
+        System.exit(0);
         GameView.setMessage("FORCE TERMINATE!!!");
     }
 }

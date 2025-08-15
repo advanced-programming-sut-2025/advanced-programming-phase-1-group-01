@@ -368,13 +368,13 @@ public class RelationshipController extends Controller {
     }
 
     public Result flower(String username) {
-        Player currentPlayer = repo.getCurrentGame().getCurrentPlayer();
+        Player currentPlayer = repo.getCurrentUser().getPlayer();
 
         if (repo.getUserByUsername(username) == null) {
             return new Result(false, "player not found");
         }
 
-        Player friend = repo.getUserByUsername(username).getPlayer();
+        Player friend = repo.getCurrentGame().getPlayerByUsername(username);
         if (!currentPlayer.isNearTo(friend)) {
             return new Result(false, "you should be near to " + friend.getUser().getNickname());
         }

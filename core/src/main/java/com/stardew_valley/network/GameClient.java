@@ -207,7 +207,7 @@ public class GameClient {
                     for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
                         if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
                             lobbyData.isThatOne = true;
-                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addToGroup(resp.username));
+                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equalsIgnoreCase(resp.questName)).findFirst().ifPresent(quest -> quest.addToGroup(resp.username));
                         }
                     }
                 } else if (object instanceof Network.ResponseAddAmount resp) {
@@ -220,12 +220,13 @@ public class GameClient {
                     handleChunk(chunk);
                     System.out.println("dfsj");
                 } else if (object instanceof Network.RadioFilesList list) {
+                    System.out.println("list");
                     Repository.getRepo().getCurrentUser().setFilesList(list.fileNames);
                 } else if (object instanceof Network.NPCPositionResponse resp) {
-                    System.out.println("222");
+                    //System.out.println("222");
                     for (NPC npc : Repository.getRepo().getCurrentGame().getFarm().getNPCs()) {
                         if (npc.getType().name().equalsIgnoreCase(resp.adminPlayer)) {
-                            System.out.println("111");
+                            //System.out.println("111");
                             npc.setHasWalk(resp.x, resp.y);
                             break;
                         }
@@ -290,6 +291,18 @@ public class GameClient {
                     Player player = repo.getCurrentUser().getPlayer();
                     player.setRelatedUser(player.getUser());
                     player.setResponse(req.success);
+                } else if (object instanceof Network.ShareCoins res) {
+                    for (Player p : Repository.getRepo().getCurrentGame().getPlayers()) {
+                        if (p.getUser().getUsername().equalsIgnoreCase(res.name)) {
+                            if (res.type.equalsIgnoreCase("coin")) {
+                                p.setNumOfCoinsC(res.amount);
+                            } else if (res.type.equalsIgnoreCase("quest")) {
+                                p.setNumOfAbilityC(res.amount);
+                            } else if (res.type.equalsIgnoreCase("ability")) {
+                                p.setNumOfAbilityC(res.amount);
+                            }
+                        }
+                    }
                 }
 
             }
@@ -506,6 +519,7 @@ public class GameClient {
         req.text = text;
         req.reactionNum = reactionNum;
         pClient.sendTCP(req);
+        sendAddAmountRequest(1f, "REACT");
     }
 
     public void sendStartGroupQuest(int lobbyId, String questType) {
@@ -532,7 +546,7 @@ public class GameClient {
         }
     }
 
-    public void sendAddAmountRequest(int amount, String questName) {
+    public void sendAddAmountRequest(float amount, String questName) {
         int lobbyId = -1;
         for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
             if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
@@ -692,5 +706,19 @@ public class GameClient {
             marriage.success = response;
             pClient.sendTCP(marriage);
         }
+    }
+
+    public void searchLobbyById(String id) {
+        Network.SearchLobbyRequest req = new Network.SearchLobbyRequest();
+        req.id = id;
+        pClient.sendTCP(req);
+    }
+
+    public void sendCoinForShare(int amount, String type) {
+        Network.ShareCoins req = new Network.ShareCoins();
+        req.amount = amount;
+        req.name = repo.getCurrentUser().getUsername();
+        req.type = type;
+        pClient.sendTCP(req);
     }
 }

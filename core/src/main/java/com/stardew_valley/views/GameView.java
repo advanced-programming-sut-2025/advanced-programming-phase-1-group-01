@@ -945,7 +945,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (friendship.getLevel() < 2) {
             showMessage("you don't have enough level!");
-            return;
+            //return;
         }
 
         DateTime currentTime = controller.getRepo().getCurrentGame().getTimeManager().getNow();
@@ -1437,6 +1437,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         double consumeAmount = 1.0 / 96.0;
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             float nextX = player.getX() + speed * delta * buff;
+            GameClient.getInstance().sendAddAmountRequest(speed * delta * buff, "WALKING");
             if (canMoveTo(nextX, player.getY())) {
                 player.setX(nextX);
                 player.setDirection(Direction.RIGHT);
@@ -1447,6 +1448,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             float nextX = player.getX() - speed * delta * buff;
+            GameClient.getInstance().sendAddAmountRequest(speed * delta * buff, "WALKING");
             if (canMoveTo(nextX, player.getY())) {
                 player.setX(nextX);
                 player.setDirection(Direction.LEFT);
@@ -1457,6 +1459,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             float nextY = player.getY() + speed * delta * buff;
+            GameClient.getInstance().sendAddAmountRequest(speed * delta * buff, "WALKING");
             if (canMoveTo(player.getX(), nextY)) {
                 player.setY(nextY);
                 player.setDirection(Direction.UP);
@@ -1467,6 +1470,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             float nextY = player.getY() - speed * delta * buff;
+            GameClient.getInstance().sendAddAmountRequest(speed * delta * buff, "WALKING");
             if (canMoveTo(player.getX(), nextY)) {
                 player.setY(nextY);
                 player.setDirection(Direction.DOWN);
@@ -2515,8 +2519,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         switch (selected) {
             case "Coins" -> sortedPlayers.sort(Comparator.comparingInt(Player::getNumOfCoins).reversed());
-            case "Missions" -> sortedPlayers.sort(Comparator.comparingInt(Player::getTotalNumOfQuests));
-            case "Skills" -> sortedPlayers.sort(Comparator.comparingInt(Player::getTotalNumOfLevels));
+            case "Missions" -> sortedPlayers.sort(Comparator.comparingInt(Player::getQuestDone));
+            case "Skills" -> sortedPlayers.sort(Comparator.comparingInt(Player::getNumOfAbility));
         }
 
         int rank = 1;
@@ -2557,7 +2561,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         viewActiveQuestsBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                showActiveGroupQuestsDialog();
                 dialog.hide();
             }
         });
@@ -2612,6 +2616,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         changeChannelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                GameClient.getInstance().requestRadioFiles(Repository.getRepo().getCurrentUser().getUsername());
                 showRadioFilesDialog(Repository.getRepo().getCurrentUser().getFilesList());
                 dialog.hide();
             }
@@ -2787,7 +2792,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
                     float totalDuration = type.getDuration();
                     float doneHours = quest.getHourCounter();
-                    float totalDoneRatio = doneHours / totalDuration;
+                    float totalDoneRatio = quest.getDoneAmount() / type.getRequiredAmount();
 
                     Label descLabel = new Label(type.getDescription(), skin);
                     Label progressLabel = new Label(String.format("Progress: %.1f%% (%d / %d hours)",
@@ -2850,16 +2855,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         content.add(new Label("Select a file to play:", skin)).row();
 
         Table filesTable = new Table();
-        for (String fileName : fileNames) {
-            TextButton fileBtn = new TextButton(fileName, skin);
-            fileBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    GameClient.getInstance().setFileForHost(Repository.getRepo().getCurrentUser().getUsername(), fileName);
-                    dialog.hide();
-                }
-            });
-            filesTable.add(fileBtn).pad(5).fillX().row();
+        if (fileNames != null) {
+            for (String fileName : fileNames) {
+                TextButton fileBtn = new TextButton(fileName, skin);
+                fileBtn.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        GameClient.getInstance().setFileForHost(Repository.getRepo().getCurrentUser().getUsername(), fileName);
+                        dialog.hide();
+                    }
+                });
+                filesTable.add(fileBtn).pad(5).fillX().row();
+            }
         }
 
         ScrollPane scrollPane = new ScrollPane(filesTable, skin);

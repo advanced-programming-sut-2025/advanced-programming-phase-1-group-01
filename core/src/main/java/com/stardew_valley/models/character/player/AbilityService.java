@@ -7,6 +7,8 @@ package com.stardew_valley.models.character.player;
 
 import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
+import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.network.GameClient;
 
 public class AbilityService {
     private final Player player;
@@ -40,6 +42,7 @@ public class AbilityService {
     }
 
     public void recipe(int newLevel, AbilityType abilityType) {
+        Repository.getRepo().getCurrentUser().getPlayer().setNumOfAbility(farming.getLevel() + mining.getLevel() + fishing.getLevel() + foraging.getLevel());
         switch (abilityType) {
             case FARMING:
                 if (newLevel == 1) {

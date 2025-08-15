@@ -198,7 +198,8 @@ public class LobbyController {
     }
 
     public LobbyData searchLobbyById(String id) {
-        for (LobbyData lobby : lobbies) {
+        for (LobbyData lobby : getLobbies()) {
+            System.out.println(lobby.getId());
             if (String.valueOf(lobby.getId()).equals(id)) {
                 return lobby;
             }

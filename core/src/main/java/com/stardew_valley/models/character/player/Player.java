@@ -64,6 +64,8 @@ public class Player extends Character {
     private int id;
     private String mapJson;
     private ReactionUI reaction;
+    private int questDone = 0;
+    private int numOfAbility = 0;
 
     List<Animal> animals;
 
@@ -154,9 +156,19 @@ public class Player extends Character {
             partner.setNumOfCoins(numOfCoins);
             syncingCoins = false;
         }
-
+        GameClient.getInstance().sendCoinForShare(numOfCoins, "coin");
+        GameClient.getInstance().sendAddAmountRequest(numOfCoins, "MONEY");
         this.numOfCoins = numOfCoins;
     }
+
+    public void setNumOfCoinsC(int numOfCoins) {
+        this.numOfCoins = numOfCoins;
+    }
+
+    public void setQuestDone(int questDone) {
+        this.questDone = questDone;
+    }
+
 
     public void increaseCoins(int amount) {
         setNumOfCoins(this.numOfCoins + amount);
@@ -953,6 +965,7 @@ public class Player extends Character {
     }
 
     public void addArtisan(Artisan artisan) {
+        GameClient.getInstance().sendAddAmountRequest(1f, "CRAFT");
         artisans.add(artisan);
     }
 
@@ -1152,5 +1165,27 @@ public class Player extends Character {
             getAbilityService().getMining().getLevel() +
             getAbilityService().getFishing().getLevel() +
             getAbilityService().getForaging().getLevel();
+    }
+
+    public void advanceQuestDone() {
+        questDone++;
+        GameClient.getInstance().sendCoinForShare(questDone, "quest");
+    }
+
+    public int getQuestDone() {
+        return questDone;
+    }
+
+    public int getNumOfAbility() {
+        return numOfAbility;
+    }
+
+    public void setNumOfAbilityC(int numOfAbility) {
+        this.numOfAbility = numOfAbility;
+    }
+
+    public void setNumOfAbility(int numOfAbility) {
+        GameClient.getInstance().sendCoinForShare(numOfCoins, "ability");
+        this.numOfAbility = numOfAbility;
     }
 }

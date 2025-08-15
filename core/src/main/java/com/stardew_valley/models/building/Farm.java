@@ -7,6 +7,7 @@ import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.initializer.CreateShelter;
 import com.stardew_valley.models.farming.Plant;
+import com.stardew_valley.network.GameClient;
 
 
 import java.util.*;
@@ -74,6 +75,7 @@ public class Farm extends Maps {
 
     public void addAnimal(Animal animal) {
         animals.add(animal);
+        GameClient.getInstance().sendAddAmountRequest(1f, "ANIMAL");
     }
 
     public void addShelter(AnimalHouse shelter) {

@@ -68,6 +68,7 @@ public class Network {
 
         kryo.register(SetTileMovableRequest.class);
         kryo.register(SetTileMovableResponse.class);
+        kryo.register(SearchLobbyRequest.class);
 
 
         kryo.register(TradeRequest.class);
@@ -75,6 +76,7 @@ public class Network {
         kryo.register(HugEvent.class);
         kryo.register(MarriageEvent.class);
         kryo.register(ResponseMarriageEvent.class);
+        kryo.register(ShareCoins.class);
     }
 
     public static class JsonMessage {
@@ -262,14 +264,14 @@ public class Network {
 
     public static class RequestAddAmount {
         public int lobbyId;
-        public int amount;
+        public float amount;
         public String questName;
         public String username;
     }
 
     public static class ResponseAddAmount {
         public String questName;
-        public int amount;
+        public float amount;
         public String username;
     }
 
@@ -396,6 +398,19 @@ public class Network {
         public int y;
     }
 
+    public static class SearchLobbyRequest {
+        public String id;
+    }
+
+    public static class SearchLobbyResponse {
+
+    }
+
+    public static class ShareCoins {
+        public int amount;
+        public String name;
+        public String type;
+    }
 
 }
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.stardew_valley.models.AI.AIChat;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.Position;
+import com.stardew_valley.models.ReactionUI;
 import com.stardew_valley.models.building.Building;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
@@ -16,6 +17,7 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.weather.Weather;
+import com.stardew_valley.network.GameClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -138,10 +140,12 @@ public class NPC extends Character {
 
     public void handleFinishingQuest() {
         if (isBeingGifted) return;
+        GameClient.getInstance().sendAddAmountRequest(1f, "QUEST");
 
         isBeingGifted = true;
         giftingStateTime = 0f;
         giftingOffset = 0f;
+        Repository.getRepo().getCurrentUser().getPlayer().advanceQuestDone();
     }
 
 
@@ -369,7 +373,7 @@ public class NPC extends Character {
         } else {
             isMoving = false;
             hasWalk = false;
-            System.out.println("555");
+            //System.out.println("555");
         }
     }
 
