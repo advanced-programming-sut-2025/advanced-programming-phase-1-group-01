@@ -39,7 +39,6 @@ public class Inventory {
         capacity = BackpackType.SMALL.getCapacity();
         slots = new ArrayList<>();
         slots.add(new Slot(this, "trash can", 1));
-        slots.add(new Slot(this, "backpack", 1));
         slots.add(new Slot(this, "scythe", 1));
         slots.add(new Slot(this, "hoe", 1));
         slots.add(new Slot(this, "pickaxe", 1));
@@ -47,7 +46,6 @@ public class Inventory {
 
     public List<Slot> getSlots() {
         List<Slot> result = new ArrayList<>(slots);
-        result.removeFirst();
         result.removeFirst();
         return result;
     }
@@ -129,11 +127,8 @@ public class Inventory {
             case "watering can" -> new WateringCan(this);
 
             case "bee house" -> new BeeHouse();
-            case "cheese press" -> new CheesePress();
-            case "keg" -> new Keg();
             case "dehydrator" -> new Dehydrator();
             case "charcoal kiln" -> new CharcoalKlin();
-            case "loom" -> new Loom();
             case "mayonnaise machine" -> new MayonnaiseMachine();
             case "oil maker" -> new OilMaker();
             case "preserves jar" -> new PreservesJar();

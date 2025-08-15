@@ -33,7 +33,6 @@ public class InventoryView extends GameWindow {
 
     private GiftView giftView;
     private boolean isPickingGift;
-    private boolean isPickingArtisanItem;
 
     public InventoryView(Stage stage) {
         super("Inventory", AssetManager.getAssetManager().getSkin(), "Letter", stage);
@@ -83,8 +82,6 @@ public class InventoryView extends GameWindow {
                     setPickingGift(false);
                     setVisible(false);
                     giftView.setVisible(true);
-                } else if (isPickingArtisanItem) {
-                    // TODO : Artisan select phony
                 } else {
                     if ("equip".equals(equipSlotButton.getLabel().getText().toString())) {
                         inventory.setEquippedSlot(selectedSlot);
@@ -210,21 +207,5 @@ public class InventoryView extends GameWindow {
 
     public void setGiftView(GiftView giftView) {
         this.giftView = giftView;
-    }
-
-    public boolean isPickingArtisanItem() {
-        return isPickingArtisanItem;
-    }
-
-    public void setPickingArtisanItem(boolean pickingArtisanItem) {
-        isPickingArtisanItem = pickingArtisanItem;
-
-        if (isPickingArtisanItem) {
-            equipSlotButton.getLabel().setText("select");
-        } else {
-            equipSlotButton.getLabel().setText("equip");
-            selectedSlot = null;
-            resetLastHighlightedBackground();
-        }
     }
 }

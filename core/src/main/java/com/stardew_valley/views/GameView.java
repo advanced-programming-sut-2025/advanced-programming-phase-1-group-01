@@ -1481,12 +1481,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 if (Boolean.TRUE.equals(object)) {
                     String selected = selectBox.getSelected();
                     Slot selectedSlot = player.getInventory().getSlot(selected);
-                    if (selectedSlot == null && !"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
-                        GameView.setMessage("You don't have this item!");
-                        return;
-                    } else if (!"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
-                        selectedSlot.removeQuantity(1);
-                    }
+//                    if (selectedSlot == null && !"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
+//                        GameView.setMessage("You don't have this item!");
+//                        return;
+//                    } else if (!"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
+//                        selectedSlot.removeQuantity(1);
+//                    }
                     switch (selected) {
                         case "Barn":
                             if (!isPixelDialogVisible) {

@@ -301,7 +301,7 @@ public class Artisan {
 
     public void finish() {
         if (status == ArtisanStatus.WORKING) {
-            repository.getCurrentGame().getCurrentPlayer().getInventory().addItem(workingProduct, 1);
+            repository.getCurrentUser().getPlayer().getInventory().addItem(workingProduct, 1);
             this.status = ArtisanStatus.FINISHED;
         }
     }

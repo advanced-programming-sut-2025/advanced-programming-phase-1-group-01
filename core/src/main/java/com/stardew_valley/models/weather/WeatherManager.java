@@ -4,6 +4,7 @@ import com.stardew_valley.models.Game;
 import com.stardew_valley.models.building.Greenhouse;
 import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileObject;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.farming.Crop;
 import com.stardew_valley.models.farming.Tree;
@@ -61,7 +62,7 @@ public class WeatherManager {
             final int THORS_PER_DAY_IF_STORMY = 3;
             for (int i = 0; i < THORS_PER_DAY_IF_STORMY; i++) {
                 Tile randomTile = game.getCurrentPlayer().getFarm().getRandomTile();
-                invokeThor(randomTile);
+                if (randomTile.getType() != TileType.GREENHOUSE) invokeThor(randomTile);
             }
         }
     }
