@@ -77,7 +77,7 @@ public class FishingShopView extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (quantity <= 0) return;
-                Player player = Repository.getRepo().getCurrentGame().getCurrentPlayer();
+                Player player = Repository.getRepo().getCurrentUser().getPlayer();
                 player.setNumOfCoins(player.getNumOfCoins() - item.getPrice());
                 player.getInventory().addItem(item.getName(), quantity);
                 Repository.getRepo().getCurrentGame().getFishShop().updateProductPurchase(item);

@@ -101,7 +101,6 @@ public class GameMenuController extends Controller {
             }
 
             playerList = new ArrayList<>();
-            playerList.add(repo.getCurrentUser().getPlayer());
 
             for (String username : playerSet) {
                 playerList.add(repo.getUserByUsername(username).getPlayer());

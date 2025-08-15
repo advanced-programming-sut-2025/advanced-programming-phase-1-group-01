@@ -48,7 +48,7 @@ public class Player extends Character {
     private int halvedEnergyCounter = 0;
     private final Set<CraftingRecipe> craftingRecipes;
     private final Set<CookingRecipe> cookingRecipes;
-    private Farm partnerFarm ;
+    private Farm partnerFarm;
     private final List<CraftingDevice> craftingDevices = new ArrayList<>();
     private final List<UnripeProduct> unripeProducts = new ArrayList<>();
     private int buffDaysCounter = 0;
@@ -67,7 +67,7 @@ public class Player extends Character {
     private boolean whileFainting = false;
 
     private float globalDelta = 0f;
-    private Map<String,Integer> foods;
+    private Map<String, Integer> foods;
 
 
     public Player(User user) {
@@ -266,7 +266,7 @@ public class Player extends Character {
         int y2 = buildingPos.y() + size.getHeight();
 
         return this.position.x() >= x1 && this.position.x() <= x2 &&
-                this.position.y() >= y1 && this.position.y() <= y2;
+            this.position.y() >= y1 && this.position.y() <= y2;
     }
 
     public Set<CraftingRecipe> getCraftingRecipes() {
@@ -290,8 +290,8 @@ public class Player extends Character {
     }
 
     public void initializeRecipes() {
-        inventory.addItem("egg",5);
-        inventory.addItem("milk",5);
+        inventory.addItem("egg", 5);
+        inventory.addItem("milk", 5);
         addCookingRecipe(CookingRecipes.FRIED_EGG.toRecipe());
         addCookingRecipe(CookingRecipes.BAKED_FISH.toRecipe());
         addCookingRecipe(CookingRecipes.OMELET.toRecipe());
@@ -344,30 +344,55 @@ public class Player extends Character {
             return manager.getFaintingAnimation().getKeyFrame(faintingTime, false);
         }
 
-        switch (direction) {
-            case UP:
-                return isMoving
-                    ? manager.get_Alex_0_walking_up_animation().getKeyFrame(stateTime, true)
-                    : manager.get_Alex_0_walking_up_animation().getKeyFrame(0, true);
+        if (user.getGender() == Gender.MALE) {
+            switch (direction) {
+                case UP:
+                    return isMoving
+                        ? manager.get_Alex_0_walking_up_animation().getKeyFrame(stateTime, true)
+                        : manager.get_Alex_0_walking_up_animation().getKeyFrame(0, true);
 
-            case DOWN:
-                return isMoving
-                    ? manager.get_Alex_0_walking_down_animation().getKeyFrame(stateTime, true)
-                    : manager.get_Alex_0_walking_down_animation().getKeyFrame(0, true);
+                case DOWN:
+                    return isMoving
+                        ? manager.get_Alex_0_walking_down_animation().getKeyFrame(stateTime, true)
+                        : manager.get_Alex_0_walking_down_animation().getKeyFrame(0, true);
 
-            case LEFT:
-                return isMoving
-                    ? manager.get_Alex_0_walking_left_animation().getKeyFrame(stateTime, true)
-                    : manager.get_Alex_0_walking_left_animation().getKeyFrame(0, true);
+                case LEFT:
+                    return isMoving
+                        ? manager.get_Alex_0_walking_left_animation().getKeyFrame(stateTime, true)
+                        : manager.get_Alex_0_walking_left_animation().getKeyFrame(0, true);
 
-            case RIGHT:
-            default:
-                return isMoving
-                    ? manager.get_Alex_0_walking_right_animation().getKeyFrame(stateTime, true)
-                    : manager.get_Alex_0_walking_right_animation().getKeyFrame(0, true);
+                case RIGHT:
+                default:
+                    return isMoving
+                        ? manager.get_Alex_0_walking_right_animation().getKeyFrame(stateTime, true)
+                        : manager.get_Alex_0_walking_right_animation().getKeyFrame(0, true);
+            }
+        } else {
+            switch (direction) {
+                case UP:
+                    return isMoving
+                        ? manager.emily_0_walking_up_animation().getKeyFrame(stateTime, true)
+                        : manager.emily_0_walking_up_animation().getKeyFrame(0, true);
+
+                case DOWN:
+                    return isMoving
+                        ? manager.emily_0_walking_down_animation().getKeyFrame(stateTime, true)
+                        : manager.emily_0_walking_down_animation().getKeyFrame(0, true);
+
+                case LEFT:
+                    return isMoving
+                        ? manager.emily_0_walking_left_animation().getKeyFrame(stateTime, true)
+                        : manager.emily_0_walking_left_animation().getKeyFrame(0, true);
+
+                case RIGHT:
+                default:
+                    return isMoving
+                        ? manager.emily_0_walking_right_animation().getKeyFrame(stateTime, true)
+                        : manager.emily_0_walking_right_animation().getKeyFrame(0, true);
+
+            }
         }
     }
-
 
     public String buyAnimal(String animalType, String animalName) {
         AnimalInfo animalInfo = stringToAnimalInfo(animalType);
@@ -392,14 +417,14 @@ public class Player extends Character {
     public String getFormattedAnimals() {
         StringBuilder animals = new StringBuilder();
         int maxLength = farm.getAnimals().stream()
-                .mapToInt(animal -> animal.getAnimalName().length())
-                .max()
-                .orElse(0);
+            .mapToInt(animal -> animal.getAnimalName().length())
+            .max()
+            .orElse(0);
 
         animals.append("Animal Type, Animal Name, Has Been Petted, Is Hungry, Friendship Level:\n");
         for (Animal animal : farm.getAnimals()) {
             String formattedAnimalType = Color.YELLOW_BOLD.colorize(String.format("%-" + 8 + "s", animal.getAnimalInfo()
-                    .name().toLowerCase()));
+                .name().toLowerCase()));
             animals.append(formattedAnimalType);
             String formattedAnimalName = Color.GREEN.colorize(String.format("%-" + maxLength + "s", animal.getAnimalName()));
             animals.append(formattedAnimalName);
@@ -830,7 +855,8 @@ public class Player extends Character {
 
     public CraftingDevice isThereSuitableCraftingDevice(String CraftingDeviceName) {
         CraftingDevice craftingDevice = (CraftingDevice) inventory.getSlot(CraftingDeviceName).getItem();
-        if (craftingDevice == null || !craftingDevices.contains(craftingDevice) || isNearToDevice()) return craftingDevice;
+        if (craftingDevice == null || !craftingDevices.contains(craftingDevice) || isNearToDevice())
+            return craftingDevice;
         else return null;
     }
 
@@ -838,9 +864,9 @@ public class Player extends Character {
         int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
         for (int[] direction : directions) {
             if (position.x() + direction[0] < 0 ||
-                    position.x() + direction[0] > 74 ||
-                    position.y() + direction[1] < 0 ||
-                    position.y() + direction[1] > 74) continue;
+                position.x() + direction[0] > 74 ||
+                position.y() + direction[1] < 0 ||
+                position.y() + direction[1] > 74) continue;
             if (farm.getTiles().get(position.x() + direction[0]).get(position.y() + direction[1]).getObject() instanceof CraftingDevice) {
                 return true;
             }
@@ -862,7 +888,8 @@ public class Player extends Character {
             if (unripeProduct.getInventoryItem().getName().equals(artisanName)) {
                 if (!unripeProduct.isRipe()) return "item is not ripe";
                 item = unripeProduct.getInventoryItem();
-            };
+            }
+            ;
         }
 
         if (item == null) return "there is no item with name: " + artisanName;
@@ -957,7 +984,7 @@ public class Player extends Character {
         marriageRequests.remove(request);
     }
 
-    public Map<String,Integer> getFoods() {
+    public Map<String, Integer> getFoods() {
         return foods;
     }
 

@@ -37,7 +37,8 @@ public class DateTimeView {
             + controller.getRepo().getCurrentGame().getTimeManager().getNow().getWeekDay()
             + controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour()
             + controller.getRepo().getCurrentGame().getTimeManager().getNow().getSeason()
-            + controller.getRepo().getCurrentGame().getTimeManager().getNow().getYear();
+            + controller.getRepo().getCurrentGame().getTimeManager().getNow().getYear()
+            + controller.getRepo().getCurrentGame().getWeatherManager().getTodayWeather();
 
 
         font.draw(batch, clock, startX, startY);

@@ -21,6 +21,7 @@ public class TimeManager {
     public static final int START_DAY = 1;
     public static final WeekDay START_WEEKDAY = WeekDay.MONDAY;
     public static final int START_YEAR = 2025;
+    private boolean crowsActive = false;
 
     public TimeManager(Game game) {
         this.eventTimes = new ArrayList<>();
@@ -130,5 +131,13 @@ public class TimeManager {
         for (NPC npc : game.getNPCVillage().getNPCs()) {
             npc.resetForNewDay();
         }
+    }
+
+    public boolean getCrowsActive() {
+        return crowsActive;
+    }
+
+    public void setCrowsActive(boolean crowsActive) {
+        this.crowsActive = crowsActive;
     }
 }

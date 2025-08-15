@@ -73,9 +73,9 @@ public class SaloonView extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (quantity <= 0) return;
-                Player player = Repository.getRepo().getCurrentGame().getCurrentPlayer();
+                Player player = Repository.getRepo().getCurrentUser().getPlayer();
                 player.setNumOfCoins(player.getNumOfCoins() - item.getPrice());
-                player.getInventory().addItem(item.getName(),1);
+                player.getInventory().addItem(item.getName(), 1);
                 Repository.getRepo().getCurrentGame().getTheStardropSaloon().updateProductPurchase(item,1);
                 updateTable();
             }

@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -44,10 +41,8 @@ import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.dateTime.Season;
 import com.stardew_valley.models.character.player.Slot;
-import com.stardew_valley.models.enums.AreaType;
-import com.stardew_valley.models.enums.ArtisanStatus;
-import com.stardew_valley.models.enums.ArtisanType;
-import com.stardew_valley.models.enums.Direction;
+import com.stardew_valley.models.dateTime.TimeManager;
+import com.stardew_valley.models.enums.*;
 import com.stardew_valley.models.farming.Seed;
 import com.stardew_valley.models.farming.Tree;
 import com.stardew_valley.models.farming.TreeSource;
@@ -161,13 +156,17 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private float buff = 1f;
     private float buffTimer = 0f;
-    private float maxEnergyTimer = 0f;
-    private ShapeRenderer darknessRenderer;
 
-    private float shakeTime = 0f;
-    private float shakeDuration = 0f;
-    private float shakeIntensity = 0f;
-    private Vector3 originalCameraPos = new Vector3();
+    private static float shakeTime = 0f;
+    private static float shakeDuration = 0f;
+    private static float shakeIntensity = 0f;
+    private static Vector3 originalCameraPos = new Vector3();
+
+    private final List<Crow> crows = new ArrayList<>();
+    private final Texture crowTexture = AssetManager.getAssetManager().getCrow();
+    private float crowTime = 0f;
+    private int day;
+    private Random rand = new Random();
 
     public GameView(GameController controller) {
         stage = new Stage(new ScreenViewport());
@@ -195,9 +194,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         heartImage = new Image(AssetManager.getAssetManager().getHeart());
         backgroundImage = new Image(AssetManager.getAssetManager().getBackgroundMessage());
         messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
-        darknessRenderer = new ShapeRenderer();
         energyMessageLabel = new Label("", AssetManager.getAssetManager().getSkin());
 //        messageLabel = new Label("", AssetManager.getAssetManager().getSkin());
+        day = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getDay();
     }
 
     @Override
@@ -251,6 +250,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         updateCameraShake(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        handleCrows(delta);
+        showWateringTile();
         batch.begin();
         checkGreenHouseActivated();
         drawWorld();
@@ -266,6 +267,9 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         shippingBinView.update();
         eatFood();
 //        notificationsView.update();
+        for (Crow crow : crows) {
+            crow.draw(batch);
+        }
         batch.end();
         if (controller.getRepo().getCurrentGame().getTimeManager().getNow().getHour() >= 18) {
             drawDark(0.7f);
@@ -279,6 +283,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         stage.act(delta);
         stage.draw();
+    }
+
+    public MiniMapView getMiniMapView() {
+        return miniMapView;
     }
 
     @Override
@@ -584,7 +592,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayers() {
         for (Player p : controller.getRepo().getCurrentGame().getPlayers())
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-        //System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -623,9 +631,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
 
-
-
-
         int sebastianX = getTilePixel(FarmInitializer.getSebastianCottageStartingPointX());
         int sebastianY = getTilePixel(FarmInitializer.getSebastianCottageStartingPointY());
         batch.draw(sebastianHouseTexture, sebastianX, sebastianY);
@@ -649,7 +654,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         List<Player> players = controller.getRepo().getCurrentGame().getPlayers();
         for (int i = 0; i < players.size(); i++) {
             if (!players.get(i).isGreenHouseActivated()) {
-                 FarmInitializer.setSpecialTilesUnmovable(i);
+                FarmInitializer.setSpecialTilesUnmovable(i);
             } else {
                 FarmInitializer.setSpecialTilesMovable(i);
             }
@@ -763,12 +768,12 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawShopping() {
 
-        for (Shop shop: Shop.values()) {
+        for (Shop shop : Shop.values()) {
             Position BL = shop.getBottomLeft();
             Texture texture = shop.getTexture();
-            batch.draw(texture,getTilePixel(BL.x()),getTilePixel(BL.y()),160f,160f);
+            batch.draw(texture, getTilePixel(BL.x()), getTilePixel(BL.y()), 160f, 160f);
         }
-     }
+    }
 
     private boolean isDialogOpen = false;
 
@@ -810,6 +815,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (!foundNearby && isDialogOpen) {
             shippingBinView.setVisible(false);
+            stage.setKeyboardFocus(null);
             shippingBinView.setTouchable(Touchable.disabled);
             isDialogOpen = false;
         }
@@ -888,27 +894,27 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             return;
         }
 
-//        if (player.getGender() == Gender.FEMALE) {
-//            showMessage("you are girl and you can't request marriage");
-//            return;
-//        }
-//
-//        if (anotherPlayer.getGender() == Gender.MALE) {
-//            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
-//            return;
-//        }
-//
-//        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
-//        if (friendship.getLevel() != 3) {
-//            showMessage("you don't have enough level!");
-//            return;
-//        }
-//
-//        if (player.getInventory().getSlot("ring") == null) {
-//            showMessage("you don't have ring in your inventory");
-//            return;
-//        }
-        //send message
+        if (player.getGender() == Gender.FEMALE) {
+            showMessage("you are girl and you can't request marriage");
+            return;
+        }
+
+        if (anotherPlayer.getGender() == Gender.MALE) {
+            showMessage(anotherPlayer.getUser().getNickname() + "is a boy!");
+            return;
+        }
+
+        Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
+        if (friendship.getLevel() != 3) {
+            showMessage("you don't have enough level!");
+            return;
+        }
+
+        if (player.getInventory().getSlot("ring") == null) {
+            showMessage("you don't have ring in your inventory");
+            return;
+        }
+
         MarriageRequest request = new MarriageRequest(player.getUser());
         anotherPlayer.addMarriageRequest(request);
         showMessage("your request sent to " + anotherPlayer.getUser().getNickname());
@@ -1030,7 +1036,6 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         if (foodEnergy.getName().equals(CookingRecipes.OMELET.getName())) {
             setBuff(2.5f);
             player.getEnergy().setMaxEnergy(player.getEnergy().getMaxEnergy() + 100);
-            maxEnergyTimer = 0f;
             buffTimer = 0f;
         }
     }
@@ -1040,11 +1045,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     boolean isShown = false;
+
     public void toggleFoodMenu() {
         if (!isShown) {
             foodMenuView.setVisible(true);
-        }
-        else {
+        } else {
             foodMenuView.setVisible(false);
         }
         isShown = !isShown;
@@ -1098,7 +1103,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    public void startCameraShake(float duration, float intensity) {
+    public static void startCameraShake(float duration, float intensity, Player player) {
         shakeDuration = duration;
         shakeIntensity = intensity;
         shakeTime = 0f;
@@ -1109,15 +1114,81 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         shakeTime += delta;
         if (shakeTime < shakeDuration) {
             float currentIntensity = shakeIntensity * (1 - shakeTime / shakeDuration);
-            float offsetX = (float)((Math.random() - 0.5) * 2 * currentIntensity);
-            float offsetY = (float)((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetX = (float) ((Math.random() - 0.5) * 2 * currentIntensity);
+            float offsetY = (float) ((Math.random() - 0.5) * 2 * currentIntensity);
 
             camera.position.set(originalCameraPos.x + offsetX, originalCameraPos.y + offsetY, 0);
-        }
-        else {
+        } else {
             camera.position.set(player.getPosition().x(), player.getPosition().y(), 0);
         }
     }
+
+    private void handleCrows(float delta) {
+        int hour = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getHour();
+        List<Tile> tiles = Repository.getRepo().getCurrentGame().getForagingManager().getCrowsTiles();
+        TimeManager time = Repository.getRepo().getCurrentGame().getTimeManager();
+        if (hour == 17 && !time.getCrowsActive()) {
+         for (int i = 0; i < 70; i++) {
+                crows.add(new Crow(crowTexture));
+            }
+            time.setCrowsActive(true);
+            crowTime = 0f;
+            day = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getDay();
+            for (Tile tile : tiles) {
+                int prob = rand.nextInt(4);
+                if (prob == 0) {
+                    tile.removeObject();
+                }
+            }
+        }
+
+        if (time.getCrowsActive()) {
+            crowTime += delta;
+
+            for (Crow crow : crows) {
+                if (crowTime >= 1f) {
+                    crow.fadingOut = true;
+                }
+                crow.update(delta);
+            }
+
+            crows.removeIf(Crow::isInvisible);
+        }
+
+        if (day != Repository.getRepo().getCurrentGame().getTimeManager().getNow().getDay()) {
+            time.setCrowsActive(false);
+        }
+    }
+
+    public void showWateringTile() {
+        Tile wateredTile = Repository.getRepo().getCurrentGame().getFarmingManager().getWateringTile();
+        if (wateredTile == null) return;
+        Image dropWater = new Image(AssetManager.getAssetManager().getDropWater());
+        dropWater.setSize(16f,16f);
+        dropWater.setVisible(false);
+        stage.addActor(dropWater);
+
+        int worldX = player.getPosition().x();
+        int worldY = player.getPosition().y();
+
+        Vector3 screenPos = camera.project(new Vector3(worldX, worldY, 0));
+
+        dropWater.setPosition(screenPos.x + 40, screenPos.y + 10);
+        dropWater.getColor().a = 1f;
+        dropWater.setVisible(true);
+        dropWater.clearActions();
+
+        dropWater.addAction(Actions.sequence(
+            Actions.delay(0.2f),
+            Actions.parallel(
+                Actions.moveBy(0, -20, 1f),
+                Actions.fadeOut(2.5f)
+            ),
+            Actions.run(() -> dropWater.setVisible(false))
+        ));
+        Repository.getRepo().getCurrentGame().getFarmingManager().setWateringTile(null);
+    }
+
 
     public void printTileTypeCounts() {
         Map<TileType, Integer> tileCounts = new EnumMap<>(TileType.class);
@@ -1189,10 +1260,13 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         switch (Repository.getRepo().getCurrentGame().getTimeManager().getNow().getSeason()) {
             case WINTER:
                 batch.draw(winterBackground, 0, 0);
+                break;
             case SUMMER:
                 batch.draw(summerBackground, 0, 0);
+                break;
             case FALL:
                 batch.draw(fallBackground, 0, 0);
+                break;
             default:
                 batch.draw(springBackground, 0, 0);
         }
@@ -1205,22 +1279,14 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     }
 
     private float faintingTimer = 0f;
+
     public void handleMovement(float delta) {
         if (friendshipView.isVisible()) return;
 
         boolean moving = false;
 
-        maxEnergyTimer += delta;
-
-        if (buffTimer > 5f) {
+        if (buffTimer > 10f) {
             setBuff(1f);
-        }
-
-        if (maxEnergyTimer > 20f) {
-            player.getEnergy().setMaxEnergy(200f);
-            if (player.getEnergy().getAmount() >= 200f) {
-                player.getEnergy().setAmount(200f);
-            }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
@@ -1273,7 +1339,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         if (player.isFainting()) {
             faintingTimer += delta;
-            float FAINTING_DURATION = 3.0f;
+            float FAINTING_DURATION = 1.8f;
             if (faintingTimer >= FAINTING_DURATION) {
                 player.setFainting(false);
                 faintingTimer = 0f;
@@ -1342,7 +1408,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            startCameraShake(1f, 10f);
+            startCameraShake(1f, 10f, player);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
@@ -1386,8 +1452,8 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         SelectBox<String> selectBox = new SelectBox<>(skin);
         selectBox.setItems(
-            "A",
-            "B",
+            "Barn",
+            "Cage",
             "Bee House",
             "Charcoal Kiln",
             "Cheese Press",
@@ -1414,14 +1480,23 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             protected void result(Object object) {
                 if (Boolean.TRUE.equals(object)) {
                     String selected = selectBox.getSelected();
+                    Slot selectedSlot = player.getInventory().getSlot(selected);
+                    if (selectedSlot == null && !"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
+                        GameView.setMessage("You don't have this item!");
+                        return;
+                    } else if (!"Barn".equalsIgnoreCase(selected) && !"Cage".equalsIgnoreCase(selected)) {
+                        selectedSlot.removeQuantity(1);
+                    }
                     switch (selected) {
-                        case "A":
-                            if (!isPixelDialogVisible)
-                                togglePixelDialog(6, 7, "A");
+                        case "Barn":
+                            if (!isPixelDialogVisible) {
+                                togglePixelDialog(6, 7, "Barn");
+                            }
                             break;
-                        case "B":
-                            if (!isPixelDialogVisible)
-                                togglePixelDialog(4, 4, "B");
+                        case "Cage":
+                            if (!isPixelDialogVisible) {
+                                togglePixelDialog(4, 4, "Cage");
+                            }
                             break;
                         case "Bee House":
                         case "Charcoal Kiln":
@@ -1530,7 +1605,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         System.out.println(r + " " + c);
 
                         switch (type) {
-                            case "A":
+                            case "Barn":
                                 tile.setObject(new CageFence());
                                 tile.setMovable(false);
                                 break;
@@ -1586,10 +1661,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (type.equals("A") || type.equals("B")) {
+                if (type.equals("Barn") || type.equals("Cage")) {
                     if (isPlantableArea(row, col, height, width)) {
                         setObject(row, col, height, width, type);
-                        areas.add(new Area(row, col, height, width, type.equals("A") ? AreaType.BARN : AreaType.CAGE));
+                        areas.add(new Area(row, col, height, width, type.equals("Barn") ? AreaType.BARN : AreaType.CAGE));
                     }
                 } else {
                     createArtisan(row, col, type);
@@ -1694,6 +1769,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 public void clicked(InputEvent event, float x, float y) {
                     handleAnimalAction(action, animal);
                     System.out.println("Action performed: " + action);
+                    dialog.hide();
                 }
             });
 
@@ -1980,6 +2056,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         animal.collectProduct();
+                        Repository.getRepo().getCurrentUser().getPlayer().getInventory().addItem(product, 1);
                         label.setText(info + " | Collected");
                         getButton.setDisabled(true);
                         Repository.getRepo().getCurrentGame().getCurrentPlayer().getInventory().addItem(product, 1);
@@ -2192,6 +2269,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 //onItemSelected(selectedItem);
                 showSelectItemDialogToCraft(skin, selectedItem, artisan);
 
+//                onItemSelected(selectedItem);
                 dialog.hide();
             }
         });

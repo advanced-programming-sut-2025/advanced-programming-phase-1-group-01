@@ -30,6 +30,7 @@ public class GiftView extends GameWindow {
     private final Table sendGiftTable;
     private final Image giftImage;
     private final Label giftName;
+    private final Label quantityLabel;
     private final TextField giftQuantityField;
     private final TextButton sendButton;
     private final TextButton backButton1;
@@ -39,11 +40,21 @@ public class GiftView extends GameWindow {
     private final RelationshipController controller;
     private final InventoryView inventoryView;
 
-    // Received gifts only for Player
     private final Table receivedGiftsMainTable;
     private final ScrollPane receivedGiftsPane;
     private final Table receivedGiftsTable;
-    private final List<Table> receivedGiftRows;
+    private final java.util.List<Table> receivedGiftRows;
+    private final TextField rateField;
+    private final java.util.List<TextField> rateFields;
+    private final java.util.List<TextButton> rateButtons;
+    private final java.util.List<Label> receivedGiftDescriptions;
+    private final TextButton backButton3;
+    private java.util.List<Gift> receivedGifts;
+
+    private final ScrollPane giftHistoryPane;
+    private final Table giftHistoryTable;
+    private final Label giftHistoryLabel;
+    private final TextButton backButton2;
 
     {
         stack = new Stack();
@@ -57,6 +68,7 @@ public class GiftView extends GameWindow {
         sendGiftTable = new Table(getSkin());
         giftImage = new Image();
         giftName = new Label("", getSkin());
+        quantityLabel = new Label("Enter Quantity:", getSkin());
         giftQuantityField = new TextField("1", getSkin());
         sendButton = new TextButton("Send", getSkin());
         backButton1 = new TextButton(">", getSkin());
@@ -65,6 +77,16 @@ public class GiftView extends GameWindow {
         receivedGiftRows = new ArrayList<>();
         receivedGiftsMainTable = new Table(getSkin());
         receivedGiftsPane = new ScrollPane(receivedGiftsTable);
+        rateField = new TextField("", getSkin());
+        rateFields = new ArrayList<>();
+        rateButtons = new ArrayList<>();
+        receivedGiftDescriptions = new ArrayList<>();
+        backButton3 = new TextButton(">", getSkin());
+
+        giftHistoryTable = new Table(getSkin());
+        giftHistoryLabel = new Label("", getSkin());
+        giftHistoryPane = new ScrollPane(giftHistoryTable);
+        backButton2 = new TextButton(">", getSkin());
     }
 
     public GiftView(RelationshipController controller, Stage stage, InventoryView inventoryView) {
@@ -87,10 +109,31 @@ public class GiftView extends GameWindow {
             }
         });
 
-        exitButton.addListener(event -> {
-            setVisible(false);
-            stage.setKeyboardFocus(null);
-            return false;
+        receivedGiftsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                receivedGiftsMainTable.setVisible(true);
+                mainTable.setVisible(false);
+                giftHistoryPane.setVisible(false);
+                sendGiftTable.setVisible(false);
+            }
+        });
+
+        giftHistoryButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                giftHistoryPane.setVisible(true);
+                mainTable.setVisible(false);
+                sendGiftTable.setVisible(false);
+            }
+        });
+
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                setVisible(false);
+                stage.setKeyboardFocus(null);
+            }
         });
 
         mainTable.add(sendGiftButton).pad(10).row();
@@ -111,10 +154,12 @@ public class GiftView extends GameWindow {
         stack.add(sendGiftTable);
         sendGiftTable.setVisible(false);
 
-        backButton1.addListener(event -> {
-            mainTable.setVisible(true);
-            sendGiftTable.setVisible(false);
-            return false;
+        backButton1.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mainTable.setVisible(true);
+                sendGiftTable.setVisible(false);
+            }
         });
 
         sendButton.addListener(new ChangeListener() {
@@ -136,15 +181,56 @@ public class GiftView extends GameWindow {
                     NPC npc = (NPC) friend;
                     npc.handleGifting(giftItem);
                     GameView.setMessage("Gift sent to NPC: " + npc.getType().getName());
-                } else if (friend instanceof Player) {
-                    Player player = (Player) friend;
-                    Result result = controller.gift(player.getUser().getUsername(), giftItem.getName(), amount);
+                } else if (friend instanceof Player player) {
+                    Result result;
+                    if (giftName.getText().equalsIgnoreCase("sunflower")) {
+                        result = controller.flower(player.getUser().getUsername());
+                    } else {
+                        result = controller.gift(player.getUser().getUsername(), giftName.getText().toString(), amount);
+                    }
                     GameView.setMessage(result.message());
                 }
 
                 giftItem = null;
                 setVisible(false);
                 stage.setKeyboardFocus(null);
+            }
+        });
+
+        receivedGiftsMainTable.add(rateField).pad(5).size(100, 60).center();
+        receivedGiftsMainTable.add(backButton3).pad(5).size(90, 70).expandX().right();
+        receivedGiftsMainTable.row();
+        receivedGiftsMainTable.center();
+        receivedGiftsPane.setScrollingDisabled(true, false);
+        receivedGiftsMainTable.add(receivedGiftsPane);
+        receivedGiftsMainTable.setVisible(false);
+        stack.add(receivedGiftsMainTable);
+
+        backButton3.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mainTable.setVisible(true);
+                receivedGiftsMainTable.setVisible(false);
+                stage.setKeyboardFocus(null);
+            }
+        });
+
+        for (int i = 0; i < 200; i++) {
+            rateFields.add(new TextField("", getSkin()));
+            rateButtons.add(new TextButton("rate", getSkin()));
+        }
+
+        giftHistoryTable.add(backButton2).padLeft(700).padBottom(50).size(90, 70);
+        giftHistoryTable.row();
+        giftHistoryTable.add(giftHistoryLabel).center();
+        giftHistoryPane.setScrollingDisabled(true, false);
+        stack.add(giftHistoryPane);
+        giftHistoryPane.setVisible(false);
+        backButton2.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                mainTable.setVisible(true);
+                giftHistoryPane.setVisible(false);
             }
         });
 
@@ -176,9 +262,77 @@ public class GiftView extends GameWindow {
             giftName.setText("");
         }
 
-        if (friend != null && friend instanceof Player) {
-            String giftHistory = controller.giftHistory(((Player) friend).getUser().getUsername()).message();
-            // می‌توانید giftHistoryLabel را اضافه کنید و نمایش دهید
+        if (friend != null && friend instanceof Player player) {
+            String giftHistory;
+
+            giftHistory = controller.giftHistory(player.getUser().getUsername()).message();
+            giftHistoryLabel.setText(giftHistory);
+
+            if (receivedGiftsPane.isVisible()) {
+                getTitleLabel().setText("All Received Gifts");
+            } else {
+                getTitleLabel().setText("Gift Menu of Your Friend: " + player.getUser().getUsername());
+            }
+
+            if (receivedGiftsPane.isVisible()) {
+                receivedGifts = controller.getAllReceivedGifts();
+
+                receivedGiftsTable.clear();
+
+                receivedGiftRows.clear();
+                receivedGiftDescriptions.clear();
+
+                for (int i = 0; i < Math.min(receivedGifts.size(), 200); i++) {
+                    receivedGiftRows.add(new Table(getSkin()));
+
+                    Gift gift = receivedGifts.get(i);
+
+                    receivedGiftDescriptions.add(new Label("", getSkin()));
+//                TextField rateField = rateFields.get(i);
+//                    TextButton rateButton = rateButtons.get(i);
+
+                    rateField.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            stage.setKeyboardFocus(rateField);
+                            rateField.setCursorPosition(rateField.getText().length());
+                            rateField.getOnscreenKeyboard().show(true);
+                        }
+                    });
+
+                    receivedGiftRows.get(i).add(receivedGiftDescriptions.get(i)).pad(5);
+//                receivedGiftRows.get(i).add(rateFields.get(i)).pad(5).size(90, 70);
+                    receivedGiftRows.get(i).add(rateButtons.get(i)).pad(5).size(100, 60);
+
+//                stage.setKeyboardFocus(rateField);
+
+                    rateButtons.get(i).addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            int rate = 0;
+                            try {
+                                rate = Integer.parseInt(rateField.getText());
+                            } catch (Exception e) {
+                                GameView.setMessage("Invalid rate!");
+                                return;
+                            }
+
+                            Result result = controller.giftRate(gift.giftNumber(), rate);
+                            GameView.setMessage(result.message());
+                        }
+                    });
+
+                    receivedGiftDescriptions.get(i).setText("Sender: %s, Gift: %s, Amount: %d, Rate: %d of 5".formatted(
+                        gift.sender().getUser().getUsername(),
+                        gift.item().getName(),
+                        gift.amount(),
+                        gift.rate()));
+                    receivedGiftDescriptions.get(i).setFontScale(0.7f);
+
+                    receivedGiftsTable.add(receivedGiftRows.get(i)).pad(5);
+                    receivedGiftsTable.row();
+                }
+            }
         }
     }
 }

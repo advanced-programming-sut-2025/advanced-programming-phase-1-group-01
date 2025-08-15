@@ -5,6 +5,8 @@ import com.stardew_valley.models.Game;
 import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
+import com.stardew_valley.models.weather.Weather;
+import com.stardew_valley.views.GameView;
 
 import java.util.List;
 
@@ -38,6 +40,10 @@ public class DateTime implements Cloneable {
             for (Artisan artisan: p.getArtisans()) {
                 artisan.advanceHourCounter();
             }
+        }
+
+        if (hour == 9 && timeManager.getGame().getWeatherManager().getTodayWeather() == Weather.STORMY) {
+            GameView.startCameraShake(3f, 10f, timeManager.getGame().getCurrentPlayer());
         }
 
         if (hour == TimeManager.DAY_END_HOUR) {

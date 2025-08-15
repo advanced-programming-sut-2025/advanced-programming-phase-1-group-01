@@ -47,7 +47,6 @@ public class AssetManager {
     private final String oil_maker = "images/artisans/Oil_Maker.png";
     private final String preserves_jar = "images/artisans/Preserves_Jar.png";
 
-
     private final String chat_icon = "images/chat_16x16.png";
     private final String plus_icon = "images/plus_16x16.png";
 
@@ -804,7 +803,21 @@ public class AssetManager {
         emily_0_walking_down_3_tex
     );
 
+    public Animation<TextureRegion> emily_0_walking_right_animation() {
+        return emily_0_walking_right_animation;
+    }
 
+    public Animation<TextureRegion> emily_0_walking_left_animation() {
+        return emily_0_walking_left_animation;
+    }
+
+    public Animation<TextureRegion> emily_0_walking_up_animation() {
+        return emily_0_walking_up_animation;
+    }
+
+    public Animation<TextureRegion> emily_0_walking_down_animation() {
+        return emily_0_walking_down_animation;
+    }
 
     private final Animation<TextureRegion> sheep_up_animation = new Animation<>(0.1f,
         sheep_up_0_tex,
@@ -4968,6 +4981,16 @@ public class AssetManager {
 
     public Texture getPizza() {
         return new Texture("shopping/pizza.png");
+    }
+
+    private final Texture crow = new Texture("crow.png");
+    public Texture getCrow() {
+        return crow;
+    }
+
+    private Texture dropWater = new Texture("dropwater.png");
+    public Texture getDropWater() {
+        return dropWater;
     }
 
     public Texture getCrown() {

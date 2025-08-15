@@ -174,8 +174,6 @@ public class SkillsView extends GameWindow {
             skillsTable.add(levelXpBar).pad(10).colspan(4).fillX();
     }
 
-    private Timer.Task hideTask;
-
     private void setupAbilityTooltip(final Image abilityImage, final Ability ability, final Label hoverLabel) {
         abilityImage.addListener(new InputListener() {
             @Override
