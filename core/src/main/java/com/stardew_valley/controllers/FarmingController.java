@@ -103,7 +103,7 @@ public class FarmingController extends Controller {
 
         if (slot.getItem() instanceof Seed seed) {
             CropInfo cropInfo = CropInfo.fromSeed(seed);
-            if (!cropInfo.getSeasons().contains(currSeason) && tile.getType() != TileType.GREENHOUSE) {
+            if (cropInfo != null && !cropInfo.getSeasons().contains(currSeason) && tile.getType() != TileType.GREENHOUSE) {
                 return new Result(false, "you can't plant this crop in this season");
             }
         } else if (slot.getItem() instanceof TreeSource treeSource) {

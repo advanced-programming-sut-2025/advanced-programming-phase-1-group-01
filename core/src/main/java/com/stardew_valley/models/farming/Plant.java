@@ -66,9 +66,9 @@ public abstract class Plant implements TileObject {
     public abstract String getName();
 
     protected void incrementGrowthIfWatered() {
-//        if (isWatered) {
+        if (isWatered) {
             growthLevel++;
-//        }
+        }
     }
 
     public abstract void growFull();

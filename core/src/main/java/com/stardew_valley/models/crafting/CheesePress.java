@@ -10,7 +10,7 @@ public class CheesePress extends CraftingDevice {
 
     @Override
     public String getName() {
-        return "CheesePress";
+        return "Cheese Press";
     }
 
     @Override

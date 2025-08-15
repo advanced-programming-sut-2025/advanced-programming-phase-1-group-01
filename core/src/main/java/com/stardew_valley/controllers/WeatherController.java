@@ -3,6 +3,7 @@ package com.stardew_valley.controllers;
 import com.stardew_valley.models.Position;
 import com.stardew_valley.models.Result;
 import com.stardew_valley.models.building.Tile;
+import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.commands.WeatherCommands;
 import com.stardew_valley.models.weather.Weather;
@@ -62,7 +63,7 @@ public class WeatherController extends Controller {
     private Result handleCheatThor(Position position) {
         GameView.startCameraShake(3f, 10f, Repository.getRepo().getCurrentUser().getPlayer());
         Tile tile = repo.getCurrentGame().getCurrentPlayer().getFarm().getTile(position);
-        repo.getCurrentGame().getWeatherManager().invokeThor(tile);
+        if (tile.getType() != TileType.GREENHOUSE) repo.getCurrentGame().getWeatherManager().invokeThor(tile);
         return new Result(true, "cheat thor applied on <%d, %d> tile.".formatted(position.x(), position.y()));
     }
 

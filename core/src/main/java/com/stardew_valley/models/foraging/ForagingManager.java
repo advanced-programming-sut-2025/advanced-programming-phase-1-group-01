@@ -25,7 +25,7 @@ public class ForagingManager {
             for (Tile tile : row) {
                 if (!tile.isEmpty()) continue;
                 if (tile.isMovable() && tile.getType() == TileType.GROUND) {
-                    int prob = RANDOM.nextInt(100);
+                    int prob = RANDOM.nextInt(500);
                     if (prob == 0) {
                         Season currSeason = game.getTimeManager().getNow().getSeason();
                         if (tile.isPlowed()) {

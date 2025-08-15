@@ -94,21 +94,21 @@ public class Main extends Game {
         playerList.add(Repository.getRepo().getUserByUsername("3").getPlayer());
         playerList.add(Repository.getRepo().getUserByUsername("4").getPlayer());
 
-        com.stardew_valley.models.Game game = new com.stardew_valley.models.Game(playerList);
-        Repository.getRepo().addGame(game);
-        Repository.getRepo().setCurrentGame(game);
-        Repository.getRepo().getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));
-        Repository.getRepo().getCurrentUser().getPlayer().setPosition(PLAYER1_STARTING_POSITION);
+//        com.stardew_valley.models.Game game = new com.stardew_valley.models.Game(playerList);
+//        Repository.getRepo().addGame(game);
+//        Repository.getRepo().setCurrentGame(game);
+//        Repository.getRepo().getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));
+//        Repository.getRepo().getCurrentUser().getPlayer().setPosition(PLAYER1_STARTING_POSITION);
 
-        Farm farm = FarmInitializer.initializeFarm();
+//        Farm farm = FarmInitializer.initializeFarm();
 
-        for (Player player : playerList) {
-            player.setFarm(farm);
-            player.setCurrentMap(farm);
-            if (player.getUser().getUsername().equals("4"))
-                player.getGame().getTimeManager().prepareForNewDay();
-        }
-        farm.getTile(31, 75).setMovable(true);
-        game.getForagingManager().prepareNewDayForaging();
+//        for (Player player : playerList) {
+//            player.setFarm(farm);
+//            player.setCurrentMap(farm);
+//            if (player.getUser().getUsername().equals("4"))
+//                player.getGame().getTimeManager().prepareForNewDay();
+//        }
+//        farm.getTile(31, 75).setMovable(true);
+//        game.getForagingManager().prepareNewDayForaging();
     }
 }

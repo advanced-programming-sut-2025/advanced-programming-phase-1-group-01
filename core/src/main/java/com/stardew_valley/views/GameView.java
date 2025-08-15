@@ -592,7 +592,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayers() {
         for (Player p : controller.getRepo().getCurrentGame().getPlayers())
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-//        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
+        System.out.println((int) (player.getX() / 16) + " " + (int) (player.getY() / 16));
     }
 
     private void drawNPCs() {
@@ -841,10 +841,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
         Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
 
-        if (friendship.getLevel() < 2) {
-            showMessage("you don't have enough level!");
-            return;
-        }
+//        if (friendship.getLevel() < 2) {
+//            showMessage("you don't have enough level!");
+//            return;
+//        }
 
         DateTime currentTime = controller.getRepo().getCurrentGame().getTimeManager().getNow();
 
@@ -905,10 +905,10 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         }
 
         Friendship friendship = player.getRelationService().getFriendship(anotherPlayer);
-        if (friendship.getLevel() != 3) {
-            showMessage("you don't have enough level!");
-            return;
-        }
+//        if (friendship.getLevel() != 3) {
+//            showMessage("you don't have enough level!");
+//            return;
+//        }
 
         if (player.getInventory().getSlot("ring") == null) {
             showMessage("you don't have ring in your inventory");
@@ -949,7 +949,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                         showMessage("you married with " + request.getFrom().getNickname());
                         friendship.setLevel(4);
                         anotherPlayer.getInventory().getSlot("ring").removeQuantity(1);
-                        currentPlayer.getInventory().getSlot("ring").addQuantity(1);
+                        currentPlayer.getInventory().addItem("ring", 1);
 
                         currentPlayer.getRelationService().marry(anotherPlayer);
                         currentPlayer.updateOfMarriage(anotherPlayer);

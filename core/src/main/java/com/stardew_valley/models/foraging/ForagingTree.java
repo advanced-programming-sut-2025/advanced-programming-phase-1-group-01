@@ -1,5 +1,7 @@
 package com.stardew_valley.models.foraging;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.stardew_valley.models.Item;
 import com.stardew_valley.models.farming.TreeSource;
 
@@ -24,4 +26,8 @@ public class ForagingTree extends Foraging implements Item, TreeSource {
         return info;
     }
 
+    @Override
+    public Texture getTexture() {
+        return info.getTexture();
+    }
 }
