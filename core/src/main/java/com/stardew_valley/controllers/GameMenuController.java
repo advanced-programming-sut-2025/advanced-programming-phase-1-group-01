@@ -109,9 +109,6 @@ public class GameMenuController extends Controller {
 
         //phony
         Game game = new Game(playerList);
-        for (Player p: playerList) {
-            System.out.println(p.getUser().getUsername());
-        }
         repo.addGame(game);
         repo.setCurrentGame(game);
         repo.getCurrentGame().setNpcVillage(VillageInitializer.initializeVillage(playerList));

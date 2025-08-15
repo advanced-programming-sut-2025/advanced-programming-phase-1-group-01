@@ -7,6 +7,7 @@ import com.stardew_valley.models.building.Tile;
 import com.stardew_valley.models.building.TileType;
 import com.stardew_valley.models.character.player.Inventory;
 import com.stardew_valley.models.character.player.Player;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.farming.Plant;
 import com.stardew_valley.models.tool.enums.WateringCanType;
@@ -65,8 +66,10 @@ public class WateringCan extends Tool {
         if (tile.getObject() instanceof Plant plant && !this.isEmpty()) {
             if (!plant.isWatered()) removeWater();
             plant.water();
+            Repository.getRepo().getCurrentGame().getFarmingManager().setWateringTile(tile);
         } else if (tile.getType() == TileType.RIVER) {
             this.fillCan();
+            Repository.getRepo().getCurrentGame().getFarmingManager().setWateringTile(null);
         }
 
         double energyCost = getEffectiveEnergyCost();
