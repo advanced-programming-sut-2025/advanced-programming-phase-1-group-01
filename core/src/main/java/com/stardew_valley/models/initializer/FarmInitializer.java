@@ -154,7 +154,7 @@ public class FarmInitializer {
             int y = yOffset * thirdHeight;
             for (int x = 0; x < width; x++) {
                 tiles.get(y).set(x, new Tile.Builder()
-                    .setPosition(new Position(x, y))
+                    .setPosition(new Position(y, x))
                     .setType(TileType.FENCE) //*
                     .setMovable(true)
                     .build());
@@ -165,7 +165,7 @@ public class FarmInitializer {
             int x = xOffset * thirdWidth;
             for (int y = 0; y < height; y++) {
                 tiles.get(y).set(x, new Tile.Builder()
-                    .setPosition(new Position(x, y))
+                    .setPosition(new Position(y, x))
                     .setType(TileType.FENCE) //*
                     .setMovable(true)
                     .build());
@@ -215,7 +215,7 @@ public class FarmInitializer {
         for (int x = COTTAGE_BL.x() + additionalX - 1; x < COTTAGE_TR.x() + additionalX; x++) {
             for (int y = COTTAGE_BL.y() + additionalY; y < COTTAGE_TR.y() + additionalY - 2; y++) {
                 Tile tile = new Tile.Builder()
-                    .setPosition(new Position(x, y))
+                    .setPosition(new Position(y, x))
                     .setType(TileType.COTTAGE)
                     .setMovable(false)
                     .setBuilding(null)
@@ -230,7 +230,7 @@ public class FarmInitializer {
         for (int x = bottomLeft.x() - 1; x <= topRight.x(); x++) {
             for (int y = bottomLeft.y(); y <= topRight.y() - 2; y++) {
                 Tile tile = new Tile.Builder()
-                    .setPosition(new Position(x, y))
+                    .setPosition(new Position(y, x))
                     .setType(houseType)
                     .setMovable(false)
                     .setBuilding(null)
@@ -248,7 +248,7 @@ public class FarmInitializer {
             for (int x = bottomLeft.x() - 1; x < bottomLeft.x() + size; x++) {
                 for (int y = bottomLeft.y() - 1; y < bottomLeft.y() + size; y++) {
                     Tile tile = new Tile.Builder()
-                        .setPosition(new Position(x, y))
+                        .setPosition(new Position(y, x))
                         .setType(TileType.SHOP)
                         .setMovable(false)
                         .setBuilding(null)
@@ -471,7 +471,7 @@ public class FarmInitializer {
 
     private static void setTile(int y, int x, TileType type, boolean movable) {
         tiles.get(y).set(x, new Tile.Builder()
-            .setPosition(new Position(x, y))
+            .setPosition(new Position(y, x))
             .setType(type)
             .setMovable(movable)
             .build());
@@ -502,7 +502,7 @@ public class FarmInitializer {
                 TileType type = (isBorderX || isBorderY) ? /*TileType.FENCE*/TileType.RIVER : TileType.RIVER;
 
                 tiles.get(y).set(x, new Tile.Builder()
-                    .setPosition(new Position(x, y))
+                    .setPosition(new Position(y, x))
                     .setType(type)
                     .setMovable(/*type != TileType.FENCE*/false) //*
                     .build());
@@ -530,7 +530,7 @@ public class FarmInitializer {
 
     private static void setShippingBinTile(int x, int y) {
         tiles.get(y).set(x, new Tile.Builder()
-            .setPosition(new Position(x, y))
+            .setPosition(new Position(y, x))
             .setType(TileType.SHIPPING_BIN)
             .setMovable(false)
             .build());
@@ -662,6 +662,33 @@ public class FarmInitializer {
         }
         return null;
     }
+
+    public static int getNumberFromTileObject(TileObject obj) {
+        if (obj == null) return 0;
+
+        if (obj instanceof Seed seed) {
+            for (int i = 0; i < SeedInfo.values().length; i++) {
+                if (SeedInfo.values()[i] == seed.getInfo()) {
+                    return i + 1;
+                }
+            }
+        } else if (obj instanceof ForagingCrop crop) {
+            for (int i = 0; i < ForagingCropInfo.values().length; i++) {
+                if (ForagingCropInfo.values()[i] == crop.getInfo()) {
+                    return i + 43;
+                }
+            }
+        } else if (obj instanceof ForagingMineral mineral) {
+            for (int i = 0; i < ForagingMineralInfo.values().length; i++) {
+                if (ForagingMineralInfo.values()[i] == mineral.getInfo()) {
+                    return i + 66;
+                }
+            }
+        }
+
+        return -1;
+    }
+
 
     private static boolean validateTileData(int x, int y, int typeNum, int objectNum) {
         if (x < 0 || y < 0 || x >= 225 || y >= 225) {

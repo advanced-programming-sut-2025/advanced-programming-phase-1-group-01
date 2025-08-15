@@ -651,7 +651,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
     private void drawNPCs() {
         for (NPC npc : npcs) {
-            npc.draw(batch);
+            npc.draw(batch, globalDelta);
         }
     }
 
@@ -2757,6 +2757,20 @@ public class GameView extends ScreenAdapter implements InputProcessor {
 
 
 
+    private void sendNPCPositionAsAdmin() {
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
+                for (NPC npc : npcs) {
+                    if (!npc.isWalking()) {
+                        float targetX = 1200 + (float) (Math.random() * (2400 - 1200));
+                        float targetY = 1200 + (float) (Math.random() * (2400 - 1200));
+                        //npc.setHasWalk(targetX, targetY);
+                        GameClient.getInstance().sendNPCPosition(targetX, targetY);
+                    }
+                }
+            }
+        }
+    }
 
 
 

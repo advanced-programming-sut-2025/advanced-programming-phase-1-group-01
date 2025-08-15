@@ -452,7 +452,7 @@ public class LobbyView extends ScreenAdapter implements InputProcessor {
 
     public static void startGame(LobbyData lobby) {
         GameClient.getInstance().requestLobbyList(false);
-        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 1");
+        //System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 1");
         List<Player> playerList = LobbyController.getInstance().findLobbyById(lobby.getId()).getPlayersReadyToPlay();
         String currentUsername = Repository.getRepo().getCurrentUser().getUsername();
 

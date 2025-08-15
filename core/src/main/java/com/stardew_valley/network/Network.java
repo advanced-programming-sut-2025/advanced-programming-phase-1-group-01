@@ -57,6 +57,19 @@ public class Network {
         kryo.register(byte[].class);
         kryo.register(RequestRadioFiles.class);
         kryo.register(RadioFilesList.class);
+        kryo.register(NPCPosition.class);
+        kryo.register(NPCPositionResponse.class);
+        kryo.register(SetObjectRequest.class);
+        kryo.register(SetObjectResponse.class);
+        kryo.register(SetTileTypeRequest.class);
+        kryo.register(SetTileTypeResponse.class);
+        kryo.register(SetTilePlowedRequest.class);
+        kryo.register(SetTilePlowedResponse.class);
+
+        kryo.register(SetTileMovableRequest.class);
+        kryo.register(SetTileMovableResponse.class);
+
+
     }
 
     public static class JsonMessage {
@@ -294,4 +307,66 @@ public class Network {
         public String hostPlayer;
         public String[] fileNames;
     }
+
+    public static class NPCPosition {
+        public String adminPlayer;
+        public float x;
+        public float y;
+    }
+
+    public static class NPCPositionResponse {
+        public String adminPlayer;
+        public float x;
+        public float y;
+    }
+
+    public static class SetObjectRequest {
+        public int object;
+        public int x;
+        public int y;
+    }
+
+    public static class SetObjectResponse {
+        public int object;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileTypeRequest {
+        public int typeNum;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileTypeResponse {
+        public int typeNum;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTilePlowedRequest {
+        public boolean plowed;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTilePlowedResponse {
+        public boolean plowed;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileMovableRequest {
+        public boolean movable;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileMovableResponse {
+        public boolean movable;
+        public int x;
+        public int y;
+    }
+
+
 }

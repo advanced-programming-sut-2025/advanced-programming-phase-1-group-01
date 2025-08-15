@@ -12,6 +12,8 @@ import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.controllers.VotingController;
 import com.stardew_valley.models.GroupQuest;
 import com.stardew_valley.models.LobbyData;
+import com.stardew_valley.models.building.TileType;
+import com.stardew_valley.models.character.NPC.NPC;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.Voting;
@@ -21,6 +23,7 @@ import com.stardew_valley.models.character.player.Slot;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.models.enums.ReactionType;
+import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.relations.Gift;
 import com.stardew_valley.views.GameView;
@@ -215,7 +218,21 @@ public class GameClient {
                     System.out.println("dfsj");
                 } else if (object instanceof Network.RadioFilesList list) {
                     Repository.getRepo().getCurrentUser().setFilesList(list.fileNames);
+                } else if (object instanceof Network.NPCPositionResponse resp) {
+                    for (NPC npc : Repository.getRepo().getCurrentGame().getFarm().getNPCs()) {
+                        if (npc.getType().name().equalsIgnoreCase(resp.adminPlayer)) {
+                            npc.setHasWalk(resp.x, resp.y);
+                            break;
+                        }
+                    }
+                } else if (object instanceof Network.SetObjectResponse resp) {
+                    Repository.getRepo().getCurrentGame().getFarm().getTiles().get(resp.x).get(resp.y).setObject(FarmInitializer.getTileObjectFromNumber(resp.object));
+                } else if (object instanceof Network.SetTileTypeResponse resp) {
+                    Repository.getRepo().getCurrentGame().getFarm()
+                        .getTiles().get(resp.x).get(resp.y)
+                        .setType(TileType.values()[resp.typeNum]);
                 }
+
             }
 
             @Override
@@ -271,7 +288,7 @@ public class GameClient {
 
     public void requestLobbyList(boolean isForOnlinePlayersList) {
         Network.RequestLobbyList req = new Network.RequestLobbyList();
-        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 2");
+        //System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 2");
         req.isForOnlinePlayersList = isForOnlinePlayersList;
         pClient.sendTCP(req);
     }
@@ -547,5 +564,31 @@ public class GameClient {
         req.targetUsername = hostPlayer;
         pClient.sendTCP(req);
     }
+
+    public void sendNPCPosition(float x, float y) {
+        Network.NPCPosition position = new Network.NPCPosition();
+        position.adminPlayer = repo.getCurrentUser().getUsername();
+        position.x = x;
+        position.y = y;
+        pClient.sendTCP(position);
+    }
+
+    public void sendTileObject(Network.SetObjectRequest request) {
+        pClient.sendTCP(request);
+    }
+
+    public void sendTileType(Network.SetTileTypeRequest request) {
+        pClient.sendTCP(request);
+    }
+
+    public void sendTilePlowed(Network.SetTilePlowedRequest request) {
+        pClient.sendTCP(request);
+    }
+
+    public void sendTileMovable(Network.SetTileMovableRequest request) {
+        pClient.sendTCP(request);
+    }
+
+
 
 }

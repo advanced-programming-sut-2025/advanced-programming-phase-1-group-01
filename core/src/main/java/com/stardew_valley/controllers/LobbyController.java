@@ -40,13 +40,13 @@ public class LobbyController {
 
     public List<LobbyData> getLobbies() {
         //GameClient.getInstance().requestLobbyList(false);
-        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 5");
+        //System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 5");
         return lobbies;
     }
 
     public List<LobbyData> getLobbiesForOnlinePlayers() {
         GameClient.getInstance().requestLobbyList(true);
-        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 4");
+        //System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 4");
         return lobbiesForOnlinePlayers;
     }
 
@@ -81,7 +81,7 @@ public class LobbyController {
 
     public List<LobbyData> loadRecentLobbies() {
         GameClient.getInstance().requestLobbyList(false);
-        System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 3");
+        //System.out.println("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 3");
         return lobbies.stream()
             .filter(LobbyData::isVisible)
             .sorted(Comparator.comparingLong(LobbyData::getCreatedTime).reversed())

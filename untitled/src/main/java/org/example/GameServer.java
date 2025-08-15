@@ -106,8 +106,49 @@ public class GameServer {
                     } else if (object instanceof Network.JoinRadioRequest req) {
                         channelMembers.values().forEach(list -> list.remove(connection));
                         channelMembers.computeIfAbsent(req.targetUsername, k -> new ArrayList<>()).add(connection);
+                    } else if (object instanceof Network.NPCPosition position) {
+                        Network.NPCPositionResponse resp = new Network.NPCPositionResponse();
+                        resp.adminPlayer = position.adminPlayer;
+                        resp.x = position.x;
+                        resp.y = position.y;
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    server.sendToTCP(id, resp);
+                                }
+                            }
+                        }
+                    } else if (object instanceof Network.SetObjectRequest req) {
+                        Network.SetObjectResponse res = new Network.SetObjectResponse();
+                        res.x = req.x;
+                        res.y = req.y;
+                        res.object = req.object;
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    if (id != connection.getID()) {
+                                        server.sendToTCP(id, res);
+                                    }
+                                }
+                            }
+                        }
+                    } else if (object instanceof Network.SetTileTypeRequest req) {
+                    Network.SetTileTypeResponse res = new Network.SetTileTypeResponse();
+                    res.x = req.x;
+                    res.y = req.y;
+                    res.typeNum = req.typeNum;
+                    for (Lobby lobby : lobbies.values()) {
+                        if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                            for (int id : lobby.getPlayerConnectionIds()) {
+                                if (id != connection.getID()) {
+                                    server.sendToTCP(id, res);
+                                }
+                            }
+                        }
                     }
-                } catch (Exception e) {
+                }
+
+            } catch (Exception e) {
                     System.out.println("Error handling message: " + e.getMessage());
                 }
             }
