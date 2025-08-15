@@ -7,6 +7,7 @@ import com.stardew_valley.models.building.TileObject;
 import com.stardew_valley.models.dateTime.DateTime;
 import com.stardew_valley.models.farming.Crop;
 import com.stardew_valley.models.farming.Tree;
+import com.stardew_valley.models.foraging.ForagingCrop;
 
 import java.util.List;
 import java.util.Random;
@@ -49,6 +50,8 @@ public class WeatherManager {
         if (object instanceof Tree tree) {
             tree.burn();
         } else if (object instanceof Crop) {
+            tile.removeObject();
+        } else if (object instanceof ForagingCrop) {
             tile.removeObject();
         }
     }

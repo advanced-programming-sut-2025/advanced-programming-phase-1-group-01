@@ -106,4 +106,8 @@ public class MiniMapView extends GameWindow {
     @Override
     public void update() {
     }
+
+    public void setMiniMapVisible(boolean miniMapVisible) {
+        isMiniMapVisible = miniMapVisible;
+    }
 }

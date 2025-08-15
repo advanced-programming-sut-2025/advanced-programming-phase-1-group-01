@@ -1,5 +1,7 @@
 package com.stardew_valley.views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -133,6 +135,14 @@ public class WindowManager extends Group {
             if (!inventoryView.isPickingGift()) {
                 inventoryView.setVisible(isVisible() && currentWindow == inventoryView);
             }
+        }
+
+        MiniMapView miniMapView = (MiniMapView) windows.get("Map");
+
+        if (isVisible() && currentWindow instanceof MiniMapView) {
+            miniMapView.setMiniMapVisible(true);
+        } else if (!Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            miniMapView.setMiniMapVisible(false);
         }
     }
 }

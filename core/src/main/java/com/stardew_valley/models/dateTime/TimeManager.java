@@ -97,6 +97,7 @@ public class TimeManager {
         game.getFarmingManager().resetAllPlantsWatered();
         game.getWeatherManager().prepareNewDayWeather();
         game.getWeatherManager().getTodayWeather().applyEffect(game);
+        game.getFarmingManager().handleNightlyCrowsAttack();
 
         game.getJojaMart().resetDailyStock();
         game.getPierreGeneralStore().resetDailyStock();
