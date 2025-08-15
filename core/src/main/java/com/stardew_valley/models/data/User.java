@@ -23,6 +23,7 @@ public class User implements Serializable {
     private String avatarPath;
     private int numOfPlayedGames;
     private int highestEarnedBalance;
+    private String[] filesList;
 
     public User(String username, String password, String nickname, String email, Gender gender, SecurityQuestion securityQuestion, String securityAnswer, String avatarPath) {
         this.username = username;
@@ -168,6 +169,14 @@ public class User implements Serializable {
             ", avatarPath='" + avatarPath + '\'' +
             ", player=" + player +
             '}';
+    }
+
+    public void setFilesList(String[] filesList) {
+        this.filesList = filesList;
+    }
+
+    public String[] getFilesList() {
+        return filesList;
     }
 
 }

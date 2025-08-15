@@ -6,7 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,9 +19,14 @@ public class GameServer {
     private final Map<Integer, String> connectionUsers = new HashMap<>();
     private final Map<String, Integer> usernameToIdMap = new HashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final List<UserInfo> signedInUsers = new ArrayList<>();
+    private final Map<String, Map<String, File>> radioFiles = new HashMap<>();
+    private final Map<String, List<Connection>> channelMembers = new HashMap<>();
+    private final Map<String, Thread> sendingThreads = new HashMap<>();
+    private final UserRepository userRepository = new UserRepository();
 
     public GameServer() throws IOException {
-        server = new Server(6553600, 6553600);
+        server = new Server(65536000, 65536000);
         Network.register(server);
 
         server.addListener(new Listener() {
@@ -61,7 +66,7 @@ public class GameServer {
                     } else if (object instanceof Network.Vote req) {
                         server.sendToAllExceptTCP(connection.getID(), req);
                     } else if (object instanceof Network.AddReaction req) {
-                    server.sendToAllTCP(req);
+                        server.sendToAllTCP(req);
                     } else if (object instanceof Network.StartVoting req) {
                         server.sendToAllExceptTCP(connection.getID(), req);
                     } else if (object instanceof Network.Vote req) {
@@ -81,8 +86,120 @@ public class GameServer {
                     } else if (object instanceof Network.ResponseMarriageEvent req) {
                         int senderId = usernameToIdMap.get(req.targetUsername);
                         server.sendToTCP(senderId, req);
-                    }
-                } catch (Exception e) {
+                    } else if (object instanceof Network.RequestAddSignedInUser req) {
+                    handleAddUserToSignedInUsers(req);
+                    } else if (object instanceof Network.RequestCheckToLogin req) {
+                        System.out.println("requestCheckToLogin in server");
+                        handleCheckToLoginRequest(connection, req);
+                    } else if (object instanceof Network.CTSReaction reaction) {
+                        handleReaction(connection, reaction);
+                    } else if (object instanceof Network.RequestStartGroupQuest req) {
+                        handleStartQuest(req);
+                    } else if (object instanceof Network.RequestAddAmount req) {
+                        handleAddAmount(req);
+                    } else if (object instanceof Network.UploadAudioRequest req) {
+                        try {
+                            handleUpload(req);
+                            //sendSavedFile(req.hostPlayer, req.fileName);
+    //                            channelMembers.put(req.hostPlayer, new ArrayList<>());
+    //                            if (!channelMembers.get(req.hostPlayer).contains(connection)) {
+    //                                channelMembers.get(req.hostPlayer).add(connection);
+    //                            }
+                        } catch (IOException e) {
+                            System.out.println("Upload failed: " + e.getMessage());
+                            connection.sendTCP("Upload failed: " + req.fileName);
+                        }
+                    } else if (object instanceof Network.RequestRadioFiles req) {
+                        Map<String, File> userFiles = radioFiles.getOrDefault(req.hostPlayer, new HashMap<>());
+                        Network.RadioFilesList response = new Network.RadioFilesList();
+                        response.hostPlayer = req.hostPlayer;
+                        response.fileNames = userFiles.keySet().toArray(new String[0]);
+
+                        connection.sendTCP(response);
+                        System.out.println("Sent radio file list to client for user: " + req.hostPlayer);
+                    } else if (object instanceof Network.ChangeAudio req) {
+                        channelMembers.putIfAbsent(req.hostPlayer, new ArrayList<>());
+                        List<Connection> members = channelMembers.get(req.hostPlayer);
+                        if (!members.contains(connection)) {
+                            members.add(connection);
+                        }
+                        sendSavedFile(req.hostPlayer, req.fileName);
+                    } else if (object instanceof Network.JoinRadioRequest req) {
+                        channelMembers.values().forEach(list -> list.remove(connection));
+                        channelMembers.computeIfAbsent(req.targetUsername, k -> new ArrayList<>()).add(connection);
+                    } else if (object instanceof Network.NPCPosition position) {
+                        System.out.println("333");
+                        Network.NPCPositionResponse resp = new Network.NPCPositionResponse();
+                        resp.adminPlayer = position.adminPlayer;
+                        resp.x = position.x;
+                        resp.y = position.y;
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    server.sendToTCP(id, resp);
+                                    System.out.println("444");
+                                }
+                            }
+                        }
+                    } else if (object instanceof Network.SetObjectRequest req) {
+                        Network.SetObjectResponse res = new Network.SetObjectResponse();
+                        res.x = req.x;
+                        res.y = req.y;
+                        res.object = req.object;
+                        for (Lobby lobby : lobbies.values()) {
+                            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                for (int id : lobby.getPlayerConnectionIds()) {
+                                    if (id != connection.getID()) {
+                                        server.sendToTCP(id, res);
+                                        System.out.println("setObjectRequest in server");
+                                    }
+                                }
+                            }
+                        }
+                    } else if (object instanceof Network.SetTileTypeRequest req) {
+                            Network.SetTileTypeResponse res = new Network.SetTileTypeResponse();
+                            res.x = req.x;
+                            res.y = req.y;
+                            res.typeNum = req.typeNum;
+                            for (Lobby lobby : lobbies.values()) {
+                                if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                    for (int id : lobby.getPlayerConnectionIds()) {
+                                        if (id != connection.getID()) {
+                                            server.sendToTCP(id, res);
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (object instanceof Network.SetTileMovableRequest req) {
+                            Network.SetTileMovableResponse res = new Network.SetTileMovableResponse();
+                            res.x = req.x;
+                            res.y = req.y;
+                            res.movable = req.movable;
+                            for (Lobby lobby : lobbies.values()) {
+                                if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                    for (int id : lobby.getPlayerConnectionIds()) {
+                                        if (id != connection.getID()) {
+                                            server.sendToTCP(id, res);
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (object instanceof Network.SetTilePlowedRequest req) {
+                            Network.SetTilePlowedResponse res = new Network.SetTilePlowedResponse();
+                            res.x = req.x;
+                            res.y = req.y;
+                            res.plowed = req.plowed;
+                            for (Lobby lobby : lobbies.values()) {
+                                if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                                    for (int id : lobby.getPlayerConnectionIds()) {
+                                        if (id != connection.getID()) {
+                                            server.sendToTCP(id, res);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                } catch(Exception e){
                     System.out.println("Error handling message: " + e.getMessage());
                 }
             }
@@ -159,15 +276,26 @@ public class GameServer {
     }
 
     private void handleUserInfo(Connection connection, Network.JsonMessage msg) {
-        String user = msg.json;
-        connectionUsers.put(connection.getID(), user);
+        String userJson = msg.json;
+        connectionUsers.put(connection.getID(), userJson);
 
-        JsonObject json = JsonParser.parseString(user).getAsJsonObject();
+        JsonObject json = JsonParser.parseString(userJson).getAsJsonObject();
         String username = json.get("username").getAsString();
+        String password = json.get("password").getAsString();
+        String nickname = json.get("nickname").getAsString();
+        String email = json.get("email").getAsString();
+        String gender = json.get("gender").getAsString();
 
         usernameToIdMap.put(username, connection.getID());
+        System.out.println("User info received: " + userJson);
 
-        System.out.println("User info received: " + user);
+        if (!userRepository.checkUserExists(username)) {
+            userRepository.registerUserFull(username, password, nickname, email, gender);
+            System.out.println("User saved to database: " + username);
+        } else {
+            System.out.println("User already exists: " + username);
+        }
+        userRepository.printAllUsers();
     }
 
     private void handleGameStart(Network.GameStart gameStart) {
@@ -185,8 +313,8 @@ public class GameServer {
                 for (int id : lobby.getPlayerConnectionIds()) {
                     if (id != connection.getID()) {
                         server.sendToTCP(id, playerStatus);
-                        System.out.println("Relayed PlayerStatus from "
-                            + playerStatus.username + " to connection " + id);
+                        //System.out.println("Relayed PlayerStatus from "
+//                            + playerStatus.username + " to connection " + id);
                     }
                 }
                 break;
@@ -311,4 +439,162 @@ public class GameServer {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    private void addUserToSignedInUsers(String username, String password, String securityQuestionType, String securityQuestionAnswer) {
+        UserInfo userInfo = new UserInfo(username, password, securityQuestionType, securityQuestionAnswer);
+        if (!signedInUsers.contains(userInfo)) {
+            signedInUsers.add(userInfo);
+        }
+    }
+
+    private boolean isInSignedInUser(String username, String password) {
+        return signedInUsers.stream()
+            .anyMatch(user -> user.getUsername().equals(username) && user.getPassword().equals(password));
+    }
+
+    private void handleAddUserToSignedInUsers(Network.RequestAddSignedInUser req) {
+        String username = req.username;
+        String password = req.password;
+        String securityQuestionType = req.securityQuestionType;
+        String securityQuestionAnswer = req.securityQuestionAnswer;
+        addUserToSignedInUsers(username, password, securityQuestionType, securityQuestionAnswer);
+    }
+
+    private void handleCheckToLoginRequest(Connection connection, Network.RequestCheckToLogin req) {
+        Network.ResponseCheckToLogin resp = new Network.ResponseCheckToLogin();
+        resp.canLogin = isInSignedInUser(req.username, req.password);
+        resp.username = req.username;
+        resp.password = req.password;
+        connection.sendTCP(resp);
+    }
+
+    private void handleReaction(Connection connection, Network.CTSReaction reaction) {
+        Network.STCReaction reactionAnswer = new Network.STCReaction();
+        reactionAnswer.username = reaction.username;
+        reactionAnswer.isText = reaction.isText;
+        reactionAnswer.text = reaction.text;
+        reactionAnswer.reactionNum = reaction.reactionNum;
+        for (Lobby lobby : lobbies.values()) {
+            if (lobby.getPlayerConnectionIds().contains(connection.getID())) {
+                for (int id : lobby.getPlayerConnectionIds()) {
+                    if (id != connection.getID()) {
+                        server.sendToTCP(id, reactionAnswer);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    private void handleStartQuest(Network.RequestStartGroupQuest request) {
+        Lobby lobby = lobbies.get(request.lobbyId);
+        Network.ResponseStartGroupQuest resp = new Network.ResponseStartGroupQuest();
+        resp.questName = request.questName;
+        resp.username = request.username;
+
+        for (int id : lobby.getPlayerConnectionIds()) {
+            server.sendToTCP(id, resp);
+        }
+    }
+
+    private void handleAddAmount(Network.RequestAddAmount req) {
+        Lobby lobby = lobbies.get(req.lobbyId);
+        Network.ResponseAddAmount resp = new Network.ResponseAddAmount();
+        resp.questName = req.questName;
+        resp.amount = req.amount;
+        resp.username = req.username;
+        for (int id : lobby.getPlayerConnectionIds()) {
+            server.sendToTCP(id, resp);
+        }
+    }
+
+    private void handleUpload(Network.UploadAudioRequest req) throws IOException {
+        File hostDir = new File("radio_uploads/" + req.hostPlayer);
+        if (!hostDir.exists()) hostDir.mkdirs();
+
+        File savedFile = new File(hostDir, req.fileName);
+        try (FileOutputStream fos = new FileOutputStream(savedFile)) {
+            fos.write(req.fileData);
+        }
+
+        radioFiles.computeIfAbsent(req.hostPlayer, k -> new HashMap<>())
+            .put(req.fileName, savedFile);
+
+        System.out.println("Received file " + req.fileName + " from host " + req.hostPlayer);
+    }
+
+
+    private void sendSavedFile(String hostPlayer, String fileName) {
+        File file = radioFiles.getOrDefault(hostPlayer, new HashMap<>()).get(fileName);
+        if (file == null || !file.exists()) {
+            System.out.println("File not found for host " + hostPlayer + ": " + fileName);
+            return;
+        }
+
+        Thread previousThread = sendingThreads.get(hostPlayer);
+        if (previousThread != null && previousThread.isAlive()) {
+            previousThread.interrupt();
+            System.out.println("Stopped previous file for host " + hostPlayer);
+        }
+
+        Thread thread = new Thread(() -> {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                int sampleRate = 44100;
+                int channels = 2;
+                int bytesPerSample = 2;
+                int chunkDurationMs = 100;
+                int bytesPerChunk = (int)(sampleRate * channels * bytesPerSample * (chunkDurationMs / 1000.0));
+
+                byte[] buffer = new byte[bytesPerChunk];
+                int seq = 0;
+                long startTime = System.currentTimeMillis();
+                int read;
+
+                while ((read = fis.read(buffer)) != -1) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.println("Sending file interrupted: " + fileName + " for host " + hostPlayer);
+                        return;
+                    }
+
+                    Network.AudioChunk chunk = new Network.AudioChunk();
+                    chunk.hostPlayer = hostPlayer;
+                    chunk.seq = seq;
+                    chunk.data = Arrays.copyOf(buffer, read);
+                    chunk.isLast = (fis.available() == 0);
+                    chunk.fileName = fileName;
+
+                    broadcastChunk(hostPlayer, chunk);
+
+                    long expectedTime = startTime + (long) seq * chunkDurationMs;
+                    seq++;
+                    long now = System.currentTimeMillis();
+                    long sleepTime = expectedTime - now;
+                    if (sleepTime > 0) Thread.sleep(sleepTime);
+                }
+
+                System.out.println("Finished sending file " + fileName + " for host " + hostPlayer);
+            } catch (InterruptedException e) {
+                System.out.println("Sending file interrupted: " + fileName + " for host " + hostPlayer);
+            } catch (Exception e) {
+                System.out.println("Error sending file " + fileName + " for host " + hostPlayer);
+                System.out.println("Error: " + e);
+            }
+        });
+
+        sendingThreads.put(hostPlayer, thread);
+        thread.start();
+    }
+
+    private void broadcastChunk(String hostPlayer, Network.AudioChunk chunk) {
+        List<Connection> members = channelMembers.getOrDefault(hostPlayer, new ArrayList<>());
+        for (Connection c : members) {
+            c.sendTCP(chunk);
+        }
+    }
+
+
+
+
+
+
 }

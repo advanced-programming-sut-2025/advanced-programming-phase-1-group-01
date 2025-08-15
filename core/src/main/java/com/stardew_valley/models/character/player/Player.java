@@ -14,13 +14,14 @@ import com.stardew_valley.models.cooking.CookingRecipes;
 import com.stardew_valley.models.crafting.*;
 import com.stardew_valley.models.crafting.enums.AllCraftedProductsType;
 import com.stardew_valley.models.crafting.enums.CraftingRecipes;
+import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.enums.Color;
 import com.stardew_valley.models.enums.Direction;
 import com.stardew_valley.models.enums.Gender;
+import com.stardew_valley.models.enums.ReactionType;
 import com.stardew_valley.models.relations.RelationshipService;
 import com.stardew_valley.models.data.User;
 import com.stardew_valley.network.GameClient;
-import com.stardew_valley.views.GameView;
 
 import java.util.*;
 import java.util.List;
@@ -62,6 +63,7 @@ public class Player extends Character {
     private int artisanId = 0;
     private int id;
     private String mapJson;
+    private ReactionUI reaction;
 
     List<Animal> animals;
 
@@ -95,6 +97,7 @@ public class Player extends Character {
         cookingRecipes = new HashSet<>();
         foods = new HashMap<>();
         initializeRecipes();
+        reaction = new ReactionUI();
     }
 
     public Player(Game game, User user) {
@@ -1043,9 +1046,8 @@ public class Player extends Character {
         return stateTime;
     }
 
-    public void addReaction(Reaction reaction) {
-        GameView.setReaction(this, reaction.getReaction());
-        GameClient.getInstance().addReaction(this, reaction);
+    public void setReaction(ReactionType react) {
+        reaction.setStarted(react);
     }
 
     public boolean isHug() {
@@ -1086,10 +1088,18 @@ public class Player extends Character {
         Reaction(String reaction) {
             this.reaction = reaction;
         }
+    }
 
-        public String getReaction() {
-            return reaction;
-        }
+    public ReactionUI getReactionUI() {
+        return reaction;
+    }
+
+    private String reactionText;
+    private float reactionTextTime = 0f;
+
+    public void setReactionText(String text) {
+        this.reactionText = text;
+        this.reactionTextTime = 0f;
     }
 
     public User getTradeRequester() {
@@ -1102,5 +1112,45 @@ public class Player extends Character {
 
     public TradeProposalService getTradeProposalService() {
         return tradeProposalService;
+    }
+
+    public String getReactionText() {
+        return reactionText;
+    }
+
+    public boolean isReactionTextActive() {
+        return reactionText != null && reactionTextTime < 5f;
+    }
+
+    public void updateReactionText(float delta) {
+        if (reactionText != null) {
+            reactionTextTime += delta;
+            if (reactionTextTime >= 5f) {
+                reactionText = null;
+            }
+        }
+    }
+
+    public int getTotalNumOfQuests() {
+        final int[] count = {0};
+
+        Repository.getRepo().getCurrentGame().getFarm().getNPCs().forEach(npc -> {
+            npc.getQuests().forEach(quest -> {
+                if (quest.getOwner() != null) {
+                    if (quest.getOwner().getUser().getUsername().equals(this.getUser().getUsername())) {
+                        count[0]++;
+                    }
+                }
+            });
+        });
+
+        return count[0];
+    }
+
+    public int getTotalNumOfLevels() {
+        return getAbilityService().getFarming().getLevel() +
+            getAbilityService().getMining().getLevel() +
+            getAbilityService().getFishing().getLevel() +
+            getAbilityService().getForaging().getLevel();
     }
 }

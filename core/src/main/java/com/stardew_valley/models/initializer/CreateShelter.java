@@ -29,7 +29,7 @@ public class CreateShelter {
         for (int i = position.x(); i <= end.x(); i++) {
             for (int j = position.y(); j <= end.y(); j++) {
                 Tile tile = new Tile.Builder()
-                        .setPosition(new Position(i, j))
+                        .setPosition(new Position(j, i))
                         .setType(TileType.GREENHOUSE)
                         .setMovable(true)
                         .setBuilding(null)
@@ -43,7 +43,7 @@ public class CreateShelter {
     private static void setFenceX(int start, int end, Farm farm, int constantVar, boolean hasDoor) {
         for (int i = start; i <= end; i++) {
             Tile tile = new Tile.Builder()
-                    .setPosition(new Position(i, constantVar))
+                    .setPosition(new Position(constantVar, i))
                     .setType(TileType.FENCE)
                     .setMovable(false)
                     .setBuilding(null)

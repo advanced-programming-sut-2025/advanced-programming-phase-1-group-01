@@ -1,35 +1,54 @@
+
 package com.stardew_valley.network;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.audio.Sound;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.stardew_valley.controllers.GameMenuController;
 import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.controllers.VotingController;
+import com.stardew_valley.models.GroupQuest;
 import com.stardew_valley.models.LobbyData;
 import com.stardew_valley.models.character.player.*;
+import com.stardew_valley.models.building.TileType;
+import com.stardew_valley.models.character.NPC.NPC;
+import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.MessageEntry;
 import com.stardew_valley.models.Voting;
 import com.stardew_valley.models.character.player.Player;
 import com.stardew_valley.models.data.Repository;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.models.enums.ReactionType;
+import com.stardew_valley.models.initializer.FarmInitializer;
 import com.stardew_valley.models.relations.Friendship;
 import com.stardew_valley.models.relations.Gift;
 import com.stardew_valley.views.GameView;
 import com.stardew_valley.views.LobbyView;
+import com.stardew_valley.views.LoginMenuView;
 import com.stardew_valley.views.ReactionView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameClient {
     private final Repository repo = Repository.getRepo();
+    private LoginMenuView loginMenuView;
     private static GameClient instance;
     private final Client pClient;
     private int playerId;
+    private Map<String, ByteArrayOutputStream> channelBuffers = new HashMap<>();
+    private final Map<String, AudioDevice> channelDevices = new HashMap<>();
 
     public GameClient() {
-        pClient = new Client(6553600, 6553600);
+        pClient = new Client(65536000, 65536000);
         Network.register(pClient);
 
         pClient.addListener(new Listener() {
@@ -51,7 +70,8 @@ public class GameClient {
                     System.out.println("Create Lobby Response: " + resp.message);
                 } else if (object instanceof Network.JoinLobbyResponse resp) {
                     System.out.println("Join Lobby Response: " + resp.message);
-                    User user = Repository.fromUserInfoJson(resp.message);
+                    User user = null;
+                    user = Repository.fromUserInfoJson(resp.message);
                     Repository.getRepo().addUser(user);
                     System.out.println(LobbyController.getInstance().findLobbyById(resp.lobbyId).addUser(user));
                 } else if (object instanceof Network.LobbyListResponse resp) {
@@ -63,28 +83,33 @@ public class GameClient {
                     LobbyController.getInstance().updateLobbyListFromNetwork(resp.lobbies, resp.isForOnlinePlayersList);
                 } else if (object instanceof Network.StartGameRequest) {
                     Gdx.app.postRunnable(() -> {
-                        LobbyData lobby = LobbyData.findLobbyByUsername(
+                        LobbyData lobby = null;
+                        lobby = LobbyData.findLobbyByUsername(
                             LobbyController.getInstance().getLobbies(),
                             LobbyController.getInstance().getRepository().getCurrentUser().getUsername()
                         );
                         LobbyView.startGame(lobby);
                     });
                 } else if (object instanceof Network.PlayerStatus playerStatus) {
-                    Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(playerStatus.username);
-                    if (player != null) {
-                        if (!playerStatus.username.equals(Repository.getRepo().getCurrentUser().getUsername())) {
-                            player.setX(playerStatus.x);
-                            player.setY(playerStatus.y);
-                            player.setDirection(Player.numToDirection(playerStatus.direction));
-                            player.setStateTime(playerStatus.stateTime);
-                            player.setMoving(playerStatus.isWalking);
-                            System.out.println("set " + playerStatus.username);
-                            System.out.println("in " + Repository.getRepo().getCurrentUser().getUsername());
+                    try {
+                        Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(playerStatus.username);
+                        if (player != null) {
+                            if (!playerStatus.username.equals(Repository.getRepo().getCurrentUser().getUsername())) {
+                                player.setX(playerStatus.x);
+                                player.setY(playerStatus.y);
+                                player.setDirection(Player.numToDirection(playerStatus.direction));
+                                player.setStateTime(playerStatus.stateTime);
+                                player.setMoving(playerStatus.isWalking);
+                                //System.out.println("set " + playerStatus.username);
+                                //System.out.println("in " + Repository.getRepo().getCurrentUser().getUsername());
+                            } else {
+                                //System.out.println("that was yourself");
+                            }
                         } else {
-                            //System.out.println("that was yourself");
+                            System.out.println("Warning: player not found for username: " + playerStatus.username);
                         }
-                    } else {
-                        System.out.println("Warning: player not found for username: " + playerStatus.username);
+                    } catch (Exception ignored) {
+
                     }
                 } else if (object instanceof Network.LeaveLobbyResponse resp) {
                     System.out.println("Leave Lobby Response: " + resp.message);
@@ -154,9 +179,9 @@ public class GameClient {
                     }
                 } else if (object instanceof Network.AddReaction req) {
                     Player player = repo.getUserByUsername(req.username).getPlayer();
-                    Player.Reaction reaction = Player.Reaction.valueOf(req.reaction.toUpperCase());
-
-                    GameView.setReaction(player, reaction.getReaction());
+//                    Player.Reaction reaction = Player.Reaction.valueOf(req.reaction.toUpperCase());
+//
+//                    GameView.setReaction(player, reaction.getReaction());
                 } else if (object instanceof Network.StartVoting req) {
                     if (req.type.equals("ban player")) {
                         String username = req.votingUsername;
@@ -166,6 +191,77 @@ public class GameClient {
                     }
                 } else if (object instanceof Network.Vote req) {
                     VotingController.getCurrentVoting().vote(req.voterUsername, Voting.Vote.valueOf(req.vote));
+                } else if (object instanceof Network.ResponseCheckToLogin resp) {
+                    System.out.println("received response check to login");
+                    loginMenuView.getController().login(List.of(resp.username, resp.password, "Yes"), loginMenuView.getMessageLabel());
+                } else if (object instanceof Network.STCReaction resp) {
+                    Player player = LobbyController.getInstance().getRepository().getCurrentGame().getPlayerByUsername(resp.username);
+                    System.out.println(resp.username + " yessssssssssssss");
+                    if (resp.isText) {
+                        player.setReactionText(resp.text);
+                    } else {
+                        player.getReactionUI().setStarted(ReactionType.fromId(resp.reactionNum));
+                    }
+                } else if (object instanceof Network.ResponseStartGroupQuest resp) {
+                    System.out.println("received response start group quest");
+                    for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+                        if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                            lobbyData.isThatOne = true;
+                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addToGroup(resp.username));
+                        }
+                    }
+                } else if (object instanceof Network.ResponseAddAmount resp) {
+                    for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+                        if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                            lobbyData.getGroupQuestList().stream().filter(q -> q.getType().name().equals(resp.questName)).findFirst().ifPresent(quest -> quest.addAmount(resp.amount, resp.username));
+                        }
+                    }
+                } else if (object instanceof Network.AudioChunk chunk) {
+                    handleChunk(chunk);
+                    System.out.println("dfsj");
+                } else if (object instanceof Network.RadioFilesList list) {
+                    Repository.getRepo().getCurrentUser().setFilesList(list.fileNames);
+                } else if (object instanceof Network.NPCPositionResponse resp) {
+                    System.out.println("222");
+                    for (NPC npc : Repository.getRepo().getCurrentGame().getFarm().getNPCs()) {
+                        if (npc.getType().name().equalsIgnoreCase(resp.adminPlayer)) {
+                            System.out.println("111");
+                            npc.setHasWalk(resp.x, resp.y);
+                            break;
+                        }
+                    }
+                } else if (object instanceof Network.SetObjectResponse resp) {
+                    try {
+                        //System.out.println("set 00000000000000000000000000");
+                        Repository.getRepo().getCurrentGame().getFarm().getTiles().get(resp.x).get(resp.y).setObjectC(FarmInitializer.getTileObjectFromNumber(resp.object));
+                    } catch (Exception ignored) {
+
+                    }
+                } else if (object instanceof Network.SetTileTypeResponse resp) {
+                    try {
+                        Repository.getRepo().getCurrentGame().getFarm()
+                            .getTiles().get(resp.x).get(resp.y)
+                            .setTypeC(TileType.values()[resp.typeNum]);
+                    } catch (Exception ignored) {
+
+                    }
+                } else if (object instanceof Network.SetTileMovableResponse resp) {
+                    try {
+                        Repository.getRepo().getCurrentGame().getFarm()
+                            .getTiles().get(resp.x).get(resp.y)
+                            .setMovableC(resp.movable);
+                    } catch (Exception ignored) {
+
+                    }
+                } else if (object instanceof Network.SetTilePlowedResponse resp) {
+                    try {
+                        Repository.getRepo().getCurrentGame().getFarm()
+                            .getTiles().get(resp.x).get(resp.y)
+                            .setPlowedC(resp.plowed);
+                    } catch (Exception ignored) {
+
+                    }
+
                 } else if (object instanceof Network.TradeRequest req) {
                     Player player = repo.getCurrentUser().getPlayer();
                     User user = repo.getUserByUsername(req.senderUsername);
@@ -178,8 +274,7 @@ public class GameClient {
                         player.getTradeProposalService().acceptProposal(req.receiverUsername, req.senderUsername, num);
                         player.getTradeProposalService().setMessage("your request has been accepted");
                         player.getTradeProposalService().setMessageShown(false);
-                    }
-                    else {
+                    } else {
                         player.getTradeProposalService().rejectProposal(req.receiverUsername, req.senderUsername, num);
                         player.getTradeProposalService().setMessage("your request has been rejected");
                         player.getTradeProposalService().setMessageShown(false);
@@ -198,6 +293,7 @@ public class GameClient {
                 }
 
             }
+
 
             @Override
             public void disconnected(com.esotericsoftware.kryonet.Connection connection) {
@@ -241,6 +337,11 @@ public class GameClient {
     public static synchronized GameClient getInstance() {
         if (instance == null) {
             instance = new GameClient();
+            try {
+                instance.connect("127.0.0.1");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return instance;
     }
@@ -349,13 +450,13 @@ public class GameClient {
         pClient.sendTCP(req);
     }
 
-    public void addReaction(Player player, Player.Reaction reaction) {
-        Network.AddReaction req = new Network.AddReaction();
-        req.reaction = reaction.name();
-        req.username = player.getUser().getUsername();
-
-        pClient.sendTCP(req);
-    }
+//    public void addReaction(Player player, Player.Reaction reaction) {
+//        Network.AddReaction req = new Network.AddReaction();
+//        req.reaction = reaction.name();
+//        req.username = player.getUser().getUsername();
+//
+//        pClient.sendTCP(req);
+//    }
 
     public void startBanPlayerVoting(String username) {
         Network.StartVoting req = new Network.StartVoting();
@@ -379,6 +480,176 @@ public class GameClient {
 
         pClient.sendTCP(req);
     }
+
+    public void sendAddRequest(User user) {
+        Network.RequestAddSignedInUser req = new Network.RequestAddSignedInUser();
+        req.username = user.getUsername();
+        req.password = user.getPassword();
+        if (user.getSecurityQuestion() != null) req.securityQuestionType = user.getSecurityQuestion().name();
+        if (user.getSecurityAnswer() != null) req.securityQuestionAnswer = user.getSecurityAnswer();
+        pClient.sendTCP(req);
+    }
+
+    public void sendCheckLoginRequest(String username, String password, LoginMenuView view) {
+        System.out.println("sendCheckLoginRequest");
+        this.loginMenuView = view;
+        Network.RequestCheckToLogin req = new Network.RequestCheckToLogin();
+        req.username = username;
+        req.password = password;
+        pClient.sendTCP(req);
+    }
+
+    public void sendReactionToServer(String username, boolean isText, String text, int reactionNum) {
+        Network.CTSReaction req = new Network.CTSReaction();
+        req.username = username;
+        req.isText = isText;
+        req.text = text;
+        req.reactionNum = reactionNum;
+        pClient.sendTCP(req);
+    }
+
+    public void sendStartGroupQuest(int lobbyId, String questType) {
+        LobbyData lobby = null;
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                lobby = lobbyData;
+            }
+        }
+        if (lobby != null) {
+            int attended = 0;
+            for (GroupQuest groupQuest : lobby.getGroupQuestList()) {
+                if (groupQuest.isInList(repo.getCurrentUser().getUsername())) {
+                    attended++;
+                }
+            }
+            if (attended <= 3) {
+                Network.RequestStartGroupQuest req = new Network.RequestStartGroupQuest();
+                req.lobbyId = lobbyId;
+                req.questName = questType;
+                req.username = repo.getCurrentUser().getUsername();
+                pClient.sendTCP(req);
+            }
+        }
+    }
+
+    public void sendAddAmountRequest(int amount, String questName) {
+        int lobbyId = -1;
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getPlayers().stream().anyMatch(p -> p.getUsername().equals(Repository.getRepo().getCurrentUser().getUsername()))) {
+                lobbyId = lobbyData.getId();
+            }
+        }
+        if (lobbyId != -1) {
+            Network.RequestAddAmount req = new Network.RequestAddAmount();
+            req.lobbyId = lobbyId;
+            req.amount = amount;
+            req.questName = questName;
+            req.username = Repository.getRepo().getCurrentUser().getUsername();
+            pClient.sendTCP(req);
+        }
+    }
+
+
+    public void uploadAudioFile(String hostPlayer, String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("File not found!");
+            return;
+        }
+
+        byte[] fileData = Files.readAllBytes(file.toPath());
+
+
+        Network.UploadAudioRequest req = new Network.UploadAudioRequest();
+        req.hostPlayer = hostPlayer;
+        req.fileName = file.getName();
+        req.fileData = fileData;
+
+
+        pClient.sendTCP(req);
+
+        System.out.println("File " + file.getName() + " uploaded for host: " + hostPlayer);
+    }
+
+    public void handleChunk(Network.AudioChunk chunk) {
+        channelBuffers.putIfAbsent(chunk.hostPlayer, new ByteArrayOutputStream());
+        channelDevices.putIfAbsent(chunk.hostPlayer,
+            Gdx.audio.newAudioDevice(44100, true));
+
+        try {
+            channelBuffers.get(chunk.hostPlayer).write(chunk.data);
+
+            byte[] pcm = chunk.data;
+            short[] samples = new short[pcm.length / 2];
+            for (int i = 0; i < samples.length; i++) {
+                int lsb = pcm[i * 2] & 0xFF;
+                int msb = pcm[i * 2 + 1];
+                samples[i] = (short) ((msb << 8) | lsb);
+            }
+
+            channelDevices.get(chunk.hostPlayer).writeSamples(samples, 0, samples.length);
+
+        } catch (Exception e) {
+            System.out.println("Error handling chunk from " + chunk.hostPlayer + ": " + e.getMessage());
+            System.out.println(e.getMessage());
+        }
+
+        if (chunk.isLast) {
+            AudioDevice device = channelDevices.get(chunk.hostPlayer);
+            if (device != null) {
+                device.dispose();
+                channelDevices.remove(chunk.hostPlayer);
+            }
+            channelBuffers.remove(chunk.hostPlayer);
+        }
+
+    }
+
+    public void requestRadioFiles(String hostPlayer) {
+        Network.RequestRadioFiles req = new Network.RequestRadioFiles();
+        req.hostPlayer = hostPlayer;
+        pClient.sendTCP(req);
+    }
+
+    public void setFileForHost(String hostPlayer, String fileName) {
+        Network.ChangeAudio req = new Network.ChangeAudio();
+        req.hostPlayer = hostPlayer;
+        req.fileName = fileName;
+        pClient.sendTCP(req);
+    }
+
+    public void joinRadioRequest(String hostPlayer) {
+        Network.JoinRadioRequest req = new Network.JoinRadioRequest();
+        req.targetUsername = hostPlayer;
+        pClient.sendTCP(req);
+    }
+
+    public void sendNPCPosition(float x, float y, String npcType) {
+        Network.NPCPosition position = new Network.NPCPosition();
+        position.adminPlayer = npcType;
+        position.x = x;
+        position.y = y;
+        pClient.sendTCP(position);
+    }
+
+    public void sendTileObject(Network.SetObjectRequest request) {
+        pClient.sendTCP(request);
+    }
+
+    public void sendTileType(Network.SetTileTypeRequest request) {
+        pClient.sendTCP(request);
+    }
+
+    public void sendTilePlowed(Network.SetTilePlowedRequest request) {
+        pClient.sendTCP(request);
+    }
+
+    public void sendTileMovable(Network.SetTileMovableRequest request) {
+        pClient.sendTCP(request);
+    }
+
+
+
 
     public void sendTradeRequest(String receiverUsername) {
         Network.TradeRequest req = new Network.TradeRequest();

@@ -10,6 +10,7 @@ import com.stardew_valley.controllers.LoginMenuController;
 import com.stardew_valley.controllers.SignUpMenuController;
 import com.stardew_valley.models.AssetManager;
 import com.stardew_valley.models.data.User;
+import com.stardew_valley.network.GameClient;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -80,11 +81,11 @@ public class LoginMenuView extends View {
         login.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                List<String> data = new ArrayList();
-                data.add(username.getText());
-                data.add(password.getText());
-                data.add(stayLogin.getSelected());
-                controller.login(data,messageLabel);
+//                List<String> data = new ArrayList();
+//                data.add(username.getText());
+//                data.add(password.getText());
+//                data.add(stayLogin.getSelected());
+                GameClient.getInstance().sendCheckLoginRequest(username.getText(), password.getText(), LoginMenuView.this);
             }
         });
 
@@ -164,5 +165,13 @@ public class LoginMenuView extends View {
                 messageLabel.setText("Your password is: " + user.getPassword());
             }
         });
+    }
+
+    public LoginMenuController getController() {
+        return controller;
+    }
+
+    public Label getMessageLabel() {
+        return messageLabel;
     }
 }

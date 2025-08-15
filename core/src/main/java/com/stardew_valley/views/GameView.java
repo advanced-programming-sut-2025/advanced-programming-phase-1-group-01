@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.stardew_valley.Main;
@@ -58,6 +60,8 @@ import com.stardew_valley.models.shop.enums.Shop;
 import com.stardew_valley.models.tool.Tool;
 import com.stardew_valley.models.weather.Weather;
 import com.stardew_valley.network.GameClient;
+import com.badlogic.gdx.utils.Timer;
+
 
 import java.io.IOException;
 import java.util.*;
@@ -78,6 +82,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion mine = AssetManager.getAssetManager().getMine();
     private final TextureRegion lakeWater = AssetManager.getAssetManager().getLakeWater();
     private final TextureRegion houseTop = AssetManager.getAssetManager().getHouseTop();
+    private final BitmapFont fontText = new BitmapFont();
 
     private final TextureRegion sebastianHouseTexture = AssetManager.getAssetManager().getNpcHouse1Full();
     private final TextureRegion abigailHouseTexture = AssetManager.getAssetManager().getNpcHouse2Full();
@@ -93,6 +98,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TextureRegion abigailHouseTopTexture = AssetManager.getAssetManager().getNpcHouse2Top();
     private final TextureRegion leahHouseTopTexture = AssetManager.getAssetManager().getNpcHouse3Top();
     private final TextureRegion harveyHouseTopTexture = AssetManager.getAssetManager().getNpcHouse4Top();
+    private final Map<NPC, Long> npcNextMoveTime = new HashMap<>();
 
     private final List<NPC> npcs;
 
@@ -177,6 +183,11 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private final TradeHistory tradeHistory;
 
     public GameView(GameController controller) {
+//        try {
+//            GameClient.getInstance().uploadAudioFile("hoi", "C:\\Users\\Afra\\Downloads\\4_5767007997435842492.wav");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         stage = new Stage(new ScreenViewport());
         this.controller = controller;
         this.camera = new OrthographicCamera();
@@ -194,7 +205,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         this.inventoryView = new InventoryView(stage);
         this.socialView = new SocialView(stage);
         this.miniMapView = new MiniMapView(stage);
-        this.reactionView = new ReactionView(stage, player);
+        this.reactionView = new ReactionView(stage);
         this.votingView = new VotingView(stage);
         this.reactionsButton = new TextButton("Reactions", AssetManager.getAssetManager().getSkin());
         this.settingsView = new SettingsView(controller.getSettingsController(), stage);
@@ -416,6 +427,18 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             GameClient.getInstance().requestUsername();
             return true;
         }
+        if (i == Input.Keys.NUM_2) {
+            player.getReactionUI().setStarted(ReactionType.HI);
+            return true;
+        }
+        if (i == Input.Keys.NUM_9) {
+            showLeaderboard(stage);
+            return true;
+        }
+        if (i == Input.Keys.NUM_8) {
+            showQuestMenu();
+            return true;
+        }
         if (i == Input.Keys.V) {
             votingView.setVisible(!votingView.isVisible());
             return true;
@@ -580,7 +603,35 @@ public class GameView extends ScreenAdapter implements InputProcessor {
         drawHouseTop();
 
         drawTrees();
+
+        drawReaction();
+
+        drawReactionText();
+
     }
+
+    private void drawReaction() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
+            ReactionUI reactionUI = p.getReactionUI();
+            //if (reactionUI.isShowed()) System.out.println("################################################################");
+            reactionUI.update(globalDelta);
+            if (reactionUI.isShowed()) {
+                batch.draw(reactionUI.getTexture(), p.getX() - 2, p.getY() + 35, 20, 20);
+            }
+        }
+    }
+
+
+    private void drawReactionText() {
+        for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
+            p.updateReactionText(globalDelta);
+            if (p.isReactionTextActive()) {
+                fontText.getData().setScale(0.6f);
+                fontText.draw(batch, p.getReactionText(), p.getX() - 10, p.getY() + 55);
+            }
+        }
+    }
+
 
     private void drawEquippedTool() {
         if (player.getInventory().getEquippedSlot() == null) return;
@@ -661,14 +712,15 @@ public class GameView extends ScreenAdapter implements InputProcessor {
     private void drawPlayers() {
         for (Player p : controller.getRepo().getCurrentGame().getPlayers()) {
             batch.draw(p.getCurrentFrame(), p.getX(), p.getY());
-            if (System.currentTimeMillis() % 1000 < 5) System.out.println(p.getUser().getUsername() + " " + p.getX() + " " + p.getY());
+            //if (System.currentTimeMillis() % 1000 < 5) System.out.println(p.getUser().getUsername() + " " + p.getX() + " " + p.getY());
         }
         //System.out.println(player.getUser().getUsername());
     }
 
     private void drawNPCs() {
+        sendNPCPositionAsAdmin();
         for (NPC npc : npcs) {
-            npc.draw(batch);
+            npc.draw(batch, globalDelta);
         }
     }
 
@@ -1357,6 +1409,7 @@ public class GameView extends ScreenAdapter implements InputProcessor {
                 miniMapActor.remove();
                 miniMapActor = null;
             }
+            showRadioMenu();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
@@ -2404,6 +2457,480 @@ public class GameView extends ScreenAdapter implements InputProcessor {
             })
         ));
     }
+
+    public void showLeaderboard(Stage stage) {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        Dialog dialog = new Dialog("🏆 Leaderboard", skin);
+
+        final SelectBox<String> criteriaBox = new SelectBox<>(skin);
+        criteriaBox.setItems("Coins", "Missions", "Skills");
+
+        final Table table = new Table(skin);
+        table.align(Align.topLeft);
+        table.defaults().pad(5);
+
+        Runnable updateTable = () -> updateTable(table, criteriaBox);
+
+        criteriaBox.addListener(event -> {
+            updateTable.run();
+            return false;
+        });
+
+        dialog.getContentTable().add(new Label("Sort by: ", skin)).padRight(10);
+        dialog.getContentTable().add(criteriaBox).row();
+        dialog.getContentTable().add(table).colspan(2);
+
+        updateTable.run();
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (dialog.getStage() != null) {
+                    updateTable.run();
+                }
+            }
+        }, 1, 1);
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+
+    private void updateTable(Table table, SelectBox<String> criteriaBox) {
+        table.clear();
+        table.add("Rank").padRight(10);
+        table.add("Player").padRight(50);
+        table.add("Coins").padRight(30);
+        table.add("Missions").padRight(30);
+        table.add("Skills").padRight(30);
+        table.row();
+
+        Array<Player> sortedPlayers = new Array<>();
+        for (Player p : Repository.getRepo().getCurrentGame().getPlayers()) {
+            sortedPlayers.add(p);
+        }
+
+        String selected = criteriaBox.getSelected();
+
+        switch (selected) {
+            case "Coins" -> sortedPlayers.sort(Comparator.comparingInt(Player::getNumOfCoins).reversed());
+            case "Missions" -> sortedPlayers.sort(Comparator.comparingInt(Player::getTotalNumOfQuests));
+            case "Skills" -> sortedPlayers.sort(Comparator.comparingInt(Player::getTotalNumOfLevels));
+        }
+
+        int rank = 1;
+        for (Player p : sortedPlayers) {
+            table.add(String.valueOf(rank++)).padRight(10);
+            table.add(p.getUser().getUsername()).padRight(50);
+            table.add(String.valueOf(p.getNumOfCoins())).padRight(30);
+            table.add(p.getTotalNumOfQuests() + " Quests").padRight(30);
+            table.add(p.getAbilityService().getForaging().getLevel() + " Foraging").padRight(30);
+            table.row();
+        }
+    }
+
+
+    public void showQuestMenu() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Quest Menu", skin);
+
+        Table content = dialog.getContentTable();
+
+        content.add(new Label("Select an option:", skin)).padBottom(20).row();
+
+        TextButton startNewQuestBtn = new TextButton("Start New Quest", skin);
+        TextButton viewActiveQuestsBtn = new TextButton("View Active Quests", skin);
+
+        content.add(startNewQuestBtn).width(200).padBottom(10).row();
+        content.add(viewActiveQuestsBtn).width(200).padBottom(10).row();
+
+
+        startNewQuestBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showGroupQuestDialog();
+                dialog.hide();
+            }
+        });
+
+        viewActiveQuestsBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                dialog.hide();
+            }
+        });
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+    public void showRadioMenu() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Radio Menu", skin);
+
+        Table content = dialog.getContentTable();
+
+        content.add(new Label("Select an option:", skin)).padBottom(20).row();
+
+        TextButton uploadButton = new TextButton("Upload File", skin);
+        TextButton changeChannelButton = new TextButton("Change Channel", skin);
+        TextButton showPlayersButton = new TextButton("Show Players", skin);
+        TextButton closeButton = new TextButton("Close", skin);
+
+        content.add(uploadButton).width(200).padBottom(10).row();
+        content.add(changeChannelButton).width(200).padBottom(10).row();
+        content.add(showPlayersButton).width(200).padBottom(10).row();
+        content.add(closeButton).width(200).padBottom(10).row();
+
+        uploadButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+                    Thread thread = new Thread(() -> {
+                        try {
+                            javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+                            chooser.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
+                            chooser.setAcceptAllFileFilterUsed(false);
+                            chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("WAV files", "wav"));
+                            int result = chooser.showOpenDialog(null);
+                            if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+                                java.io.File file = chooser.getSelectedFile();
+                                String hostPlayer = Repository.getRepo().getCurrentUser().getUsername();
+                                GameClient.getInstance().uploadAudioFile(hostPlayer, file.getAbsolutePath());
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    });
+                    thread.start();
+                }
+            }
+        });
+
+        changeChannelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showRadioFilesDialog(Repository.getRepo().getCurrentUser().getFilesList());
+                dialog.hide();
+            }
+        });
+
+        showPlayersButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showPlayersDialog();
+                dialog.hide();
+            }
+        });
+
+        closeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dialog.hide();
+            }
+        });
+
+        dialog.show(stage);
+    }
+
+    public void showPlayersDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Players", skin);
+        Table content = dialog.getContentTable();
+        content.add(new Label("Players:", skin)).padBottom(20).row();
+
+        for (Player player : Repository.getRepo().getCurrentGame().getPlayers()) {
+            TextButton playerButton = new TextButton(player.getUser().getUsername(), skin);
+            playerButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    GameClient.getInstance().joinRadioRequest(player.getUser().getUsername());
+                    dialog.hide();
+                }
+            });
+            content.add(playerButton).width(200).padBottom(10).row();
+        }
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+
+
+    public void showGroupQuestDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        User currentPlayer = Repository.getRepo().getCurrentUser();
+
+        Dialog dialog = new Dialog("Available Group Quests", skin);
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(5);
+
+        List<LobbyData> lobbies = LobbyController.getInstance().getLobbies();
+
+        LobbyData currentLobby = null;
+
+        for (LobbyData lobby : lobbies) {
+            if (lobby.getPlayers().stream()
+                .anyMatch(player -> player.getUsername().equals(currentPlayer.getUsername()))) {
+                currentLobby = lobby;
+                break;
+            }
+        }
+
+        if (currentLobby == null) {
+            content.add(new Label("You are not in any lobby!", skin));
+        } else {
+            content.add(new Label("Lobby: " + currentLobby.getName(), skin))
+                .colspan(3).center().padBottom(10).row();
+
+            List<GroupQuest> quests = currentLobby.getGroupQuestList();
+
+            Table questsTable = new Table(skin);
+            questsTable.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+
+            boolean hasQuestsToStart = false;
+            for (GroupQuest quest : quests) {
+                if (!quest.isStarted()) {
+                    hasQuestsToStart = true;
+
+                    GroupQuestType type = quest.getType();
+
+                    Label descLabel = new Label(type.getDescription(), skin);
+                    Label durationLabel = new Label("Duration: " + type.getDuration() + " hours", skin);
+                    TextButton startBtn = new TextButton("Start", skin);
+
+                    Table row = new Table(skin);
+                    row.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+                    row.add(descLabel).width(300).padRight(120).padLeft(20);
+                    row.add(durationLabel).width(150).padRight(20).padLeft(20);
+                    row.add(startBtn).width(155).padRight(20).padLeft(200);
+
+                    LobbyData finalCurrentLobby = currentLobby;
+                    startBtn.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            GameClient.getInstance().sendStartGroupQuest(finalCurrentLobby.getId(), quest.getType().name());
+                            dialog.hide();
+                        }
+                    });
+
+                    questsTable.add(row).colspan(3).row();
+                }
+            }
+
+            if (!hasQuestsToStart) {
+                questsTable.add(new Label("No quests available to start.", skin))
+                    .colspan(3).center().pad(10);
+            }
+
+            ScrollPane scrollPane = new ScrollPane(questsTable, skin);
+            scrollPane.setFadeScrollBars(false);
+
+            scrollPane.setScrollingDisabled(true, false);
+
+            content.add(scrollPane).maxWidth(1000).maxHeight(600).fill().expandX().expandY().colspan(3).row();
+        }
+
+        dialog.button("Close", true);
+
+        dialog.pack();
+        dialog.setResizable(true);
+        dialog.setMovable(true);
+
+        dialog.show(stage);
+    }
+
+    public void showActiveGroupQuestsDialog() {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+
+        User currentPlayer = Repository.getRepo().getCurrentUser();
+
+        Dialog dialog = new Dialog("Active Group Quests", skin);
+
+        Table content = dialog.getContentTable();
+        content.defaults().pad(5);
+
+        List<LobbyData> lobbies = LobbyController.getInstance().getLobbies();
+
+        LobbyData currentLobby = null;
+
+        for (LobbyData lobby : lobbies) {
+            if (lobby.getPlayers().stream()
+                .anyMatch(player -> player.getUsername().equals(currentPlayer.getUsername()))) {
+                currentLobby = lobby;
+                break;
+            }
+        }
+
+        if (currentLobby == null) {
+            content.add(new Label("You are not in any lobby!", skin));
+        } else {
+            content.add(new Label("Lobby: " + currentLobby.getName(), skin))
+                .colspan(3).center().padBottom(10).row();
+
+            List<GroupQuest> quests = currentLobby.getGroupQuestList();
+
+            Table questsTable = new Table(skin);
+            questsTable.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+
+            boolean hasActiveQuests = false;
+
+            for (GroupQuest quest : quests) {
+                if (quest.isStarted()) {
+
+                    hasActiveQuests = true;
+                    GroupQuestType type = quest.getType();
+
+                    float totalDuration = type.getDuration();
+                    float doneHours = quest.getHourCounter();
+                    float totalDoneRatio = doneHours / totalDuration;
+
+                    Label descLabel = new Label(type.getDescription(), skin);
+                    Label progressLabel = new Label(String.format("Progress: %.1f%% (%d / %d hours)",
+                        totalDoneRatio * 100, (int) doneHours, (int) totalDuration), skin);
+
+                    Table playerProgressTable = new Table(skin);
+                    playerProgressTable.defaults().pad(2);
+
+
+                    for (String player : quest.getPlayerUsernames().keySet()) {
+                        float playerDone = quest.getPlayerUsernames().get(player);
+                        float playerRatio = playerDone / quest.getDoneAmount();
+
+                        Label playerLabel = new Label(player, skin);
+                        Label playerProgress = new Label(String.format("%.1f%%", playerRatio * 100), skin);
+
+                        playerProgressTable.add(playerLabel).width(150);
+                        playerProgressTable.add(playerProgress).width(80);
+                        playerProgressTable.row();
+                    }
+
+                    Table row = new Table(skin);
+                    row.defaults().padTop(2).padBottom(2).padLeft(5).padRight(5);
+
+                    row.add(descLabel).width(300).padRight(20).padLeft(20).row();
+                    row.add(progressLabel).colspan(2).padBottom(10).row();
+                    row.add(playerProgressTable).colspan(3).row();
+
+                    questsTable.add(row).colspan(3).row();
+                }
+            }
+
+            if (!hasActiveQuests) {
+                questsTable.add(new Label("No active quests found.", skin))
+                    .colspan(3).center().pad(10);
+            }
+
+            ScrollPane scrollPane = new ScrollPane(questsTable, skin);
+            scrollPane.setFadeScrollBars(false);
+            scrollPane.setScrollingDisabled(true, false);
+
+            content.add(scrollPane).maxWidth(1000).maxHeight(600).fill().expandX().expandY().colspan(3).row();
+        }
+
+        dialog.button("Close", true);
+
+        dialog.pack();
+        dialog.setResizable(true);
+        dialog.setMovable(true);
+
+        dialog.show(stage);
+    }
+
+    public void showRadioFilesDialog(String[] fileNames) {
+        Skin skin = AssetManager.getAssetManager().getSkin();
+        Dialog dialog = new Dialog("Radio Files", skin);
+
+        Table content = dialog.getContentTable();
+        content.row().padBottom(10);
+        content.add(new Label("Select a file to play:", skin)).row();
+
+        Table filesTable = new Table();
+        for (String fileName : fileNames) {
+            TextButton fileBtn = new TextButton(fileName, skin);
+            fileBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    GameClient.getInstance().setFileForHost(Repository.getRepo().getCurrentUser().getUsername(), fileName);
+                    dialog.hide();
+                }
+            });
+            filesTable.add(fileBtn).pad(5).fillX().row();
+        }
+
+        ScrollPane scrollPane = new ScrollPane(filesTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        content.add(scrollPane).width(500).height(300).row();
+
+        dialog.button("Close", true);
+        dialog.show(stage);
+    }
+
+
+
+
+
+    private void sendNPCPositionAsAdmin() {
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            if (lobbyData.getAdmin().getUsername().equals(Repository.getRepo().getCurrentUser().getUsername())) {
+
+                int hour = Repository.getRepo().getCurrentGame().getTimeManager().getNow().getHour();
+
+                float[][] morningPositions = {
+                    {FarmInitializer.getSebastianStartingPointX(), FarmInitializer.getSebastianStartingPointY()},
+                    {FarmInitializer.getAbigailStartingPointX(), FarmInitializer.getAbigailStartingPointY()},
+                    {FarmInitializer.getHarveyStartingPointX(), FarmInitializer.getHarveyStartingPointY()},
+                    {FarmInitializer.getLeahStartingPointX(), FarmInitializer.getLeahStartingPointY()},
+                };
+
+                float[][] workingPositions = {
+                    {1700f, 1700f},
+                    {1900f, 1700f},
+                    {1900f, 1900f},
+                    {1700f, 1900f}
+                };
+
+
+
+
+                for (int i = 0; i < npcs.size(); i++) {
+                    NPC npc = npcs.get(i);
+
+                    if (hour < 12) {
+                        float[] pos = morningPositions[i % morningPositions.length];
+                        GameClient.getInstance().sendNPCPosition(pos[0], pos[1], npc.getType().name());
+                        continue;
+                    }
+
+                    if (hour < 15) {
+                        float[] pos = workingPositions[i % workingPositions.length];
+                        GameClient.getInstance().sendNPCPosition(pos[0], pos[1], npc.getType().name());
+                        continue;
+                    }
+
+                    long currentTime = System.currentTimeMillis();
+                    long nextMoveTime = npcNextMoveTime.getOrDefault(npc, 0L);
+
+                    if (currentTime >= nextMoveTime) {
+                        float targetX = 1200 + (float) (Math.random() * (2400 - 1200));
+                        float targetY = 1200 + (float) (Math.random() * (2400 - 1200));
+                        GameClient.getInstance().sendNPCPosition(targetX, targetY, npc.getType().name());
+
+                        long waitTime = 2000 + (long) (Math.random() * 3000);
+                        npcNextMoveTime.put(npc, currentTime + waitTime);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
 }
 
 

@@ -73,6 +73,7 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx:1.13.5"
   implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
   implementation 'com.google.code.gson:gson:2.11.0'
+  implementation 'org.mongodb:mongodb-driver-sync:4.9.1'
 }
 
 eclipse.project.name = 'StardewValley' + '-parent'

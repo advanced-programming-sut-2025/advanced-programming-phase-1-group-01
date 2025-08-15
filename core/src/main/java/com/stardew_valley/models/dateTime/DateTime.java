@@ -1,6 +1,9 @@
 package com.stardew_valley.models.dateTime;
 
+import com.stardew_valley.controllers.LobbyController;
 import com.stardew_valley.models.Game;
+import com.stardew_valley.models.GroupQuest;
+import com.stardew_valley.models.LobbyData;
 import com.stardew_valley.models.character.NPC.NPC;
 
 import java.util.List;
@@ -34,6 +37,14 @@ public class DateTime implements Cloneable {
 
         if (hour == TimeManager.DAY_END_HOUR) {
             timeManager.skipToMorning();
+        }
+
+        for (LobbyData lobbyData : LobbyController.getInstance().getLobbies()) {
+            for (GroupQuest groupQuest : lobbyData.getGroupQuestList()) {
+                if (groupQuest.isStarted()) {
+                    groupQuest.advanceHour();
+                }
+            }
         }
 
         if (hour > MAX_HOUR_OF_DAY) {

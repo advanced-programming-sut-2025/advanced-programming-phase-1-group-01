@@ -40,6 +40,36 @@ public class Network {
         kryo.register(AddReaction.class);
         kryo.register(Vote.class);
         kryo.register(StartVoting.class);
+        kryo.register(RequestAddSignedInUser.class);
+        kryo.register(RequestCheckToLogin.class);
+        kryo.register(ResponseCheckToLogin.class);
+        kryo.register(CTSReaction.class);
+        kryo.register(STCReaction.class);
+        kryo.register(RequestStartGroupQuest.class);
+        kryo.register(ResponseStartGroupQuest.class);
+        kryo.register(RequestAddAmount.class);
+        kryo.register(ResponseAddAmount.class);
+        kryo.register(UploadAudioRequest.class);
+        kryo.register(JoinRadioRequest.class);
+        kryo.register(AudioChunk.class);
+        kryo.register(RadioChannelList.class);
+        kryo.register(ChangeAudio.class);
+        kryo.register(byte[].class);
+        kryo.register(RequestRadioFiles.class);
+        kryo.register(RadioFilesList.class);
+        kryo.register(NPCPosition.class);
+        kryo.register(NPCPositionResponse.class);
+        kryo.register(SetObjectRequest.class);
+        kryo.register(SetObjectResponse.class);
+        kryo.register(SetTileTypeRequest.class);
+        kryo.register(SetTileTypeResponse.class);
+        kryo.register(SetTilePlowedRequest.class);
+        kryo.register(SetTilePlowedResponse.class);
+
+        kryo.register(SetTileMovableRequest.class);
+        kryo.register(SetTileMovableResponse.class);
+
+
         kryo.register(TradeRequest.class);
         kryo.register(TradeResponse.class);
         kryo.register(HugEvent.class);
@@ -190,6 +220,44 @@ public class Network {
         public String votingUsername;
     }
 
+    public static class RequestAddSignedInUser {
+        public String username;
+        public String password;
+        public String securityQuestionType;
+        public String securityQuestionAnswer;
+    }
+
+    public static class RequestCheckToLogin {
+        public String username;
+        public String password;
+    }
+
+    public static class ResponseCheckToLogin {
+        public boolean canLogin;
+        public String username;
+        public String password;
+    }
+
+    public static class CTSReaction {
+        public String username;
+        public boolean isText;
+        public String text;
+        public int reactionNum;
+    }
+
+    public static class STCReaction {
+        public String username;
+        public boolean isText;
+        public String text;
+        public int reactionNum;
+    }
+
+    public static class RequestStartGroupQuest {
+        public int lobbyId;
+        public String questName;
+        public String username;
+    }
+
     public static class TradeRequest {
         public String senderUsername;
         public String receiverUsername;
@@ -216,5 +284,121 @@ public class Network {
         public String targetUsername;
         public boolean success;
     }
-}
 
+    public static class ResponseStartGroupQuest {
+        public String questName;
+        public String username;
+    }
+
+    public static class RequestAddAmount {
+        public int lobbyId;
+        public int amount;
+        public String questName;
+        public String username;
+    }
+
+    public static class ResponseAddAmount {
+        public String questName;
+        public int amount;
+        public String username;
+    }
+
+    public static class UploadAudioRequest {
+        public String hostPlayer;
+        public String fileName;
+        public byte[] fileData;
+    }
+
+    public static class JoinRadioRequest {
+        public String targetUsername;
+        public String currentUsername;
+    }
+
+    public static class AudioChunk {
+        public String hostPlayer;
+        public byte[] data;
+        public int seq;
+        public boolean isLast;
+        public String fileName;
+    }
+
+    public static class RadioChannelList {
+        public String[] channelNames;
+    }
+
+    public static class ChangeAudio {
+        public String hostPlayer;
+        public String fileName;
+    }
+
+    public static class RequestRadioFiles {
+        public String hostPlayer;
+    }
+
+    public static class RadioFilesList {
+        public String hostPlayer;
+        public String[] fileNames;
+    }
+
+    public static class NPCPosition {
+        public String adminPlayer;
+        public float x;
+        public float y;
+    }
+
+    public static class NPCPositionResponse {
+        public String adminPlayer;
+        public float x;
+        public float y;
+    }
+
+    public static class SetObjectRequest {
+        public int object;
+        public int x;
+        public int y;
+    }
+
+    public static class SetObjectResponse {
+        public int object;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileTypeRequest {
+        public int typeNum;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileTypeResponse {
+        public int typeNum;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTilePlowedRequest {
+        public boolean plowed;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTilePlowedResponse {
+        public boolean plowed;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileMovableRequest {
+        public boolean movable;
+        public int x;
+        public int y;
+    }
+
+    public static class SetTileMovableResponse {
+        public boolean movable;
+        public int x;
+        public int y;
+    }
+
+
+}

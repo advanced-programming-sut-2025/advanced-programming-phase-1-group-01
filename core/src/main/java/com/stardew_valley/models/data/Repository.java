@@ -53,6 +53,7 @@ public class Repository {
     }
 
     public void addUser(User user) {
+        GameClient.getInstance().sendAddRequest(user);
         users.put(user.getUsername(), user);
     }
 
@@ -100,8 +101,11 @@ public class Repository {
     public String toUserInfoJson() {
         User user = getCurrentUser();
 
+        if (user == null) return "{}";
+
         JsonObject json = new JsonObject();
         json.addProperty("username", user.getUsername());
+        json.addProperty("password", user.getPassword());
         json.addProperty("nickname", user.getNickname());
         json.addProperty("email", user.getEmail());
         json.addProperty("gender", user.getGender() != null ? user.getGender().toString() : "");
